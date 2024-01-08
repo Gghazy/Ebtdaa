@@ -13,15 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{7CF01F80-99F
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{4C4A319E-B410-41A1-AD05-39332004E702}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ebtdaa.Common", "Src\Common\Ebtdaa.Common\Ebtdaa.Common.csproj", "{8C0BD7E3-5F3E-418A-B6BC-4789CD29321B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.Common", "Src\Common\Ebtdaa.Common\Ebtdaa.Common.csproj", "{8C0BD7E3-5F3E-418A-B6BC-4789CD29321B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ebtdaa.Domain", "Src\Core\Ebtdaa.Domain\Ebtdaa.Domain.csproj", "{A7E8D805-1D41-4247-A083-36A9F2C41CA5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.Domain", "Src\Core\Ebtdaa.Domain\Ebtdaa.Domain.csproj", "{A7E8D805-1D41-4247-A083-36A9F2C41CA5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ebtdaa.Application", "Src\Core\Ebtdaa.Application\Ebtdaa.Application.csproj", "{E36B2E3F-94FC-4A7E-B10A-B317FEAFB210}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.Application", "Src\Core\Ebtdaa.Application\Ebtdaa.Application.csproj", "{E36B2E3F-94FC-4A7E-B10A-B317FEAFB210}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ebtdaa.Persistence", "Src\Infrastructure\Ebtdaa.Persistence\Ebtdaa.Persistence.csproj", "{D7708334-D751-45B1-B739-975CCCB39D52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.Persistence", "Src\Infrastructure\Ebtdaa.Persistence\Ebtdaa.Persistence.csproj", "{D7708334-D751-45B1-B739-975CCCB39D52}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ebtdaa.WebApi", "Src\Presentation\Ebtdaa.WebApi\Ebtdaa.WebApi.csproj", "{A3A134BA-7A54-4889-8DDC-5449817D6DC9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.WebApi", "Src\Presentation\Ebtdaa.WebApi\Ebtdaa.WebApi.csproj", "{A3A134BA-7A54-4889-8DDC-5449817D6DC9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ebtdaa.Infrastructure", "Ebtdaa.Infrastructure\Ebtdaa.Infrastructure.csproj", "{DC176E90-C365-43EF-B866-CF487B6AF327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{A3A134BA-7A54-4889-8DDC-5449817D6DC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A3A134BA-7A54-4889-8DDC-5449817D6DC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A3A134BA-7A54-4889-8DDC-5449817D6DC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC176E90-C365-43EF-B866-CF487B6AF327}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC176E90-C365-43EF-B866-CF487B6AF327}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC176E90-C365-43EF-B866-CF487B6AF327}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC176E90-C365-43EF-B866-CF487B6AF327}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -63,6 +69,7 @@ Global
 		{E36B2E3F-94FC-4A7E-B10A-B317FEAFB210} = {58BB0E29-AB9F-45ED-872B-D5932A5DE4AA}
 		{D7708334-D751-45B1-B739-975CCCB39D52} = {9D559DC7-5086-40BD-A83D-9A6B21C1359A}
 		{A3A134BA-7A54-4889-8DDC-5449817D6DC9} = {4C4A319E-B410-41A1-AD05-39332004E702}
+		{DC176E90-C365-43EF-B866-CF487B6AF327} = {9D559DC7-5086-40BD-A83D-9A6B21C1359A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {09F57C05-AFBC-466C-BD48-13A7AFF19720}

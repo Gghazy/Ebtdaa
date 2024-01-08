@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Ebtdaa.Infrastructure\Ebtdaa.Infrastructure.csproj" />
     <ProjectReference Include="..\..\Infrastructure\Ebtdaa.Persistence\Ebtdaa.Persistence.csproj" />
   </ItemGroup>
 

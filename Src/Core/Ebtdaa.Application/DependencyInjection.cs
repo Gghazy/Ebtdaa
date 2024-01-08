@@ -13,8 +13,9 @@ using Ebtdaa.Application.FactoryFinancials.Validation;
 using Ebtdaa.Application.FactoryLocations.Handlers;
 using Ebtdaa.Application.FactoryLocations.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Validation;
+using Ebtdaa.Application.Jobs;
 using Microsoft.Extensions.DependencyInjection;
-
+using Quartz;
 
 namespace Ebtdaa.Application
 {
@@ -54,6 +55,24 @@ namespace Ebtdaa.Application
 
             // AutoMapper
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+
+            #region Quartz Jobs
+
+            services.AddQuartz(options =>
+            {
+                options.UseMicrosoftDependencyInjectionJobFactory();
+
+                var jobKey = JobKey.Create(nameof(FactoryBackgroundJob));
+
+                options.AddJob<FactoryBackgroundJob>(jobKey)
+                        .AddTrigger(trigger =>
+                        trigger.ForJob(jobKey)
+                               .WithSimpleSchedule(schedule => schedule.WithIntervalInSeconds(5).RepeatForever()));
+            });
+
+            services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
+            #endregion
         }
     }
 }
