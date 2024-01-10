@@ -38,7 +38,19 @@ namespace Ebtdaa.Persistence
         public DbSet<Product> Products { get; set; }
         public Task<int> SaveChangesAsync()
         {
-          return  base.SaveChangesAsync();
+            foreach (var entry in ChangeTracker.Entries<BaseEntity>())
+            {
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                        entry.Entity.CreatedDate = DateTime.UtcNow;
+                        break;
+                    case EntityState.Modified:
+                        entry.Entity.UpdatedDate = DateTime.UtcNow;
+                        break;
+                }
+            }
+            return  base.SaveChangesAsync();
         }
 
     }

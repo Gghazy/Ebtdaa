@@ -9,11 +9,11 @@ namespace Ebtdaa.Domain.General
 {
     public class BaseEntity
     {
-        public string CreatedBy { get; set; }
-        public string UpdatedBy { get; set; }
+        public string? CreatedBy { get; set; }
+        public string? UpdatedBy { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime CreatedDate { get; set; }
         [Column(TypeName = "smalldatetime")]
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
     }
 }

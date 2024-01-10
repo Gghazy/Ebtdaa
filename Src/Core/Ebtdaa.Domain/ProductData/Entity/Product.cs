@@ -13,10 +13,13 @@ namespace Ebtdaa.Domain.ProductData.Entity
     {
         public int Id { get; set; }
         public string ProductName { get; set; }
-        public int CustomItemId_12 { get; set; }
-        public string CommericalName { get; set; }
-        public int UnitId { get; set; }
-        public int WiegthInKgm { get; set; }
+        public string ItemNumber { get; set; }
+        public string CR  { get; set; }
+        public string Status { get; set; }
+        public int? CustomItemId_12 { get; set; }
+        public string? CommericalName { get; set; }
+        public int? UnitId { get; set; }
+        public int? WiegthInKgm { get; set; }
         public int FactoryId { get; set; }
 
 

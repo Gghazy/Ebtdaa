@@ -1,6 +1,7 @@
 using Ebtdaa.Application;
 using Ebtdaa.Infrastructure;
 using Ebtdaa.Persistence;
+using Ebtdaa.WebApi.Jobs;
 using Ebtdaa.WebApi.Middlewares;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -18,7 +19,8 @@ builder.Services.AddSwaggerGen();
 //DependancyInjection
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddJobsConfiguration();
 
 
 

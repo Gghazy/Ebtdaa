@@ -3,6 +3,7 @@ using Ebtdaa.Domain.CustomsItem.CustomsItemLevel.Entity;
 using Ebtdaa.Domain.CustomsItemUpdateData.Entity;
 using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
+using Ebtdaa.Domain.Integration;
 using Ebtdaa.Domain.ProductData.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
