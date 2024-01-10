@@ -1,5 +1,7 @@
 ﻿using Ebtdaa.Application.Common.Dtos;
+using Ebtdaa.Application.CustomsItem.Dtos;
 using Ebtdaa.Application.CustomsItemUpdateData.Dtos;
+using Ebtdaa.Common.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,5 +15,6 @@ namespace Ebtdaa.Application.CustomsItemUpdateData.Interfaces
         Task<BaseResponse<CustomsItemUpdateResultDto>> AddAsync(CustomsItemUpdateRequestDto request);
         Task<BaseResponse<CustomsItemUpdateResultDto>> UpdateAsync(CustomsItemUpdateRequestDto request);
         Task<BaseResponse<CustomsItemUpdateResultDto>> GetOne(int Id);
+        Task<BaseResponse<QueryResult<CUstomsItemLevelResultDto>>> GetCustomItem_12(CustomsItemSearch search);
     }
 }

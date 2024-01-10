@@ -37,10 +37,6 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _actualProductionService.UpdateAsync(req));
         }
 
-        // DELETE api/<ActualProductionAndCapacitiesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+        
     }
 }

@@ -18,6 +18,12 @@ namespace Ebtdaa.Application.ActualProduction.Mapper
 
             CreateMap<ActualProductionResultDto, ActualProductionAndCapacity>();
             CreateMap<ActualProductionAndCapacity, ActualProductionResultDto>();
+
+            CreateMap<ActualProductionAttachment,ActualProductionAttacRequestDto>();
+            CreateMap<ActualProductionAttacRequestDto, ActualProductionAttachment>();
+
+            CreateMap<ActualProductionAttacResultDto,ActualProductionAttachment>();
+            CreateMap<ActualProductionAttachment, ActualProductionAttacResultDto>();
         }
     }
 }

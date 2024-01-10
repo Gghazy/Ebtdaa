@@ -25,7 +25,6 @@
     <Folder Include="Units\Dtos\" />
     <Folder Include="Units\Handlers\" />
     <Folder Include="Units\Interfaces\" />
-    <Folder Include="Units\Mapper\" />
   </ItemGroup>
 
   <ItemGroup>
