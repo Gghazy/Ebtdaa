@@ -1,4 +1,5 @@
-﻿using Ebtdaa.Application.ActualRawMaterials.Handlers;
+﻿using Ebtdaa.Application.ActualProduction.Validation;
+using Ebtdaa.Application.ActualRawMaterials.Handlers;
 using Ebtdaa.Application.ActualRawMaterials.Interfaces;
 using Ebtdaa.Application.ActualRawMaterials.Validation;
 using Ebtdaa.Application.Attachments.Handler;
@@ -51,6 +52,7 @@ namespace Ebtdaa.Application
                 services.AddScoped<FactoryFileValidator>();
                 services.AddScoped<FactoryFinancialValidator>();
                 services.AddScoped<FactoryFinancialAttachmentValidator>();
+                services.AddScoped<ActualProductionValidator>();
                 services.AddScoped<FactoryLocationValidator>();
                 services.AddScoped<FactoryLocationAttachmentValidator>();
                 services.AddScoped<FactoryContactValidator>();

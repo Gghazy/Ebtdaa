@@ -14,6 +14,9 @@
     <Folder Include="Attachments\Mapper\" />
     <Folder Include="Common\Handlers\" />
     <Folder Include="FactoryFinancials\Mapper\" />
+    <Folder Include="CustomsItem\Validation\" />
+    <Folder Include="Units\Handlers\" />
+    <Folder Include="Units\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>
