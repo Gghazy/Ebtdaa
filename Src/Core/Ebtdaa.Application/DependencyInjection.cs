@@ -1,4 +1,7 @@
-﻿using Ebtdaa.Application.Attachments.Handler;
+﻿using Ebtdaa.Application.ActualRawMaterials.Handlers;
+using Ebtdaa.Application.ActualRawMaterials.Interfaces;
+using Ebtdaa.Application.ActualRawMaterials.Validation;
+using Ebtdaa.Application.Attachments.Handler;
 using Ebtdaa.Application.Attachments.Interfaces;
 using Ebtdaa.Application.Attachments.Validation;
 using Ebtdaa.Application.Factories.Handlers;
@@ -13,6 +16,9 @@ using Ebtdaa.Application.FactoryFinancials.Validation;
 using Ebtdaa.Application.FactoryLocations.Handlers;
 using Ebtdaa.Application.FactoryLocations.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Validation;
+using Ebtdaa.Application.RawMaterials.Handlers;
+using Ebtdaa.Application.RawMaterials.Interfaces;
+using Ebtdaa.Application.RawMaterials.Validation;
 using Microsoft.Extensions.DependencyInjection;
 
 
@@ -33,6 +39,8 @@ namespace Ebtdaa.Application
                services.AddScoped<IFactoryLocationService, FactoryLocationService>();
                services.AddScoped<IFactoryLocationAttachmentService, FactoryLocationAttachmentService>();
                services.AddScoped<IFactoryContactService, FactoryContactService>();
+               services.AddScoped<IRawMaterialService, RawMaterialServie>();
+               services.AddScoped<IActualRawMaterialService, ActualRawMaterialService>();
 
             #endregion
 
@@ -46,6 +54,8 @@ namespace Ebtdaa.Application
                 services.AddScoped<FactoryLocationValidator>();
                 services.AddScoped<FactoryLocationAttachmentValidator>();
                 services.AddScoped<FactoryContactValidator>();
+                services.AddScoped<ActualRawMaterialValidator>();
+                services.AddScoped<RawMaterialValidtor>();
 
             #endregion
 

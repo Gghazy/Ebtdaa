@@ -1,5 +1,7 @@
-﻿using Ebtdaa.Domain.Factories.Entity;
+﻿using Ebtdaa.Domain.ActualRawMaterials.Entity;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
+using Ebtdaa.Domain.RawMaterials.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using System;
@@ -25,5 +27,7 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<FactoryLocationAttachment> FactoryLocationAttachments { get; set; }
         public DbSet<IndustrialArea> IndustrialAreas { get; set; }
         public DbSet<FactoryContact> FactoryContacts { get; set; }
+        public DbSet<ActualRawMaterial> ActualRawMaterials { get; set; }
+        public DbSet<RawMaterial> RawMaterials { get; set; }
     }
 }
