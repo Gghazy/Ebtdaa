@@ -34,5 +34,8 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<ActualProductionAndCapacity> ActualProductionAndCapacities { get; set; }
         public DbSet<ReasonIncreasCapacity> ReasonIncreasCapacities { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<Unit> Units { get; set; }
+        public DbSet<ActualProductionAttachment> ActualProductionAttachments { get; set; }
+        public DbSet<ProductAttachment> ProductAttachments { get; set; }
     }
 }

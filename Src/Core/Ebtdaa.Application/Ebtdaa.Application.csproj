@@ -15,15 +15,8 @@
     <Folder Include="Common\Handlers\" />
     <Folder Include="FactoryFinancials\Mapper\" />
     <Folder Include="CustomsItem\Validation\" />
-    <Folder Include="ProductsData\Dtos\" />
-    <Folder Include="ProductsData\Handlers\" />
-    <Folder Include="ProductsData\Interfaces\" />
-    <Folder Include="ProductsData\Mapper\" />
-    <Folder Include="ProductsData\Validatiton\" />
-    <Folder Include="Units\Dtos\" />
     <Folder Include="Units\Handlers\" />
     <Folder Include="Units\Interfaces\" />
-    <Folder Include="Units\Mapper\" />
   </ItemGroup>
 
   <ItemGroup>

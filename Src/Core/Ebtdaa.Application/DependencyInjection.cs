@@ -42,7 +42,7 @@ namespace Ebtdaa.Application
                 services.AddScoped<FactoryValidator>();
                 services.AddScoped<FactoryFileValidator>();
                 services.AddScoped<FactoryFinancialValidator>();
-                services.AddScoped<FactoryFinancialAttachmentValidator>();
+                services.AddScoped<ActualProductionAttachValidator>();
                 services.AddScoped<FactoryLocationValidator>();
                 services.AddScoped<FactoryLocationAttachmentValidator>();
                 services.AddScoped<FactoryContactValidator>();

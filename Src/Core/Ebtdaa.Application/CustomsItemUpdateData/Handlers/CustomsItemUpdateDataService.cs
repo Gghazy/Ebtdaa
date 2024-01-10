@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.CustomsItem.Dtos;
 using Ebtdaa.Application.CustomsItemUpdateData.Dtos;
 using Ebtdaa.Application.CustomsItemUpdateData.Interfaces;
 using Ebtdaa.Application.CustomsItemUpdateData.Validation;
+using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Enums;
+using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.CustomsItemUpdateData.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -23,6 +27,18 @@ namespace Ebtdaa.Application.CustomsItemUpdateData.Handlers
             _customItemVaildator = customItemVaildator;
         }
 
+        public async Task<BaseResponse<QueryResult<CUstomsItemLevelResultDto>>> GetCustomItem_12(CustomsItemSearch search)
+        {
+
+            var resualt = _mapper.Map<QueryResult<CUstomsItemLevelResultDto>>(await _dbContext.CustomsItemLevels.Where(l => l.LevelId == CustomsItemLevelEnum.Level12).ToQueryResult());
+
+
+            return new BaseResponse<QueryResult<CUstomsItemLevelResultDto>>
+            {
+                Data = resualt
+            };
+
+        }
         public async Task<BaseResponse<CustomsItemUpdateResultDto>> GetOne(int Id)
         {
             var result = await _dbContext.CustomsItemUpdates.FirstOrDefaultAsync(x => x.Id == Id);

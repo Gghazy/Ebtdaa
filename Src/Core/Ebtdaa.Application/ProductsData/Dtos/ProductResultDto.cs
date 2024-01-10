@@ -1,15 +1,12 @@
-﻿using Ebtdaa.Domain.CustomsItem.CustomsItemLevel.Entity;
-using Ebtdaa.Domain.Factories.Entity;
-using Ebtdaa.Domain.General;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ebtdaa.Domain.ProductData.Entity
+namespace Ebtdaa.Application.ProductsData.Dtos
 {
-    public class Product : BaseEntity
+    public class ProductResultDto
     {
         public int Id { get; set; }
         public string ProductName { get; set; }
@@ -20,11 +17,5 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public int ProductCount { get; set; }
         public bool AnyNewProducts { get; set; }
         public int FactoryId { get; set; }
-
-
-        public virtual Factory Factory { get; set; }
-
-        public virtual ICollection<CustomsItemLevel> CustomsItems { get; set; }
-        public virtual ICollection<Unit> Units { get; set; }
     }
 }
