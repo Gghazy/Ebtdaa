@@ -4,10 +4,7 @@ using Ebtdaa.Application.ActualRawMaterials.Interfaces;
 using Ebtdaa.Application.ActualRawMaterials.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.Factories.Dtos;
-using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Domain.ActualRawMaterials.Entity;
-using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 

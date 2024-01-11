@@ -10,7 +10,11 @@ namespace Ebtdaa.Application.ActualRawMaterials.Mapper
         {
             CreateMap<ActualRawMaterial, ActualRawMaterialResultDto>();
             CreateMap<ActualRawMaterialRequestDto, ActualRawMaterial>();
-            
+
+
+
+            CreateMap<ActualRawMaterialFile, ActualRawFileResultDto>();
+            CreateMap<ActualRawFileRequestDto, ActualRawMaterialFile>();
         }
     }
 }
