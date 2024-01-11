@@ -4,23 +4,23 @@
 
 namespace Ebtdaa.Infrastructure.Migrations
 {
-    public partial class update_ProductIntegration_Table : Migration
+    public partial class updatefactory : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<int>(
-                name: "MeasureUnitID",
-                table: "ProductIntegrations",
-                type: "int",
+            migrationBuilder.AddColumn<string>(
+                name: "City",
+                table: "FactoryIntegrations",
+                type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: 0);
+                defaultValue: "");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "MeasureUnitID",
-                table: "ProductIntegrations");
+                name: "City",
+                table: "FactoryIntegrations");
         }
     }
 }

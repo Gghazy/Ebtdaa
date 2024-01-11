@@ -25,6 +25,8 @@ using Ebtdaa.Application.RawMaterials.Validation;
 using Ebtdaa.Application.ProductJobs.Handlers;
 using Ebtdaa.Application.ProductJobs.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
+using Ebtdaa.Application.UnitJobs.Interfaces;
+using Ebtdaa.Application.UnitJobs.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -47,6 +49,7 @@ namespace Ebtdaa.Application
                services.AddScoped<IFactoryContactService, FactoryContactService>();
                services.AddScoped<IRawMaterialService, RawMaterialServie>();
                services.AddScoped<IActualRawMaterialService, ActualRawMaterialService>();
+               services.AddScoped<IUnitJobService, UnitJobService>();
 
             #endregion
 

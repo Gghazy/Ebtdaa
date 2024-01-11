@@ -38,24 +38,34 @@ namespace Ebtdaa.Application.FactoryJobs.Handlers
 
                await AddAllFactories(integrationFactories);
             }
+            else if (integrationFactories.Count > Factories.Count)
+            {
+                await AddNewFactories(integrationFactories, Factories);
+            }
             else {
 
                await Update(integrationFactories);
             }
-             if (integrationFactories.Count > Factories.Count)
-            {
-                await AddNewFactories(integrationFactories, Factories);
-            }
+           
 
             return 1;
         }
         private async Task AddAllFactories(List<FactoryIntegration> factoryIntegrations)
         {
-            var _factories = _mapper.Map<List<Factory>>(factoryIntegrations);
+            try
+            {
+                var _factories = _mapper.Map<List<Factory>>(factoryIntegrations);
 
-            await _dbContext.Factories.AddRangeAsync(_factories);
+                await _dbContext.Factories.AddRangeAsync(_factories);
 
-            await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
         private async Task Update(List<FactoryIntegration> factoryIntegrations)
         {

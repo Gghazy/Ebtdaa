@@ -22,6 +22,7 @@
     <Folder Include="ProductsData\Interfaces\" />
     <Folder Include="ProductsData\Mapper\" />
     <Folder Include="ProductsData\Validatiton\" />
+    <Folder Include="UnitJobs\Dtos\" />
     <Folder Include="Units\Dtos\" />
     <Folder Include="Units\Handlers\" />
     <Folder Include="Units\Interfaces\" />

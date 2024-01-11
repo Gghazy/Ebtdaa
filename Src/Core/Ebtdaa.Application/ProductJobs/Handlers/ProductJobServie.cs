@@ -32,15 +32,16 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
 
                 await AddAllProducts(integrationProducts);
             }
+            else if (integrationProducts.Count > Products.Count)
+            {
+                await AddNewProducts(integrationProducts, Products);
+            }
             else
             {
 
                 await Update(integrationProducts);
             }
-            if (integrationProducts.Count > Products.Count)
-            {
-                await AddNewProducts(integrationProducts, Products);
-            }
+           
 
             return 1;
         }
@@ -50,7 +51,17 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
 
             await _dbContext.Products.AddRangeAsync(products);
 
-            await _dbContext.SaveChangesAsync();
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+           
         }
         private async Task AddNewProducts(List<ProductIntegration> productIntegrations, List<Product> products)
         {

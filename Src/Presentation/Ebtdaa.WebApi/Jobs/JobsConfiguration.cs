@@ -33,12 +33,6 @@ namespace Ebtdaa.WebApi.Jobs
                         .AddTrigger(trigger =>
                         trigger.ForJob(factoryJobKey)
                                .WithSimpleSchedule(schedule => schedule.WithIntervalInMinutes(5).RepeatForever()));
-
-                var productJobKey = JobKey.Create(nameof(FactoryBackgroundJob));
-                options.AddJob<ProductBackgroundJob>(productJobKey)
-                        .AddTrigger(trigger =>
-                        trigger.ForJob(productJobKey)
-                               .WithSimpleSchedule(schedule => schedule.WithIntervalInMinutes(5).RepeatForever()));
             });
 
             services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);

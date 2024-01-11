@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240111164522_update_num=llable_in_factory")]
+    partial class update_numllable_in_factory
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -732,9 +734,11 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("CR")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CommericalName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
@@ -743,16 +747,17 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int?>("CustomItemId_12")
+                    b.Property<int>("CustomItemId_12")
                         .HasColumnType("int");
 
-                    b.Property<int?>("FactoryId")
+                    b.Property<int>("FactoryId")
                         .HasColumnType("int");
 
                     b.Property<string>("ItemNumber")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ProductCount")
+                    b.Property<int>("ProductCount")
                         .HasColumnType("int");
 
                     b.Property<string>("ProductName")
@@ -760,9 +765,10 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UnitId")
+                    b.Property<int>("UnitId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -771,7 +777,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int?>("WiegthInKgm")
+                    b.Property<int>("WiegthInKgm")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -1071,7 +1077,9 @@ namespace Ebtdaa.Persistence.Migrations
                 {
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
                         .WithMany()
-                        .HasForeignKey("FactoryId");
+                        .HasForeignKey("FactoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Factory");
                 });

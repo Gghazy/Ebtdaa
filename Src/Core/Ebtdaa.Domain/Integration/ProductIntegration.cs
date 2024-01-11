@@ -12,7 +12,7 @@ namespace Ebtdaa.Domain.Integration
         public string ProductName { get; set; }
         public string ItemNumber { get; set; }
         public string CR { get; set; }
-        public string Status { get; set; }
+        public string? Status { get; set; }
         public int MeasureUnitID { get; set; }
     }
 }

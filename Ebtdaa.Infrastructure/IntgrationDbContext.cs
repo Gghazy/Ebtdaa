@@ -13,6 +13,7 @@ namespace Ebtdaa.Infrastructure
 
         public DbSet<FactoryIntegration> FactoryIntegrations { get; set; }
         public DbSet<ProductIntegration> ProductIntegrations { get; set; }
+        public DbSet<UnitIntegration> UnitIntegrations { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
