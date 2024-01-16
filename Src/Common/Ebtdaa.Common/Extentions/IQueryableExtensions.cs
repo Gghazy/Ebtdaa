@@ -13,15 +13,15 @@ namespace Ebtdaa.Common.Extentions
                 throw new ArgumentNullException("dbQuery");
             int count = await dbQuery.CountAsync();
 
-            if (pageNumber == -1)
-            {
-                pageNumber = (int)Math.Ceiling((decimal)count / (decimal)pageSize);
-            }
+        
+
             if (sort != "")
                 dbQuery = dbQuery.SortBy(sort, descending).Page(pageNumber, pageSize);
             else
                 dbQuery = dbQuery.Page(pageNumber, pageSize);
             var data = isCountOnly ? null : await dbQuery.ToListAsync();
+            pageNumber = (int)Math.Ceiling((decimal)count / (decimal)pageSize);
+
             return new QueryResult<T>(data, count, pageNumber, pageSize);
         }
         public static IQueryable<TSource> Page<TSource>(this IQueryable<TSource> source, int pageNumber = 1, int pageSize = 10)

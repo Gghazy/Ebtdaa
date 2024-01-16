@@ -33,7 +33,7 @@ namespace Ebtdaa.Application.Factories.Handlers
         public async Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search)
         {
 
-            var resualt = _mapper.Map<QueryResult<FactoryResualtDto>>(await _dbContext.Factories.ToQueryResult());
+            var resualt = _mapper.Map<QueryResult<FactoryResualtDto>>(await _dbContext.Factories.ToQueryResult(search.PageNumber,search.PageSize));
 
 
             return new BaseResponse<QueryResult<FactoryResualtDto>>

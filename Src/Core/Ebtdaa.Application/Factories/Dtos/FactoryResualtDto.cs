@@ -17,12 +17,9 @@ namespace Ebtdaa.Application.Factories.Dtos
         public string CommercialRegister { get; set; }
         public string Activity { get; set; }
         public DateTime RegistrationDate { get; set; }
-        public int OwnerIdentity { get; set; }
-        public int FactoryNumber { get; set; }
-        public int LicenseNumber { get; set; }
-        public int FactoryFinancialId { get; set; }
-        public int FactoryLocationId { get; set; }
-        public int FactoryContactId { get; set; }
+        public string OwnerIdentity { get; set; }
+        public string FactoryNumber { get; set; }
+        public string LicenseNumber { get; set; }
         public DateTime LicenseExpirDate { get; set; }
         public string Status { get; set; }
     }
