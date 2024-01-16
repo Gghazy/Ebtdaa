@@ -44,6 +44,8 @@ namespace Ebtdaa.Persistence
         public DbSet<Unit> Units { get; set; }
         public DbSet<ActualProductionAttachment> ActualProductionAttachments { get; set; }
         public DbSet<ProductAttachment> ProductAttachments { get; set; }
+        public DbSet<FactoryProduct> FactoryProducts { get; set; }
+        public DbSet<Period> Periods { get; set; }
         public Task<int> SaveChangesAsync()
         {
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
