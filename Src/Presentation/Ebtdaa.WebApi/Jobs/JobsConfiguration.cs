@@ -32,7 +32,7 @@ namespace Ebtdaa.WebApi.Jobs
                 options.AddJob<FactoryBackgroundJob>(factoryJobKey)
                         .AddTrigger(trigger =>
                         trigger.ForJob(factoryJobKey)
-                               .WithSimpleSchedule(schedule => schedule.WithIntervalInMinutes(5).RepeatForever()));
+                               .WithSimpleSchedule(schedule => schedule.WithIntervalInHours(2).RepeatForever()));
             });
 
             services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
