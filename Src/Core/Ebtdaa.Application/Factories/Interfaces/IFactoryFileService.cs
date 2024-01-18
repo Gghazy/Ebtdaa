@@ -11,7 +11,7 @@ namespace Ebtdaa.Application.Factories.Interfaces
 {
     public interface IFactoryFileService
     {
-        Task<BaseResponse<List<FactoryFileResultDto>>> GetAll();
+        Task<BaseResponse<List<FactoryFileResultDto>>> GetAll(int factoryId);
         Task<BaseResponse<FactoryFileResultDto>> AddAsync(FactoryFileRequestDto req);
         Task<BaseResponse<FactoryFileResultDto>> DeleteAsync(int id);
     }

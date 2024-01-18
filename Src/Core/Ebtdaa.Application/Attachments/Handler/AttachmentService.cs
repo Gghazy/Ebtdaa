@@ -82,6 +82,29 @@ namespace Ebtdaa.Application.Attachments.Handler
 
 
         }
+        public async Task<ImageResultDto> DownloadImageBas64(int id)
+        {
+            ImageResultDto result = new ImageResultDto();
+            var attachment =await _dbContext.Attachments.FindAsync(id);
+            var filepath = Path.Combine(Directory.GetCurrentDirectory(), attachment.Path);
+
+            var provider = new FileExtensionContentTypeProvider();
+            if (!provider.TryGetContentType(filepath, out var contenttype))
+            {
+                contenttype = "application/octet-stream";
+            }
+
+            var bytes = await System.IO.File.ReadAllBytesAsync(filepath);
+            result.Image= Convert.ToBase64String(bytes);
+
+            result.Name = attachment.Name;
+            result.Extention = contenttype;
+
+
+            return result;
+
+
+        }
 
 
         public async Task<string> UploadFile(IFormFile file)

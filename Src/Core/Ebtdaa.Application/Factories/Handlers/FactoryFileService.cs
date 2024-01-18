@@ -27,9 +27,12 @@ namespace Ebtdaa.Application.Factories.Handlers
             _mapper = mapper;
             _factoryFileValidator = factoryFileValidator;
         }
-        public async Task<BaseResponse<List<FactoryFileResultDto>>> GetAll()
+        public async Task<BaseResponse<List<FactoryFileResultDto>>> GetAll(int factoryId)
         {
-            var respose = _mapper.Map<List<FactoryFileResultDto>>(await _dbContext.FactoryFiles.ToListAsync());
+            var respose = _mapper.Map<List<FactoryFileResultDto>>(
+                await _dbContext.FactoryFiles.Where(x=>x.FactoryId==factoryId).Include(x=>x.Attachment).ToListAsync()
+                
+                );
 
             return new BaseResponse<List<FactoryFileResultDto>>
             {

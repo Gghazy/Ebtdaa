@@ -16,10 +16,14 @@ namespace Ebtdaa.Application.Factories.Mapper
         public FactoryMapper()
         {
             CreateMap<Factory, FactoryResualtDto>();
+
             CreateMap<FactoryRequestDto, Factory>();
             CreateMap<QueryResult<Factory>, QueryResult<FactoryResualtDto>>();
-            
-            CreateMap<FactoryFile, FactoryFileResultDto>();
+
+            CreateMap<FactoryFile, FactoryFileResultDto>()
+                       .ForMember(d => d.Name, opt => opt.MapFrom(src => src.Attachment.Name))
+                       .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path));
+
             CreateMap<FactoryFileRequestDto, FactoryFile>();
 
         }

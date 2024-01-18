@@ -30,5 +30,14 @@ namespace Ebtdaa.WebApi.Controllers
 
             return File(result.File, result.Extention, result.Name);
         }
+        
+        [HttpGet]
+        [Route("DownloadImageBas64")]
+        public async Task<IActionResult> DownloadImageBas64(int id)
+        {
+            var result = await _attachmentService.DownloadImageBas64(id);
+
+            return Ok(result);
+        }
     }
 }

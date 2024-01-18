@@ -10,7 +10,9 @@ namespace Ebtdaa.Application.Common.Enums
     {
         Productive = 0,
         Under_Construction=1,
-        Stop=2
+        Under_Built=2,
+        Stop=3,
+        Canceled=4
 
     }
 }

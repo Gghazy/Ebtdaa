@@ -10,6 +10,8 @@ namespace Ebtdaa.Application.FactoryJobs.Mapper
         {
             CreateMap<FactoryIntegration, Factory>()
                       .ForMember(d => d.NameAr, opt => opt.MapFrom(src => src.FactoryName_ar))
+                      .ForMember(d => d.CommercialRegister, opt => opt.MapFrom(src => src.CR))
+                      .ForMember(d => d.Activity, opt => opt.MapFrom(src => src.Activity))
                       .ForMember(d => d.Id, opt => opt.Ignore())
                       .ForMember(d => d.NameEn, opt => opt.MapFrom(src => src.FactoryName_en));
 

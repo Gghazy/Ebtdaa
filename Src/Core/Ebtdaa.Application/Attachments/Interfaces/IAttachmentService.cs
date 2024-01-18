@@ -14,5 +14,6 @@ namespace Ebtdaa.Application.Attachments.Interfaces
     {
         Task<BaseResponse<Attachment>> AddAsync(IFormFile file);
         Task<AttachmentResultDto> DownloadFile(int id);
+        Task<ImageResultDto> DownloadImageBas64(int id);
     }
 }
