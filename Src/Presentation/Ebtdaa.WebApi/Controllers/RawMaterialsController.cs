@@ -18,10 +18,18 @@ namespace Ebtdaa.WebApi.Controllers
             _RawMaterialService = RawMaterialService;
         }
 
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    return Ok(await _RawMaterialService.GetAll());
+
+        //}
+
+
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetByFactory(int Factoryid)
         {
-            return Ok(await _RawMaterialService.GetAll());
+            return Ok(await _RawMaterialService.GetAllByFactory(Factoryid));
 
         }
 

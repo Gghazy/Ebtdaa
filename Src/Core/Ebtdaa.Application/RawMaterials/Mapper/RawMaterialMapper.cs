@@ -8,11 +8,13 @@ namespace Ebtdaa.Application.RawMaterials.Mapper
         {
             public RawMaterialMapper()
             {
-                CreateMap<RawMaterialResultDto, RawMaterial>();
-                CreateMap<RawMaterial, RawMaterialRequestDto>();
+               
+            CreateMap<RawMaterial, RawMaterialResultDto>();
+            CreateMap<RawMaterialRequestDto, RawMaterial>();
 
-              }
-        
+
+        }
+
 
     }
 }
