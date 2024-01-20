@@ -35,7 +35,7 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
 
             return new BaseResponse<FactoryContactResultDto>
             {
-                Data = _mapper.Map<FactoryContactResultDto>(resualt)
+                Data =resualt!=null? _mapper.Map<FactoryContactResultDto>(resualt):new FactoryContactResultDto()
             };
         }
         public async Task<BaseResponse<FactoryContactResultDto>> AddAsync(FactoryContactRequestDto req)

@@ -113,6 +113,28 @@ namespace Ebtdaa.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Phone",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CountryCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DialCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    E164Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    InternationalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NationalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Number = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Phone", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ActualProductionAndCapacities",
                 columns: table => new
                 {
@@ -191,35 +213,6 @@ namespace Ebtdaa.Persistence.Migrations
                     table.PrimaryKey("PK_CustomsItemUpdates", x => x.Id);
                     table.ForeignKey(
                         name: "FK_CustomsItemUpdates_Factories_FactoryId",
-                        column: x => x.FactoryId,
-                        principalTable: "Factories",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "FactoryContacts",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    OfficerPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OfficerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductionManagerPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductionManagerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FinanceManagerPhone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FinanceManagerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FactoryId = table.Column<int>(type: "int", nullable: false),
-                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_FactoryContacts", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_FactoryContacts_Factories_FactoryId",
                         column: x => x.FactoryId,
                         principalTable: "Factories",
                         principalColumn: "Id",
@@ -353,6 +346,53 @@ namespace Ebtdaa.Persistence.Migrations
                         name: "FK_FactoryLocations_IndustrialAreas_IndustrialAreaId",
                         column: x => x.IndustrialAreaId,
                         principalTable: "IndustrialAreas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "FactoryContacts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    OfficerPhoneId = table.Column<int>(type: "int", nullable: false),
+                    OfficerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ProductionManagerPhoneId = table.Column<int>(type: "int", nullable: false),
+                    ProductionManagerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FinanceManagerPhoneId = table.Column<int>(type: "int", nullable: false),
+                    FinanceManagerEmail = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FactoryId = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FactoryContacts", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FactoryContacts_Factories_FactoryId",
+                        column: x => x.FactoryId,
+                        principalTable: "Factories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FactoryContacts_Phone_FinanceManagerPhoneId",
+                        column: x => x.FinanceManagerPhoneId,
+                        principalTable: "Phone",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FactoryContacts_Phone_OfficerPhoneId",
+                        column: x => x.OfficerPhoneId,
+                        principalTable: "Phone",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FactoryContacts_Phone_ProductionManagerPhoneId",
+                        column: x => x.ProductionManagerPhoneId,
+                        principalTable: "Phone",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -707,6 +747,21 @@ namespace Ebtdaa.Persistence.Migrations
                 column: "FactoryId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FactoryContacts_FinanceManagerPhoneId",
+                table: "FactoryContacts",
+                column: "FinanceManagerPhoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FactoryContacts_OfficerPhoneId",
+                table: "FactoryContacts",
+                column: "OfficerPhoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FactoryContacts_ProductionManagerPhoneId",
+                table: "FactoryContacts",
+                column: "ProductionManagerPhoneId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FactoryFiles_AttachmentId",
                 table: "FactoryFiles",
                 column: "AttachmentId");
@@ -855,6 +910,9 @@ namespace Ebtdaa.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "CustomsItemUpdates");
+
+            migrationBuilder.DropTable(
+                name: "Phone");
 
             migrationBuilder.DropTable(
                 name: "FactoryFinancials");

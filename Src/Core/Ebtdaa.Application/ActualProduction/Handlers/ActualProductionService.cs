@@ -35,7 +35,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
 
             return new BaseResponse<ActualProductionResultDto>
             {
-                Data = _mapper.Map<ActualProductionResultDto>(result)
+                Data = result != null ? _mapper.Map<ActualProductionResultDto>(result) : new ActualProductionResultDto()
             };
         }
 

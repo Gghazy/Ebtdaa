@@ -12,6 +12,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Src", "Src", "{7CF01F80-99FD-4F30-981F-2A0E6BA180C0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{4C4A319E-B410-41A1-AD05-39332004E702}"
+	ProjectSection(SolutionItems) = preProject
+		Src\Infrastructure\Ebtdaa.Persistence\DependencyInjection.cs = Src\Infrastructure\Ebtdaa.Persistence\DependencyInjection.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.Common", "Src\Common\Ebtdaa.Common\Ebtdaa.Common.csproj", "{8C0BD7E3-5F3E-418A-B6BC-4789CD29321B}"
 EndProject
@@ -23,7 +26,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.Persistence", "Src\I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.WebApi", "Src\Presentation\Ebtdaa.WebApi\Ebtdaa.WebApi.csproj", "{A3A134BA-7A54-4889-8DDC-5449817D6DC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ebtdaa.Infrastructure", "Ebtdaa.Infrastructure\Ebtdaa.Infrastructure.csproj", "{DC176E90-C365-43EF-B866-CF487B6AF327}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ebtdaa.Infrastructure", "Ebtdaa.Infrastructure\Ebtdaa.Infrastructure.csproj", "{DC176E90-C365-43EF-B866-CF487B6AF327}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

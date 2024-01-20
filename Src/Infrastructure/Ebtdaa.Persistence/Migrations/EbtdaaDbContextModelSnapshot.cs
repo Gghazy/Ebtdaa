@@ -348,25 +348,22 @@ namespace Ebtdaa.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FinanceManagerPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("FinanceManagerPhoneId")
+                        .HasColumnType("int");
 
                     b.Property<string>("OfficerEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OfficerPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("OfficerPhoneId")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProductionManagerEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("ProductionManagerPhone")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("ProductionManagerPhoneId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -377,6 +374,12 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FactoryId");
+
+                    b.HasIndex("FinanceManagerPhoneId");
+
+                    b.HasIndex("OfficerPhoneId");
+
+                    b.HasIndex("ProductionManagerPhoneId");
 
                     b.ToTable("FactoryContacts");
                 });
@@ -650,6 +653,55 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("IndustrialAreas");
+                });
+
+            modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.Phone", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CountryCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("DialCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("E164Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InternationalNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NationalNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Phone");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.General.Attachment", b =>
@@ -1055,7 +1107,31 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Phone", "FinanceManagerPhone")
+                        .WithMany()
+                        .HasForeignKey("FinanceManagerPhoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Phone", "OfficerPhone")
+                        .WithMany()
+                        .HasForeignKey("OfficerPhoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Phone", "ProductionManagerPhone")
+                        .WithMany()
+                        .HasForeignKey("ProductionManagerPhoneId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Factory");
+
+                    b.Navigation("FinanceManagerPhone");
+
+                    b.Navigation("OfficerPhone");
+
+                    b.Navigation("ProductionManagerPhone");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryFile", b =>
