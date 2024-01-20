@@ -17,10 +17,10 @@ namespace Ebtdaa.WebApi.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpGet("{id}")] 
+        public async Task<IActionResult> GetAll(int id)
         {
-            return Ok(await _service.GetAll());
+            return Ok(await _service.GetAll(id));
 
         }
 

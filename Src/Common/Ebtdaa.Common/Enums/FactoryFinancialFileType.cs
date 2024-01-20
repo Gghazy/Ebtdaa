@@ -9,7 +9,6 @@ namespace Ebtdaa.Common.Enums
     public enum FactoryFinancialFileType
     {
         zakat=0,
-
         FinancialStatement=1
     }
 }

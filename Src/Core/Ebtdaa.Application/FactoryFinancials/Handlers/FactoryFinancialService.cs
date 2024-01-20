@@ -33,11 +33,11 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
 
         public async Task<BaseResponse<FactoryFinancialResultDto>> GetOne(int id)
         {
-            var resualt = await _dbContext.FactoryFinancials.FirstOrDefaultAsync(x => x.Id == id);
+            var resualt = await _dbContext.FactoryFinancials.FirstOrDefaultAsync(x => x.FactoryId == id);
 
             return new BaseResponse<FactoryFinancialResultDto>
             {
-                Data = _mapper.Map<FactoryFinancialResultDto>(resualt)
+                Data = resualt != null ? _mapper.Map<FactoryFinancialResultDto>(resualt) : new FactoryFinancialResultDto()
             };
         }
         public async Task<BaseResponse<FactoryFinancialResultDto>> AddAsync(FactoryFinancialRequestDto req)

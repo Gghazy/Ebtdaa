@@ -12,10 +12,13 @@
 
   <ItemGroup>
     <Folder Include="Attachments\Mapper\" />
+    <Folder Include="Cities\Validation\" />
     <Folder Include="Common\Handlers\" />
+    <Folder Include="FactoryEntities\Validation\" />
     <Folder Include="FactoryFinancials\Mapper\" />
     <Folder Include="CustomsItem\Validation\" />
     <Folder Include="FactoryJobs\Dtos\" />
+    <Folder Include="IndustrialAreas\Validation\" />
     <Folder Include="ProductJobs\Dtos\" />
     <Folder Include="ProductsData\Dtos\" />
     <Folder Include="ProductsData\Handlers\" />

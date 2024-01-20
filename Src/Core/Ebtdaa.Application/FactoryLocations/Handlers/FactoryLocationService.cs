@@ -36,7 +36,7 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
 
             return new BaseResponse<FactoryLocationResultDto>
             {
-                Data = _mapper.Map<FactoryLocationResultDto>(resualt)
+                Data = resualt!=null? _mapper.Map<FactoryLocationResultDto>(resualt):new FactoryLocationResultDto()
             };
         }
         public async Task<BaseResponse<FactoryLocationResultDto>> AddAsync(FactoryLocationRequestDto req)

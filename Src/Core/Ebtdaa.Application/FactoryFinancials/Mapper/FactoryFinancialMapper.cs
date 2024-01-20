@@ -9,11 +9,13 @@ namespace Ebtdaa.Application.FactoryFinancials.Mapper
     {
         public FactoryFinancialMapper()
         {
-            CreateMap<FactoryFinancialResultDto, FactoryFinancial>();
-            CreateMap<FactoryFinancial, FactoryFinancialRequestDto>();
+            CreateMap<FactoryFinancial, FactoryFinancialResultDto>();
+            CreateMap<FactoryFinancialRequestDto,FactoryFinancial > ();
             
-            CreateMap<FactoryFinancialAttachmentResultDto, FactoryFinancialAttachment>();
-            CreateMap<FactoryFinancialAttachment, FactoryFinancialAttachmentRequestDto>();
+            CreateMap<FactoryFinancialAttachment,FactoryFinancialAttachmentResultDto> ()
+                                       .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path));
+
+            CreateMap< FactoryFinancialAttachmentRequestDto, FactoryFinancialAttachment>();
         }
     }
 }

@@ -24,6 +24,10 @@ namespace Ebtdaa.Application.Factories.Validation
                 .NotEmpty()
                 .WithMessage("Type-IsRequired-Field");
 
+            RuleFor(d => d.Name)
+               .NotEmpty()
+               .WithMessage("Name-IsRequired-Field");
+
 
 
 

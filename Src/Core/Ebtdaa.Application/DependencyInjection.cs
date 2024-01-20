@@ -27,6 +27,12 @@ using Ebtdaa.Application.ProductJobs.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Ebtdaa.Application.UnitJobs.Interfaces;
 using Ebtdaa.Application.UnitJobs.Handlers;
+using Ebtdaa.Application.IndustrialAreas.Interfaces;
+using Ebtdaa.Application.IndustrialAreas.Handlers;
+using Ebtdaa.Application.Cities.Interfaces;
+using Ebtdaa.Application.Cities.Handlers;
+using Ebtdaa.Application.FactoryEntities.Interfaces;
+using Ebtdaa.Application.FactoryEntities.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -51,6 +57,9 @@ namespace Ebtdaa.Application
                services.AddScoped<IActualRawMaterialService, ActualRawMaterialService>();
                services.AddScoped<IActualRawFileService, ActualRawFileService>();
                services.AddScoped<IUnitJobService, UnitJobService>();
+               services.AddScoped<IIndustrialAreaService, IndustrialAreaService>();
+               services.AddScoped<ICityService, CityService>();
+               services.AddScoped<IFactoryEntityService, FactoryEntityService>();
 
             #endregion
 

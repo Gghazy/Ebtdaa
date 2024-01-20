@@ -10,11 +10,11 @@ namespace Ebtdaa.Application.FactoryLocations.Mapper
     {
         public FactoryLocationMapper()
         {
-            CreateMap<FactoryLocationResultDto, FactoryLocation>();
-            CreateMap<FactoryLocation, FactoryLocationRequestDto>();
+            CreateMap<FactoryLocation,FactoryLocationResultDto>();
+            CreateMap<FactoryLocationRequestDto,FactoryLocation>();
             
-            CreateMap<FactoryLocationAttachmentResultDto, FactoryLocationAttachment>();
-            CreateMap<FactoryLocationAttachment, FactoryLocationAttachmentRequestDto>();
+            CreateMap<FactoryLocationAttachment, FactoryLocationAttachmentResultDto>();
+            CreateMap<FactoryLocationAttachmentRequestDto, FactoryLocationAttachment>();
         }
     }
 }

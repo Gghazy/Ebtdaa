@@ -11,7 +11,7 @@ namespace Ebtdaa.Application.FactoryLocations.Interfaces
 {
     public interface IFactoryLocationAttachmentService
     {
-        Task<BaseResponse<List<FactoryLocationAttachmentResultDto>>> GetAll();
+        Task<BaseResponse<List<FactoryLocationAttachmentResultDto>>> GetAll(int id);
         Task<BaseResponse<FactoryLocationAttachmentResultDto>> AddAsync(FactoryLocationAttachmentRequestDto req);
         Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int id);
     }

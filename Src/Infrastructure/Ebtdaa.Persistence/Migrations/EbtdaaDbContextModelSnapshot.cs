@@ -416,6 +416,10 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -514,6 +518,10 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("FactoryFinancialId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Type")
                         .HasColumnType("int");
 
@@ -600,6 +608,10 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.Property<int>("FactoryLocationId")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
