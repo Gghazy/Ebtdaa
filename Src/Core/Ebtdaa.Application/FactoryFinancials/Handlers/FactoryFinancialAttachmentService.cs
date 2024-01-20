@@ -27,9 +27,12 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         }
        
 
-        public async Task<BaseResponse<List<FactoryFinancialAttachmentResultDto>>> GetAll()
+        public async Task<BaseResponse<List<FactoryFinancialAttachmentResultDto>>> GetAll(int id)
         {
-            var respose = _mapper.Map<List<FactoryFinancialAttachmentResultDto>>(await _dbContext.FactoryFinancialAttachments.ToListAsync());
+            var respose = _mapper.Map<List<FactoryFinancialAttachmentResultDto>>(
+                await _dbContext.FactoryFinancialAttachments.Where(x=>x.FactoryFinancialId==id).Include(x=>x.Attachment).ToListAsync()
+                
+                );
 
             return new BaseResponse<List<FactoryFinancialAttachmentResultDto>>
             {

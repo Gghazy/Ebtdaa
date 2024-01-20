@@ -26,7 +26,7 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         }
 
 
-        public async Task<BaseResponse<List<FactoryLocationAttachmentResultDto>>> GetAll()
+        public async Task<BaseResponse<List<FactoryLocationAttachmentResultDto>>> GetAll(int id)
         {
             var respose = _mapper.Map<List<FactoryLocationAttachmentResultDto>>(await _dbContext.FactoryLocationAttachments.ToListAsync());
 

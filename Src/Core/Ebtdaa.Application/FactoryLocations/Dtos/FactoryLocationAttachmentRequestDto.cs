@@ -11,6 +11,7 @@ namespace Ebtdaa.Application.FactoryLocations.Dtos
     {
         public int Id { get; set; }
         public FactoryLocationAttachmentType Type { get; set; }
+        public string Name { get; set; }
         public int AttachmentId { get; set; }
         public int FactoryLocationId { get; set; }
     }

@@ -12,6 +12,7 @@ namespace Ebtdaa.Application.Factories.Dtos
         public int Id { get; set; }
         public FactoryFileType Type { get; set; }
         public int AttachmentId { get; set; }
+        public string Name { get; set; }
         public int FactoryId { get; set; }
     }
 }

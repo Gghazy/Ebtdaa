@@ -13,6 +13,7 @@ namespace Ebtdaa.Domain.Factories.Entity
         public int Id { get; set; }
         public FactoryFileType Type { get; set; }
         public int AttachmentId { get; set; }
+        public string Name { get; set; }
         
 
         public virtual Attachment Attachment { get; set; }

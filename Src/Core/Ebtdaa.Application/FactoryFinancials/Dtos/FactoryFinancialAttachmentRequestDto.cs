@@ -10,6 +10,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Dtos
     public class FactoryFinancialAttachmentRequestDto
     {
         public int Id { get; set; }
+        public string Name { get; set; }
         public FactoryFinancialFileType Type { get; set; }
         public int AttachmentId { get; set; }
         public int FactoryFinancialId { get; set; }

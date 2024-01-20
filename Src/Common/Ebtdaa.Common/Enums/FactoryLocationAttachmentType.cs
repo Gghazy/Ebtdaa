@@ -10,6 +10,6 @@ namespace Ebtdaa.Common.Enums
     {
         NationalAddress=0,
         FactoryEntranceImage=1,
-        Electricity_Or_Electricity_Invoice
+        Electricity_Or_Electricity_Invoice=2
     }
 }
