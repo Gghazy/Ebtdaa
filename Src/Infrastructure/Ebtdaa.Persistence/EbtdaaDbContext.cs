@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Ebtdaa.Persistence.Configuration.Factory;
 
 namespace Ebtdaa.Persistence
 {
@@ -22,6 +23,13 @@ namespace Ebtdaa.Persistence
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+
+            builder.ApplyConfiguration(new FactoryContactConfiguration());
+            base.OnModelCreating(builder);
+
+        }
         public DbSet<Factory> Factories { get; set; }
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<City> Cities { get; set; }

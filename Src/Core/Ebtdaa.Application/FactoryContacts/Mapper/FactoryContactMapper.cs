@@ -15,6 +15,8 @@ namespace Ebtdaa.Application.FactoryContacts.Mapper
         {
             CreateMap<FactoryContact, FactoryContactResultDto>();
             CreateMap<FactoryContactRequestDto, FactoryContact>();
+            CreateMap<PhoneDto, Phone>();
+            CreateMap<Phone, PhoneDto>();
         }
     }
 }
