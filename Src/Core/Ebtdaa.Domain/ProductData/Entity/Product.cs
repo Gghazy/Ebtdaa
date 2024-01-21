@@ -23,10 +23,6 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public string? CR  { get; set; }
         public string? Status { get; set; }
 
-        //public int? FactoryId { get; set; }
-
-
-       // public virtual Factory Factory { get; set; }
 
         public virtual ICollection<CustomsItemLevel> CustomsItems { get; set; }
         public virtual ICollection<Unit> Units { get; set; }

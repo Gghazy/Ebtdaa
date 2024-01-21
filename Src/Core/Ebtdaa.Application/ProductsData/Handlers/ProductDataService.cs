@@ -17,6 +17,7 @@ using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Application.Units.Dtos;
 using Ebtdaa.Common.Enums;
+using Ebtdaa.Application.Factories.Dtos;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -32,6 +33,27 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             _mapper = mapper;
         }
 
+        public async Task<BaseResponse<List<ProductResultDto>>> GetAll()
+        {
+            var resualt = _mapper.Map<List<ProductResultDto>>(await _dbContext.Products.ToListAsync());
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = resualt
+            };
+        }
+
+        public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAll(ProductSearch search)
+        {
+            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(await _dbContext.Products.ToQueryResult(search.PageNumber, search.PageSize));
+
+
+            return new BaseResponse<QueryResult<ProductResultDto>>
+            {
+                Data = resualt
+            };
+        }
         public async Task<BaseResponse<ProductResultDto>> GetOne(int Id)
         {
             var result = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == Id);
@@ -99,5 +121,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             };
 
         }
+
+       
     }
 }

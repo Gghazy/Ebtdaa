@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
+using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.ProductsData.Dtos;
+using Ebtdaa.Common.Dtos;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using System;
 using System.Collections.Generic;
@@ -15,6 +18,8 @@ namespace Ebtdaa.Application.ProductsData.Mapper
         {
             CreateMap<ProductRequestDto, Product>();
             CreateMap<Product, ProductRequestDto>();
+            CreateMap<QueryResult<Product>, QueryResult<ProductRequestDto>>();
+
 
             CreateMap<Product , ProductResultDto>();
             CreateMap<ProductResultDto, Product>();

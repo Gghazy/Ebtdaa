@@ -17,7 +17,16 @@ namespace Ebtdaa.WebApi.Controllers
             _productDataService = productDataService;
         }
 
-
+        [HttpPost("Pagination")]
+        public async Task<IActionResult> GetAll(ProductSearch search)
+        {
+            return Ok(await _productDataService.GetAll(search));
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            return Ok(await _productDataService.GetAll());
+        }
         // GET: api/<ProductsController>/id
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne(int id)
