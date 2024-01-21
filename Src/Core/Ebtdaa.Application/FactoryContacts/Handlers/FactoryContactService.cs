@@ -31,7 +31,11 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
         }
         public async Task<BaseResponse<FactoryContactResultDto>> GetOne(int id)
         {
-            var resualt = await _dbContext.FactoryContacts.FirstOrDefaultAsync(x => x.Id == id);
+            var resualt = await _dbContext.FactoryContacts
+                .Include(x=>x.FinanceManagerPhone)
+                .Include(x=>x.OfficerPhone)
+                .Include(x=>x.ProductionManagerPhone)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return new BaseResponse<FactoryContactResultDto>
             {

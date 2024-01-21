@@ -19,10 +19,10 @@ namespace Ebtdaa.Domain.Factories.Entity
         public int FactoryId { get; set; }
 
 
-        public Factory Factory { get; set; }
-        public Phone OfficerPhone { get; set; }
-        public Phone ProductionManagerPhone { get; set; }
-        public Phone FinanceManagerPhone { get; set; }
+        public virtual Factory Factory { get; set; }
+        public virtual Phone OfficerPhone { get; set; }
+        public virtual Phone ProductionManagerPhone { get; set; }
+        public virtual Phone FinanceManagerPhone { get; set; }
 
     }
 }

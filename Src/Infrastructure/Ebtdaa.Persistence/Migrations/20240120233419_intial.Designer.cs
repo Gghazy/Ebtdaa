@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    [Migration("20240120231250_intial")]
+    [Migration("20240120233419_intial")]
     partial class intial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1110,21 +1110,21 @@ namespace Ebtdaa.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Phone", "FinanceManagerPhone")
-                        .WithMany()
+                        .WithMany("FinanceManagerPhones")
                         .HasForeignKey("FinanceManagerPhoneId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Phone", "OfficerPhone")
-                        .WithMany()
+                        .WithMany("OfficerPhones")
                         .HasForeignKey("OfficerPhoneId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Phone", "ProductionManagerPhone")
-                        .WithMany()
+                        .WithMany("ProductionManagerPhones")
                         .HasForeignKey("ProductionManagerPhoneId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Factory");
@@ -1355,6 +1355,15 @@ namespace Ebtdaa.Persistence.Migrations
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryLocation", b =>
                 {
                     b.Navigation("FactoryLocationAttachments");
+                });
+
+            modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.Phone", b =>
+                {
+                    b.Navigation("FinanceManagerPhones");
+
+                    b.Navigation("OfficerPhones");
+
+                    b.Navigation("ProductionManagerPhones");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.General.Attachment", b =>

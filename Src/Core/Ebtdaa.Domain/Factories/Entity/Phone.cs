@@ -16,5 +16,9 @@ namespace Ebtdaa.Domain.Factories.Entity
         public string InternationalNumber { get; set; }
         public string NationalNumber { get; set; }
         public string Number { get; set; }
+        public virtual ICollection<FactoryContact> OfficerPhones { get; set; }
+        public virtual ICollection<FactoryContact> ProductionManagerPhones { get; set; }
+        public virtual ICollection<FactoryContact> FinanceManagerPhones { get; set; }
+        
     }
 }

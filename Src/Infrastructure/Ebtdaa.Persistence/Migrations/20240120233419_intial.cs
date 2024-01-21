@@ -382,19 +382,19 @@ namespace Ebtdaa.Persistence.Migrations
                         column: x => x.FinanceManagerPhoneId,
                         principalTable: "Phone",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FactoryContacts_Phone_OfficerPhoneId",
                         column: x => x.OfficerPhoneId,
                         principalTable: "Phone",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FactoryContacts_Phone_ProductionManagerPhoneId",
                         column: x => x.ProductionManagerPhoneId,
                         principalTable: "Phone",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
