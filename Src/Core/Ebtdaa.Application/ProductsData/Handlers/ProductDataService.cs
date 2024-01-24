@@ -12,12 +12,12 @@ using System.Text;
 using System.Threading.Tasks;
 using FluentValidation;
 using Ebtdaa.Domain.ProductData.Entity;
-using Ebtdaa.Application.CustomsItem.Dtos;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Application.Units.Dtos;
 using Ebtdaa.Common.Enums;
 using Ebtdaa.Application.Factories.Dtos;
+using Ebtdaa.Domain.Factories.Entity;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -33,22 +33,53 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<List<ProductResultDto>>> GetAll()
+        public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAll(ProductSearch search)
         {
-            var resualt = _mapper.Map<List<ProductResultDto>>(await _dbContext.Products.ToListAsync());
+            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
+                await _dbContext.Products
+                .Include(x=>x.Unit)
+                .Where(x => x.FactoryId == search.FactoryId)
+                .ToQueryResult(search.PageNumber, search.PageSize)
+                );
 
+            foreach (var item in resualt.Items)
+            {
+                item.HasCustomLevel = _dbContext.Products.Any(x => x.ParentId == item.Id);
+            }
+            return new BaseResponse<QueryResult<ProductResultDto>>
+            {
+                Data = resualt
+            };
+        }
+        public async Task<BaseResponse<List<ProductResultDto>>> ProductLevel12(int factoryId,int productId)
+        {
+            var resualt = _mapper.Map<List<ProductResultDto>>(
+                await _dbContext.Products
+                .Where(x=>x.FactoryId==factoryId)
+                .Where(x=>x.Level==LevelEnum.Level12)
+                .Where(x=>x.ParentId==null || x.ParentId== productId)
+                .ToListAsync());
 
+            
             return new BaseResponse<List<ProductResultDto>>
             {
                 Data = resualt
             };
         }
 
-        public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAll(ProductSearch search)
+        public async Task<BaseResponse<QueryResult<ProductResultDto>>> ProductLevel10(ProductSearch search)
         {
-            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(await _dbContext.Products.ToQueryResult(search.PageNumber, search.PageSize));
+            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
+            await _dbContext.Products
+                .Where(x => x.FactoryId == search.FactoryId)
+                .Where(x=>x.Level==LevelEnum.Level10)
+                .ToQueryResult(search.PageNumber, search.PageSize)
+                );
 
-
+            foreach (var item in resualt.Items)
+            {
+                item.HasCustomLevel = _dbContext.Products.Any(x => x.ParentId == item.Id);
+            }
             return new BaseResponse<QueryResult<ProductResultDto>>
             {
                 Data = resualt
@@ -96,18 +127,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             };
         }
 
-        public async Task<BaseResponse<QueryResult<CUstomsItemLevelResultDto>>> GetCustomItem_12(CustomsItemSearch search)
-        {
-
-            var resualt = _mapper.Map<QueryResult<CUstomsItemLevelResultDto>>(await _dbContext.CustomsItemLevels.Where(l => l.LevelId == CustomsItemLevelEnum.Level12).ToQueryResult());
-
-
-            return new BaseResponse<QueryResult<CUstomsItemLevelResultDto>>
-            {
-                Data = resualt
-            };
-
-        }
 
         public async Task<BaseResponse<QueryResult<UnitResultDto>>> GetUnit(UnitSearch search)
         {
@@ -122,6 +141,66 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         }
 
-       
+        public async Task<BaseResponse<bool>> SaveCustomLevel(CustomLevelRequestDto request)
+        {
+            var customLevelProduct = await _dbContext.Products.Where(x => request.CustomLevelProductIds.Contains(x.Id)).ToListAsync();
+
+            foreach (var item in customLevelProduct)
+            {
+                item.ParentId = request.ProductId;
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            return new BaseResponse<bool>
+            {
+                Data =true
+            };
+        }
+        public async Task<BaseResponse<List<ProductResultDto>>> GetCustomProductLevel(int productId)
+        {
+            var resualt = _mapper.Map<List<ProductResultDto>>(
+                await _dbContext.Products
+                .Where(x => x.ParentId == productId)
+                .ToListAsync());
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = resualt
+            };
+        }
+
+        public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAllCheckLevel(ProductSearch search)
+        {
+            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
+                await _dbContext.Products
+                .Include(x=>x.Parent)
+                .Where(x => x.Level == LevelEnum.Level12)
+                .Where(x => x.ParentId !=null)
+                .ToQueryResult(search.PageNumber, search.PageSize)
+                );
+
+            return new BaseResponse<QueryResult<ProductResultDto>>
+            {
+                Data = resualt
+            };
+        }
+
+        public async Task<BaseResponse<bool>> SaveCheckLevel(CheckLevelRequestDto request)
+        {
+            var oldProduct = await _dbContext.Products.FirstOrDefaultAsync(x =>x.Id==request.OldProductId);
+            var newProduct = await _dbContext.Products.FirstOrDefaultAsync(x =>x.Id==request.NewProductId);
+
+            oldProduct.ParentId = null;
+            newProduct.ParentId = request.ParentId;
+
+             await _dbContext.SaveChangesAsync();
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
     }
 }

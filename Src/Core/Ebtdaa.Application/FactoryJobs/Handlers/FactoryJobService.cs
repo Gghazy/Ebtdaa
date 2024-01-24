@@ -69,9 +69,11 @@ namespace Ebtdaa.Application.FactoryJobs.Handlers
         }
         private async Task Update(List<FactoryIntegration> factoryIntegrations)
         {
+            var factories = await _dbContext.Factories.ToListAsync();
+
             foreach (var item in factoryIntegrations)
             {
-                var factory =await _dbContext.Factories.FirstOrDefaultAsync(x => x.FactoryNumber == item.FactoryNumber);
+                var factory = factories.FirstOrDefault(x => x.CommercialRegister == item.CR);
 
                 var factoryUpdated = _mapper.Map(item, factory);
 

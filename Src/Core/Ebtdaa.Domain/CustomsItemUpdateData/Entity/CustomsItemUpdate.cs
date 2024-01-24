@@ -1,5 +1,4 @@
-﻿using Ebtdaa.Domain.CustomsItem.CustomsItemLevel.Entity;
-using Ebtdaa.Domain.Factories.Entity;
+﻿using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
 using System;
 using System.Collections.Generic;
@@ -21,7 +20,6 @@ namespace Ebtdaa.Domain.CustomsItemUpdateData.Entity
 
         public virtual Factory Factory { get; set; }
 
-        public ICollection<CustomsItemLevel> CustomsItemLevels { get; set; }
 
 
 

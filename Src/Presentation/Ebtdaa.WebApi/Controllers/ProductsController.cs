@@ -22,10 +22,16 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _productDataService.GetAll(search));
         }
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+
+        [HttpPost("ProductLevel10")]
+        public async Task<IActionResult> ProductLevel10(ProductSearch search)
         {
-            return Ok(await _productDataService.GetAll());
+            return Ok(await _productDataService.ProductLevel10(search));
+        }
+        [HttpGet("ProductLevel12")]
+        public async Task<IActionResult> ProductLevel12(int factoryId, int productId)
+        {
+            return Ok(await _productDataService.ProductLevel12(factoryId, productId));
         }
         // GET: api/<ProductsController>/id
         [HttpGet("{id}")]
@@ -47,6 +53,30 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _productDataService.UpdateAsync(req));
         }
+
+        [HttpPost("SaveCustomLevel")]
+        public async Task<IActionResult> SaveCustomLevel([FromBody] CustomLevelRequestDto req)
+        {
+            return Ok(await _productDataService.SaveCustomLevel(req));
+        }
+        [HttpGet("GetCustomProductLevel")]
+        public async Task<IActionResult> GetCustomProductLevel(int productId)
+        {
+            return Ok(await _productDataService.GetCustomProductLevel(productId));
+        }
+
+        [HttpPost("GetAllCheckLevel")]
+        public async Task<IActionResult> GetAllCheckLevel(ProductSearch search)
+        {
+            return Ok(await _productDataService.GetAllCheckLevel(search));
+        }
+
+        [HttpPost("SaveCheckLevel")]
+        public async Task<IActionResult> SaveCheckLevel([FromBody] CheckLevelRequestDto req)
+        {
+            return Ok(await _productDataService.SaveCheckLevel(req));
+        }
+
 
     }
 }

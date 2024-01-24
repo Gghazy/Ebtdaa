@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240123174804_add_Review_Column")]
+    partial class add_Review_Column
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -822,9 +824,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("ItemNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("Kilograms_Per_Unit")
-                        .HasColumnType("float");
-
                     b.Property<int?>("Level")
                         .HasColumnType("int");
 
@@ -1212,7 +1211,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.ProductData.Entity.Product", "Product")
-                        .WithMany("ProductAttachments")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1311,8 +1310,6 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Product", b =>
                 {
-                    b.Navigation("ProductAttachments");
-
                     b.Navigation("Units");
                 });
 #pragma warning restore 612, 618

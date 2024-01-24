@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240121165407_Update-Product")]
+    partial class UpdateProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -793,6 +795,35 @@ namespace Ebtdaa.Persistence.Migrations
                     b.ToTable("Units");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Level", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Levels");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -822,10 +853,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("ItemNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<double?>("Kilograms_Per_Unit")
-                        .HasColumnType("float");
-
-                    b.Property<int?>("Level")
+                    b.Property<int?>("LevelId")
                         .HasColumnType("int");
 
                     b.Property<int?>("ParentId")
@@ -837,9 +865,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("ProductName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool?>("Review")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
@@ -859,6 +884,8 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("FactoryId");
+
+                    b.HasIndex("LevelId");
 
                     b.HasIndex("ParentId");
 
@@ -1194,9 +1221,15 @@ namespace Ebtdaa.Persistence.Migrations
                         .WithMany("Products")
                         .HasForeignKey("FactoryId");
 
+                    b.HasOne("Ebtdaa.Domain.ProductData.Entity.Level", "Level")
+                        .WithMany("Products")
+                        .HasForeignKey("LevelId");
+
                     b.HasOne("Ebtdaa.Domain.ProductData.Entity.Product", "Parent")
                         .WithMany()
                         .HasForeignKey("ParentId");
+
+                    b.Navigation("Level");
 
                     b.Navigation("Parent");
 
@@ -1212,7 +1245,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.ProductData.Entity.Product", "Product")
-                        .WithMany("ProductAttachments")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1309,10 +1342,13 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("FactoryLocations");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Level", b =>
+                {
+                    b.Navigation("Products");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Product", b =>
                 {
-                    b.Navigation("ProductAttachments");
-
                     b.Navigation("Units");
                 });
 #pragma warning restore 612, 618

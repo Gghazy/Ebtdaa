@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace Ebtdaa.Common.Enums
 {
-    public enum FactoryFileType
+    public enum LevelEnum
     {
-        factoryFace=0,
-        factoryStatus=1,
-        Photo=2,
-        BaseFile=2,
+        Level10=0,
+        Level12=1,
     }
 }

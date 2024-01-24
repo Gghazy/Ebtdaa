@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.ProductJobs.Interfaces;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.Integration;
 using Ebtdaa.Domain.ProductData.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -49,12 +50,24 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
         {
             var products = _mapper.Map<List<Product>>(productIntegrations);
 
-            await _dbContext.Products.AddRangeAsync(products);
+            var factories = await _dbContext.Factories.ToListAsync();
 
             try
             {
+
+                foreach (var product in products)
+                {
+
+                    var factory = factories.FirstOrDefault(x => x.CommercialRegister == product.CR);
+
+                    product.FactoryId = factory == null?null: factory.Id;
+                }
+
+                await _dbContext.Products.AddRangeAsync(products);
+
                 await _dbContext.SaveChangesAsync();
 
+            
             }
             catch (Exception ex)
             {
@@ -71,7 +84,10 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
             var newProduct = productIntegrations.Where(x => !productIds.Contains(x.ItemNumber.Trim(' '))).ToList();
 
             var _products = _mapper.Map<List<Product>>(newProduct);
-
+            foreach (var product in _products)
+            {
+                product.FactoryId = (await _dbContext.Factories.FirstOrDefaultAsync(x => x.CommercialRegister == product.CR)).Id;
+            }
             await _dbContext.Products.AddRangeAsync(_products);
             try
             {
@@ -86,11 +102,18 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
         }
         private async Task Update(List<ProductIntegration> productIntegrations)
         {
+            var factories= await _dbContext.Factories.ToListAsync();
+            var products= await _dbContext.Products.ToListAsync();
+
             foreach (var item in productIntegrations)
             {
-                var product = await _dbContext.Products.FirstOrDefaultAsync(x => x.ItemNumber == item.ItemNumber);
+                var product =  products.FirstOrDefault(x => x.ItemNumber == item.ItemNumber);
 
                 var productUpdated = _mapper.Map(item, product);
+
+                var factory = factories.FirstOrDefault(x => x.CommercialRegister == productUpdated.CR);
+
+                productUpdated.FactoryId = factories==null?null: factory?.Id;
 
             }
             try

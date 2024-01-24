@@ -1,7 +1,6 @@
 ﻿using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Domain.ActualRawMaterials.Entity;
 using Ebtdaa.Domain.ActualProduction.Entity;
-using Ebtdaa.Domain.CustomsItem.CustomsItemLevel.Entity;
 using Ebtdaa.Domain.CustomsItemUpdateData.Entity;
 using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
@@ -14,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ebtdaa.Persistence.Configuration.Factory;
+using Ebtdaa.Persistence.Configuration.Products;
 
 namespace Ebtdaa.Persistence
 {
@@ -27,6 +27,7 @@ namespace Ebtdaa.Persistence
         {
 
             builder.ApplyConfiguration(new FactoryContactConfiguration());
+            builder.ApplyConfiguration(new ProductConfiguration());
             base.OnModelCreating(builder);
 
         }
@@ -44,7 +45,6 @@ namespace Ebtdaa.Persistence
         public DbSet<RawMaterial> RawMaterials { get; set; }
         public DbSet<ActualRawMaterial> ActualRawMaterials { get; set; }
         public DbSet<ActualRawMaterialFile> ActualRawMaterialFiles { get; set; }
-        public DbSet<CustomsItemLevel> CustomsItemLevels { get; set; }
         public DbSet<CustomsItemUpdate> CustomsItemUpdates { get; set; }
         public DbSet<ActualProductionAndCapacity> ActualProductionAndCapacities { get; set; }
         public DbSet<ReasonIncreasCapacity> ReasonIncreasCapacities { get; set; }
@@ -52,7 +52,6 @@ namespace Ebtdaa.Persistence
         public DbSet<Unit> Units { get; set; }
         public DbSet<ActualProductionAttachment> ActualProductionAttachments { get; set; }
         public DbSet<ProductAttachment> ProductAttachments { get; set; }
-        public DbSet<FactoryProduct> FactoryProducts { get; set; }
         public DbSet<Period> Periods { get; set; }
         public Task<int> SaveChangesAsync()
         {
