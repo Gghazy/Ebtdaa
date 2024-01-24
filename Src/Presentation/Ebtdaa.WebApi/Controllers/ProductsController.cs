@@ -48,7 +48,7 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         // PUT api/<ProductsController>/5
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] ProductRequestDto req)
         {
             return Ok(await _productDataService.UpdateAsync(req));

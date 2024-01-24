@@ -7,7 +7,7 @@ namespace Ebtdaa.Application.ActualProduction.Validation
     {
         public ActualProductionValidator() 
         {
-            RuleFor(d => d.CustomItemId_12)
+            RuleFor(d => d.ProductId)
               .NotEmpty()
               .WithMessage("CustomItem 12-IsRequired-Field");
 

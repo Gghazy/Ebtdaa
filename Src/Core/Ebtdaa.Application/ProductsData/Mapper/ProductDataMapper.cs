@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
-using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.ProductsData.Dtos;
 using Ebtdaa.Common.Dtos;
-using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.ProductData.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.ProductsData.Mapper
 {

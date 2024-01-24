@@ -1,4 +1,5 @@
 ﻿using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
 
@@ -21,11 +22,14 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public LevelEnum? Level { get; set; }
         public bool? Review { get; set; }
         public int? ParentId { get; set; }
+        public string? Level12Number { get; set; }
+
         public double? Kilograms_Per_Unit { get; set; }
         public virtual Unit Unit { get; set; }
         public virtual Factory factory { get; set; }
         public virtual Product Parent { get; set; }
         public virtual ICollection<ProductAttachment> ProductAttachments { get; set; }
+        public virtual ICollection<ActualProductionAndCapacity> ActualProductionAndCapacities { get; set; }
 
     }
 }

@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240124190045_addLevel12Number_In_Product")]
+    partial class addLevel12Number_In_Product
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -45,16 +47,19 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
+                    b.Property<int>("CustomItemId_12")
+                        .HasColumnType("int");
+
                     b.Property<int>("DesignedCapacity")
                         .HasColumnType("int");
 
                     b.Property<int>("DesignedCapacityUnitId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Month")
+                    b.Property<int>("FactoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("Month")
                         .HasColumnType("int");
 
                     b.Property<int>("ReasoneForIncreaseCapacity")
@@ -68,11 +73,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ActualProductionUintId");
-
-                    b.HasIndex("DesignedCapacityUnitId");
-
-                    b.HasIndex("ProductId");
+                    b.HasIndex("FactoryId");
 
                     b.ToTable("ActualProductionAndCapacities");
                 });
@@ -753,11 +754,16 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("ActualProductionAndCapacityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Reason")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActualProductionAndCapacityId");
 
                     b.ToTable("ReasonIncreasCapacities");
                 });
@@ -770,11 +776,16 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int?>("ActualProductionAndCapacityId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ActualProductionAndCapacityId");
 
                     b.ToTable("Units");
                 });
@@ -954,29 +965,13 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAndCapacity", b =>
                 {
-                    b.HasOne("Ebtdaa.Domain.General.Unit", "ActualProductionUint")
-                        .WithMany("ActualProductionUints")
-                        .HasForeignKey("ActualProductionUintId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Ebtdaa.Domain.General.Unit", "DesignedCapacityUnit")
-                        .WithMany("DesignedCapacityUnits")
-                        .HasForeignKey("DesignedCapacityUnitId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("Ebtdaa.Domain.ProductData.Entity.Product", "Product")
-                        .WithMany("ActualProductionAndCapacities")
-                        .HasForeignKey("ProductId")
+                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
+                        .WithMany()
+                        .HasForeignKey("FactoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ActualProductionUint");
-
-                    b.Navigation("DesignedCapacityUnit");
-
-                    b.Navigation("Product");
+                    b.Navigation("Factory");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAttachment", b =>
@@ -1177,6 +1172,20 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("FactoryLocation");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.General.ReasonIncreasCapacity", b =>
+                {
+                    b.HasOne("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAndCapacity", null)
+                        .WithMany("Reasones")
+                        .HasForeignKey("ActualProductionAndCapacityId");
+                });
+
+            modelBuilder.Entity("Ebtdaa.Domain.General.Unit", b =>
+                {
+                    b.HasOne("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAndCapacity", null)
+                        .WithMany("Units")
+                        .HasForeignKey("ActualProductionAndCapacityId");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Product", b =>
                 {
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "factory")
@@ -1244,6 +1253,13 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAndCapacity", b =>
+                {
+                    b.Navigation("Reasones");
+
+                    b.Navigation("Units");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.Factory", b =>
                 {
                     b.Navigation("FactoryContacts");
@@ -1299,17 +1315,11 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.General.Unit", b =>
                 {
-                    b.Navigation("ActualProductionUints");
-
-                    b.Navigation("DesignedCapacityUnits");
-
                     b.Navigation("Products");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Product", b =>
                 {
-                    b.Navigation("ActualProductionAndCapacities");
-
                     b.Navigation("ProductAttachments");
                 });
 #pragma warning restore 612, 618

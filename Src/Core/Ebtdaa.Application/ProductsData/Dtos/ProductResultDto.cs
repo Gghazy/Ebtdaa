@@ -17,6 +17,8 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public int? ProductCount { get; set; }
         public bool AnyNewProducts { get; set; }
         public string? ItemNumber { get; set; }
+        public string? Level12Number { get; set; }
+
         public string? CR { get; set; }
         public string? Status { get; set; }
         public int? FactoryId { get; set; }
@@ -27,6 +29,8 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public string UnitName { get; set; }
         public bool? Review { get; set; }
         public double? Kilograms_Per_Unit { get; set; }
+        public double? PhotoId { get; set; }
+        public double? PaperId { get; set; }
 
 
     }

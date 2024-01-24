@@ -35,9 +35,12 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAll(ProductSearch search)
         {
+
+
             var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
                 await _dbContext.Products
                 .Include(x=>x.Unit)
+                .Include(x=>x.ProductAttachments)
                 .Where(x => x.FactoryId == search.FactoryId)
                 .ToQueryResult(search.PageNumber, search.PageSize)
                 );
@@ -45,6 +48,8 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             foreach (var item in resualt.Items)
             {
                 item.HasCustomLevel = _dbContext.Products.Any(x => x.ParentId == item.Id);
+                item.PhotoId = _dbContext.ProductAttachments.FirstOrDefault(x => x.ProductId == item.Id && x.Type==ProductAttachmentType.ProductImage)?.AttachmentId;
+                item.PaperId = _dbContext.ProductAttachments.FirstOrDefault(x => x.ProductId == item.Id && x.Type==ProductAttachmentType.PaperData)?.AttachmentId;
             }
             return new BaseResponse<QueryResult<ProductResultDto>>
             {
@@ -87,10 +92,22 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         }
         public async Task<BaseResponse<ProductResultDto>> GetOne(int Id)
         {
-            var result = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == Id);
+            var result = await _dbContext
+                                .Products
+                                .Include(x=>x.ProductAttachments)
+                                .FirstOrDefaultAsync(x => x.Id == Id);
+
+            int? photoId = result.ProductAttachments.FirstOrDefault(x => x.Type == ProductAttachmentType.ProductImage)?.AttachmentId;
+            int? paperId = result.ProductAttachments.FirstOrDefault(x => x.Type == ProductAttachmentType.PaperData)?.AttachmentId;
+
+            var response = _mapper.Map<ProductResultDto>(result);
+
+            response.PhotoId = photoId;
+            response.PaperId = paperId;
+
             return new BaseResponse<ProductResultDto>
             {
-                Data = _mapper.Map<ProductResultDto>(result)
+                Data = response
             };
         }
 
@@ -98,9 +115,14 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         {
             var product = _mapper.Map<Product>(request);
 
-            var result = await _validator.ValidateAsync(product);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
+            //var result = await _validator.ValidateAsync(product);
+            //if (result.IsValid == false) throw new ValidationException(result.Errors);
+            product.Level = LevelEnum.Level12;
+            product.ProductAttachments = new List<ProductAttachment>
+            {
+                new ProductAttachment{AttachmentId=request.PhotoId,Type=ProductAttachmentType.ProductImage},
+                new ProductAttachment{AttachmentId=request.PaperId,Type=ProductAttachmentType.PaperData},
+            };
             await _dbContext.Products.AddAsync(product);
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<ProductResultDto>
@@ -112,12 +134,18 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         public async Task<BaseResponse<ProductResultDto>> UpdateAsync(ProductRequestDto req)
         {
-            var getProduct = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == req.Id);
+            var getProduct = await _dbContext.Products.Include(x=>x.ProductAttachments).FirstOrDefaultAsync(x => x.Id == req.Id);
             var productUpdated = _mapper.Map(req, getProduct);
+            
+            productUpdated.ProductAttachments = new List<ProductAttachment>
+            {
+                new ProductAttachment{AttachmentId=req.PhotoId,Type=ProductAttachmentType.ProductImage},
+                new ProductAttachment{AttachmentId=req.PaperId,Type=ProductAttachmentType.PaperData},
+            };
 
             // Validation
-            var result = await _validator.ValidateAsync(productUpdated);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
+            //var result = await _validator.ValidateAsync(productUpdated);
+            //if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
 
