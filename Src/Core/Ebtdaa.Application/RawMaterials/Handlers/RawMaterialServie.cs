@@ -34,19 +34,24 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         }
         public async Task<BaseResponse<RawMaterialResultDto>> AddAsync(RawMaterialRequestDto req)
         {
-            RawMaterial rawMaterial = _mapper.Map<RawMaterial>(req);
+            var rawMaterial = _mapper.Map<RawMaterial>(req);
             var result = await _rawMaterialValidtor.ValidateAsync(rawMaterial);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.RawMaterials.AddAsync(rawMaterial);
-
-            await _dbContext.SaveChangesAsync();
+            
+                await _dbContext.SaveChangesAsync();
+           
+              
+           
             return new BaseResponse<RawMaterialResultDto>
             {
                 Data = _mapper.Map<RawMaterialResultDto>(rawMaterial)
             };
         }
 
+       
+           
         public async Task<BaseResponse<RawMaterialResultDto>> GetOne(int id)
         {
             var result = await _dbContext.RawMaterials.FirstOrDefaultAsync(x => x.Id == id);

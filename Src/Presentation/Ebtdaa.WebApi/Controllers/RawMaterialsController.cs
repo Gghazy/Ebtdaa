@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Application.ActualRawMaterials.Dtos;
 using Ebtdaa.Application.ActualRawMaterials.Interfaces;
+using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -34,11 +35,10 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(RawMaterialRequestDto request)
+        public async Task<IActionResult> CreateAsync([FromBody] RawMaterialRequestDto  request)
         {
             return Ok(await _RawMaterialService.AddAsync(request));
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne(int id)
