@@ -42,6 +42,7 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<ProductAttachment> ProductAttachments { get; set; }
         public DbSet<ActualRawMaterial> ActualRawMaterials { get; set; }
         public DbSet<RawMaterial> RawMaterials { get; set; }
+        public DbSet<RawMaterialAttachment> RawMaterialAttachments { get; set; }
         public DbSet<ActualRawMaterialFile> ActualRawMaterialFiles { get; set; }
         public DbSet<FactoryProduct> FactoryProducts { get; set; }
         public DbSet<Period> Periods { get; set; }

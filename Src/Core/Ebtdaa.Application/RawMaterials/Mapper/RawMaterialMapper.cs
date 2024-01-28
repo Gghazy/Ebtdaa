@@ -13,6 +13,8 @@ namespace Ebtdaa.Application.RawMaterials.Mapper
             CreateMap<RawMaterialRequestDto, RawMaterial>();
 
 
+            CreateMap<RawMaterialAttachment,ItemAttachmentsResultDto>();
+            CreateMap<ItemAttachmentsRequestDto, RawMaterialAttachment>();
         }
 
 

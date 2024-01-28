@@ -1,22 +1,12 @@
 ﻿using AutoMapper;
-using Ebtdaa.Application.ActualRawMaterials.Dtos;
-using Ebtdaa.Application.ActualRawMaterials.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
 using Ebtdaa.Application.RawMaterials.Validation;
-using Ebtdaa.Domain.ActualRawMaterials.Entity;
-using Ebtdaa.Domain.ProductData.Entity;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.RawMaterials.Handlers
 {
@@ -39,9 +29,15 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.RawMaterials.AddAsync(rawMaterial);
-            
+            try
+            {
                 await _dbContext.SaveChangesAsync();
-           
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
               
            
             return new BaseResponse<RawMaterialResultDto>
@@ -89,7 +85,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             };
         }
 
-        public async Task<BaseResponse<List<RawMaterialResultDto>>> GetAllByFactory(int id)
+        public async Task<BaseResponse<List<RawMaterialResultDto>>> GetByFactory(int id)
         {
             var respose = _mapper.Map<List<RawMaterialResultDto>>(await _dbContext.RawMaterials.Where(x => x.FactoryId == id).ToListAsync());
 

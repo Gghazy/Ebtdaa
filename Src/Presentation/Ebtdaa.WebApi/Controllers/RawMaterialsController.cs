@@ -30,7 +30,7 @@ namespace Ebtdaa.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetByFactory(int Factoryid)
         {
-            return Ok(await _RawMaterialService.GetAllByFactory(Factoryid));
+            return Ok(await _RawMaterialService.GetByFactory(Factoryid));
 
         }
 

@@ -56,6 +56,7 @@ namespace Ebtdaa.Application
                services.AddScoped<IFactoryLocationAttachmentService, FactoryLocationAttachmentService>();
                services.AddScoped<IFactoryContactService, FactoryContactService>();
                services.AddScoped<IRawMaterialService, RawMaterialServie>();
+               services.AddScoped<IItemAttachmentService, ItemAttachmentService>();
                services.AddScoped<IActualRawMaterialService, ActualRawMaterialService>();
                services.AddScoped<IActualRawFileService, ActualRawFileService>();
                services.AddScoped<IUnitJobService, UnitJobService>();
@@ -79,6 +80,7 @@ namespace Ebtdaa.Application
                 services.AddScoped<FactoryContactValidator>();
                 services.AddScoped<ActualRawMaterialValidator>();
                 services.AddScoped<RawMaterialValidtor>();
+                services.AddScoped<ItemAttachmentValidator>();
                 services.AddScoped<ActualRawMaterialFileValidator>();
 
             #endregion
