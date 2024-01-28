@@ -11,7 +11,7 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public virtual Attachment Attachment { get; set; }
         public int RawMaterialId { get; set; }
         public virtual RawMaterial RawMaterial { get; set; }
-        public AttachmentType Type { get; set; }
+        public ProductAttachmentType Type { get; set; }
 
       
 
