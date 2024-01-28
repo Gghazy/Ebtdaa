@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ebtdaa.Application.CustomsItem.Dtos
+namespace Ebtdaa.Application.ProductsData.Dtos
 {
-    public class CustomsItemSearch : SearchCriteria
+    public class ProductSearch:SearchCriteria
     {
-
+        public int FactoryId { get; set; }
     }
 }

@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.ProductsData.Dtos;
+using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.ProductData.Entity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.ProductsData.Mapper
 {
@@ -14,16 +11,16 @@ namespace Ebtdaa.Application.ProductsData.Mapper
         public ProductDataMapper() 
         {
             CreateMap<ProductRequestDto, Product>();
-            CreateMap<Product, ProductRequestDto>();
 
-            CreateMap<Product , ProductResultDto>();
-            CreateMap<ProductResultDto, Product>();
 
-            CreateMap<Product , ProductResultDto>();
-            CreateMap<ProductResultDto, Product>();
+            CreateMap<Product, ProductResultDto>()
+                 .ForMember(d => d.ParentName, opt => opt.MapFrom(src => src.Parent.ProductName))
+                 .ForMember(d => d.UnitName, opt => opt.MapFrom(src => src.Unit.Name));
+            CreateMap<QueryResult<Product>, QueryResult<ProductResultDto>>();
 
-            CreateMap<Product ,ProductAttachmentRequestDto>();
-            CreateMap<ProductAttachmentResultDto, Product>();  
+
+            CreateMap<ProductAttachmentRequestDto,Product>();
+            CreateMap<Product, ProductAttachmentResultDto>();  
         }
     }
 }

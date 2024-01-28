@@ -15,4 +15,8 @@
     <ProjectReference Include="..\..\Common\Ebtdaa.Common\Ebtdaa.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CustomsItem\CustomsItemLevels\Entity\" />
+  </ItemGroup>
+
 </Project>
