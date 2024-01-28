@@ -4,6 +4,10 @@ using Ebtdaa.Application.ActualProduction.Interfaces;
 using Ebtdaa.Application.ActualProduction.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.ProductsData.Dtos;
+using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Enums;
+using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.CustomsItemUpdateData.Entity;
 using FluentValidation;
@@ -22,6 +26,24 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public readonly IMapper _mapper;
         private readonly ActualProductionValidator _actualProductionValidator;
 
+        public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAll(ActualProductionSearch search)
+        {
+            var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
+                        await _dbContext.Products
+                        .Where(x=>x.FactoryId==search.FactoryId)
+                        .Where(x=>x.Level==LevelEnum.Level12)
+                        .Include(x => x.ActualProductionAndCapacities.Where(x=>(int)x.Month==search.MonthId))
+                        .ThenInclude(x => x.DesignedCapacityUnit)
+                        .Include(x => x.ActualProductionAndCapacities)
+                        .ThenInclude(x => x.ActualProductionUint)
+                        .ToQueryResult(search.PageNumber, search.PageSize)
+                        );
+
+            return new BaseResponse<QueryResult<ProductCapacityResultDto>>
+            {
+                Data = resualt
+            };
+        }
         public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper , ActualProductionValidator actualProductionValidator)
         {
             _dbContext = dbContext;
@@ -71,5 +93,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 Data = _mapper.Map<ActualProductionResultDto>(actualproductionUpdated)
             };
         }
+
+      
     }
 }

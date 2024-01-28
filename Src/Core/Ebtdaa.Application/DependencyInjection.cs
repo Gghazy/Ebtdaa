@@ -37,6 +37,8 @@ using Ebtdaa.Application.ProductsData.Interfaces;
 using Ebtdaa.Application.ProductsData.Handlers;
 using Ebtdaa.Application.Units.Interfaces;
 using Ebtdaa.Application.Units.Handlers;
+using Ebtdaa.Application.ActualProduction.Interfaces;
+using Ebtdaa.Application.ActualProduction.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -66,6 +68,7 @@ namespace Ebtdaa.Application
                services.AddScoped<IFactoryEntityService, FactoryEntityService>();
                services.AddScoped<IProductDataService, ProductDataService>();
                services.AddScoped<IUnitService, UnitService>();
+               services.AddScoped<IActualProductionService, ActualProductionService>();
 
             #endregion
 

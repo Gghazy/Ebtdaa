@@ -6,20 +6,19 @@ using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.ActualProduction.Dtos
 {
-    public class ActualProductionResultDto
+    public class ProductCapacityResultDto
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+        public int ActualProductionAndCapacityId { get; set; }
         public int DesignedCapacity { get; set; }
-        public int DesignedCapacityUnitId { get; set; }
         public int ActualProduction { get; set; }
-        public int ActualProductionUintId { get; set; }
         public int ActualProductionWeight { get; set; }
-        public int MonthId { get; set; }
         public int ReasoneForIncreaseCapacity { get; set; }
         public string DesignedCapacityUnitName { get; set; }
         public string ActualProductionUintName { get; set; }
-        public string ProductName { get; set; }
+        public double? Kilograms_Per_Unit { get; set; }
+
 
     }
 }

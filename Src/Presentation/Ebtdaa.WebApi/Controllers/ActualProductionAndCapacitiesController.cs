@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Application.ActualProduction.Dtos;
 using Ebtdaa.Application.ActualProduction.Interfaces;
+using Ebtdaa.Application.ProductsData.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -15,7 +16,11 @@ namespace Ebtdaa.WebApi.Controllers
         {
             _actualProductionService = actualProductionService;
         }
-      
+        [HttpPost("Pagination")]
+        public async Task<IActionResult> GetAll(ActualProductionSearch search)
+        {
+            return Ok(await _actualProductionService.GetAll(search));
+        }
         // GET api/<ActualProductionAndCapacitiesController>/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne(int id)
