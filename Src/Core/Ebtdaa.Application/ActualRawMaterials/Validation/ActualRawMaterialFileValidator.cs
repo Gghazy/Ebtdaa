@@ -11,9 +11,9 @@ namespace Ebtdaa.Application.ActualRawMaterials.Validation
             .NotEmpty()
             .WithMessage("Attachment-IsRequired-Field");
 
-            RuleFor(d => d.ActualRawMaterialId)
+            RuleFor(d => d.FactoryId)
                 .NotEmpty()
-                .WithMessage("ActualRawMaterial-IsRequired-Field");
+                .WithMessage("FactoryId-IsRequired-Field");
             RuleFor(d => d.Name)
                .NotEmpty()
                .WithMessage("Name-IsRequired-Field");

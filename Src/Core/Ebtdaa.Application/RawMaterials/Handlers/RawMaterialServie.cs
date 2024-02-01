@@ -4,6 +4,8 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
 using Ebtdaa.Application.RawMaterials.Validation;
+using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -85,14 +87,20 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             };
         }
 
-        public async Task<BaseResponse<List<RawMaterialResultDto>>> GetByFactory(int id)
+        public async Task<BaseResponse<QueryResult<RawMaterialResultDto>>> GetByFactory(RawMaterialSearch search,int id)
         {
-            var respose = _mapper.Map<List<RawMaterialResultDto>>(await _dbContext.RawMaterials.Where(x => x.FactoryId == id).ToListAsync());
+            var respose = _mapper.Map<QueryResult<RawMaterialResultDto>>
+                            (await _dbContext.RawMaterials
+                                             .Where(x => x.FactoryId == id )
+                                             .ToQueryResult(search.PageNumber, search.PageSize));
+                return new BaseResponse<QueryResult<RawMaterialResultDto>>
+                {
+                    Data = respose
+                };
+           
 
-            return new BaseResponse<List<RawMaterialResultDto>>
-            {
-                Data = respose
-            };
+
+            
 
 
             }

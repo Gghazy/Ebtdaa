@@ -22,6 +22,7 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public Factory Factory { get; set; }
         public int PhotoId { get; set; }
         public int PaperId { get; set; }
-       
+      //  public virtual Product Product { get; set; }
+
     }
 }

@@ -1,9 +1,5 @@
-﻿using Ebtdaa.Application.ActualRawMaterials.Dtos;
-using Ebtdaa.Application.ActualRawMaterials.Interfaces;
-using Ebtdaa.Application.FactoryContacts.Dtos;
-using Ebtdaa.Application.RawMaterials.Dtos;
+﻿using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ebtdaa.WebApi.Controllers
@@ -27,10 +23,10 @@ namespace Ebtdaa.WebApi.Controllers
         //}
 
 
-        [HttpGet]
-        public async Task<IActionResult> GetByFactory(int Factoryid)
+        [HttpPost("pagination")]
+        public async Task<IActionResult> GetByFactory([FromBody] RawMaterialSearch search,int Factoryid)
         {
-            return Ok(await _RawMaterialService.GetByFactory(Factoryid));
+            return Ok(await _RawMaterialService.GetByFactory(search,Factoryid));
 
         }
 

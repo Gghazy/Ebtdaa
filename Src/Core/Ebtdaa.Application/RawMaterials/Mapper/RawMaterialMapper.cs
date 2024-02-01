@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.RawMaterials.Dtos;
+using Ebtdaa.Common.Dtos;
 using Ebtdaa.Domain.RawMaterials.Entity;
 
 namespace Ebtdaa.Application.RawMaterials.Mapper
@@ -11,6 +12,7 @@ namespace Ebtdaa.Application.RawMaterials.Mapper
                
             CreateMap<RawMaterial, RawMaterialResultDto>();
             CreateMap<RawMaterialRequestDto, RawMaterial>();
+            CreateMap<QueryResult<RawMaterial>, QueryResult<RawMaterialResultDto>>();
 
 
             CreateMap<RawMaterialAttachment,ItemAttachmentsResultDto>();
