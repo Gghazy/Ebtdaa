@@ -45,6 +45,7 @@ namespace Ebtdaa.Persistence
         public DbSet<IndustrialArea> IndustrialAreas { get; set; }
         public DbSet<FactoryContact> FactoryContacts { get; set; }
         public DbSet<RawMaterial> RawMaterials { get; set; }
+        public DbSet<RawMaterialAttachment> RawMaterialAttachments { get; set; }
         public DbSet<ActualRawMaterial> ActualRawMaterials { get; set; }
         public DbSet<ActualRawMaterialFile> ActualRawMaterialFiles { get; set; }
         public DbSet<CustomsItemUpdate> CustomsItemUpdates { get; set; }

@@ -1,8 +1,5 @@
-﻿using Ebtdaa.Application.ActualRawMaterials.Dtos;
-using Ebtdaa.Application.ActualRawMaterials.Interfaces;
-using Ebtdaa.Application.RawMaterials.Dtos;
+﻿using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ebtdaa.WebApi.Controllers
@@ -18,19 +15,26 @@ namespace Ebtdaa.WebApi.Controllers
             _RawMaterialService = RawMaterialService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    return Ok(await _RawMaterialService.GetAll());
+
+        //}
+
+
+        [HttpPost("pagination")]
+        public async Task<IActionResult> GetByFactory([FromBody] RawMaterialSearch search,int Factoryid)
         {
-            return Ok(await _RawMaterialService.GetAll());
+            return Ok(await _RawMaterialService.GetByFactory(search,Factoryid));
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(RawMaterialRequestDto request)
+        public async Task<IActionResult> CreateAsync([FromBody] RawMaterialRequestDto  request)
         {
             return Ok(await _RawMaterialService.AddAsync(request));
         }
-
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetOne(int id)

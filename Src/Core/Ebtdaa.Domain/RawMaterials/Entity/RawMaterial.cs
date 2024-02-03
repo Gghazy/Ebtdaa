@@ -10,16 +10,19 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public string CustomItemName { get; set; }
         public string Name { get; set; }
         public int MaximumMonthlyConsumption { get; set; }
+        public int UnitId { get; set; }
+        public Unit Unit { get; set; }
         public int AverageWeightKG { get; set; }
-      //  public int ProductId { get; set; }
+        public int ProductId { get; set; }
         public Product Product { get; set; }
 
         public string Description { get; set; }
 
         public int FactoryId { get; set; }
         public Factory Factory { get; set; }
-        public int AttachmentId { get; set; }
-        public virtual Attachment Attachment { get; set; }
+        public int PhotoId { get; set; }
+        public int PaperId { get; set; }
+      //  public virtual Product Product { get; set; }
 
     }
 }
