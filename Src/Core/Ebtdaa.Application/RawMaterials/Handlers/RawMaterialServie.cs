@@ -1,21 +1,14 @@
 ﻿using AutoMapper;
-using Ebtdaa.Application.ActualRawMaterials.Dtos;
-using Ebtdaa.Application.ActualRawMaterials.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
 using Ebtdaa.Application.RawMaterials.Validation;
-using Ebtdaa.Domain.ActualRawMaterials.Entity;
+using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.RawMaterials.Handlers
 {
@@ -33,19 +26,30 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         }
         public async Task<BaseResponse<RawMaterialResultDto>> AddAsync(RawMaterialRequestDto req)
         {
-            RawMaterial rawMaterial = _mapper.Map<RawMaterial>(req);
+            var rawMaterial = _mapper.Map<RawMaterial>(req);
             var result = await _rawMaterialValidtor.ValidateAsync(rawMaterial);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.RawMaterials.AddAsync(rawMaterial);
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
 
-            await _dbContext.SaveChangesAsync();
+                throw ex;
+            }
+              
+           
             return new BaseResponse<RawMaterialResultDto>
             {
                 Data = _mapper.Map<RawMaterialResultDto>(rawMaterial)
             };
         }
 
+       
+           
         public async Task<BaseResponse<RawMaterialResultDto>> GetOne(int id)
         {
             var result = await _dbContext.RawMaterials.FirstOrDefaultAsync(x => x.Id == id);
@@ -61,7 +65,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             var rawMaterial = await _dbContext.RawMaterials.FirstOrDefaultAsync(x => x.Id == req.Id);
             var rawMaterialUpdated = _mapper.Map(req, rawMaterial);
 
-            // Validation
+
             var result = await _rawMaterialValidtor.ValidateAsync(rawMaterialUpdated);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
@@ -75,12 +79,30 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
         public async Task<BaseResponse<List<RawMaterialResultDto>>> GetAll()
         {
-            var respose = _mapper.Map<List<RawMaterialResultDto>>(await _dbContext.RawMaterials.ToListAsync());
+            var respose = _mapper.Map<List<RawMaterialResultDto>>(await _dbContext.RawMaterials.Include(x => x.Product).ToListAsync());
 
             return new BaseResponse<List<RawMaterialResultDto>>
             {
                 Data = respose
             };
         }
-    }
+
+        public async Task<BaseResponse<QueryResult<RawMaterialResultDto>>> GetByFactory(RawMaterialSearch search,int id)
+        {
+            var respose = _mapper.Map<QueryResult<RawMaterialResultDto>>
+                            (await _dbContext.RawMaterials
+                                             .Where(x => x.FactoryId == id )
+                                             .ToQueryResult(search.PageNumber, search.PageSize));
+                return new BaseResponse<QueryResult<RawMaterialResultDto>>
+                {
+                    Data = respose
+                };
+           
+
+
+            
+
+
+            }
+    } 
 }

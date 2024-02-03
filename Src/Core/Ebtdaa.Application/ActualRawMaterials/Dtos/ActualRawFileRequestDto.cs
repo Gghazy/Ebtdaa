@@ -11,5 +11,7 @@ namespace Ebtdaa.Application.ActualRawMaterials.Dtos
         public int Id { get; set; }
         public int AttachmentId { get; set; }
         public int FactoryId { get; set; }
+        public string Name { get; set; }
+        public int Month { get; set; }
     }
 }

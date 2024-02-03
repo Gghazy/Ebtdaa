@@ -50,9 +50,12 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             };
         }
 
-        public async Task<BaseResponse<List<ActualRawFileResultDto>>> GetAll()
+        public async Task<BaseResponse<List<ActualRawFileResultDto>>> GetByFactory(int id)
         {
-            var respose = _mapper.Map<List<ActualRawFileResultDto>>(await _dbContext.ActualRawMaterialFiles.ToListAsync());
+            var respose = _mapper.Map<List<ActualRawFileResultDto>>(
+                await _dbContext.ActualRawMaterialFiles
+                .Where(x=>x.FactoryId ==id)
+                .Include(x => x.Attachment).ToListAsync());
 
             return new BaseResponse<List<ActualRawFileResultDto>>
             {
