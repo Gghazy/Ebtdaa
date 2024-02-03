@@ -32,7 +32,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                         await _dbContext.Products
                         .Where(x=>x.FactoryId==search.FactoryId)
                         .Where(x=>x.Level==LevelEnum.Level12)
-                        .Include(x => x.ActualProductionAndCapacities.Where(x=>(int)x.Month==search.MonthId))
+                        .Include(x => x.ActualProductionAndCapacities.Where(x=>(int)x.MonthId==search.MonthId))
                         .ThenInclude(x => x.DesignedCapacityUnit)
                         .Include(x => x.ActualProductionAndCapacities)
                         .ThenInclude(x => x.ActualProductionUint)
@@ -53,11 +53,13 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
 
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
         {
-            var result = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.Id == Id);
+            var result = await _dbContext.ActualProductionAndCapacities
+                                         .FirstOrDefaultAsync(x => x.Id == Id);
+            var response = _mapper.Map<ActualProductionResultDto>(result);
 
             return new BaseResponse<ActualProductionResultDto>
             {
-                Data = result != null ? _mapper.Map<ActualProductionResultDto>(result) : new ActualProductionResultDto()
+                Data = result != null ? response : new ActualProductionResultDto()
             };
         }
 
@@ -82,6 +84,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         {
             var getActualproduction = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(a => a.Id == request.Id);
             var actualproductionUpdated = _mapper.Map(request , getActualproduction);
+           
 
             var result = await _actualProductionValidator.ValidateAsync(actualproductionUpdated);
             if (result.IsValid == false) throw new ValidationException(result.Errors);

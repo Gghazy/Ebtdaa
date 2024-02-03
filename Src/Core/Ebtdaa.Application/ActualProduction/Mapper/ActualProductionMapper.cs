@@ -14,15 +14,16 @@ namespace Ebtdaa.Application.ActualProduction.Mapper
             CreateMap<QueryResult<Product>, QueryResult<ProductCapacityResultDto>>();
 
             CreateMap<ActualProductionRequestDto, ActualProductionAndCapacity>();
-            CreateMap<ActualProductionAndCapacity, ActualProductionResultDto>();
+            CreateMap<ActualProductionAndCapacity, ActualProductionResultDto>()
+                                                 .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.Product.ProductName));
+
             CreateMap<Product, ProductCapacityResultDto>()
-                                 .ForMember(d => d.ActualProductionAndCapacityId, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count>0? src.ActualProductionAndCapacities.FirstOrDefault().Id:0))
+                                 .ForMember(d => d.ActualProductionAndCapacityId, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().Id : 0))
                                  .ForMember(d => d.DesignedCapacityUnitName, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacityUnit.Name : ""))
                                  .ForMember(d => d.ActualProductionUintName, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProductionUint.Name : ""))
                                  .ForMember(d => d.DesignedCapacity, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacity : 0))
                                  .ForMember(d => d.ActualProduction, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProduction : 0))
-                                 .ForMember(d => d.ActualProductionWeight, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProductionWeight : 0))
-                                 .ForMember(d => d.ReasoneForIncreaseCapacity, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ReasoneForIncreaseCapacity : 0));
+                                 .ForMember(d => d.ActualProductionWeight, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProductionWeight : 0));
 
 
 
