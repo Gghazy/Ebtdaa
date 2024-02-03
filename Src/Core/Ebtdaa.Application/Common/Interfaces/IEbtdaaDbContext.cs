@@ -35,5 +35,6 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<RawMaterial> RawMaterials { get; set; }
         public DbSet<ActualRawMaterialFile> ActualRawMaterialFiles { get; set; }
         public DbSet<Period> Periods { get; set; }
+        public DbSet<Setting> Settings { get; set; }
     }
 }
