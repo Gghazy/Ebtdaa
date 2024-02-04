@@ -4,6 +4,7 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.Factories.Validation;
+using Ebtdaa.Application.LogIn.Interfaces;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.Factories.Entity;
@@ -23,17 +24,19 @@ namespace Ebtdaa.Application.Factories.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryValidator _factoryValidator;
+        private readonly ILoginService _loginService;
 
-        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator)
+        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator, ILoginService loginService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _factoryValidator= factoryValidator;
+            _loginService = loginService;
         }
         public async Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search)
         {
-
-            var resualt = _mapper.Map<QueryResult<FactoryResualtDto>>(await _dbContext.Factories.ToQueryResult(search.PageNumber,search.PageSize));
+           
+            var resualt = _mapper.Map<QueryResult<FactoryResualtDto>>(await _dbContext.Factories.Where(f => f.OwnerIdentity == search.OwnerIdentity.ToString()).ToQueryResult(search.PageNumber,search.PageSize));
 
 
             return new BaseResponse<QueryResult<FactoryResualtDto>>
