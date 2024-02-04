@@ -15,6 +15,10 @@ namespace Ebtdaa.Application.RawMaterials.Mapper
             CreateMap<QueryResult<RawMaterial>, QueryResult<RawMaterialResultDto>>();
 
 
+
+          //  CreateMap<List<ProductRawMaterial>, List< RawMaterialProductDto>>();
+          //  CreateMap<RawMaterialProductDto, ProductRawMaterial>();
+
             CreateMap<RawMaterialAttachment,ItemAttachmentsResultDto>();
             CreateMap<ItemAttachmentsRequestDto, RawMaterialAttachment>();
         }

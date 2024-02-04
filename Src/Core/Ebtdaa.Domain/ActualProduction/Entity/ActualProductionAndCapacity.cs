@@ -20,8 +20,7 @@ namespace Ebtdaa.Domain.ActualProduction.Entity
         public int ActualProduction {  get; set; }
         public int ActualProductionUintId { get; set; }
         public int ActualProductionWeight {  get; set; }
-        public MonthsEnum Month { get; set; }
-        public int ReasoneForIncreaseCapacity { get; set; }
+        public MonthsEnum MonthId { get; set; }
 
         public virtual Unit DesignedCapacityUnit { get; set; }
         public virtual Unit ActualProductionUint { get; set; }

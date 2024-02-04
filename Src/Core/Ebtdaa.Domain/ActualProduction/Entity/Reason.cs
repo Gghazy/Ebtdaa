@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ebtdaa.Application.Units.Dtos
+namespace Ebtdaa.Domain.ActualProduction.Entity
 {
-    public class UnitResultDto
+    public class Reason
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string conversionToKG { get; set; }
+
+        public ICollection<IncreaseActualProduction> IncreaseActualProductions { get; set; }
     }
 }

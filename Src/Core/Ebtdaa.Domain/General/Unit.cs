@@ -12,7 +12,7 @@ namespace Ebtdaa.Domain.General
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
+        public string conversionToKG { get; set; }
         public ICollection<Product> Products { get; set; }
         public ICollection<ActualProductionAndCapacity> ActualProductionUints { get; set; }
         public ICollection<ActualProductionAndCapacity> DesignedCapacityUnits { get; set; }

@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ebtdaa.Application.Units.Dtos
+namespace Ebtdaa.Application.ActualProduction.Dtos
 {
-    public class UnitResultDto
+    public class ReasonResultDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string conversionToKG { get; set; }
     }
 }
