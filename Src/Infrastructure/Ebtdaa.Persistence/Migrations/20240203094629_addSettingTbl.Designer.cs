@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240203094629_addSettingTbl")]
+    partial class addSettingTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -51,10 +53,13 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("DesignedCapacityUnitId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MonthId")
+                    b.Property<int>("Month")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ReasoneForIncreaseCapacity")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -115,44 +120,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.ToTable("ActualProductionAttachments");
                 });
 
-            modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.IncreaseActualProduction", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("Month")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReasonId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ReasonId");
-
-                    b.ToTable("IncreaseActualProductions");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.Reason", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Reasons");
-                });
-
             modelBuilder.Entity("Ebtdaa.Domain.ActualRawMaterials.Entity.ActualRawMaterial", b =>
                 {
                     b.Property<int>("Id")
@@ -206,27 +173,8 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("AttachmentId")
                         .HasColumnType("int");
 
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("smalldatetime");
-
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
-
-                    b.Property<int>("Month")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("smalldatetime");
 
                     b.HasKey("Id");
 
@@ -977,6 +925,9 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AttachmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("AverageWeightKG")
                         .HasColumnType("int");
 
@@ -1004,56 +955,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("PaperId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PhotoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UnitId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("smalldatetime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FactoryId");
-
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("UnitId");
-
-                    b.ToTable("RawMaterials");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterialAttachment", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AttachmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<int>("RawMaterialId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -1066,9 +968,11 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("AttachmentId");
 
-                    b.HasIndex("RawMaterialId");
+                    b.HasIndex("FactoryId");
 
-                    b.ToTable("RawMaterialAttachments");
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("RawMaterials");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAndCapacity", b =>
@@ -1115,17 +1019,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("ActualProduction");
 
                     b.Navigation("Attachment");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.IncreaseActualProduction", b =>
-                {
-                    b.HasOne("Ebtdaa.Domain.ActualProduction.Entity.Reason", "Reason")
-                        .WithMany("IncreaseActualProductions")
-                        .HasForeignKey("ReasonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Reason");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualRawMaterials.Entity.ActualRawMaterial", b =>
@@ -1349,6 +1242,12 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", b =>
                 {
+                    b.HasOne("Ebtdaa.Domain.General.Attachment", "Attachment")
+                        .WithMany()
+                        .HasForeignKey("AttachmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
                         .WithMany()
                         .HasForeignKey("FactoryId")
@@ -1361,41 +1260,11 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.General.Unit", "Unit")
-                        .WithMany()
-                        .HasForeignKey("UnitId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Attachment");
 
                     b.Navigation("Factory");
 
                     b.Navigation("Product");
-
-                    b.Navigation("Unit");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterialAttachment", b =>
-                {
-                    b.HasOne("Ebtdaa.Domain.General.Attachment", "Attachment")
-                        .WithMany()
-                        .HasForeignKey("AttachmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", "RawMaterial")
-                        .WithMany()
-                        .HasForeignKey("RawMaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Attachment");
-
-                    b.Navigation("RawMaterial");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.Reason", b =>
-                {
-                    b.Navigation("IncreaseActualProductions");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.Factory", b =>

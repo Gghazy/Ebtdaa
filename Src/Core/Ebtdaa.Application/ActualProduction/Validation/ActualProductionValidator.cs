@@ -9,11 +9,8 @@ namespace Ebtdaa.Application.ActualProduction.Validation
         {
             RuleFor(d => d.ProductId)
               .NotEmpty()
-              .WithMessage("CustomItem 12-IsRequired-Field");
+              .WithMessage("Product-IsRequired-Field");
 
-            RuleFor(d => d.ActualProductionWeight)
-              .NotEmpty()
-              .WithMessage("ActualProductionWeight Weight-IsRequired-Field");
 
             RuleFor(d => d.ActualProductionUintId)
               .NotEmpty()
@@ -31,13 +28,7 @@ namespace Ebtdaa.Application.ActualProduction.Validation
               .NotEmpty()
               .WithMessage("ActualProduction ActualProduction-IsRequired-Field");
 
-            RuleFor(d => d.Month)
-             .NotEmpty()
-             .WithMessage("Month Month-IsRequired-Field");
 
-            RuleFor(d => d.ReasoneForIncreaseCapacity)
-             .NotEmpty()
-             .WithMessage("Reason ReasoneForIncreaseCapacity-IsRequired-Field");
         }
     }
 }

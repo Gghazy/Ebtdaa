@@ -4,6 +4,10 @@ using Ebtdaa.Application.ActualProduction.Interfaces;
 using Ebtdaa.Application.ActualProduction.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.ProductsData.Dtos;
+using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Enums;
+using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.CustomsItemUpdateData.Entity;
 using FluentValidation;
@@ -22,6 +26,24 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public readonly IMapper _mapper;
         private readonly ActualProductionValidator _actualProductionValidator;
 
+        public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAll(ActualProductionSearch search)
+        {
+            var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
+                        await _dbContext.Products
+                        .Where(x=>x.FactoryId==search.FactoryId)
+                        .Where(x=>x.Level==LevelEnum.Level12)
+                        .Include(x => x.ActualProductionAndCapacities.Where(x=>x.MonthId==search.MonthId))
+                        .ThenInclude(x => x.DesignedCapacityUnit)
+                        .Include(x => x.ActualProductionAndCapacities)
+                        .ThenInclude(x => x.ActualProductionUint)
+                        .ToQueryResult(search.PageNumber, search.PageSize)
+                        );
+
+            return new BaseResponse<QueryResult<ProductCapacityResultDto>>
+            {
+                Data = resualt
+            };
+        }
         public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper , ActualProductionValidator actualProductionValidator)
         {
             _dbContext = dbContext;
@@ -31,11 +53,13 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
 
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
         {
-            var result = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.Id == Id);
+            var result = await _dbContext.ActualProductionAndCapacities
+                                         .FirstOrDefaultAsync(x => x.Id == Id);
+            var response = _mapper.Map<ActualProductionResultDto>(result);
 
             return new BaseResponse<ActualProductionResultDto>
             {
-                Data = result != null ? _mapper.Map<ActualProductionResultDto>(result) : new ActualProductionResultDto()
+                Data = result != null ? response : new ActualProductionResultDto()
             };
         }
 
@@ -60,6 +84,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         {
             var getActualproduction = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(a => a.Id == request.Id);
             var actualproductionUpdated = _mapper.Map(request , getActualproduction);
+           
 
             var result = await _actualProductionValidator.ValidateAsync(actualproductionUpdated);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
@@ -71,5 +96,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 Data = _mapper.Map<ActualProductionResultDto>(actualproductionUpdated)
             };
         }
+
+      
     }
 }
