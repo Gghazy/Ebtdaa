@@ -10,5 +10,6 @@ namespace Ebtdaa.Application.Units.Dtos
     {
         public int Id {  get; set; }
         public string Name { get; set; }
+        public string conversionToKG { get; set; }
     }
 }
