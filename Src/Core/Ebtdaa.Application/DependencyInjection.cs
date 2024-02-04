@@ -70,6 +70,8 @@ namespace Ebtdaa.Application
                services.AddScoped<IProductDataService, ProductDataService>();
                services.AddScoped<IUnitService, UnitService>();
                services.AddScoped<IActualProductionService, ActualProductionService>();
+               services.AddScoped<IIncreaseActualProductionService, IncreaseActualProductionService>();
+               services.AddScoped<IReasonService, ReasonService>();
 
             #endregion
 

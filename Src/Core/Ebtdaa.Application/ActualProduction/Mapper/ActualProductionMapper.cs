@@ -23,7 +23,7 @@ namespace Ebtdaa.Application.ActualProduction.Mapper
                                  .ForMember(d => d.ActualProductionUintName, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProductionUint.Name : ""))
                                  .ForMember(d => d.DesignedCapacity, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacity : 0))
                                  .ForMember(d => d.ActualProduction, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProduction : 0))
-                                 .ForMember(d => d.ActualProductionWeight, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProductionWeight : 0));
+                                 .ForMember(d => d.ActualProductionWeight, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProduction * src.Kilograms_Per_Unit : 0));
 
 
 

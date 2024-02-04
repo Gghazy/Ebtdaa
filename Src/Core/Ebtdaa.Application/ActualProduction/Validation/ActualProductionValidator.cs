@@ -9,7 +9,7 @@ namespace Ebtdaa.Application.ActualProduction.Validation
         {
             RuleFor(d => d.ProductId)
               .NotEmpty()
-              .WithMessage("CustomItem 12-IsRequired-Field");
+              .WithMessage("Product-IsRequired-Field");
 
 
             RuleFor(d => d.ActualProductionUintId)
@@ -28,9 +28,6 @@ namespace Ebtdaa.Application.ActualProduction.Validation
               .NotEmpty()
               .WithMessage("ActualProduction ActualProduction-IsRequired-Field");
 
-            RuleFor(d => d.MonthId)
-             .NotEmpty()
-             .WithMessage("Month Month-IsRequired-Field");
 
         }
     }
