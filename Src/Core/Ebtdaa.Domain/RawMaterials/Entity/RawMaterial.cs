@@ -13,8 +13,6 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public int UnitId { get; set; }
         public Unit Unit { get; set; }
         public int AverageWeightKG { get; set; }
-        //public int ProductId { get; set; }
-        //public Product Product { get; set; }
 
         public string Description { get; set; }
 
@@ -22,8 +20,7 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public Factory Factory { get; set; }
         public int PhotoId { get; set; }
         public int PaperId { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
-      // public virtual ProductRawMaterial ProductRawMaterial { get; set; }
-    }
+        public virtual ICollection<ProductRawMaterial> ProductRawMaterials { get; set; }
+  }
    
     }

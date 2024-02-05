@@ -77,8 +77,17 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             };
         }
 
-       
+        public async Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetByMonth(int month)
+        {
+            var respose = _mapper.Map<List<ActualRawMaterialResultDto>>(
+                                    await _dbContext.ActualRawMaterials
+                                    .Where(x=>x.Month == month)
+                                    .ToListAsync());
 
-      
+            return new BaseResponse<List<ActualRawMaterialResultDto>>
+            {
+                Data = respose
+            };
+        }
     }
 }

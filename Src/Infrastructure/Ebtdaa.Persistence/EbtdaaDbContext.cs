@@ -15,6 +15,8 @@ using System.Threading.Tasks;
 using Ebtdaa.Persistence.Configuration.Factory;
 using Ebtdaa.Persistence.Configuration.Products;
 using Ebtdaa.Persistence.Configuration.ActualProductionAndCapacities;
+using System.Reflection.Emit;
+using Ebtdaa.Persistence.Configuration.ProductRawMaterials;
 
 namespace Ebtdaa.Persistence
 {
@@ -30,6 +32,10 @@ namespace Ebtdaa.Persistence
             builder.ApplyConfiguration(new FactoryContactConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new ActualProductionAndCapacityConfiguration());
+            builder.ApplyConfiguration(new ProductRawMaterialConfiguration());
+
+
+           
             base.OnModelCreating(builder);
 
         }

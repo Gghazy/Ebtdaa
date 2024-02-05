@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240205120114_itemss")]
+    partial class itemss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,22 +169,16 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<double>("CurrentStockQuantity")
-                        .HasColumnType("float");
+                    b.Property<int>("CurrentStockQuantity_KG")
+                        .HasColumnType("int");
 
-                    b.Property<double>("CurrentStockQuantity_KG")
-                        .HasColumnType("float");
-
-                    b.Property<double>("IncreasedUsageReason")
-                        .HasColumnType("float");
+                    b.Property<int>("IncreasedUsageReason")
+                        .HasColumnType("int");
 
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
                     b.Property<int>("RawMaterialId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StockUnitId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -191,14 +187,8 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int>("UsageUnitId")
+                    b.Property<int>("UsedQuantity_KG")
                         .HasColumnType("int");
-
-                    b.Property<double>("UsedQuantity")
-                        .HasColumnType("float");
-
-                    b.Property<double>("UsedQuantity_KG")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -990,13 +980,21 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.ProductRawMaterial", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("rawMaterialId")
                         .HasColumnType("int");
 
-                    b.HasKey("ProductId", "rawMaterialId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("rawMaterialId");
 
@@ -1379,13 +1377,13 @@ namespace Ebtdaa.Persistence.Migrations
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.ProductRawMaterial", b =>
                 {
                     b.HasOne("Ebtdaa.Domain.ProductData.Entity.Product", "Product")
-                        .WithMany("ProductRawMaterials")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", "RawMaterial")
-                        .WithMany("ProductRawMaterials")
+                        .WithMany()
                         .HasForeignKey("rawMaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1505,13 +1503,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("ActualProductionAndCapacities");
 
                     b.Navigation("ProductAttachments");
-
-                    b.Navigation("ProductRawMaterials");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", b =>
-                {
-                    b.Navigation("ProductRawMaterials");
                 });
 #pragma warning restore 612, 618
         }

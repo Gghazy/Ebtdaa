@@ -30,7 +30,7 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public virtual Product Parent { get; set; }
         public virtual ICollection<ProductAttachment> ProductAttachments { get; set; }
         public virtual ICollection<ActualProductionAndCapacity> ActualProductionAndCapacities { get; set; }
-        public virtual ICollection<RawMaterial> RawMaterials { get; set; }
+        public virtual ICollection<ProductRawMaterial> ProductRawMaterials { get; set; }
 
     }
 }

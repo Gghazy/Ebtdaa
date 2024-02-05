@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Common.Dtos;
+using Ebtdaa.Domain.ProductData.Entity;
 using Ebtdaa.Domain.RawMaterials.Entity;
 
 namespace Ebtdaa.Application.RawMaterials.Mapper
@@ -10,12 +11,23 @@ namespace Ebtdaa.Application.RawMaterials.Mapper
             public RawMaterialMapper()
             {
 
-            CreateMap<RawMaterial, RawMaterialResultDto>();
+            CreateMap<RawMaterial, RawMaterialResultDto>() ;
             CreateMap<RawMaterialRequestDto, RawMaterial>() ;
             CreateMap<QueryResult<RawMaterial>, QueryResult<RawMaterialResultDto>>();
 
-
             CreateMap<RawMaterialProductDto,ProductRawMaterial>();
+
+
+
+
+            CreateMap<ProductRawMaterial, RawMaterialResultDto>()
+           .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.RawMaterial.Id))
+           .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.RawMaterial.Name));
+
+            CreateMap<RawMaterial, RawMaterialProductDto>()
+                .ForMember(dest => dest.RawMaterialId, opt => opt.MapFrom(src => src.ProductRawMaterials));
+
+
 
 
 

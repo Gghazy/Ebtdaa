@@ -26,6 +26,12 @@ namespace Ebtdaa.WebApi.Controllers
 
         }
 
+        [HttpGet("Month")]
+        public async Task<IActionResult> GetByMonth(int month)
+        {
+            return Ok(await _actualRawMaterialService.GetByMonth(month));
+
+        }
         [HttpPost]
         public async Task<IActionResult> CreateAsync(ActualRawMaterialRequestDto request)
         {

@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240205122123_Update1")]
+    partial class Update1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,22 +169,16 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<double>("CurrentStockQuantity")
-                        .HasColumnType("float");
+                    b.Property<int>("CurrentStockQuantity_KG")
+                        .HasColumnType("int");
 
-                    b.Property<double>("CurrentStockQuantity_KG")
-                        .HasColumnType("float");
-
-                    b.Property<double>("IncreasedUsageReason")
-                        .HasColumnType("float");
+                    b.Property<int>("IncreasedUsageReason")
+                        .HasColumnType("int");
 
                     b.Property<int>("Month")
                         .HasColumnType("int");
 
                     b.Property<int>("RawMaterialId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("StockUnitId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -191,14 +187,8 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int>("UsageUnitId")
+                    b.Property<int>("UsedQuantity_KG")
                         .HasColumnType("int");
-
-                    b.Property<double>("UsedQuantity")
-                        .HasColumnType("float");
-
-                    b.Property<double>("UsedQuantity_KG")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -1000,7 +990,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("rawMaterialId");
 
-                    b.ToTable("ProductRawMaterials");
+                    b.ToTable("ProductRawMaterial");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", b =>
