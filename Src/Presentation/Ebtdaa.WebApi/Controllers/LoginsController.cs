@@ -21,11 +21,11 @@ namespace Ebtdaa.WebApi.Controllers
         }
        
         // GET api/<LoginsController>/5
-        [HttpGet("{id}")]
-        public async Task<IActionResult> Get(int id)
-        {
-            return Ok(await _loginService.OnGet());
-        }
+        //[HttpGet("{id}")]
+        //public async Task<IActionResult> Get(int id)
+        //{
+        //    return Ok(await _loginService.OnGet());
+        //}
 
        
     }

@@ -24,14 +24,12 @@ namespace Ebtdaa.Application.Factories.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryValidator _factoryValidator;
-        private readonly ILoginService _loginService;
 
-        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator, ILoginService loginService)
+        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _factoryValidator= factoryValidator;
-            _loginService = loginService;
         }
         public async Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search)
         {
