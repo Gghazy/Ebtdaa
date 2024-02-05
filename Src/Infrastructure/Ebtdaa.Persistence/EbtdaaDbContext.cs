@@ -59,6 +59,7 @@ namespace Ebtdaa.Persistence
         public DbSet<Setting> Settings { get; set; }
         public DbSet<IncreaseActualProduction> IncreaseActualProductions { get; set; }
         public DbSet<Reason> Reasons { get; set; }
+        public DbSet<ProductRawMaterial> ProductRawMaterials { get; set; }
         public Task<int> SaveChangesAsync()
         {
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())

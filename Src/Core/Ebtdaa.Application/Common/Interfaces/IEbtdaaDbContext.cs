@@ -39,5 +39,6 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<Setting> Settings { get; set; }
         public DbSet<IncreaseActualProduction> IncreaseActualProductions { get; set; }
         public DbSet<Reason> Reasons { get; set; }
+        public DbSet<ProductRawMaterial> ProductRawMaterials { get; set; }
     }
 }
