@@ -9,9 +9,13 @@ namespace Ebtdaa.Domain.ActualRawMaterials.Entity
         public int Month { get; set; }
         public int RawMaterialId { get; set; }
         public RawMaterial RawMaterial { get; set; }
-        public int CurrentStockQuantity_KG { get; set; }
-        public int UsedQuantity_KG { get; set; }
-        public int IncreasedUsageReason { get; set; }
+        public double CurrentStockQuantity_KG { get; set; }
+        public double UsedQuantity_KG { get; set; }
+        public double IncreasedUsageReason { get; set; }
+        public double UsedQuantity { get; set; }
+        public double CurrentStockQuantity { get; set; }
+        public int StockUnitId { get; set; }
+        public int UsageUnitId { get; set; }
 
     }
 }
