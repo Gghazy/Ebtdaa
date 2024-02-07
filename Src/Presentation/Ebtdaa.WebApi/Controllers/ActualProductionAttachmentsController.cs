@@ -19,7 +19,7 @@ namespace Ebtdaa.WebApi.Controllers
 
 
         // GET: api/<ActualProductionAttachmentsController>
-        [HttpGet(":id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetAll(int factoryId)
         {
             return Ok(await _service.GetAll(factoryId));
