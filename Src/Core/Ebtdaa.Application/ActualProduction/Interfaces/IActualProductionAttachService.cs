@@ -12,7 +12,7 @@ namespace Ebtdaa.Application.ActualProduction.Interfaces
     {
         Task<BaseResponse<ActualProductionAttacResultDto>> AddAsync(ActualProductionAttacRequestDto result);
         Task<BaseResponse<ActualProductionAttacResultDto>> DeleteAsync(int id);
-        Task<BaseResponse<List<ActualProductionAttacResultDto>>> GetAll();
+        Task<BaseResponse<List<ActualProductionAttacResultDto>>> GetAll(int factoryId);
 
     }
 }

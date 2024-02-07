@@ -13,12 +13,9 @@ namespace Ebtdaa.Application.ActualProduction.Validation
         public ActualroductionAttachValidator() 
         {
             RuleFor(d => d.AttachmentId)
-       .NotEmpty()
-       .WithMessage("Attachment-IsRequired-Field");
+           .NotEmpty()
+           .WithMessage("Attachment-IsRequired-Field");
 
-            RuleFor(d => d.ActualProduvtionId)
-                .NotEmpty()
-                .WithMessage("Actual Production-IsRequired-Field");
 
             RuleFor(d => d.Type)
                 .NotEmpty()
