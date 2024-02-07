@@ -35,13 +35,13 @@ namespace Ebtdaa.WebApi.Controllers
 
         // POST api/<InspectorsController>
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> CreateAsync(InspectorRequestDto request)
         {
             return Ok(await _inspectorService.AddAsync(request));
         }
 
         // PUT api/<InspectorsController>/5
+        [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] InspectorRequestDto req)
         {
 

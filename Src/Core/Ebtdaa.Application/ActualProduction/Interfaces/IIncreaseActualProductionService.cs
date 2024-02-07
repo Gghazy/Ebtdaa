@@ -6,7 +6,7 @@ namespace Ebtdaa.Application.ActualProduction.Interfaces
 {
     public interface IIncreaseActualProductionService
     {
-        Task<BaseResponse<IncreaseActualProductionResultDto>> GetOne(MonthsEnum month);
+        Task<BaseResponse<IncreaseActualProductionResultDto>> GetOne(MonthsEnum month, int factoryId);
         Task<BaseResponse<IncreaseActualProductionResultDto>> AddAsync(IncreaseActualProductionRequestDto result);
         Task<BaseResponse<IncreaseActualProductionResultDto>> UpdateAsync(IncreaseActualProductionRequestDto result);
 

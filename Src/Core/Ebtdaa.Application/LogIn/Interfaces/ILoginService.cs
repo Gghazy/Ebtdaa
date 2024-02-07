@@ -12,6 +12,6 @@ namespace Ebtdaa.Application.LogIn.Interfaces
    public interface  ILoginService
     {
         Task<BaseResponse<List<FactoryResualtDto>>> GetAll(string ownerIdentity);
-        Task<BaseResponse<List<FactoryResualtDto>>> OnGet();
+        //Task<BaseResponse<List<FactoryResualtDto>>> OnGet();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.General;
 using Ebtdaa.Domain.ProductData.Entity;
 using System;
@@ -31,6 +32,7 @@ namespace Ebtdaa.Domain.Factories.Entity
         public virtual ICollection<FactoryContact> FactoryContacts { get; set; }
         public virtual ICollection<FactoryFile> FactoryFiles { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<IncreaseActualProduction> IncreaseActualProductions { get; set; }
 
     }
 }

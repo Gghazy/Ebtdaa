@@ -11,7 +11,9 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
     {
         public int Id { get; set; }
         public int AttachmentId { get; set; }
-        public int ActualProductionId { get; set; }
+        public int FactoryId { get; set; }
+        public string Name { get; set; }
+
         public ActualProductionFileType Type { get; set; }
 
     }
