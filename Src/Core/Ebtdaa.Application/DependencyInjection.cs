@@ -75,6 +75,7 @@ namespace Ebtdaa.Application
                services.AddScoped<IIncreaseActualProductionService, IncreaseActualProductionService>();
                services.AddScoped<IReasonService, ReasonService>();
                services.AddScoped<ILoginService, LoginService>();
+               services.AddScoped<IActualProductionAttachService, ActualProductionAttachService>();
 
             #endregion
 
@@ -93,6 +94,7 @@ namespace Ebtdaa.Application
                 services.AddScoped<RawMaterialValidtor>();
                 services.AddScoped<ItemAttachmentValidator>();
                 services.AddScoped<ActualRawMaterialFileValidator>();
+                services.AddScoped<ActualroductionAttachValidator>();
 
             #endregion
 
