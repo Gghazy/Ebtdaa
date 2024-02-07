@@ -6,6 +6,7 @@ using Ebtdaa.Domain.General;
 using Ebtdaa.Domain.ProductData.Entity;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using Microsoft.EntityFrameworkCore;
+using Ebtdaa.Domain.Inspectors.Entity;
 
 namespace Ebtdaa.Application.Common.Interfaces
 {
@@ -39,5 +40,7 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<Setting> Settings { get; set; }
         public DbSet<IncreaseActualProduction> IncreaseActualProductions { get; set; }
         public DbSet<Reason> Reasons { get; set; }
+        public DbSet<Inspector> Inspectors { get; set; }
+        public DbSet<InspectorFactory> InspectorFactories { get; set; }
     }
 }

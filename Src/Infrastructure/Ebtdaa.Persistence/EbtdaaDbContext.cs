@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using Ebtdaa.Persistence.Configuration.Factory;
 using Ebtdaa.Persistence.Configuration.Products;
 using Ebtdaa.Persistence.Configuration.ActualProductionAndCapacities;
+using Ebtdaa.Domain.Inspectors.Entity;
 
 namespace Ebtdaa.Persistence
 {
@@ -59,6 +60,8 @@ namespace Ebtdaa.Persistence
         public DbSet<Setting> Settings { get; set; }
         public DbSet<IncreaseActualProduction> IncreaseActualProductions { get; set; }
         public DbSet<Reason> Reasons { get; set; }
+        public DbSet<Inspector> Inspectors { get; set; }
+        public DbSet<InspectorFactory> InspectorFactories { get; set; }
         public Task<int> SaveChangesAsync()
         {
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
