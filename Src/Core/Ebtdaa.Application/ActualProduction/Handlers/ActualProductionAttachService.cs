@@ -27,9 +27,9 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             _validator = validator;
         }
 
-        public async Task<BaseResponse<List<ActualProductionAttacResultDto>>> GetAll()
+        public async Task<BaseResponse<List<ActualProductionAttacResultDto>>> GetAll(int factoryId)
         {
-            var respose = _mapper.Map<List<ActualProductionAttacResultDto>>(await _dbContext.ActualProductionAttachments.ToListAsync());
+            var respose = _mapper.Map<List<ActualProductionAttacResultDto>>(await _dbContext.ActualProductionAttachments.Where(x=>x.FactoryId==factoryId).ToListAsync());
 
             return new BaseResponse<List<ActualProductionAttacResultDto>>
             {
