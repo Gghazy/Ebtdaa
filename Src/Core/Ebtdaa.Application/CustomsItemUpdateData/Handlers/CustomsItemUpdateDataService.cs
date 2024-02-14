@@ -4,9 +4,6 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.CustomsItemUpdateData.Dtos;
 using Ebtdaa.Application.CustomsItemUpdateData.Interfaces;
 using Ebtdaa.Application.CustomsItemUpdateData.Validation;
-using Ebtdaa.Common.Dtos;
-using Ebtdaa.Common.Enums;
-using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.CustomsItemUpdateData.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -69,5 +66,6 @@ namespace Ebtdaa.Application.CustomsItemUpdateData.Handlers
                 Data = _mapper.Map<CustomsItemUpdateResultDto>(customItemUpdated)
             };
         }
+
     }
 }
