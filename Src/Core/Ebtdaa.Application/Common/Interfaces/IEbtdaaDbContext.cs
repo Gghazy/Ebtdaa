@@ -43,5 +43,6 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<Inspector> Inspectors { get; set; }
         public DbSet<InspectorFactory> InspectorFactories { get; set; }
         public DbSet<ProductRawMaterial> ProductRawMaterials { get; set; }
+        public DbSet<IndustiryalZoneType> IndustiryalZoneTypes { get; set; }
     }
 }

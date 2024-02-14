@@ -1,4 +1,5 @@
-﻿using Ebtdaa.Domain.General;
+﻿using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.General;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,5 +15,9 @@ namespace Ebtdaa.Domain.Inspectors.Entity
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string OwnerIdentity { get; set; }
+        public int IndustiryalZoneTypeId {  get; set; }
+        public InspectorStatusEnum Status { get; set; }
+
+        public ICollection<IndustiryalZoneType> IndustiryalZoneType { get; set; }
     }
 }
