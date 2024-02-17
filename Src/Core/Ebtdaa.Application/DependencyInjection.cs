@@ -41,6 +41,9 @@ using Ebtdaa.Application.ActualProduction.Interfaces;
 using Ebtdaa.Application.ActualProduction.Handlers;
 using Ebtdaa.Application.LogIn.Interfaces;
 using Ebtdaa.Application.LogIn.Handllers;
+using Ebtdaa.Application.InspectorRawMaterials.Interfaces;
+using Ebtdaa.Application.InspectorRawMaterials.Handlers;
+using Ebtdaa.Application.InspectorRawMaterials.Validation;
 
 namespace Ebtdaa.Application
 {
@@ -76,6 +79,7 @@ namespace Ebtdaa.Application
                services.AddScoped<IReasonService, ReasonService>();
                services.AddScoped<ILoginService, LoginService>();
                services.AddScoped<IActualProductionAttachService, ActualProductionAttachService>();
+               services.AddScoped<IInspectorRawMaterialService, InspectorRawMaterialService>();
 
             #endregion
 
@@ -95,6 +99,7 @@ namespace Ebtdaa.Application
                 services.AddScoped<ItemAttachmentValidator>();
                 services.AddScoped<ActualRawMaterialFileValidator>();
                 services.AddScoped<ActualroductionAttachValidator>();
+                services.AddScoped<InspectorRawMaterialValidator>();
 
             #endregion
 
