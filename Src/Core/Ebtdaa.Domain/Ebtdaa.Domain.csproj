@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Folder Include="CustomsItem\CustomsItemLevels\Entity\" />
+    <Folder Include="Inspector\InspectorRawMaterials\" />
   </ItemGroup>
 
 </Project>
