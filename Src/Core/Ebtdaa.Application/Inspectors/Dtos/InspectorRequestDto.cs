@@ -1,4 +1,5 @@
-﻿using Ebtdaa.Common.Enums;
+﻿using Ebtdaa.Application.Factories.Dtos;
+using Ebtdaa.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,5 +17,6 @@ namespace Ebtdaa.Application.Inspectors.Dtos
         public string OwnerIdentity { get; set; }
         public int IndustiryalZoneTypeId { get; set; }
         public InspectorStatusEnum Status { get; set; }
+        
     }
 }
