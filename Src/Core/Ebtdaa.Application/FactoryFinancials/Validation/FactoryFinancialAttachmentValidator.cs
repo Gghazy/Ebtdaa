@@ -16,9 +16,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Validation
                 .NotEmpty()
                 .WithMessage("Factory Financial-IsRequired-Field");
 
-            RuleFor(d => d.Type)
-                .NotEmpty()
-                .WithMessage("Type-IsRequired-Field");
+
 
 
 
