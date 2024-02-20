@@ -18,6 +18,7 @@ using Ebtdaa.Persistence.Configuration.ActualProductionAndCapacities;
 using Ebtdaa.Domain.Inspectors.Entity;
 using System.Reflection.Emit;
 using Ebtdaa.Persistence.Configuration.ProductRawMaterials;
+using Ebtdaa.Domain.InspectorRawMaterials.Entity;
 
 namespace Ebtdaa.Persistence
 {
@@ -69,6 +70,9 @@ namespace Ebtdaa.Persistence
         public DbSet<Inspector> Inspectors { get; set; }
         public DbSet<InspectorFactory> InspectorFactories { get; set; }
         public DbSet<ProductRawMaterial> ProductRawMaterials { get; set; }
+        public DbSet<IndustiryalZoneType> IndustiryalZoneTypes { get; set; }
+        public DbSet<InspectorRawMaterial> InspectorRawMaterials { get; set; }
+
         public Task<int> SaveChangesAsync()
         {
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())
