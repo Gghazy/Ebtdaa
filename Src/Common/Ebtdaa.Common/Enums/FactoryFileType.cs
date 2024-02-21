@@ -11,6 +11,6 @@ namespace Ebtdaa.Common.Enums
         factoryFace=0,
         factoryStatus=1,
         Photo=2,
-        BaseFile=2,
+        BaseFile=3,
     }
 }

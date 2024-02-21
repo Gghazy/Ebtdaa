@@ -17,9 +17,6 @@ namespace Ebtdaa.Application.ActualProduction.Validation
            .WithMessage("Attachment-IsRequired-Field");
 
 
-            RuleFor(d => d.Type)
-                .NotEmpty()
-                .WithMessage("Type-IsRequired-Field");
         }
     }
 }
