@@ -43,7 +43,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
 
                     ProductRawMaterial x = new ProductRawMaterial();
-                    x.ProductId = item;
+                    x.ProductId = item.Id;
                     x.rawMaterialId = rawMaterial.Id;
                     await _dbContext.ProductRawMaterials.AddAsync(x);
 
@@ -90,8 +90,12 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
         public async Task<BaseResponse<RawMaterialResultDto>> UpdateAsync(RawMaterialRequestDto req)
         {
-            var rawMaterial = await _dbContext.RawMaterials.FirstOrDefaultAsync(x => x.Id == req.Id);
+            var rawMaterial = await _dbContext.RawMaterials
+                                        .Include(s => s.ProductRawMaterials)
+                                        .ThenInclude(x => x.Product)
+                                        .FirstOrDefaultAsync(x => x.Id == req.Id);
             var rawMaterialUpdated = _mapper.Map(req, rawMaterial);
+            var rawMaterialproductUpdated = _mapper.Map(rawMaterialUpdated.ProductRawMaterials, rawMaterial.ProductRawMaterials);
 
 
             var result = await _rawMaterialValidtor.ValidateAsync(rawMaterialUpdated);
