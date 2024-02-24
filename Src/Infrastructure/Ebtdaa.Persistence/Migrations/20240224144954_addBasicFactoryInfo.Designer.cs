@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240224144954_addBasicFactoryInfo")]
+    partial class addBasicFactoryInfo
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -850,6 +852,28 @@ namespace Ebtdaa.Persistence.Migrations
                     b.ToTable("Cities");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.General.IndustiryalZoneType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("InspectorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InspectorId");
+
+                    b.ToTable("IndustiryalZoneTypes");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.General.Period", b =>
                 {
                     b.Property<int>("Id")
@@ -994,6 +1018,9 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IndustiryalZoneTypeId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1566,6 +1593,13 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("FactoryLocation");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.General.IndustiryalZoneType", b =>
+                {
+                    b.HasOne("Ebtdaa.Domain.Inspectors.Entity.Inspector", null)
+                        .WithMany("IndustiryalZoneType")
+                        .HasForeignKey("InspectorId");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.InspectorRawMaterials.Entity.InspectorRawMaterial", b =>
                 {
                     b.HasOne("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", "RawMaterial")
@@ -1752,6 +1786,11 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("DesignedCapacityUnits");
 
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Ebtdaa.Domain.Inspectors.Entity.Inspector", b =>
+                {
+                    b.Navigation("IndustiryalZoneType");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Inspectors.Entity.InspectorFactory", b =>
