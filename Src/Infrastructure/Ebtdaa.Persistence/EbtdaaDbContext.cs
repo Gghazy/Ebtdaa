@@ -72,7 +72,7 @@ namespace Ebtdaa.Persistence
         public DbSet<ProductRawMaterial> ProductRawMaterials { get; set; }
         public DbSet<IndustiryalZoneType> IndustiryalZoneTypes { get; set; }
         public DbSet<InspectorRawMaterial> InspectorRawMaterials { get; set; }
-
+        public DbSet<BaiscFactoryInfo> BasicFactoryInfos { get; set; }
         public Task<int> SaveChangesAsync()
         {
             foreach (var entry in ChangeTracker.Entries<BaseEntity>())

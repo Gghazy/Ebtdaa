@@ -30,9 +30,9 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
             _mapper = mapper;
             _validator = validator;
         }
-        public async Task<BaseResponse<FactoryLocationResultDto>> GetOne(int id)
+        public async Task<BaseResponse<FactoryLocationResultDto>> GetOne(int factoryId , int periodId)
         {
-            var resualt = await _dbContext.FactoryLocations.FirstOrDefaultAsync(x => x.Id == id);
+            var resualt = await _dbContext.FactoryLocations.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             return new BaseResponse<FactoryLocationResultDto>
             {

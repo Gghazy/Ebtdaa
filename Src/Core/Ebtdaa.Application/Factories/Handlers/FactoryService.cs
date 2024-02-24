@@ -53,6 +53,28 @@ namespace Ebtdaa.Application.Factories.Handlers
             };
 
         }
+
+        public async Task<BaseResponse<BasicFactoryInfoResultDto>>GetByPeriod(int factoryId , int periodId)
+        {
+            var resualt = await _dbContext.Factories.FirstOrDefaultAsync(x => x.Id == factoryId);
+            var basicFactoryInfo = new BasicFactoryInfoRequestDto()
+            {
+               FactoryId = factoryId,
+               PeriodId = periodId,
+               //FactoryStatusId = resualt.Status,
+
+            };
+            var mapBasicFactoryInf = _mapper.Map<BaiscFactoryInfo>(basicFactoryInfo);
+            await _dbContext.BasicFactoryInfos.AddAsync(mapBasicFactoryInf);
+            await _dbContext.SaveChangesAsync();
+            
+            return new BaseResponse<BasicFactoryInfoResultDto>
+            {
+                Data = _mapper.Map<BasicFactoryInfoResultDto>(mapBasicFactoryInf)
+            };
+
+        }
+
         public async Task<BaseResponse<FactoryResualtDto>> UpdateAsync(FactoryRequestDto req)
         {
             var factory = await _dbContext.Factories.FirstOrDefaultAsync(x => x.Id == req.Id);

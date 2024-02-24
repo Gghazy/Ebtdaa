@@ -11,7 +11,7 @@ namespace Ebtdaa.Application.FactoryLocations.Interfaces
 {
     public interface IFactoryLocationService
     {
-        Task<BaseResponse<FactoryLocationResultDto>> GetOne(int id);
+        Task<BaseResponse<FactoryLocationResultDto>> GetOne(int factoryId, int periodId);
         Task<BaseResponse<FactoryLocationResultDto>> UpdateAsync(FactoryLocationRequestDto req);
         Task<BaseResponse<FactoryLocationResultDto>> AddAsync(FactoryLocationRequestDto req);
     }
