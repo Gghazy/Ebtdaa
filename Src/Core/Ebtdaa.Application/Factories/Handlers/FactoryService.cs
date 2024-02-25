@@ -44,10 +44,15 @@ namespace Ebtdaa.Application.Factories.Handlers
             };
 
         }
-        public async Task<BaseResponse<FactoryResualtDto>> GetOne(int id)
+        public async Task<BaseResponse<FactoryResualtDto>> GetOne(int id, int periodId)
         {
-            var resualt = await _dbContext.Factories.FirstOrDefaultAsync(x => x.Id == id);
-
+            var resualt = await _dbContext.Factories
+                                .Include(x => x.BaiscFactoryInfos)
+                                .FirstOrDefaultAsync(x => x.Id == id && x.BaiscFactoryInfos.Any(b => b.PeriodId == periodId));
+            if (resualt.BaiscFactoryInfos.Count != 0)
+            {
+                resualt.Status = resualt.BaiscFactoryInfos.FirstOrDefault().FactoryStatusId;
+            }
             return new BaseResponse<FactoryResualtDto>
             {
                 Data = _mapper.Map<FactoryResualtDto>(resualt)
@@ -57,15 +62,7 @@ namespace Ebtdaa.Application.Factories.Handlers
 
         public async Task<BaseResponse<FactoryResualtDto>> UpdateAsync(FactoryRequestDto req)
         {
-            var factory = await _dbContext.Factories.FirstOrDefaultAsync(x => x.Id == req.Id);
-            var factoryUpdated = _mapper.Map(req, factory);
-
-            // Validation
-            var result = await _factoryValidator.ValidateAsync(factoryUpdated);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.SaveChangesAsync();
-
+            
             var basicFactoryInfo = new BasicFactoryInfoRequestDto()
             {
                 FactoryId = req.FactoryId,
@@ -78,7 +75,7 @@ namespace Ebtdaa.Application.Factories.Handlers
 
             return new BaseResponse<FactoryResualtDto>
             {
-                Data = _mapper.Map<FactoryResualtDto>(factoryUpdated)
+                Data = _mapper.Map<FactoryResualtDto>(mapBasicFactoryInf)
             };
         }
 
