@@ -11,7 +11,7 @@ namespace Ebtdaa.Domain.ActualProduction.Entity
     public class IncreaseActualProduction
     {
         public int Id { get; set; }
-        public MonthsEnum MonthId { get; set; }
+        public int PeriodId { get; set; }
         public int ReasonId { get; set; }
         public int FactoryId { get; set; }
         public Reason Reason { get; set; }

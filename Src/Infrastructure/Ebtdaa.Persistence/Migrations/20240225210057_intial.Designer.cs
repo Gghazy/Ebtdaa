@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    [Migration("20240224161803_intial")]
+    [Migration("20240225210057_intial")]
     partial class intial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -184,7 +184,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<double>("IncreasedUsageReason")
                         .HasColumnType("float");
 
-                    b.Property<int>("Month")
+                    b.Property<int>("PeriodId")
                         .HasColumnType("int");
 
                     b.Property<int>("RawMaterialId")
@@ -209,6 +209,8 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PeriodId");
 
                     b.HasIndex("RawMaterialId");
 
@@ -583,6 +585,9 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<decimal>("WaterExpenses")
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FactoryId");
@@ -852,29 +857,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.ToTable("Cities");
                 });
 
-            modelBuilder.Entity("Ebtdaa.Domain.General.Period", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("PeriodEndDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("PeriodName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PeriodStartDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Periods");
-                });
-
             modelBuilder.Entity("Ebtdaa.Domain.General.ReasonIncreasCapacity", b =>
                 {
                     b.Property<int>("Id")
@@ -1055,6 +1037,29 @@ namespace Ebtdaa.Persistence.Migrations
                     b.ToTable("InspectorFactories");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.Periods.Period", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("PeriodEndDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PeriodName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("PeriodStartDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Periods");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Product", b =>
                 {
                     b.Property<int>("Id")
@@ -1170,6 +1175,27 @@ namespace Ebtdaa.Persistence.Migrations
                     b.ToTable("ProductAttachments");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.CustomItemRawMaterial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("ItemName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ItemNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CustomItemRawMaterials");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.ProductRawMaterial", b =>
                 {
                     b.Property<int>("ProductId")
@@ -1206,12 +1232,19 @@ namespace Ebtdaa.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CustomItemRawMaterialId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
+
+                    b.Property<string>("ItemNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MaximumMonthlyConsumption")
                         .HasColumnType("int");
@@ -1236,6 +1269,8 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CustomItemRawMaterialId");
 
                     b.HasIndex("FactoryId");
 
@@ -1349,11 +1384,19 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualRawMaterials.Entity.ActualRawMaterial", b =>
                 {
+                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
+                        .WithMany()
+                        .HasForeignKey("PeriodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", "RawMaterial")
                         .WithMany()
                         .HasForeignKey("RawMaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Period");
 
                     b.Navigation("RawMaterial");
                 });
@@ -1396,7 +1439,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.General.Period", "Period")
+                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
                         .WithMany()
                         .HasForeignKey("PeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1434,7 +1477,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.General.Period", "Period")
+                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
                         .WithMany()
                         .HasForeignKey("PeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1532,7 +1575,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.General.Period", "Period")
+                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
                         .WithMany()
                         .HasForeignKey("PeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1651,6 +1694,12 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", b =>
                 {
+                    b.HasOne("Ebtdaa.Domain.RawMaterials.Entity.CustomItemRawMaterial", "CustomItemRawMaterial")
+                        .WithMany()
+                        .HasForeignKey("CustomItemRawMaterialId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
                         .WithMany()
                         .HasForeignKey("FactoryId")
@@ -1662,6 +1711,8 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("CustomItemRawMaterial");
 
                     b.Navigation("Factory");
 

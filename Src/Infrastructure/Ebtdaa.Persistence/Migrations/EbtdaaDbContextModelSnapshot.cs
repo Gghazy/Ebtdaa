@@ -51,7 +51,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("DesignedCapacityUnitId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MonthId")
+                    b.Property<int>("PeriodId")
                         .HasColumnType("int");
 
                     b.Property<int>("ProductId")
@@ -127,7 +127,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("MonthId")
+                    b.Property<int>("PeriodId")
                         .HasColumnType("int");
 
                     b.Property<int>("ReasonId")
@@ -1254,9 +1254,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("PaperId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PeriodId")
-                        .HasColumnType("int");
-
                     b.Property<int>("PhotoId")
                         .HasColumnType("int");
 
@@ -1274,8 +1271,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasIndex("CustomItemRawMaterialId");
 
                     b.HasIndex("FactoryId");
-
-                    b.HasIndex("PeriodId");
 
                     b.HasIndex("UnitId");
 
@@ -1387,7 +1382,7 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualRawMaterials.Entity.ActualRawMaterial", b =>
                 {
-                    b.HasOne("Ebtdaa.Domain.General.Period", "Period")
+                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
                         .WithMany()
                         .HasForeignKey("PeriodId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1709,12 +1704,6 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.General.Period", "Period")
-                        .WithMany()
-                        .HasForeignKey("PeriodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Ebtdaa.Domain.General.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
@@ -1724,8 +1713,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("CustomItemRawMaterial");
 
                     b.Navigation("Factory");
-
-                    b.Navigation("Period");
 
                     b.Navigation("Unit");
                 });

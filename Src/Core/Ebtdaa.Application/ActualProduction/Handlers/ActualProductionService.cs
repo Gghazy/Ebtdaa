@@ -32,7 +32,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                         await _dbContext.Products
                         .Where(x=>x.FactoryId==search.FactoryId)
                         .Where(x=>x.Level==LevelEnum.Level12)
-                        .Include(x => x.ActualProductionAndCapacities.Where(x=>x.MonthId==search.MonthId))
+                        .Include(x => x.ActualProductionAndCapacities.Where(x=>x.PeriodId==search.PeriodId))
                         .ThenInclude(x => x.DesignedCapacityUnit)
                         .Include(x => x.ActualProductionAndCapacities)
                         .ThenInclude(x => x.ActualProductionUint)
