@@ -14,7 +14,6 @@ namespace Ebtdaa.Application.Factories.Interfaces
     {
         Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search);
         Task<BaseResponse<FactoryResualtDto>> GetOne(int id);
-        Task<BaseResponse<BasicFactoryInfoResultDto>> GetByPeriod(int factoryId, int periodId);
         Task<BaseResponse<FactoryResualtDto>> UpdateAsync(FactoryRequestDto req);
     }
 }

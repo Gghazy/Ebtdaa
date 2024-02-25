@@ -8,6 +8,7 @@ using Ebtdaa.Application.LogIn.Interfaces;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.General;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -54,27 +55,6 @@ namespace Ebtdaa.Application.Factories.Handlers
 
         }
 
-        public async Task<BaseResponse<BasicFactoryInfoResultDto>>GetByPeriod(int factoryId , int periodId)
-        {
-            var resualt = await _dbContext.Factories.FirstOrDefaultAsync(x => x.Id == factoryId);
-            var basicFactoryInfo = new BasicFactoryInfoRequestDto()
-            {
-               FactoryId = factoryId,
-               PeriodId = periodId,
-               //FactoryStatusId = resualt.Status,
-
-            };
-            var mapBasicFactoryInf = _mapper.Map<BaiscFactoryInfo>(basicFactoryInfo);
-            await _dbContext.BasicFactoryInfos.AddAsync(mapBasicFactoryInf);
-            await _dbContext.SaveChangesAsync();
-            
-            return new BaseResponse<BasicFactoryInfoResultDto>
-            {
-                Data = _mapper.Map<BasicFactoryInfoResultDto>(mapBasicFactoryInf)
-            };
-
-        }
-
         public async Task<BaseResponse<FactoryResualtDto>> UpdateAsync(FactoryRequestDto req)
         {
             var factory = await _dbContext.Factories.FirstOrDefaultAsync(x => x.Id == req.Id);
@@ -84,6 +64,16 @@ namespace Ebtdaa.Application.Factories.Handlers
             var result = await _factoryValidator.ValidateAsync(factoryUpdated);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
+            await _dbContext.SaveChangesAsync();
+
+            var basicFactoryInfo = new BasicFactoryInfoRequestDto()
+            {
+                FactoryId = req.FactoryId,
+                PeriodId = req.PeriodId,
+                FactoryStatusId = req.Status,
+            };
+            var mapBasicFactoryInf = _mapper.Map<BaiscFactoryInfo>(basicFactoryInfo);
+            await _dbContext.BasicFactoryInfos.AddAsync(mapBasicFactoryInf);
             await _dbContext.SaveChangesAsync();
 
             return new BaseResponse<FactoryResualtDto>

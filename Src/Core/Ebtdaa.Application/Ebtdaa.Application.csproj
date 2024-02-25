@@ -18,6 +18,10 @@
     <Folder Include="FactoryEntities\Validation\" />
     <Folder Include="FactoryFinancials\Mapper\" />
     <Folder Include="FactoryJobs\Dtos\" />
+    <Folder Include="FactoryRawMaterials\Dtos\" />
+    <Folder Include="FactoryRawMaterials\Handlers\" />
+    <Folder Include="FactoryRawMaterials\Interfaces\" />
+    <Folder Include="FactoryRawMaterials\Mapper\" />
     <Folder Include="IndustrialAreas\Validation\" />
     <Folder Include="LogIn\Validation\" />
     <Folder Include="ProductJobs\Dtos\" />

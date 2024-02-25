@@ -27,7 +27,7 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _factoryService.GetOne(id));
 
-        }
+        } 
 
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] FactoryRequestDto req)
