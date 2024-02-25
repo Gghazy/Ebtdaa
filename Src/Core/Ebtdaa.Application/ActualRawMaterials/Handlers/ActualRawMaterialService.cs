@@ -77,11 +77,13 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             };
         }
 
-        public async Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetByMonth(int month)
+        public async Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetByPeriod(int factoryid,int periodid)
         {
             var respose = _mapper.Map<List<ActualRawMaterialResultDto>>(
                                     await _dbContext.ActualRawMaterials
-                                    .Where(x=>x.Month == month)
+                                    .Where(x=>x.PeriodId == periodid 
+                                    && x.RawMaterial.FactoryId == factoryid)
+                                   .Include(x=>x.RawMaterial)
                                     .ToListAsync());
 
             return new BaseResponse<List<ActualRawMaterialResultDto>>
