@@ -44,6 +44,8 @@ using Ebtdaa.Application.LogIn.Handllers;
 using Ebtdaa.Application.InspectorRawMaterials.Interfaces;
 using Ebtdaa.Application.InspectorRawMaterials.Handlers;
 using Ebtdaa.Application.InspectorRawMaterials.Validation;
+using Ebtdaa.Application.CustomItemRawMaterials.Interfaces;
+using Ebtdaa.Application.CustomItemRawMaterials.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -80,6 +82,7 @@ namespace Ebtdaa.Application
                services.AddScoped<ILoginService, LoginService>();
                services.AddScoped<IActualProductionAttachService, ActualProductionAttachService>();
                services.AddScoped<IInspectorRawMaterialService, InspectorRawMaterialService>();
+               services.AddScoped<ICustomItemRawMaterialServices, CustomItemRawMaterialServices>();
 
             #endregion
 

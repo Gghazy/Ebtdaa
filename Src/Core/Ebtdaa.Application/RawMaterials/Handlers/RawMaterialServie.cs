@@ -90,12 +90,16 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
         public async Task<BaseResponse<RawMaterialResultDto>> UpdateAsync(RawMaterialRequestDto req)
         {
+            try
+            {
+
+           
             var rawMaterial = await _dbContext.RawMaterials
                                         .Include(s => s.ProductRawMaterials)
                                         .ThenInclude(x => x.Product)
                                         .FirstOrDefaultAsync(x => x.Id == req.Id);
             var rawMaterialUpdated = _mapper.Map(req, rawMaterial);
-            var rawMaterialproductUpdated = _mapper.Map(rawMaterialUpdated.ProductRawMaterials, rawMaterial.ProductRawMaterials);
+            var rawMaterialproductUpdated = _mapper.Map(req.ProductIds, rawMaterial.ProductRawMaterials);
 
 
             var result = await _rawMaterialValidtor.ValidateAsync(rawMaterialUpdated);
@@ -107,12 +111,20 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             {
                 Data = _mapper.Map<RawMaterialResultDto>(rawMaterialUpdated)
             };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
-        public async Task<BaseResponse<List<RawMaterialResultDto>>> GetAll()
+        public async Task<BaseResponse<List<RawMaterialResultDto>>> GetAll(int Factoryid, int Periodid)
         {
             var respose = _mapper.Map<List<RawMaterialResultDto>>(await _dbContext.RawMaterials
                 .Include(x => x.ProductRawMaterials)
+                 .ThenInclude(x => x.Product)
+                   .Where(x => x.FactoryId == Factoryid&& x.PeriodId == Periodid)
                 .ToListAsync());
 
             return new BaseResponse<List<RawMaterialResultDto>>

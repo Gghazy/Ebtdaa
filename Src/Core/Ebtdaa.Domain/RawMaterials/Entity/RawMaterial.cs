@@ -1,13 +1,15 @@
 ﻿using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
-using Ebtdaa.Domain.ProductData.Entity;
-
 namespace Ebtdaa.Domain.RawMaterials.Entity
 {
     public class RawMaterial:BaseEntity
     {
         public int Id { get; set; }
+        public int PeriodId { get; set; }
+        public virtual Period Period { get; set; }
         public string CustomItemName { get; set; }
+        public string ItemNumber { get; set; }
+        public virtual CustomItemRawMaterial CustomItemRawMaterial { get; set; }
         public string Name { get; set; }
         public int MaximumMonthlyConsumption { get; set; }
         public int UnitId { get; set; }
