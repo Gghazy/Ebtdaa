@@ -8,6 +8,7 @@ using Ebtdaa.Domain.RawMaterials.Entity;
 using Microsoft.EntityFrameworkCore;
 using Ebtdaa.Domain.Inspectors.Entity;
 using Ebtdaa.Domain.InspectorRawMaterials.Entity;
+using Ebtdaa.Domain.Periods;
 
 namespace Ebtdaa.Application.Common.Interfaces
 {

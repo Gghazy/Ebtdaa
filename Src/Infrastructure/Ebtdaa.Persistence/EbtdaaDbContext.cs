@@ -19,6 +19,7 @@ using Ebtdaa.Domain.Inspectors.Entity;
 using System.Reflection.Emit;
 using Ebtdaa.Persistence.Configuration.ProductRawMaterials;
 using Ebtdaa.Domain.InspectorRawMaterials.Entity;
+using Ebtdaa.Domain.Periods;
 
 namespace Ebtdaa.Persistence
 {

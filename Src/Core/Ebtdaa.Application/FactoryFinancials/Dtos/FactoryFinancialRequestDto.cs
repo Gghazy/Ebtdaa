@@ -22,5 +22,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Dtos
         public decimal CurrentLiabilities { get; set; }
         public decimal NonCurrentLiabilities { get; set; }
         public int FactoryId { get; set; }
+        public int Year { get; set; }
+
     }
 }
