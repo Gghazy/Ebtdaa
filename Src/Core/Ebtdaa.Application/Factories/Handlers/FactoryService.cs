@@ -61,7 +61,7 @@ namespace Ebtdaa.Application.Factories.Handlers
             {
                FactoryId = factoryId,
                PeriodId = periodId,
-               //FactoryStatusId = resualt.Status,
+               FactoryStatusId = (Common.Enums.FactoryStatusEnum?)resualt.Status,
 
             };
             var mapBasicFactoryInf = _mapper.Map<BaiscFactoryInfo>(basicFactoryInfo);
