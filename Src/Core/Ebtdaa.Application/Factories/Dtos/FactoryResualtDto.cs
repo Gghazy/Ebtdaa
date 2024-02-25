@@ -22,5 +22,7 @@ namespace Ebtdaa.Application.Factories.Dtos
         public string LicenseNumber { get; set; }
         public DateTime LicenseExpirDate { get; set; }
         public int Status { get; set; }
+        public int FactoryId {  get; set; }
+        public int PeriodId {  get; set; }
     }
 }

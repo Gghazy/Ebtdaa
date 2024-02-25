@@ -28,12 +28,6 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _factoryService.GetOne(id));
 
         } 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetByPeriod(int factoryId, int periodId)
-        {
-            return Ok(await _factoryService.GetByPeriod(factoryId , periodId));
-
-        }
 
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] FactoryRequestDto req)
