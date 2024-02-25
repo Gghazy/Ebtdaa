@@ -23,9 +23,9 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetOne(int id)
+        public async Task<IActionResult> GetOne(int id , int periodId)
         {
-            return Ok(await _factoryService.GetOne(id));
+            return Ok(await _factoryService.GetOne(id, periodId));
 
         } 
 

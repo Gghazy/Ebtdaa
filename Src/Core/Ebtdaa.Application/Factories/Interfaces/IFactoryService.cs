@@ -13,7 +13,7 @@ namespace Ebtdaa.Application.Factories.Interfaces
     public interface IFactoryService
     {
         Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search);
-        Task<BaseResponse<FactoryResualtDto>> GetOne(int id);
+        Task<BaseResponse<FactoryResualtDto>> GetOne(int id,int periodId);
         Task<BaseResponse<FactoryResualtDto>> UpdateAsync(FactoryRequestDto req);
     }
 }
