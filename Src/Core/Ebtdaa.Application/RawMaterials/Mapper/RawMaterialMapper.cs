@@ -19,6 +19,7 @@ namespace Ebtdaa.Application.RawMaterials.Mapper
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
            
             CreateMap<Product, RawMaterialProductDto>();
+            CreateMap<RawMaterialProductDto, ProductRawMaterial>();
 
         }
 

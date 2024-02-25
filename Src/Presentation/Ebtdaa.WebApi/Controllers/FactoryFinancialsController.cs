@@ -17,10 +17,10 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOne(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetOne(int id,int year)
         {
-            return Ok(await _factoryFinancialService.GetOne(id));
+            return Ok(await _factoryFinancialService.GetOne(id, year));
 
         }
 

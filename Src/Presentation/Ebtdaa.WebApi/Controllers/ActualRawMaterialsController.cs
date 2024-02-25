@@ -26,10 +26,10 @@ namespace Ebtdaa.WebApi.Controllers
 
         }
 
-        [HttpGet("Month")]
-        public async Task<IActionResult> GetByMonth(int month)
+        [HttpGet("Period")]
+        public async Task<IActionResult> GetByPeriod(int factoryId, int PeriodId)
         {
-            return Ok(await _actualRawMaterialService.GetByMonth(month));
+            return Ok(await _actualRawMaterialService.GetByPeriod(factoryId, PeriodId));
 
         }
         [HttpPost]

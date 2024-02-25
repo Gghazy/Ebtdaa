@@ -23,6 +23,8 @@ namespace Ebtdaa.Domain.Factories.Entity
         public decimal CurrentLiabilities { get; set; }
         public decimal NonCurrentLiabilities { get; set; }
         public int FactoryId { get; set; }
+        public int Year { get; set; }
+
         public virtual ICollection<FactoryFinancialAttachment> FactoryFinancialAttachments { get; set; }
         public virtual Factory Factory { get; set; }
 

@@ -11,7 +11,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Interfaces
 {
     public interface IFactoryFinancialService
     {
-        Task<BaseResponse<FactoryFinancialResultDto>> GetOne(int id);
+        Task<BaseResponse<FactoryFinancialResultDto>> GetOne(int id, int year);
         Task<BaseResponse<FactoryFinancialResultDto>> UpdateAsync(FactoryFinancialRequestDto req);
         Task<BaseResponse<FactoryFinancialResultDto>> AddAsync(FactoryFinancialRequestDto req);
     }

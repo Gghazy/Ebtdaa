@@ -31,9 +31,9 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             _validator = validator;
         }
 
-        public async Task<BaseResponse<FactoryFinancialResultDto>> GetOne(int id)
+        public async Task<BaseResponse<FactoryFinancialResultDto>> GetOne(int id,int year)
         {
-            var resualt = await _dbContext.FactoryFinancials.FirstOrDefaultAsync(x => x.FactoryId == id);
+            var resualt = await _dbContext.FactoryFinancials.FirstOrDefaultAsync(x => x.FactoryId == id&&x.Year==year);
 
             return new BaseResponse<FactoryFinancialResultDto>
             {

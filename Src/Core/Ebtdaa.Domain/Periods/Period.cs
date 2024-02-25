@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ebtdaa.Domain.General
+namespace Ebtdaa.Domain.Periods
 {
     public class Period
     {

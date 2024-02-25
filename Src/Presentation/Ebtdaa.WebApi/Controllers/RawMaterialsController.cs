@@ -15,12 +15,12 @@ namespace Ebtdaa.WebApi.Controllers
             _RawMaterialService = RawMaterialService;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    return Ok(await _RawMaterialService.GetAll());
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int Factoryid, int Periodid)
+        {
+            return Ok(await _RawMaterialService.GetAll(Factoryid, Periodid));
 
-        //}
+        }
 
 
         [HttpPost("pagination")]
