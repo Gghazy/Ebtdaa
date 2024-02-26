@@ -1,4 +1,4 @@
-﻿using Ebtdaa.Application.Common.Enums;
+﻿using Ebtdaa.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

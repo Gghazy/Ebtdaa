@@ -21,9 +21,6 @@ namespace Ebtdaa.Application.FactoryLocations.Validation
                 .NotEmpty()
                 .WithMessage("Factory Location-IsRequired-Field");
 
-            RuleFor(d => d.Type)
-                .NotEmpty()
-                .WithMessage("Type-IsRequired-Field");
 
 
         }

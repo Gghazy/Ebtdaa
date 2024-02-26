@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Factories.Dtos;
+using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Domain.Factories.Entity;
 using System;
@@ -14,6 +15,7 @@ namespace Ebtdaa.Application.Factories.Interfaces
     {
         Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search);
         Task<BaseResponse<FactoryResualtDto>> GetOne(int id,int periodId);
-        Task<BaseResponse<FactoryResualtDto>> UpdateAsync(FactoryRequestDto req);
+        Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req);
+
     }
 }
