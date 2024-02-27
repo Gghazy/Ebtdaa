@@ -22,7 +22,11 @@ namespace Ebtdaa.Application.Periods.Handlers
         }
         public async Task<BaseResponse<QueryResult<PeriodResultDto>>> GetAll(PeriodSearch search)
         {
-            var resualt = _mapper.Map<QueryResult<PeriodResultDto>>(await _dbContext.Periods.ToQueryResult(search.PageNumber, search.PageSize));
+            var resualt = _mapper.Map<QueryResult<PeriodResultDto>>(
+                await _dbContext.Periods
+                .OrderByDescending(x=>x.PeriodStartDate.Year)
+                .ThenByDescending(x=>x.PeriodStartDate.Month)
+                .ToQueryResult(search.PageNumber, search.PageSize));
 
 
             return new BaseResponse<QueryResult<PeriodResultDto>>

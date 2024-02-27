@@ -1,0 +1,18 @@
+
+
+Restaex
+
+url: http://sprime-001-site22.atempurl.com/
+
+Email: admin@venttat.com
+
+password:P@ssw0rd
+
+
+Leap
+
+url: http://sprime-001-site21.atempurl.com/#/auth/login
+
+Email: admin@venttat.com
+
+password:P@ssw0rd
