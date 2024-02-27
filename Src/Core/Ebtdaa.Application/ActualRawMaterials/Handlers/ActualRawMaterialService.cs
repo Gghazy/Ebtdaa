@@ -48,6 +48,10 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
 
         public async Task<BaseResponse<ActualRawMaterialResultDto>> AddAsync(ActualRawMaterialRequestDto req)
         {
+            try
+            {
+
+          
             ActualRawMaterial actualRawMaterial = _mapper.Map<ActualRawMaterial>(req);
             var result = await _actualRawMaterialValidator.ValidateAsync(actualRawMaterial);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
@@ -59,6 +63,12 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             {
                 Data = _mapper.Map<ActualRawMaterialResultDto>(actualRawMaterial)
             };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
         public async Task<BaseResponse<ActualRawMaterialResultDto>> UpdateAsync(ActualRawMaterialRequestDto req)
         {
