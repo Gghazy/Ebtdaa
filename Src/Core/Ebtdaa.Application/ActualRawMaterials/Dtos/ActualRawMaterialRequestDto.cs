@@ -10,7 +10,7 @@ namespace Ebtdaa.Application.ActualRawMaterials.Dtos
     public class ActualRawMaterialRequestDto
     {
         public int Id { get; set; }
-        public int Month { get; set; }
+        public int PeriodId { get; set; }
         public int RawMaterialId { get; set; }
         public int IncreasedUsageReason { get; set; }
         public double CurrentStockQuantity_KG { get; set; }
