@@ -8,8 +8,8 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
     {
         public int Id { get; set; }
         public string CustomItemName { get; set; }
-        //public string ItemNumber { get; set; }
-        //public virtual CustomItemRawMaterial CustomItemRawMaterial { get; set; }
+        public int CustomItemRawMaterialId { get; set; }
+        public virtual CustomItemRawMaterial CustomItemRawMaterial { get; set; }
         public string Name { get; set; }
         public int MaximumMonthlyConsumption { get; set; }
         public int UnitId { get; set; }
