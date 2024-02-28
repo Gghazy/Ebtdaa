@@ -36,7 +36,7 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         // PUT api/<ActualProductionAndCapacitiesController>/5
-        [HttpPut("{id}")]
+        [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] ActualProductionRequestDto req)
         {
             return Ok(await _actualProductionService.UpdateAsync(req));

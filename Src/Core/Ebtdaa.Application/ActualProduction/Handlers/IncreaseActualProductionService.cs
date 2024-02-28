@@ -20,10 +20,10 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<IncreaseActualProductionResultDto>> GetOne(MonthsEnum month, int factoryId)
+        public async Task<BaseResponse<IncreaseActualProductionResultDto>> GetOne(int periodId, int factoryId)
         {
             var result = await _dbContext.IncreaseActualProductions
-                                         .FirstOrDefaultAsync(x => x.MonthId == month && x.FactoryId==factoryId);
+                                         .FirstOrDefaultAsync(x => x.PeriodId == periodId && x.FactoryId==factoryId);
             var response = _mapper.Map<IncreaseActualProductionResultDto>(result);
 
             return new BaseResponse<IncreaseActualProductionResultDto>

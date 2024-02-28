@@ -4,6 +4,7 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.Factories.Validation;
+using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Application.LogIn.Interfaces;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Extentions;
@@ -14,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -49,9 +51,15 @@ namespace Ebtdaa.Application.Factories.Handlers
             var resualt = await _dbContext.Factories
                                 .Include(x => x.BaiscFactoryInfos)
                                 .FirstOrDefaultAsync(x => x.Id == id && x.BaiscFactoryInfos.Any(b => b.PeriodId == periodId));
-            if (resualt.BaiscFactoryInfos.Count != 0)
+            if (resualt != null)
             {
                 resualt.Status = resualt.BaiscFactoryInfos.FirstOrDefault().FactoryStatusId;
+            }
+            else
+            {
+                resualt= await _dbContext.Factories
+                                .Include(x => x.BaiscFactoryInfos)
+                                .FirstOrDefaultAsync(x => x.Id == id);
             }
             return new BaseResponse<FactoryResualtDto>
             {
@@ -60,24 +68,38 @@ namespace Ebtdaa.Application.Factories.Handlers
 
         }
 
-        public async Task<BaseResponse<FactoryResualtDto>> UpdateAsync(FactoryRequestDto req)
+
+
+
+        public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
         {
-            
-            var basicFactoryInfo = new BasicFactoryInfoRequestDto()
+            var factory = await _dbContext.BasicFactoryInfos
+                            .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId&&x.PeriodId==req.PeriodId);
+
+
+            if (factory != null)
             {
-                FactoryId = req.FactoryId,
-                PeriodId = req.PeriodId,
-                FactoryStatusId = req.Status,
-            };
-            var mapBasicFactoryInf = _mapper.Map<BaiscFactoryInfo>(basicFactoryInfo);
-            await _dbContext.BasicFactoryInfos.AddAsync(mapBasicFactoryInf);
+                factory.FactoryStatusId = req.Status;
+            }
+            else
+            {
+                var basicFactoryInfo = new BaiscFactoryInfo()
+                {
+                    FactoryId = req.FactoryId,
+                    PeriodId = req.PeriodId,
+                    FactoryStatusId = req.Status,
+                };
+
+                await _dbContext.BasicFactoryInfos.AddAsync(basicFactoryInfo);
+            }
+            
+
             await _dbContext.SaveChangesAsync();
 
-            return new BaseResponse<FactoryResualtDto>
+            return new BaseResponse<bool>
             {
-                Data = _mapper.Map<FactoryResualtDto>(mapBasicFactoryInf)
+                Data =true
             };
         }
-
     }
 }

@@ -124,7 +124,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             var respose = _mapper.Map<List<RawMaterialResultDto>>(await _dbContext.RawMaterials
                 .Include(x => x.ProductRawMaterials)
                  .ThenInclude(x => x.Product)
-                   .Where(x => x.FactoryId == Factoryid&& x.PeriodId == Periodid)
+                   .Where(x => x.FactoryId == Factoryid)
                 .ToListAsync());
 
             return new BaseResponse<List<RawMaterialResultDto>>

@@ -11,6 +11,6 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
     public class ActualProductionSearch:SearchCriteria
     {
         public int FactoryId { get; set; }
-        public MonthsEnum MonthId { get; set; }
+        public int PeriodId { get; set; }
     }
 }

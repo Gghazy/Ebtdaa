@@ -6,6 +6,7 @@ namespace Ebtdaa.Application.RawMaterials.Dtos
     {
         public int Id { get; set; }
         public string CustomItemName { get; set; }
+        public int CustomItemRawMaterialId { get; set; }
         public string Name { get; set; }
         public int MaximumMonthlyConsumption { get; set; }
         public int AverageWeightKG { get; set; }

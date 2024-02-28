@@ -15,9 +15,6 @@ namespace Ebtdaa.Application.RawMaterials.Validation
                 .NotEmpty()
                 .WithMessage("RawMaterial-IsRequired-Field");
 
-            RuleFor(d => d.Type)
-                .NotEmpty()
-                .WithMessage("Type-IsRequired-Field");
         }
     }
 }
