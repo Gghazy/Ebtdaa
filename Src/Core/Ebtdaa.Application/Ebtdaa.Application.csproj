@@ -29,6 +29,7 @@
     <Folder Include="ProductsData\Interfaces\" />
     <Folder Include="ProductsData\Mapper\" />
     <Folder Include="ProductsData\Validatiton\" />
+    <Folder Include="ScreenUpdateStatus\Validations\" />
     <Folder Include="UnitJobs\Dtos\" />
     <Folder Include="Units\Dtos\" />
   </ItemGroup>

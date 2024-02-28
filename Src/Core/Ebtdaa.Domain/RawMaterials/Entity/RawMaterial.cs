@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
+using Ebtdaa.Domain.Periods;
 namespace Ebtdaa.Domain.RawMaterials.Entity
 {
     public class RawMaterial:BaseEntity
