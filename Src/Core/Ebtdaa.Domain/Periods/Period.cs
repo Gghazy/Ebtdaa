@@ -11,6 +11,6 @@ namespace Ebtdaa.Domain.Periods
         public int Id { get; set; }
         public string PeriodName { get; set; }
         public DateTime PeriodStartDate { get; set; }
-        public DateTime PeriodEndDate { get; set; }
+        public DateTime PeriodEndDate { get; set; } 
     }
 }
