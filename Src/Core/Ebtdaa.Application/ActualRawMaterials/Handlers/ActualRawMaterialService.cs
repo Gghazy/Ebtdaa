@@ -4,9 +4,11 @@ using Ebtdaa.Application.ActualRawMaterials.Interfaces;
 using Ebtdaa.Application.ActualRawMaterials.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Domain.ActualRawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 
 namespace Ebtdaa.Application.ActualRawMaterials.Handlers
 {
@@ -72,6 +74,10 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
         }
         public async Task<BaseResponse<ActualRawMaterialResultDto>> UpdateAsync(ActualRawMaterialRequestDto req)
         {
+            try
+            {
+
+            
             var actualRawMaterial = await _dbContext.ActualRawMaterials.FirstOrDefaultAsync(x => x.Id == req.Id);
             var actualRawMaterialUpdated = _mapper.Map(req, actualRawMaterial);
 
@@ -85,21 +91,28 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             {
                 Data = _mapper.Map<ActualRawMaterialResultDto>(actualRawMaterialUpdated)
             };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetByPeriod(int factoryid,int periodid)
         {
-            var respose = _mapper.Map<List<ActualRawMaterialResultDto>>(
-                                    await _dbContext.ActualRawMaterials
-                                    .Where(x=>x.PeriodId == periodid 
-                                    && x.RawMaterial.FactoryId == factoryid)
-                                   .Include(x=>x.RawMaterial)
-                                    .ToListAsync());
+            var respose =
+           
+                                await _dbContext.ActualRawMaterials
+                                .Where(x => x.PeriodId == periodid
+                                && x.RawMaterial.FactoryId == factoryid)
+                               .Include(x => x.RawMaterial)
+                               .ToListAsync();
 
             return new BaseResponse<List<ActualRawMaterialResultDto>>
             {
-                Data = respose
+                   Data = _mapper.Map<List<ActualRawMaterialResultDto>>(respose)
             };
-        }
+            }
     }
 }
