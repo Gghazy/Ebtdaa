@@ -15,11 +15,11 @@ namespace Ebtdaa.Persistence
         public static void AddPersistence(this IServiceCollection services, IConfiguration configuration)
         {
 
-            //services.AddDbContext<EbtdaaDbContext>(options =>
-            //{
-            //    options.UseSqlServer(configuration.GetConnectionString("Data Source=DESKTOP-0T2EAIP;Initial Catalog=FactoryDb;Integrated Security=True;TrustServerCertificate=True"),
-            //                            b => b.MigrationsAssembly(typeof(EbtdaaDbContext).Assembly.FullName));
-            //});
+            services.AddDbContext<EbtdaaDbContext>(options =>
+            {
+                options.UseSqlServer("Data Source=DESKTOP-0T2EAIP;Initial Catalog=FactoryDb;Integrated Security=True",
+                                        b => b.MigrationsAssembly(typeof(EbtdaaDbContext).Assembly.FullName));
+            });
             services.AddScoped<IEbtdaaDbContext>(provider => provider.GetService<EbtdaaDbContext>());
         }
     }
