@@ -1,4 +1,5 @@
-﻿using Ebtdaa.Domain.RawMaterials.Entity;
+﻿using Ebtdaa.Application.RawMaterials.Dtos;
+using Ebtdaa.Domain.RawMaterials.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Ebtdaa.Application.ActualRawMaterials.Dtos
     {
         public int Id { get; set; }
         public int PeriodId { get; set; }
-        public int RawMaterialId { get; set; }
+        public RawMaterialResultDto RawMaterialId { get; set; }
 
         public double CurrentStockQuantity_KG { get; set; }
         public double UsedQuantity_KG { get; set; }
