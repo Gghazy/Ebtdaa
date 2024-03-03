@@ -28,6 +28,10 @@ namespace Ebtdaa.Persistence
         public EbtdaaDbContext(DbContextOptions<EbtdaaDbContext> options) : base(options)
         {
         }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Data Source=DESKTOP-0T2EAIP;Initial Catalog=FactoryDb;Integrated Security=True;TrustServerCertificate=True");
+        }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
