@@ -549,12 +549,49 @@ namespace Ebtdaa.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FactoryMonthlyFinancial",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    WaterExpenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ElectricityExpenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    FuelExpenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    RawMterialExpenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    EmploymentExpenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    OtherOperatingExpenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalExpenses = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    FactoryId = table.Column<int>(type: "int", nullable: false),
+                    PeriodId = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FactoryMonthlyFinancial", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FactoryMonthlyFinancial_Factories_FactoryId",
+                        column: x => x.FactoryId,
+                        principalTable: "Factories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FactoryMonthlyFinancial_Periods_PeriodId",
+                        column: x => x.PeriodId,
+                        principalTable: "Periods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "IncreaseActualProductions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MonthId = table.Column<int>(type: "int", nullable: false),
+                    PeriodId = table.Column<int>(type: "int", nullable: false),
                     ReasonId = table.Column<int>(type: "int", nullable: false),
                     FactoryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -628,7 +665,6 @@ namespace Ebtdaa.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomItemName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ItemNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CustomItemRawMaterialId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     MaximumMonthlyConsumption = table.Column<int>(type: "int", nullable: false),
@@ -742,7 +778,7 @@ namespace Ebtdaa.Persistence.Migrations
                     ActualProduction = table.Column<int>(type: "int", nullable: false),
                     ActualProductionUintId = table.Column<int>(type: "int", nullable: false),
                     ActualProductionWeight = table.Column<int>(type: "int", nullable: false),
-                    MonthId = table.Column<int>(type: "int", nullable: false),
+                    PeriodId = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
@@ -1072,6 +1108,16 @@ namespace Ebtdaa.Persistence.Migrations
                 column: "PeriodId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FactoryMonthlyFinancial_FactoryId",
+                table: "FactoryMonthlyFinancial",
+                column: "FactoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FactoryMonthlyFinancial_PeriodId",
+                table: "FactoryMonthlyFinancial",
+                column: "PeriodId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_IncreaseActualProductions_FactoryId",
                 table: "IncreaseActualProductions",
                 column: "FactoryId");
@@ -1178,6 +1224,9 @@ namespace Ebtdaa.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "FactoryLocationAttachments");
+
+            migrationBuilder.DropTable(
+                name: "FactoryMonthlyFinancial");
 
             migrationBuilder.DropTable(
                 name: "IncreaseActualProductions");

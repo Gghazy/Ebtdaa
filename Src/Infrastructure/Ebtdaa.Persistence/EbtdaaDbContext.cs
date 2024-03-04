@@ -7,16 +7,10 @@ using Ebtdaa.Domain.General;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Ebtdaa.Persistence.Configuration.Factory;
 using Ebtdaa.Persistence.Configuration.Products;
 using Ebtdaa.Persistence.Configuration.ActualProductionAndCapacities;
 using Ebtdaa.Domain.Inspectors.Entity;
-using System.Reflection.Emit;
 using Ebtdaa.Persistence.Configuration.ProductRawMaterials;
 using Ebtdaa.Domain.InspectorRawMaterials.Entity;
 using Ebtdaa.Domain.Periods;
@@ -29,6 +23,12 @@ namespace Ebtdaa.Persistence
         public EbtdaaDbContext(DbContextOptions<EbtdaaDbContext> options) : base(options)
         {
         }
+
+        public EbtdaaDbContext() : base()
+        {
+        }
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

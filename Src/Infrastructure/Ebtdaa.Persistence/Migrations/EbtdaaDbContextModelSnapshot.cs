@@ -731,6 +731,62 @@ namespace Ebtdaa.Persistence.Migrations
                     b.ToTable("FactoryLocationAttachments");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryMonthlyFinancial", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<decimal>("ElectricityExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("EmploymentExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("FactoryId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("FuelExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("OtherOperatingExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<int>("PeriodId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("RawMterialExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("TotalExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<decimal>("WaterExpenses")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FactoryId");
+
+                    b.HasIndex("PeriodId");
+
+                    b.ToTable("FactoryMonthlyFinancial");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.IndustrialArea", b =>
                 {
                     b.Property<int>("Id")
@@ -1605,6 +1661,25 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("FactoryLocation");
                 });
 
+            modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryMonthlyFinancial", b =>
+                {
+                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
+                        .WithMany("FactoryMonthlyFinancials")
+                        .HasForeignKey("FactoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
+                        .WithMany("FactoryMonthlyFinancials")
+                        .HasForeignKey("PeriodId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Factory");
+
+                    b.Navigation("Period");
+                });
+
             modelBuilder.Entity("Ebtdaa.Domain.InspectorRawMaterials.Entity.InspectorRawMaterial", b =>
                 {
                     b.HasOne("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", "RawMaterial")
@@ -1749,6 +1824,8 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.Navigation("FactoryLocations");
 
+                    b.Navigation("FactoryMonthlyFinancials");
+
                     b.Navigation("IncreaseActualProductions");
 
                     b.Navigation("Products");
@@ -1806,6 +1883,11 @@ namespace Ebtdaa.Persistence.Migrations
             modelBuilder.Entity("Ebtdaa.Domain.Inspectors.Entity.InspectorFactory", b =>
                 {
                     b.Navigation("Factories");
+                });
+
+            modelBuilder.Entity("Ebtdaa.Domain.Periods.Period", b =>
+                {
+                    b.Navigation("FactoryMonthlyFinancials");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Product", b =>

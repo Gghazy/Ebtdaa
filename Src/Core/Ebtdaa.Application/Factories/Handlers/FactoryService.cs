@@ -7,6 +7,7 @@ using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Application.LogIn.Interfaces;
 using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
@@ -92,7 +93,10 @@ namespace Ebtdaa.Application.Factories.Handlers
 
                 await _dbContext.BasicFactoryInfos.AddAsync(basicFactoryInfo);
             }
-            
+            //if (req.Status==FactoryStatusEnum.)
+            //{
+
+            //}
 
             await _dbContext.SaveChangesAsync();
 

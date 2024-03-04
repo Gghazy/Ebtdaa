@@ -17,7 +17,7 @@ namespace Ebtdaa.Persistence
 
             services.AddDbContext<EbtdaaDbContext>(options =>
             {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer("Data Source=DESKTOP-0T2EAIP;Initial Catalog=FactoryDb;Integrated Security=True",
                                         b => b.MigrationsAssembly(typeof(EbtdaaDbContext).Assembly.FullName));
             });
             services.AddScoped<IEbtdaaDbContext>(provider => provider.GetService<EbtdaaDbContext>());

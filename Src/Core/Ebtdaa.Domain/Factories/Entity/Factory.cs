@@ -34,6 +34,7 @@ namespace Ebtdaa.Domain.Factories.Entity
         public virtual ICollection<Product> Products { get; set; }
         public virtual ICollection<IncreaseActualProduction> IncreaseActualProductions { get; set; }
         public virtual ICollection<BaiscFactoryInfo> BaiscFactoryInfos { get; set; }
+        public virtual ICollection<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
 
     }
 }
