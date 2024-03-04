@@ -5,6 +5,7 @@ using Ebtdaa.Application.Inspectors.Dtos;
 using Ebtdaa.Application.Inspectors.Interfaces;
 using Ebtdaa.Application.Inspectors.Validation;
 using Ebtdaa.Domain.Inspectors.Entity;
+using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -50,7 +51,7 @@ namespace Ebtdaa.Application.Inspectors.Handlers
 
         public async Task<BaseResponse<InspectorResultDto>> AddAsync(InspectorRequestDto req)
         {
-            Inspector inspector = _mapper.Map<Inspector>(req);
+            var inspector = _mapper.Map<Inspector>(req);
             var result = await _inspectorValidator.ValidateAsync(inspector);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
@@ -91,6 +92,29 @@ namespace Ebtdaa.Application.Inspectors.Handlers
             return new BaseResponse<InspectorResultDto>
             {
                 Data = _mapper.Map<InspectorResultDto>(inspector)
+            };
+        }
+
+        public async Task<BaseResponse<InspectorFactoriesResultDto>> AssingFactoriesAsync(InspectorFactoriesRequestDto req)
+        {
+            InspectorFactory inspectorFactory = new InspectorFactory();
+            foreach (var item in req.FactoryIds)
+            {
+                inspectorFactory.FactoryId = item.FactoryId;
+                inspectorFactory.InspectorId = req.InspectorId;
+
+                await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
+
+            }
+            
+            var inspectorFactories = _mapper.Map<InspectorFactory>(inspectorFactory);
+           
+            await _dbContext.InspectorFactories.AddAsync(inspectorFactories);
+
+            await _dbContext.SaveChangesAsync();
+            return new BaseResponse<InspectorFactoriesResultDto>
+            {
+                Data = _mapper.Map<InspectorFactoriesResultDto>(inspectorFactories)
             };
         }
     }
