@@ -48,6 +48,9 @@ using Ebtdaa.Application.CustomItemRawMaterials.Interfaces;
 using Ebtdaa.Application.CustomItemRawMaterials.Handlers;
 using Ebtdaa.Application.Periods.Interfaces;
 using Ebtdaa.Application.Periods.Handlers;
+using Ebtdaa.Application.FactoryMonthlyFinancials.Validation;
+using Ebtdaa.Application.FactoryMonthlyFinancials.Interfaces;
+using Ebtdaa.Application.FactoryMonthlyFinancials.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -64,6 +67,7 @@ namespace Ebtdaa.Application
                services.AddScoped<IAttachmentService, AttachmentService>();
                services.AddScoped<IFactoryFileService, FactoryFileService>();
                services.AddScoped<IFactoryFinancialService, FactoryFinancialService>();
+               services.AddScoped<IFactoryMonthlyFinancialService, FactoryMonthlyFinancialService>();
                services.AddScoped<IFactoryFinancialAttachmentService, FactoryFinancialAttachmentService>();
                services.AddScoped<IFactoryLocationService, FactoryLocationService>();
                services.AddScoped<IFactoryLocationAttachmentService, FactoryLocationAttachmentService>();
@@ -96,6 +100,7 @@ namespace Ebtdaa.Application
                 services.AddScoped<FactoryFileValidator>();
                 services.AddScoped<FactoryFinancialValidator>();
                 services.AddScoped<FactoryFinancialAttachmentValidator>();
+                services.AddScoped<FactoryMonthlyFinancialValidator>();
                 services.AddScoped<ActualProductionValidator>();
                 services.AddScoped<FactoryLocationValidator>();
                 services.AddScoped<FactoryLocationAttachmentValidator>();

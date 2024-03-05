@@ -74,6 +74,7 @@ namespace Ebtdaa.Persistence
         public DbSet<InspectorRawMaterial> InspectorRawMaterials { get; set; }
         public DbSet<BaiscFactoryInfo> BasicFactoryInfos { get; set; }
         public DbSet<CustomItemRawMaterial> CustomItemRawMaterials { get; set; }
+        public DbSet<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
 
         public Task<int> SaveChangesAsync()
         {
