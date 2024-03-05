@@ -41,7 +41,8 @@ namespace Ebtdaa.Application.Inspectors.Handlers
 
         public async Task<BaseResponse<InspectorResultDto>> GetOne(int id)
         {
-            var result = await _dbContext.Inspectors.FirstOrDefaultAsync(x => x.Id == id);
+            var result = await _dbContext.Inspectors.Include(x=> x.InspectorFactories)
+                .FirstOrDefaultAsync(x => x.Id == id);
 
             return new BaseResponse<InspectorResultDto>
             {
@@ -107,14 +108,12 @@ namespace Ebtdaa.Application.Inspectors.Handlers
 
             }
             
-            var inspectorFactories = _mapper.Map<InspectorFactory>(inspectorFactory);
-           
-            await _dbContext.InspectorFactories.AddAsync(inspectorFactories);
+            await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
 
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<InspectorFactoriesResultDto>
             {
-                Data = _mapper.Map<InspectorFactoriesResultDto>(inspectorFactories)
+                Data = _mapper.Map<InspectorFactoriesResultDto>(inspectorFactory)
             };
         }
     }
