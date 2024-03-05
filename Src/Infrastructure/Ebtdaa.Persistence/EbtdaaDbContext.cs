@@ -14,6 +14,7 @@ using Ebtdaa.Domain.Inspectors.Entity;
 using Ebtdaa.Persistence.Configuration.ProductRawMaterials;
 using Ebtdaa.Domain.InspectorRawMaterials.Entity;
 using Ebtdaa.Domain.Periods;
+using Ebtdaa.Domain.ScreenStatus.Entity;
 
 namespace Ebtdaa.Persistence
 {
@@ -74,6 +75,7 @@ namespace Ebtdaa.Persistence
         public DbSet<InspectorRawMaterial> InspectorRawMaterials { get; set; }
         public DbSet<BaiscFactoryInfo> BasicFactoryInfos { get; set; }
         public DbSet<CustomItemRawMaterial> CustomItemRawMaterials { get; set; }
+        public DbSet<ScreenStatus> ScreenStatuses { get; set; }
         public DbSet<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
 
         public Task<int> SaveChangesAsync()
