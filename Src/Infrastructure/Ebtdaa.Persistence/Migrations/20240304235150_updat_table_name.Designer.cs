@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240304235150_updat_table_name")]
+    partial class updat_table_name
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1367,44 +1369,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.ToTable("RawMaterialAttachments");
                 });
 
-            modelBuilder.Entity("Ebtdaa.Domain.ScreenStatus.Entity.ScreenStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CreatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("smalldatetime");
-
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PeriodId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ScreenStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UpdatedBy")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("smalldatetime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FactoryId");
-
-                    b.HasIndex("PeriodId");
-
-                    b.ToTable("ScreenStatuses");
-                });
-
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAndCapacity", b =>
                 {
                     b.HasOne("Ebtdaa.Domain.General.Unit", "ActualProductionUint")
@@ -1843,25 +1807,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("Attachment");
 
                     b.Navigation("RawMaterial");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.ScreenStatus.Entity.ScreenStatus", b =>
-                {
-                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
-                        .WithMany()
-                        .HasForeignKey("FactoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
-                        .WithMany()
-                        .HasForeignKey("PeriodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Factory");
-
-                    b.Navigation("Period");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.Reason", b =>

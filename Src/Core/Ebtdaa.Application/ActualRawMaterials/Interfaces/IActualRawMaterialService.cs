@@ -10,6 +10,8 @@ namespace Ebtdaa.Application.ActualRawMaterials.Interfaces
         Task<BaseResponse<ActualRawMaterialResultDto>> GetOne(int id);
         Task<BaseResponse<ActualRawMaterialResultDto>> AddAsync(ActualRawMaterialRequestDto req);
         Task<BaseResponse<ActualRawMaterialResultDto>> UpdateAsync(ActualRawMaterialRequestDto req);
-     
+        Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId);
+
+
     }
 }

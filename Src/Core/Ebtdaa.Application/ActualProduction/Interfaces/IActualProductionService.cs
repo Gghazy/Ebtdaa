@@ -11,5 +11,6 @@ namespace Ebtdaa.Application.ActualProduction.Interfaces
         Task<BaseResponse<ActualProductionResultDto>> AddAsync(ActualProductionRequestDto result);
         Task<BaseResponse<ActualProductionResultDto>>UpdateAsync(ActualProductionRequestDto result);
         Task<BaseResponse<ActualProductionResultDto>> GetOne (int id);
+        Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId (int factoryId,int periodId);
     }
 }

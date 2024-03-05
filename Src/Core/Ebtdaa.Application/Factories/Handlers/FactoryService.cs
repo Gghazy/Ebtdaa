@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Ebtdaa.Application.ActualProduction.Interfaces;
+using Ebtdaa.Application.ActualRawMaterials.Interfaces;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.Factories.Dtos;
@@ -28,12 +30,16 @@ namespace Ebtdaa.Application.Factories.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryValidator _factoryValidator;
+        private readonly IActualProductionService _actualProductionService;
+        private readonly IActualRawMaterialService _actualRawMaterialService;
 
-        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator)
+        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator, IActualProductionService actualProductionService, IActualRawMaterialService actualRawMaterialService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
-            _factoryValidator= factoryValidator;
+            _factoryValidator = factoryValidator;
+            _actualProductionService = actualProductionService;
+            _actualRawMaterialService = actualRawMaterialService;
         }
         public async Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search)
         {
@@ -52,7 +58,7 @@ namespace Ebtdaa.Application.Factories.Handlers
             var resualt = await _dbContext.Factories
                                 .Include(x => x.BaiscFactoryInfos)
                                 .FirstOrDefaultAsync(x => x.Id == id && x.BaiscFactoryInfos.Any(b => b.PeriodId == periodId));
-            if (resualt != null)
+            if (resualt == null)
             {
                 resualt.Status = resualt.BaiscFactoryInfos.FirstOrDefault().FactoryStatusId;
             }
@@ -61,6 +67,8 @@ namespace Ebtdaa.Application.Factories.Handlers
                 resualt= await _dbContext.Factories
                                 .Include(x => x.BaiscFactoryInfos)
                                 .FirstOrDefaultAsync(x => x.Id == id);
+
+                resualt.Status=resualt.BaiscFactoryInfos.First().FactoryStatusId;
             }
             return new BaseResponse<FactoryResualtDto>
             {
@@ -97,6 +105,12 @@ namespace Ebtdaa.Application.Factories.Handlers
             //{
 
             //}
+
+            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
+            {
+              await  _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+              await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+            }
 
             await _dbContext.SaveChangesAsync();
 

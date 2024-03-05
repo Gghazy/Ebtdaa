@@ -1,12 +1,12 @@
-﻿using Ebtdaa.Domain.General;
-using Ebtdaa.Domain.Periods;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-
-namespace Ebtdaa.Domain.Factories.Entity
+namespace Ebtdaa.Application.FactoryMonthlyFinancials.Dtos
 {
-    [Table("FactoryMonthlyFinancials")]
-    public class FactoryMonthlyFinancial: BaseEntity
+    public class FactoryMonthlyFinancialRequestDto
     {
         public int Id { get; set; }
         public decimal WaterExpenses { get; set; }
@@ -18,8 +18,5 @@ namespace Ebtdaa.Domain.Factories.Entity
         public decimal TotalExpenses { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
-
-        public virtual Factory Factory { get; set; }
-        public virtual Period Period { get; set; }
     }
 }
