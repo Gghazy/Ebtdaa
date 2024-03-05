@@ -22,6 +22,7 @@
     <Folder Include="FactoryRawMaterials\Handlers\" />
     <Folder Include="FactoryRawMaterials\Interfaces\" />
     <Folder Include="FactoryRawMaterials\Mapper\" />
+    <Folder Include="FactoriesUpdateStatus\Validation\" />
     <Folder Include="IndustrialAreas\Validation\" />
     <Folder Include="LogIn\Validation\" />
     <Folder Include="ProductJobs\Dtos\" />

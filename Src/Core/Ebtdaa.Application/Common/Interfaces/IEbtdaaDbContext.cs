@@ -50,6 +50,7 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<BaiscFactoryInfo> BasicFactoryInfos {  get; set; } 
         public DbSet<CustomItemRawMaterial> CustomItemRawMaterials {  get; set; } 
         public DbSet<ScreenStatus> ScreenStatuses { get; set; }
-        public DbSet<FactoryMonthlyFinancial> FactoryMonthlyFinancials {  get; set; } 
+        public DbSet<FactoryMonthlyFinancial> FactoryMonthlyFinancials {  get; set; }
+        public DbSet<FactoryUpdateStatus> FactoryUpdateStatuses { get; set; }
     }
 }
