@@ -52,7 +52,7 @@ namespace Ebtdaa.Application.Factories.Handlers
             var resualt = await _dbContext.Factories
                                 .Include(x => x.BaiscFactoryInfos)
                                 .FirstOrDefaultAsync(x => x.Id == id && x.BaiscFactoryInfos.Any(b => b.PeriodId == periodId));
-            if (resualt != null)
+            if (resualt == null)
             {
                 resualt.Status = resualt.BaiscFactoryInfos.FirstOrDefault().FactoryStatusId;
             }
