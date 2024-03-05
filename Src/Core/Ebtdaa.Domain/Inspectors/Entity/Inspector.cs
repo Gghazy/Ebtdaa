@@ -17,5 +17,7 @@ namespace Ebtdaa.Domain.Inspectors.Entity
         public string OwnerIdentity { get; set; }
         public InspectorStatusEnum Status { get; set; }
 
+        public virtual ICollection<InspectorFactory> InspectorFactories { get; set; }
+
     }
 }
