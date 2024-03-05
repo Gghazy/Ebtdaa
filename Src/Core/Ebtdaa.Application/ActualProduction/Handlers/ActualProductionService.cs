@@ -97,6 +97,20 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             };
         }
 
-      
+        public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
+        {
+            var result = await _dbContext.ActualProductionAndCapacities
+                                      .Include(x=>x.Product)
+                                      .Where(x => x.PeriodId == periodId && x.Product.FactoryId == factoryId).ToListAsync();
+
+
+            _dbContext.ActualProductionAndCapacities.RemoveRange(result);
+
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
     }
 }

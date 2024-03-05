@@ -114,5 +114,21 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
                    Data = _mapper.Map<List<ActualRawMaterialResultDto>>(respose)
             };
             }
+
+        public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
+        {
+            var result = await _dbContext.ActualRawMaterials
+                                     .Include(x=>x.RawMaterial) 
+                                     .Where(x => x.PeriodId == periodId && x.RawMaterial.FactoryId == factoryId).ToListAsync();
+
+
+            _dbContext.ActualRawMaterials.RemoveRange(result);
+
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
     }
 }
