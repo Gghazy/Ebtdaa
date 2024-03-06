@@ -3,8 +3,6 @@ using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.FactoriesUpdateStatus.Dtos;
 using Ebtdaa.Application.FactoriesUpdateStatus.Interfaces;
-using Ebtdaa.Application.FactoryContacts.Dtos;
-using Ebtdaa.Application.Inspectors.Dtos;
 using Ebtdaa.Domain.Factories.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;

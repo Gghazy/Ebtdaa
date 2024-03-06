@@ -1,6 +1,5 @@
 ﻿using Ebtdaa.Application.FactoriesUpdateStatus.Dtos;
 using Ebtdaa.Application.FactoriesUpdateStatus.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ebtdaa.WebApi.Controllers
@@ -19,7 +18,6 @@ namespace Ebtdaa.WebApi.Controllers
         {
 
             return Ok(await _FactoryUpdateStatus.AddAsync(req));
-
         }
 
         [HttpPut]
@@ -31,3 +29,4 @@ namespace Ebtdaa.WebApi.Controllers
         }
     }
 }
+
