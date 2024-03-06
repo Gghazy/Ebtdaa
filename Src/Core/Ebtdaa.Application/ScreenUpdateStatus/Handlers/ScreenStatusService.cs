@@ -50,7 +50,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         public async Task<BaseResponse<ScreenStatusResultDto>> UpdateAsync(ScreenStatusRequestDto req)
         {
-            var screenStatus = await _dbContext.ScreenStatuses.FirstOrDefaultAsync(x => x.Id == req.Id);
+            var screenStatus = await _dbContext.ScreenStatuses.FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId && x.PeriodId == req.PeriodId);
             var screenStatusUpdated = _mapper.Map(req, screenStatus);
 
             await _dbContext.SaveChangesAsync();
