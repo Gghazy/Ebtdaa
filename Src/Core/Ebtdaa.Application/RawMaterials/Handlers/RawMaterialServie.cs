@@ -121,15 +121,15 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
         public async Task<BaseResponse<List<RawMaterialResultDto>>> GetAll(int Factoryid, int Periodid)
         {
-            var respose = _mapper.Map<List<RawMaterialResultDto>>(await _dbContext.RawMaterials
+            var data =await _dbContext.RawMaterials
                 .Include(x => x.ProductRawMaterials)
-                 .ThenInclude(x => x.Product)
-                   .Where(x => x.FactoryId == Factoryid)
-                .ToListAsync());
-
+                .ThenInclude(x => x.Product)
+                .Where(x => x.FactoryId == Factoryid)
+                .ToListAsync();
+          var response=  _mapper.Map<List<RawMaterialResultDto>>(data);
             return new BaseResponse<List<RawMaterialResultDto>>
             {
-                Data = respose
+                Data = response
             };
         }
 
