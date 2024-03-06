@@ -17,9 +17,9 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetByFactory(int id)
+        public async Task<IActionResult> GetByFactory(int factoryId,int periodId)
         {
-            return Ok(await _actualRawMaterialFileService.GetByFactory(id));
+            return Ok(await _actualRawMaterialFileService.GetByFactory(factoryId, periodId));
 
         }
 

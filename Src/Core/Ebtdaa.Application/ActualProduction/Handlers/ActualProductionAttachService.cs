@@ -5,6 +5,7 @@ using Ebtdaa.Application.ActualProduction.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Domain.ActualProduction.Entity;
+using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -27,7 +28,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             _validator = validator;
         }
 
-        public async Task<BaseResponse<List<ActualProductionAttacResultDto>>> GetAll(int factoryId)
+        public async Task<BaseResponse<List<ActualProductionAttacResultDto>>> GetAll(int factoryId,int periodId)
         {
             var respose = _mapper.Map<List<ActualProductionAttacResultDto>>(await _dbContext.ActualProductionAttachments.Where(x=>x.FactoryId==factoryId).ToListAsync());
 
@@ -63,6 +64,18 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             return new BaseResponse<ActualProductionAttacResultDto>
             {
                 Data = _mapper.Map<ActualProductionAttacResultDto>(file)
+            };
+        }
+
+        public async Task<BaseResponse<bool>> delete(int factoryId, int periodId)
+        {
+           var result= await _dbContext.ActualProductionAttachments.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+
+            _dbContext.ActualProductionAttachments.RemoveRange(result);
+
+            return new BaseResponse<bool>
+            {
+                Data = true
             };
         }
     }

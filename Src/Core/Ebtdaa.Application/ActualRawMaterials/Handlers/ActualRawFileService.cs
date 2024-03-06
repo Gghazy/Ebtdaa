@@ -50,16 +50,28 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             };
         }
 
-        public async Task<BaseResponse<List<ActualRawFileResultDto>>> GetByFactory(int id)
+        public async Task<BaseResponse<List<ActualRawFileResultDto>>> GetByFactory(int factoryId, int periodId)
         {
             var respose = _mapper.Map<List<ActualRawFileResultDto>>(
                 await _dbContext.ActualRawMaterialFiles
-                .Where(x=>x.FactoryId ==id)
+                .Where(x=>x.FactoryId ==factoryId&&x.PeriodId==periodId)
                 .Include(x => x.Attachment).ToListAsync());
 
             return new BaseResponse<List<ActualRawFileResultDto>>
             {
                 Data = respose
+            };
+        }
+
+        public async Task<BaseResponse<bool>> delete(int factoryId, int periodId)
+        {
+            var result = await _dbContext.ActualRawMaterialFiles.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+
+            _dbContext.ActualRawMaterialFiles.RemoveRange(result);
+
+            return new BaseResponse<bool>
+            {
+                Data = true
             };
         }
     }

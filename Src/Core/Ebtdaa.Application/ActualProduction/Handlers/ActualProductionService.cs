@@ -25,6 +25,9 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly ActualProductionValidator _actualProductionValidator;
+        private readonly IActualProductionAttachService _actualProductionAttachService;
+        private readonly IIncreaseActualProductionService _increaseActualProductionService;
+
 
         public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAll(ActualProductionSearch search)
         {
@@ -44,11 +47,13 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 Data = resualt
             };
         }
-        public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper , ActualProductionValidator actualProductionValidator)
+        public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper, ActualProductionValidator actualProductionValidator, IActualProductionAttachService actualProductionAttachService, IIncreaseActualProductionService increaseActualProductionService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _actualProductionValidator = actualProductionValidator;
+            _actualProductionAttachService = actualProductionAttachService;
+            _increaseActualProductionService = increaseActualProductionService;
         }
 
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
@@ -100,11 +105,37 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
             var result = await _dbContext.ActualProductionAndCapacities
-                                      .Include(x=>x.Product)
                                       .Where(x => x.PeriodId == periodId && x.Product.FactoryId == factoryId).ToListAsync();
 
 
+            await _actualProductionAttachService.delete(factoryId, periodId);
+            await _increaseActualProductionService.delete(factoryId, periodId);
+
+
             _dbContext.ActualProductionAndCapacities.RemoveRange(result);
+
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
+
+        public async Task<BaseResponse<bool>> UpdateByFactoryIdAndPeriodId(int factoryId, int periodId)
+        {
+            var result = await _dbContext.ActualProductionAndCapacities
+                                      .Where(x => x.PeriodId == periodId && x.Product.FactoryId == factoryId).ToListAsync();
+
+
+            await _actualProductionAttachService.delete(factoryId, periodId);
+            await _increaseActualProductionService.delete(factoryId, periodId);
+
+            foreach (var item in result)
+            {
+                item.ActualProduction = null;
+                item.ActualProductionUintId = null;
+                item.ActualProductionWeight = null;
+            }
 
 
             return new BaseResponse<bool>

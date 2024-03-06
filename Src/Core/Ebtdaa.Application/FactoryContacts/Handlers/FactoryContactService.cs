@@ -29,13 +29,13 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
             _mapper = mapper;
             _validator = validator;
         }
-        public async Task<BaseResponse<FactoryContactResultDto>> GetOne(int factoryId, int periodId)
+        public async Task<BaseResponse<FactoryContactResultDto>> GetOne(int factoryId)
         {
             var resualt = await _dbContext.FactoryContacts
                 .Include(x=>x.FinanceManagerPhone)
                 .Include(x=>x.OfficerPhone)
                 .Include(x=>x.ProductionManagerPhone)
-                .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+                .FirstOrDefaultAsync(x => x.FactoryId == factoryId);
 
             return new BaseResponse<FactoryContactResultDto>
             {

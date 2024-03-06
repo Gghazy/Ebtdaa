@@ -11,8 +11,8 @@ namespace Ebtdaa.Common.Enums
         Productive = 0,
         Under_Construction=1,
         Stop=2,
-        Active=3,
-        Pendding = 4,
+        Under_Production = 3,
+        Canceled = 4,
 
     }
 }

@@ -17,13 +17,14 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly ActualRawMaterialValidator _actualRawMaterialValidator;
+        private readonly IActualRawFileService _actualRawFileService;
 
-        public ActualRawMaterialService(IEbtdaaDbContext dbContext, IMapper mapper, ActualRawMaterialValidator actualRawMaterial)
+        public ActualRawMaterialService(IEbtdaaDbContext dbContext, IMapper mapper, ActualRawMaterialValidator actualRawMaterial, IActualRawFileService actualRawFileService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _actualRawMaterialValidator = actualRawMaterial;
-            
+            _actualRawFileService = actualRawFileService;
         }
 
         public async Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetAll()
@@ -121,9 +122,8 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
                                      .Include(x=>x.RawMaterial) 
                                      .Where(x => x.PeriodId == periodId && x.RawMaterial.FactoryId == factoryId).ToListAsync();
 
-
+            await _actualRawFileService.delete(factoryId, periodId);
             _dbContext.ActualRawMaterials.RemoveRange(result);
-
 
             return new BaseResponse<bool>
             {

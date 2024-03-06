@@ -30,13 +30,13 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("ActualProduction")
+                    b.Property<int?>("ActualProduction")
                         .HasColumnType("int");
 
-                    b.Property<int>("ActualProductionUintId")
+                    b.Property<int?>("ActualProductionUintId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ActualProductionWeight")
+                    b.Property<int?>("ActualProductionWeight")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
@@ -45,10 +45,10 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int>("DesignedCapacity")
+                    b.Property<int?>("DesignedCapacity")
                         .HasColumnType("int");
 
-                    b.Property<int>("DesignedCapacityUnitId")
+                    b.Property<int?>("DesignedCapacityUnitId")
                         .HasColumnType("int");
 
                     b.Property<int>("PeriodId")
@@ -97,6 +97,9 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PeriodId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -235,12 +238,12 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Month")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PeriodId")
+                        .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -442,9 +445,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("OfficerPhoneId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PeriodId")
-                        .HasColumnType("int");
-
                     b.Property<string>("ProductionManagerEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -465,8 +465,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasIndex("FinanceManagerPhoneId");
 
                     b.HasIndex("OfficerPhoneId");
-
-                    b.HasIndex("PeriodId");
 
                     b.HasIndex("ProductionManagerPhoneId");
 
@@ -661,9 +659,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("IndustrialAreaId")
                         .HasColumnType("int");
 
-                    b.Property<int>("PeriodId")
-                        .HasColumnType("int");
-
                     b.Property<string>("UpdatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -683,8 +678,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasIndex("FactoryId");
 
                     b.HasIndex("IndustrialAreaId");
-
-                    b.HasIndex("PeriodId");
 
                     b.ToTable("FactoryLocations");
                 });
@@ -1448,14 +1441,12 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasOne("Ebtdaa.Domain.General.Unit", "ActualProductionUint")
                         .WithMany("ActualProductionUints")
                         .HasForeignKey("ActualProductionUintId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Ebtdaa.Domain.General.Unit", "DesignedCapacityUnit")
                         .WithMany("DesignedCapacityUnits")
                         .HasForeignKey("DesignedCapacityUnitId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Ebtdaa.Domain.ProductData.Entity.Product", "Product")
                         .WithMany("ActualProductionAndCapacities")
@@ -1603,12 +1594,6 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
-                        .WithMany()
-                        .HasForeignKey("PeriodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Phone", "ProductionManagerPhone")
                         .WithMany("ProductionManagerPhones")
                         .HasForeignKey("ProductionManagerPhoneId")
@@ -1620,8 +1605,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("FinanceManagerPhone");
 
                     b.Navigation("OfficerPhone");
-
-                    b.Navigation("Period");
 
                     b.Navigation("ProductionManagerPhone");
                 });
@@ -1701,12 +1684,6 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
-                        .WithMany()
-                        .HasForeignKey("PeriodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("City");
 
                     b.Navigation("Factory");
@@ -1714,8 +1691,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Navigation("FactoryEntity");
 
                     b.Navigation("IndustrialArea");
-
-                    b.Navigation("Period");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryLocationAttachment", b =>

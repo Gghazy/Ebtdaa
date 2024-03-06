@@ -8,6 +8,7 @@ using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Application.LogIn.Interfaces;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Enums;
 using Ebtdaa.Common.Extentions;
@@ -32,14 +33,16 @@ namespace Ebtdaa.Application.Factories.Handlers
         private readonly FactoryValidator _factoryValidator;
         private readonly IActualProductionService _actualProductionService;
         private readonly IActualRawMaterialService _actualRawMaterialService;
+        private readonly IScreenStatusService _screenStatusService;
 
-        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator, IActualProductionService actualProductionService, IActualRawMaterialService actualRawMaterialService)
+        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator, IActualProductionService actualProductionService, IActualRawMaterialService actualRawMaterialService, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _factoryValidator = factoryValidator;
             _actualProductionService = actualProductionService;
             _actualRawMaterialService = actualRawMaterialService;
+            _screenStatusService = screenStatusService;
         }
         public async Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search)
         {
@@ -57,19 +60,18 @@ namespace Ebtdaa.Application.Factories.Handlers
         {
             var resualt = await _dbContext.Factories
                                 .Include(x => x.BaiscFactoryInfos)
-                                .FirstOrDefaultAsync(x => x.Id == id && x.BaiscFactoryInfos.Any(b => b.PeriodId == periodId));
-            if (resualt == null)
-            {
-                resualt.Status = resualt.BaiscFactoryInfos.FirstOrDefault().FactoryStatusId;
-            }
-            else
-            {
-                resualt= await _dbContext.Factories
-                                .Include(x => x.BaiscFactoryInfos)
                                 .FirstOrDefaultAsync(x => x.Id == id);
+            if (resualt.BaiscFactoryInfos != null)
+            {
 
-                resualt.Status=resualt.BaiscFactoryInfos.First().FactoryStatusId;
+                var basicinfo = resualt.BaiscFactoryInfos.FirstOrDefault(x => x.PeriodId == periodId);
+                if (basicinfo!=null)
+                {
+                    resualt.Status = basicinfo.FactoryStatusId;
+                }
+                
             }
+
             return new BaseResponse<FactoryResualtDto>
             {
                 Data = _mapper.Map<FactoryResualtDto>(resualt)
@@ -101,15 +103,17 @@ namespace Ebtdaa.Application.Factories.Handlers
 
                 await _dbContext.BasicFactoryInfos.AddAsync(basicFactoryInfo);
             }
-            //if (req.Status==FactoryStatusEnum.)
-            //{
 
-            //}
 
-            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
+            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction || factory.FactoryStatusId == FactoryStatusEnum.Under_Construction)
             {
               await  _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
               await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+            }
+            if (factory.FactoryStatusId == FactoryStatusEnum.Under_Production)
+            {
+                await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
             }
 
             await _dbContext.SaveChangesAsync();
@@ -118,6 +122,17 @@ namespace Ebtdaa.Application.Factories.Handlers
             {
                 Data =true
             };
+        }
+
+
+        public async Task CheckScreenStatus(int periodId,int factoryId)
+        {
+          var result=  await _dbContext.FactoryFiles.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+
+            if (result)
+            {
+
+            }
         }
     }
 }

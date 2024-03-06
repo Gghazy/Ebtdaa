@@ -13,11 +13,13 @@ namespace Ebtdaa.Persistence.Configuration.ActualProductionAndCapacities
             builder.HasOne<Unit>(s => s.DesignedCapacityUnit)
                 .WithMany(g => g.DesignedCapacityUnits)
                 .HasForeignKey(s => s.DesignedCapacityUnitId)
+                .IsRequired(false)
               .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne<Unit>(s => s.ActualProductionUint)
                .WithMany(g => g.ActualProductionUints)
                .HasForeignKey(s => s.ActualProductionUintId)
+               .IsRequired(false)
              .OnDelete(DeleteBehavior.Restrict);
 
         }

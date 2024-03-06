@@ -16,6 +16,5 @@ namespace Ebtdaa.Application.FactoryContacts.Dtos
         public PhoneDto FinanceManagerPhone { get; set; }
         public string FinanceManagerEmail { get; set; }
         public int FactoryId { get; set; }
-        public int PeriodId { get; set; }
     }
 }

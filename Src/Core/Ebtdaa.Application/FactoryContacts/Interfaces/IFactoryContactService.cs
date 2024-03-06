@@ -6,7 +6,7 @@ namespace Ebtdaa.Application.FactoryContacts.Interfaces
 {
     public interface IFactoryContactService
     {
-        Task<BaseResponse<FactoryContactResultDto>> GetOne(int factoryId, int periodId);
+        Task<BaseResponse<FactoryContactResultDto>> GetOne(int factoryId);
         Task<BaseResponse<FactoryContactResultDto>> UpdateAsync(FactoryContactRequestDto req);
         Task<BaseResponse<FactoryContactResultDto>> AddAsync(FactoryContactRequestDto req);
     }

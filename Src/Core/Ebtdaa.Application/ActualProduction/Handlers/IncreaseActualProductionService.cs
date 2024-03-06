@@ -59,5 +59,19 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 Data = _mapper.Map<IncreaseActualProductionResultDto>(increaseActualProductionUpdated)
             };
         }
+
+        public async Task<BaseResponse<bool>> delete(int factoryId, int periodId)
+        {
+            var result = await _dbContext.IncreaseActualProductions.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+
+            _dbContext.IncreaseActualProductions.RemoveRange(result);
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
+
+
     }
 }

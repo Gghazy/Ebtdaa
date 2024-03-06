@@ -18,14 +18,12 @@ namespace Ebtdaa.Domain.Factories.Entity
         public int FinanceManagerPhoneId { get; set; }
         public string FinanceManagerEmail { get; set; }
         public int FactoryId { get; set; }
-        public int PeriodId {  get; set; }
 
 
         public virtual Factory Factory { get; set; }
         public virtual Phone OfficerPhone { get; set; }
         public virtual Phone ProductionManagerPhone { get; set; }
         public virtual Phone FinanceManagerPhone { get; set; }
-        public virtual Period Period { get; set; }
 
     }
 }
