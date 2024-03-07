@@ -6,6 +6,7 @@ using Ebtdaa.Application.FactoryFinancials.Validation;
 using Ebtdaa.Application.FactoryLocations.Dtos;
 using Ebtdaa.Application.FactoryLocations.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Validation;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -18,11 +19,13 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryLocationAttachmentValidator _validator;
-        public FactoryLocationAttachmentService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryLocationAttachmentValidator validator)
+        private readonly IScreenStatusService _screenStatusService;
+        public FactoryLocationAttachmentService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryLocationAttachmentValidator validator, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _screenStatusService = screenStatusService;
         }
 
 
@@ -44,6 +47,11 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
             await _dbContext.FactoryLocationAttachments.AddAsync(file);
 
             await _dbContext.SaveChangesAsync();
+
+            var FactoryLocation= await _dbContext.FactoryLocations.FirstOrDefaultAsync(x=>x.Id==req.FactoryLocationId);
+
+            await _screenStatusService.CheckFactoryLocationScreenStatus(FactoryLocation.FactoryId);
+
             return new BaseResponse<FactoryLocationAttachmentResultDto>
             {
                 Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
@@ -52,11 +60,14 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
 
         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int id)
         {
-            var file = await _dbContext.FactoryLocationAttachments.FindAsync(id);
+            var file = await _dbContext.FactoryLocationAttachments.Include(x=>x.FactoryLocation).FirstOrDefaultAsync(x=>x.Id== id);
 
             _dbContext.FactoryLocationAttachments.Remove(file);
 
             await _dbContext.SaveChangesAsync();
+
+            await _screenStatusService.CheckFactoryLocationScreenStatus(file.FactoryLocation.FactoryId);
+
 
             return new BaseResponse<FactoryLocationAttachmentResultDto>
             {

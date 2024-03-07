@@ -14,8 +14,9 @@ namespace Ebtdaa.Domain.ScreenStatus.Entity
     {
         public int Id {  get; set; }
         public int FactoryId {  get; set; }
-        public int PeriodId {  get; set; }
+        public int? PeriodId {  get; set; }
         public ScreenStatusEnums ScreenStatusId {  get; set; }
+        public bool UpdateStatus { get; set; }
 
         public virtual Factory Factory { get; set; }
         public virtual Period Period { get; set; }

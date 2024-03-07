@@ -1,18 +1,20 @@
 ﻿using Ebtdaa.Common.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Ebtdaa.Application.ScreenUpdateStatus.Dtos
 {
     public class ScreenStatusResultDto
     {
-        public int Id { get; set; }
-        public int FactoryId { get; set; }
-        public int PeriodId { get; set; }
-        public bool UpdateStatus { get; set; }
-        public ScreenStatusEnums ScreenStatusId { get; set; }
+        public bool? BasicFactoryInfo { get; set; }
+        public bool? FinancialData { get; set; }
+        public bool? FactoryLocation { get; set; }
+        public bool? FactoryContact { get; set; }
+        public bool? CustomItemsUpdated { get; set; }
+        public bool? CustomItemValidity { get; set; }
+        public bool? ProductData { get; set; }
+        public bool? ActualProduction { get; set; }
+        public bool? RawMaterial { get; set; }
+        public bool? ActualRawMaterila { get; set; }
+
     }
 }

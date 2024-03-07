@@ -20,7 +20,7 @@ namespace Ebtdaa.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll(int factoryId, int periodId)
         {
-            return Ok(await _screenStatusService.GetAll(factoryId, periodId));
+            return Ok(await _screenStatusService.GetAll(periodId,factoryId));
 
         }
 

@@ -6,6 +6,7 @@ using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Application.FactoryFinancials.Dtos;
 using Ebtdaa.Application.FactoryFinancials.Interfaces;
 using Ebtdaa.Application.FactoryFinancials.Validation;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -23,12 +24,14 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryFinancialValidator _validator;
+        private readonly IScreenStatusService _screenStatusService;
 
-        public FactoryFinancialService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryFinancialValidator validator)
+        public FactoryFinancialService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryFinancialValidator validator, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _screenStatusService = screenStatusService;
         }
 
         public async Task<BaseResponse<FactoryFinancialResultDto>> GetOne(int id,int year)
@@ -51,6 +54,8 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             await _dbContext.FactoryFinancials.AddAsync(factoryFinancial);
 
             await _dbContext.SaveChangesAsync();
+            await _screenStatusService.CheckFactoryFinanicailScreenStatus(req.FactoryId);
+
 
             return new BaseResponse<FactoryFinancialResultDto>
             {
@@ -67,6 +72,8 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
+            await _screenStatusService.CheckFactoryFinanicailScreenStatus(req.FactoryId);
+
 
             return new BaseResponse<FactoryFinancialResultDto>
             {

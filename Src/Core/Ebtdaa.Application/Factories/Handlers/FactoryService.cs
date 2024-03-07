@@ -8,6 +8,7 @@ using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Application.LogIn.Interfaces;
+using Ebtdaa.Application.ScreenUpdateStatus.Dtos;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Enums;
@@ -117,6 +118,8 @@ namespace Ebtdaa.Application.Factories.Handlers
             }
 
             await _dbContext.SaveChangesAsync();
+            await _screenStatusService.CheckBasicInfoScreenStatus(req.PeriodId, req.FactoryId);
+
 
             return new BaseResponse<bool>
             {
@@ -125,14 +128,6 @@ namespace Ebtdaa.Application.Factories.Handlers
         }
 
 
-        public async Task CheckScreenStatus(int periodId,int factoryId)
-        {
-          var result=  await _dbContext.FactoryFiles.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
-
-            if (result)
-            {
-
-            }
-        }
+      
     }
 }

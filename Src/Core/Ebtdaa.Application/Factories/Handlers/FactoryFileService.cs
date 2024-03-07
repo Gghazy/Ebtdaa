@@ -4,6 +4,7 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.Factories.Validation;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -21,16 +22,19 @@ namespace Ebtdaa.Application.Factories.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryFileValidator _factoryFileValidator;
-        public FactoryFileService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryFileValidator factoryFileValidator)
+        private readonly IScreenStatusService _screenStatusService;
+
+        public FactoryFileService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryFileValidator factoryFileValidator, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _factoryFileValidator = factoryFileValidator;
+            _screenStatusService = screenStatusService;
         }
-        public async Task<BaseResponse<List<FactoryFileResultDto>>> GetAll(int factoryId)
+        public async Task<BaseResponse<List<FactoryFileResultDto>>> GetAll(int factoryId,int periodId)
         {
             var respose = _mapper.Map<List<FactoryFileResultDto>>(
-                await _dbContext.FactoryFiles.Where(x=>x.FactoryId==factoryId).Include(x=>x.Attachment).ToListAsync()
+                await _dbContext.FactoryFiles.Where(x=>x.FactoryId==factoryId&&x.PeriodId==periodId).Include(x=>x.Attachment).ToListAsync()
                 
                 );
 
@@ -48,6 +52,7 @@ namespace Ebtdaa.Application.Factories.Handlers
             await _dbContext.FactoryFiles.AddAsync(factoryFile);
 
             await _dbContext.SaveChangesAsync();
+            await _screenStatusService.CheckBasicInfoScreenStatus(req.PeriodId, req.FactoryId);
             return new BaseResponse<FactoryFileResultDto>
             {
                 Data = _mapper.Map<FactoryFileResultDto>(factoryFile)
@@ -61,7 +66,7 @@ namespace Ebtdaa.Application.Factories.Handlers
              _dbContext.FactoryFiles.Remove(factoryFile);
 
             await _dbContext.SaveChangesAsync();
-
+            await _screenStatusService.CheckBasicInfoScreenStatus(factoryFile.PeriodId, factoryFile.FactoryId);
             return new BaseResponse<FactoryFileResultDto>
             {
                 Data = _mapper.Map<FactoryFileResultDto>(factoryFile)

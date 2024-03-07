@@ -14,5 +14,7 @@ namespace Ebtdaa.Application.Factories.Dtos
         public int AttachmentId { get; set; }
         public string Name { get; set; }
         public int FactoryId { get; set; }
+        public int PeriodId { get; set; }
+
     }
 }

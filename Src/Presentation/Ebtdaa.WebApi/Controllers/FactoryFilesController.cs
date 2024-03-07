@@ -17,10 +17,10 @@ namespace Ebtdaa.WebApi.Controllers
             _factoryFileService = factoryFileService;
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetAll(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int factoryId, int periodId)
         {
-            return Ok(await _factoryFileService.GetAll(id));
+            return Ok(await _factoryFileService.GetAll(factoryId,periodId));
 
         }
 

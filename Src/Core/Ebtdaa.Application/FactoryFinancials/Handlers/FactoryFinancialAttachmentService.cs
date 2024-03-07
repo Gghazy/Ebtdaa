@@ -6,6 +6,7 @@ using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Application.FactoryFinancials.Dtos;
 using Ebtdaa.Application.FactoryFinancials.Interfaces;
 using Ebtdaa.Application.FactoryFinancials.Validation;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +20,15 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryFinancialAttachmentValidator _validator;
-        public FactoryFinancialAttachmentService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryFinancialAttachmentValidator validator)
+        private readonly IScreenStatusService _screenStatusService;
+        public FactoryFinancialAttachmentService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryFinancialAttachmentValidator validator, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _screenStatusService = screenStatusService;
         }
-       
+
 
         public async Task<BaseResponse<List<FactoryFinancialAttachmentResultDto>>> GetAll(int id)
         {
@@ -48,6 +51,10 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             await _dbContext.FactoryFinancialAttachments.AddAsync(file);
 
             await _dbContext.SaveChangesAsync();
+
+            var factory =await _dbContext.FactoryFinancials.FirstOrDefaultAsync(x => x.Id == req.FactoryFinancialId);
+
+            await _screenStatusService.CheckFactoryFinanicailScreenStatus(factory.FactoryId);
             return new BaseResponse<FactoryFinancialAttachmentResultDto>
             {
                 Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file)
@@ -56,11 +63,14 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
 
         public async Task<BaseResponse<FactoryFinancialAttachmentResultDto>> DeleteAsync(int id)
         {
-            var file = await _dbContext.FactoryFinancialAttachments.FindAsync(id);
+            var file = await _dbContext.FactoryFinancialAttachments
+                .Include(x=>x.FactoryFinancial)
+                .FirstOrDefaultAsync(x=>x.Id==id);
 
             _dbContext.FactoryFinancialAttachments.Remove(file);
 
             await _dbContext.SaveChangesAsync();
+            await _screenStatusService.CheckFactoryFinanicailScreenStatus(file.FactoryFinancial.FactoryId);
 
             return new BaseResponse<FactoryFinancialAttachmentResultDto>
             {

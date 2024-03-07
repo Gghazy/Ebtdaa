@@ -11,7 +11,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Dtos
     {
         public int Id { get; set; }
         public int FactoryId { get; set; }
-        public int PeriodId { get; set; }
+        public int? PeriodId { get; set; }
         public bool UpdateStatus { get; set; }
         public ScreenStatusEnums ScreenStatusId { get; set; }
     }

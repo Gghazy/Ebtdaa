@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 
 namespace Ebtdaa.Application.FactoryContacts.Handlers
 {
@@ -22,12 +23,14 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryContactValidator _validator;
+        private readonly IScreenStatusService _screenStatusService;
 
-        public FactoryContactService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryContactValidator validator)
+        public FactoryContactService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryContactValidator validator, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _screenStatusService = screenStatusService;
         }
         public async Task<BaseResponse<FactoryContactResultDto>> GetOne(int factoryId)
         {
@@ -53,6 +56,7 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
             await _dbContext.FactoryContacts.AddAsync(factoryContact);
 
             await _dbContext.SaveChangesAsync();
+            await _screenStatusService.CheckFactoryContactScreenStatus(req.FactoryId);
 
             return new BaseResponse<FactoryContactResultDto>
             {
@@ -69,6 +73,9 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
+
+            await _screenStatusService.CheckFactoryContactScreenStatus(req.FactoryId);
+
 
             return new BaseResponse<FactoryContactResultDto>
             {
