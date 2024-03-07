@@ -1,20 +1,12 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.FactoryLocations.Dtos;
 using Ebtdaa.Application.ScreenUpdateStatus.Dtos;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Common.Enums;
-using Ebtdaa.Domain.ActualRawMaterials.Entity;
-using Ebtdaa.Domain.Factories.Entity;
-using Ebtdaa.Domain.RawMaterials.Entity;
 using Ebtdaa.Domain.ScreenStatus.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 {
