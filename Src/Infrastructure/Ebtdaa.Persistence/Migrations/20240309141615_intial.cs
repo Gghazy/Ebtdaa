@@ -123,6 +123,20 @@ namespace Ebtdaa.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "MappingUnits",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    HS6 = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UnitOfMeasurement = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MappingUnits", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Periods",
                 columns: table => new
                 {
@@ -206,8 +220,7 @@ namespace Ebtdaa.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    conversionToKG = table.Column<int>(type: "int", nullable: true),
-                    Sign = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UnitOfMeasurement = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -1286,6 +1299,9 @@ namespace Ebtdaa.Persistence.Migrations
 
             migrationBuilder.DropTable(
                 name: "MappingProducts");
+
+            migrationBuilder.DropTable(
+                name: "MappingUnits");
 
             migrationBuilder.DropTable(
                 name: "ProductRawMaterials");

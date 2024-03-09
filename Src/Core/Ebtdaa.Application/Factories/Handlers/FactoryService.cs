@@ -80,9 +80,6 @@ namespace Ebtdaa.Application.Factories.Handlers
 
         }
 
-
-
-
         public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
         {
             var factory = await _dbContext.BasicFactoryInfos
@@ -95,14 +92,14 @@ namespace Ebtdaa.Application.Factories.Handlers
             }
             else
             {
-                var basicFactoryInfo = new BaiscFactoryInfo()
+                factory = new BaiscFactoryInfo()
                 {
                     FactoryId = req.FactoryId,
                     PeriodId = req.PeriodId,
                     FactoryStatusId = req.Status,
                 };
 
-                await _dbContext.BasicFactoryInfos.AddAsync(basicFactoryInfo);
+                await _dbContext.BasicFactoryInfos.AddAsync(factory);
             }
 
 
@@ -126,8 +123,6 @@ namespace Ebtdaa.Application.Factories.Handlers
                 Data =true
             };
         }
-
-
       
     }
 }

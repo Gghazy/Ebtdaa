@@ -2,6 +2,7 @@
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.ProductJobs.Interfaces;
 using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.General;
 using Ebtdaa.Domain.Integration;
 using Ebtdaa.Domain.ProductData.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -33,15 +34,15 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
 
                 await AddAllProducts(integrationProducts);
             }
-            else if (integrationProducts.Count > Products.Count)
-            {
-                await AddNewProducts(integrationProducts, Products);
-            }
-            else
-            {
+            //else if (integrationProducts.Count > Products.Count)
+            //{
+            //    await AddNewProducts(integrationProducts, Products);
+            //}
+            //else
+            //{
 
-                await Update(integrationProducts);
-            }
+            //    await Update(integrationProducts);
+            //}
            
 
             return 1;
@@ -52,6 +53,9 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
 
             var factories = await _dbContext.Factories.ToListAsync();
 
+            var mappUnits = await _dbContext.MappingUnits.ToListAsync();
+            var units = await _dbContext.Units.ToListAsync();
+
             try
             {
 
@@ -61,6 +65,9 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
                     var factory = factories.FirstOrDefault(x => x.CommercialRegister == product.CR);
 
                     product.FactoryId = factory == null?null: factory.Id;
+
+                    var unitId =await getUnitId(product.ItemNumber, mappUnits,units);
+                    product.UnitId = unitId ;
                 }
 
                 await _dbContext.Products.AddRangeAsync(products);
@@ -136,6 +143,20 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
         private async Task<List<Product>> GetAllProducts()
         {
             return await _dbContext.Products.ToListAsync();
+        }
+
+
+        private async Task<int?> getUnitId(string itemNumber,List<MappingUnit> mappingUnits,List<Unit> units) 
+        {
+
+            string firstSixCharacters = itemNumber.Substring(0, Math.Min(itemNumber.Length, 6));
+
+
+
+           var mapUnit= mappingUnits.FirstOrDefault(x => x.HS6 == firstSixCharacters);
+
+          return mapUnit!=null?  units.FirstOrDefault(x => x.UnitOfMeasurement == mapUnit.UnitOfMeasurement)?.Id:null;
+        
         }
     }
 }

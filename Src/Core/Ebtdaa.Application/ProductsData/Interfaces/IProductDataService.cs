@@ -8,6 +8,7 @@ namespace Ebtdaa.Application.ProductsData.Interfaces
     public interface IProductDataService
     {
         Task<BaseResponse<QueryResult<ProductResultDto>>> GetAll(ProductSearch search);
+        Task<BaseResponse<List<ProductResultDto>>> GetAll(int factoryId);
         Task<BaseResponse<ProductResultDto>> GetOne(int Id);
         Task<BaseResponse<QueryResult<ProductResultDto>>> ProductLevel10(ProductSearch search);
         Task<BaseResponse<ProductResultDto>> AddAsync(ProductRequestDto request);

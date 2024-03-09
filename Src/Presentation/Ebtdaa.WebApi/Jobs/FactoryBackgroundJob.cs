@@ -21,10 +21,18 @@ namespace Ebtdaa.WebApi.Jobs
         }
         public async Task Execute(IJobExecutionContext context)
         {
+            try
+            {
+                await _factoryJobService.FactoryIntegrat();
+                await _unitJobService.UnitIntegrat();
+                await _productJobServie.ProductIntegrat();
+            }
+            catch (Exception ex)
+            {
 
-          await  _factoryJobService.FactoryIntegrat();
-          await _unitJobService.UnitIntegrat();
-          await _productJobServie.ProductIntegrat();
+                throw;
+            }
+         
         }
     }
 }

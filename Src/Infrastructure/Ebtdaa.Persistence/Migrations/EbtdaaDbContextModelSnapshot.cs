@@ -1016,12 +1016,9 @@ namespace Ebtdaa.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Sign")
+                    b.Property<string>("UnitOfMeasurement")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("conversionToKG")
-                        .HasColumnType("int");
 
                     b.HasKey("Id");
 

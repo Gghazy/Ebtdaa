@@ -13,5 +13,6 @@ namespace Ebtdaa.Domain.Integration
 
         public int Id { get; set; }
         public string Name { get; set; }
+        public string UnitOfMeasurement { get; set; }
     }
 }
