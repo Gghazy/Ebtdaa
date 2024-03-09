@@ -79,6 +79,7 @@ namespace Ebtdaa.Persistence
         public DbSet<FactoryUpdateStatus> FactoryUpdateStatuses { get; set; }
         public DbSet<MappingProduct> MappingProducts { get; set; }
         public DbSet<MappingUnit> MappingUnits { get; set; }
+        public DbSet<ProductPeriodActive> ProductPeriodActives { get; set; }
 
 
         public Task<int> SaveChangesAsync()

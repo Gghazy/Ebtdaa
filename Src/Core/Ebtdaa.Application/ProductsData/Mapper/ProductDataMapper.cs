@@ -17,6 +17,9 @@ namespace Ebtdaa.Application.ProductsData.Mapper
                  .ForMember(d => d.UnitName, opt => opt.MapFrom(src => src.Unit.Name));
             CreateMap<QueryResult<Product>, QueryResult<ProductResultDto>>();
 
+            CreateMap<ProductPeriodActiveRequestDto, ProductPeriodActive>();
+            CreateMap<ProductPeriodActive, ProductPeriodActiveResultDto>();
+
         }
     }
 }

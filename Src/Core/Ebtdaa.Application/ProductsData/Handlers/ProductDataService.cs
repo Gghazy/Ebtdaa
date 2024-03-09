@@ -37,6 +37,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             var resualt = 
                 await _dbContext.Products
                 .Include(x=>x.Unit)
+                .Include(x=>x.ProductPeriodActives)
                 .Where(x => x.FactoryId == search.FactoryId)
                 .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto {
@@ -58,6 +59,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     UnitName = a.Unit.Name,
                     PeperId = a.PeperId,
                     PhototId = a.PhototId,
+                    IsActive=a.ProductPeriodActives.Any(x=>x.PeriodId==search.PeriodId&&x.ProductId== a.Id),
                 })
                 .ToQueryResult(search.PageNumber, search.PageSize)
                 ;
@@ -107,19 +109,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             };
         }
 
-
-        public async Task<BaseResponse<QueryResult<ProductResultDto>>> ProductLevel10(ProductSearch search)
-        {
-            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
-            await _dbContext.Products
-                .Where(x => x.FactoryId == search.FactoryId)
-                .ToQueryResult(search.PageNumber, search.PageSize)
-                );
-            return new BaseResponse<QueryResult<ProductResultDto>>
-            {
-                Data = resualt
-            };
-        }
         public async Task<BaseResponse<ProductResultDto>> GetOne(int Id)
         {
             var result = await _dbContext

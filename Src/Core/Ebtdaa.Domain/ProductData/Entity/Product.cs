@@ -30,6 +30,8 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public virtual Attachment Photot { get; set; }
         public virtual ICollection<ActualProductionAndCapacity> ActualProductionAndCapacities { get; set; }
         public virtual ICollection<ProductRawMaterial> ProductRawMaterials { get; set; }
+        public virtual ICollection<ProductPeriodActive> ProductPeriodActives { get; set; }
+
 
     }
 }

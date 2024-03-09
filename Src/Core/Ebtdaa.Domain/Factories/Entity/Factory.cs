@@ -36,5 +36,6 @@ namespace Ebtdaa.Domain.Factories.Entity
         public virtual ICollection<BaiscFactoryInfo> BaiscFactoryInfos { get; set; }
         public virtual ICollection<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
 
+
     }
 }
