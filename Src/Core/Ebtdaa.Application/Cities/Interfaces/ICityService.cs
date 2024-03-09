@@ -12,6 +12,7 @@ namespace Ebtdaa.Application.Cities.Interfaces
     public interface ICityService
     {
         Task<BaseResponse<List<CityResultDto>>> GetAll();
+        Task<BaseResponse<List<CityResultDto>>> GetByEntity(int id);
 
     }
 }

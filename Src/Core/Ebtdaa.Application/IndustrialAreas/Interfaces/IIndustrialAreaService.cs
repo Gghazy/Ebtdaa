@@ -7,6 +7,7 @@ namespace Ebtdaa.Application.IndustrialAreas.Interfaces
     {
 
         Task<BaseResponse<List<IndustrialAreaResultDto>>> GetAll();
+        Task<BaseResponse<List<IndustrialAreaResultDto>>> GetByCity(int id);
 
     }
 }
