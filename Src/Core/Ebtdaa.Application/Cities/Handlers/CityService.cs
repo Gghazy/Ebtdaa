@@ -32,5 +32,16 @@ namespace Ebtdaa.Application.Cities.Handlers
                 Data = respose
             };
         }
+
+        public async Task<BaseResponse<List<CityResultDto>>> GetByEntity(int id)
+        {
+            var respose = _mapper.Map<List<CityResultDto>>
+                (await _dbContext.Cities.Where(x=>x.FactoryEntityId==id).ToListAsync());
+
+            return new BaseResponse<List<CityResultDto>>
+            {
+                Data = respose
+            };
+        }
     }
 }

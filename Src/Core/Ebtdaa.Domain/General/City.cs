@@ -12,6 +12,8 @@ namespace Ebtdaa.Domain.General
         public int Id { get; set; }
         public string NameAr { get; set; }
         public string NameEn { get; set; }
+        public int FactoryEntityId { get; set; }
+        public virtual FactoryEntity FactoryEntity { get; set; }
 
         public virtual ICollection<FactoryLocation> FactoryLocations { get; set; }
     }

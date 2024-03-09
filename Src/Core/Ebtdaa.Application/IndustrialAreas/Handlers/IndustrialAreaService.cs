@@ -32,5 +32,16 @@ namespace Ebtdaa.Application.IndustrialAreas.Handlers
                 Data = respose
             };
         }
+
+        public async Task<BaseResponse<List<IndustrialAreaResultDto>>> GetByCity(int id)
+        {
+            var respose = _mapper.Map<List<IndustrialAreaResultDto>>
+                (await _dbContext.IndustrialAreas.Where(x=>x.CityId==id).ToListAsync());
+
+            return new BaseResponse<List<IndustrialAreaResultDto>>
+            {
+                Data = respose
+            };
+        }
     }
 }

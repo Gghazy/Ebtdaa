@@ -20,5 +20,11 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _cityService.GetAll());
         }
+
+        [HttpGet("ByEntity")]
+        public async Task<IActionResult> GetByEntity(int id)
+        {
+            return Ok(await _cityService.GetByEntity( id));
+        }
     }
 }
