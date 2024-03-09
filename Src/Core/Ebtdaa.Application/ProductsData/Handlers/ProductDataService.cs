@@ -5,19 +5,16 @@ using Ebtdaa.Application.ProductsData.Dtos;
 using Ebtdaa.Application.ProductsData.Interfaces;
 using Ebtdaa.Application.ProductsData.Validatiton;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FluentValidation;
 using Ebtdaa.Domain.ProductData.Entity;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Application.Units.Dtos;
 using Ebtdaa.Common.Enums;
-using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.General;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -37,54 +34,49 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         {
 
 
-            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
+            var resualt = 
                 await _dbContext.Products
                 .Include(x=>x.Unit)
-                .Include(x=>x.ProductAttachments)
                 .Where(x => x.FactoryId == search.FactoryId)
+                .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                new ProductResultDto {
+                    Hs12NameEn= b.Hs12NameEn,
+                    Hs12NameAr = b.Hs12NameAr,
+                    Hs12Code = b.Hs12Code,
+                    Id = a.Id,
+                    ProductName = a.ProductName,
+                    CommericalName = a.CommericalName,
+                    UnitId = a.UnitId,
+                    WiegthInKgm = a.WiegthInKgm,
+                    ProductCount = a.ProductCount,
+                    ItemNumber = a.ItemNumber,
+                    CR = a.CR,
+                    Status = a.Status,
+                    FactoryId = a.FactoryId,
+                    Review = a.Review,
+                    Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                    UnitName = a.Unit.Name,
+                    PeperId = a.PeperId,
+                    PhototId = a.PhototId,
+                })
                 .ToQueryResult(search.PageNumber, search.PageSize)
-                );
+                ;
 
-            foreach (var item in resualt.Items)
-            {
-                item.HasCustomLevel = _dbContext.Products.Any(x => x.ParentId == item.Id);
-                item.PhotoId = _dbContext.ProductAttachments.FirstOrDefault(x => x.ProductId == item.Id && x.Type==ProductAttachmentType.ProductImage)?.AttachmentId;
-                item.PaperId = _dbContext.ProductAttachments.FirstOrDefault(x => x.ProductId == item.Id && x.Type==ProductAttachmentType.PaperData)?.AttachmentId;
-            }
+           
             return new BaseResponse<QueryResult<ProductResultDto>>
             {
                 Data = resualt
             };
         }
-        public async Task<BaseResponse<List<ProductResultDto>>> ProductLevel12(int factoryId,int productId)
-        {
-            var resualt = _mapper.Map<List<ProductResultDto>>(
-                await _dbContext.Products
-                .Where(x=>x.FactoryId==factoryId)
-                .Where(x=>x.Level==LevelEnum.Level12)
-                .Where(x=>x.ParentId==null || x.ParentId== productId)
-                .ToListAsync());
 
-            
-            return new BaseResponse<List<ProductResultDto>>
-            {
-                Data = resualt
-            };
-        }
 
         public async Task<BaseResponse<QueryResult<ProductResultDto>>> ProductLevel10(ProductSearch search)
         {
             var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
             await _dbContext.Products
                 .Where(x => x.FactoryId == search.FactoryId)
-                .Where(x=>x.Level==LevelEnum.Level10)
                 .ToQueryResult(search.PageNumber, search.PageSize)
                 );
-
-            foreach (var item in resualt.Items)
-            {
-                item.HasCustomLevel = _dbContext.Products.Any(x => x.ParentId == item.Id);
-            }
             return new BaseResponse<QueryResult<ProductResultDto>>
             {
                 Data = resualt
@@ -94,16 +86,11 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         {
             var result = await _dbContext
                                 .Products
-                                .Include(x=>x.ProductAttachments)
                                 .FirstOrDefaultAsync(x => x.Id == Id);
 
-            int? photoId = result.ProductAttachments.FirstOrDefault(x => x.Type == ProductAttachmentType.ProductImage)?.AttachmentId;
-            int? paperId = result.ProductAttachments.FirstOrDefault(x => x.Type == ProductAttachmentType.PaperData)?.AttachmentId;
+                      var response = _mapper.Map<ProductResultDto>(result);
 
-            var response = _mapper.Map<ProductResultDto>(result);
 
-            response.PhotoId = photoId;
-            response.PaperId = paperId;
 
             return new BaseResponse<ProductResultDto>
             {
@@ -114,15 +101,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         public async Task<BaseResponse<ProductResultDto>> AddAsync (ProductRequestDto request)
         {
             var product = _mapper.Map<Product>(request);
-
-            //var result = await _validator.ValidateAsync(product);
-            //if (result.IsValid == false) throw new ValidationException(result.Errors);
-            product.Level = LevelEnum.Level12;
-            product.ProductAttachments = new List<ProductAttachment>
-            {
-                new ProductAttachment{AttachmentId=request.PhotoId,Type=ProductAttachmentType.ProductImage},
-                new ProductAttachment{AttachmentId=request.PaperId,Type=ProductAttachmentType.PaperData},
-            };
             await _dbContext.Products.AddAsync(product);
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<ProductResultDto>
@@ -134,18 +112,9 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         public async Task<BaseResponse<ProductResultDto>> UpdateAsync(ProductRequestDto req)
         {
-            var getProduct = await _dbContext.Products.Include(x=>x.ProductAttachments).FirstOrDefaultAsync(x => x.Id == req.Id);
+            var getProduct = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == req.Id);
             var productUpdated = _mapper.Map(req, getProduct);
             
-            productUpdated.ProductAttachments = new List<ProductAttachment>
-            {
-                new ProductAttachment{AttachmentId=req.PhotoId,Type=ProductAttachmentType.ProductImage},
-                new ProductAttachment{AttachmentId=req.PaperId,Type=ProductAttachmentType.PaperData},
-            };
-
-            // Validation
-            //var result = await _validator.ValidateAsync(productUpdated);
-            //if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
 
@@ -169,66 +138,8 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         }
 
-        public async Task<BaseResponse<bool>> SaveCustomLevel(CustomLevelRequestDto request)
-        {
-            var customLevelProduct = await _dbContext.Products.Where(x => request.CustomLevelProductIds.Contains(x.Id)).ToListAsync();
-
-            foreach (var item in customLevelProduct)
-            {
-                item.ParentId = request.ProductId;
-            }
-
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<bool>
-            {
-                Data =true
-            };
-        }
-        public async Task<BaseResponse<List<ProductResultDto>>> GetCustomProductLevel(int productId)
-        {
-            var resualt = _mapper.Map<List<ProductResultDto>>(
-                await _dbContext.Products
-                .Where(x => x.ParentId == productId)
-                .ToListAsync());
 
 
-            return new BaseResponse<List<ProductResultDto>>
-            {
-                Data = resualt
-            };
-        }
 
-        public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAllCheckLevel(ProductSearch search)
-        {
-            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
-                await _dbContext.Products
-                .Include(x=>x.Parent)
-                .Where(x => x.Level == LevelEnum.Level12)
-                .Where(x => x.ParentId !=null)
-                .ToQueryResult(search.PageNumber, search.PageSize)
-                );
-
-            return new BaseResponse<QueryResult<ProductResultDto>>
-            {
-                Data = resualt
-            };
-        }
-
-        public async Task<BaseResponse<bool>> SaveCheckLevel(CheckLevelRequestDto request)
-        {
-            var oldProduct = await _dbContext.Products.FirstOrDefaultAsync(x =>x.Id==request.OldProductId);
-            var newProduct = await _dbContext.Products.FirstOrDefaultAsync(x =>x.Id==request.NewProductId);
-
-            oldProduct.ParentId = null;
-            newProduct.ParentId = request.ParentId;
-
-             await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<bool>
-            {
-                Data = true
-            };
-        }
     }
 }

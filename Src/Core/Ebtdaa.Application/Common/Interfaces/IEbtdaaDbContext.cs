@@ -34,7 +34,6 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<Product> Products { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<ActualProductionAttachment> ActualProductionAttachments { get; set; }
-        public DbSet<ProductAttachment> ProductAttachments { get; set; }
         public DbSet<ActualRawMaterial> ActualRawMaterials { get; set; }
         public DbSet<RawMaterial> RawMaterials { get; set; }
         public DbSet<RawMaterialAttachment> RawMaterialAttachments { get; set; }
@@ -52,5 +51,8 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<ScreenStatus> ScreenStatuses { get; set; }
         public DbSet<FactoryMonthlyFinancial> FactoryMonthlyFinancials {  get; set; }
         public DbSet<FactoryUpdateStatus> FactoryUpdateStatuses { get; set; }
+        public DbSet<MappingProduct> MappingProducts { get; set; }
+        public DbSet<MappingUnit> MappingUnits { get; set; }
+
     }
 }
