@@ -1,11 +1,8 @@
 ﻿using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.General;
 using Ebtdaa.Domain.ProductData.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace Ebtdaa.Persistence.Configuration.Products
 {
@@ -13,7 +10,17 @@ namespace Ebtdaa.Persistence.Configuration.Products
     {
         public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Product> builder)
         {
-           
+            builder.HasOne<Attachment>(s => s.Peper)
+               .WithMany(g => g.Perpers)
+               .HasForeignKey(s => s.PeperId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne<Attachment>(s => s.Photot)
+              .WithMany(g => g.Photos)
+              .HasForeignKey(s => s.PhototId)
+              .IsRequired(false)
+              .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

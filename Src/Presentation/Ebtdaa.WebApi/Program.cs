@@ -1,10 +1,13 @@
 using Ebtdaa.Application;
+using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Infrastructure;
 using Ebtdaa.Persistence;
 using Ebtdaa.WebApi.Jobs;
 using Ebtdaa.WebApi.Middlewares;
+using Ebtdaa.WebApi.Seeding;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +35,7 @@ builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddJobsConfiguration();
 
+builder.Services.AddScoped<ExcelDataSeeder>();
 
 
 
@@ -69,6 +73,9 @@ app.UseMiddleware<GlobalExceptionHandler>();
 app.Services.CreateScope().ServiceProvider.GetRequiredService<EbtdaaDbContext>().Database.Migrate();
 
 
+SeedData(app);
+
+
 app.MapControllers();
 app.UseEndpoints(endpoints =>
 {
@@ -76,3 +83,17 @@ app.UseEndpoints(endpoints =>
 });
 
 app.Run();
+
+#region Seed Data
+void SeedData(IHost app)
+{
+    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
+
+    using (var scope = scopedFactory.CreateScope())
+    {
+        var service = scope.ServiceProvider.GetService<ExcelDataSeeder>();
+        service.SeedData().Wait();
+    }
+}
+
+#endregion

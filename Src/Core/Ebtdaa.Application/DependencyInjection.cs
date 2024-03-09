@@ -53,6 +53,8 @@ using Ebtdaa.Application.FactoryMonthlyFinancials.Interfaces;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Handlers;
 using Ebtdaa.Application.FactoriesUpdateStatus.Interfaces;
 using Ebtdaa.Application.FactoriesUpdateStatus.Handlers;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
+using Ebtdaa.Application.ScreenUpdateStatus.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -93,6 +95,7 @@ namespace Ebtdaa.Application
                services.AddScoped<ICustomItemRawMaterialServices, CustomItemRawMaterialServices>();
                services.AddScoped<IPeriodService, PeriodService>();
                services.AddScoped<IFactoryUpdateStatusService, FactoryUpdateStatusService>();
+               services.AddScoped<IScreenStatusService, ScreenStatusService>();
 
             #endregion
 

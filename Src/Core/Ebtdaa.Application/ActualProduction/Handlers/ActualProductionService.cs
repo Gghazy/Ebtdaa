@@ -4,19 +4,11 @@ using Ebtdaa.Application.ActualProduction.Interfaces;
 using Ebtdaa.Application.ActualProduction.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.ProductsData.Dtos;
 using Ebtdaa.Common.Dtos;
-using Ebtdaa.Common.Enums;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.ActualProduction.Entity;
-using Ebtdaa.Domain.CustomsItemUpdateData.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.ActualProduction.Handlers
 {
@@ -34,7 +26,6 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
                         await _dbContext.Products
                         .Where(x=>x.FactoryId==search.FactoryId)
-                        .Where(x=>x.Level==LevelEnum.Level12)
                         .Include(x => x.ActualProductionAndCapacities.Where(x=>x.PeriodId==search.PeriodId))
                         .ThenInclude(x => x.DesignedCapacityUnit)
                         .Include(x => x.ActualProductionAndCapacities)

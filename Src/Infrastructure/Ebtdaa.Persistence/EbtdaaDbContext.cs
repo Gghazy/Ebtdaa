@@ -64,7 +64,6 @@ namespace Ebtdaa.Persistence
         public DbSet<Product> Products { get; set; }
         public DbSet<Unit> Units { get; set; }
         public DbSet<ActualProductionAttachment> ActualProductionAttachments { get; set; }
-        public DbSet<ProductAttachment> ProductAttachments { get; set; }
         public DbSet<Period> Periods { get; set; }
         public DbSet<Setting> Settings { get; set; }
         public DbSet<IncreaseActualProduction> IncreaseActualProductions { get; set; }
@@ -78,6 +77,9 @@ namespace Ebtdaa.Persistence
         public DbSet<ScreenStatus> ScreenStatuses { get; set; }
         public DbSet<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
         public DbSet<FactoryUpdateStatus> FactoryUpdateStatuses { get; set; }
+        public DbSet<MappingProduct> MappingProducts { get; set; }
+        public DbSet<MappingUnit> MappingUnits { get; set; }
+
 
         public Task<int> SaveChangesAsync()
         {

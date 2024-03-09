@@ -14,13 +14,9 @@ namespace Ebtdaa.Application.ProductsData.Mapper
 
 
             CreateMap<Product, ProductResultDto>()
-                 .ForMember(d => d.ParentName, opt => opt.MapFrom(src => src.Parent.ProductName))
                  .ForMember(d => d.UnitName, opt => opt.MapFrom(src => src.Unit.Name));
             CreateMap<QueryResult<Product>, QueryResult<ProductResultDto>>();
 
-
-            CreateMap<ProductAttachmentRequestDto,Product>();
-            CreateMap<Product, ProductAttachmentResultDto>();  
         }
     }
 }

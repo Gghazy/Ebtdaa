@@ -21,11 +21,10 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public string? CR { get; set; }
         public string? Status { get; set; }
         public int? FactoryId { get; set; }
-        public LevelEnum? Level { get; set; }
         public int? ParentId { get; set; }
         public bool? Review { get; set; }
         public double? Kilograms_Per_Unit { get; set; }
-        public int PhotoId { get; set; }
-        public int PaperId { get; set; }
+        public int PhototId { get; set; }
+        public int PeperId { get; set; }
     }
 }

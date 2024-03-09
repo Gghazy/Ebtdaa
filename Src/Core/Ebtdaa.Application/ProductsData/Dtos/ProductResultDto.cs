@@ -15,22 +15,20 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public int? UnitId { get; set; }
         public int? WiegthInKgm { get; set; }
         public int? ProductCount { get; set; }
-        public bool AnyNewProducts { get; set; }
         public string? ItemNumber { get; set; }
         public string? Level12Number { get; set; }
+        public string? Hs12NameEn { get; set; }
+        public string? Hs12NameAr { get; set; }
+        public string? Hs12Code { get; set; }
 
         public string? CR { get; set; }
         public string? Status { get; set; }
         public int? FactoryId { get; set; }
-        public LevelEnum? Level { get; set; }
-        public int? ParentId { get; set; }
-        public bool HasCustomLevel { get; set; }
-        public string ParentName { get; set; }
         public string UnitName { get; set; }
         public bool? Review { get; set; }
         public double? Kilograms_Per_Unit { get; set; }
-        public double? PhotoId { get; set; }
-        public double? PaperId { get; set; }
+        public int? PeperId { get; set; }
+        public int? PhototId { get; set; }
 
 
     }
