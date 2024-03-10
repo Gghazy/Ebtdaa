@@ -10,6 +10,7 @@ namespace Ebtdaa.Application.ProductsData.Dtos
     public class ProductRequestDto
     {
         public int Id { get; set; }
+        public int PeriodId { get; set; }
         public string ProductName { get; set; }
         public string? CommericalName { get; set; }
         public string? Level12Number { get; set; }
@@ -20,7 +21,7 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public string? ItemNumber { get; set; }
         public string? CR { get; set; }
         public string? Status { get; set; }
-        public int? FactoryId { get; set; }
+        public int FactoryId { get; set; }
         public int? ParentId { get; set; }
         public bool? Review { get; set; }
         public double? Kilograms_Per_Unit { get; set; }

@@ -17,6 +17,7 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
         public int ActualProductionUintId { get; set; }
         public int? ActualProductionWeight { get; set; }
         public int PeriodId { get; set; }
+        public int FactoryId { get; set; }
         public int? ReasoneForIncreaseCapacity { get; set; }
     }
 }

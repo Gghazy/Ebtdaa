@@ -14,7 +14,7 @@ using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -23,15 +23,18 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly ProductDataValidator _validator;
+        private readonly IScreenStatusService _screenStatusService;
 
-        public ProductDataService(IEbtdaaDbContext dbContext, IMapper mapper)
+        public ProductDataService(IEbtdaaDbContext dbContext, IMapper mapper, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _screenStatusService = screenStatusService;
         }
 
         public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAll(ProductSearch search)
         {
+
 
 
             var resualt = 
@@ -129,6 +132,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             var product = _mapper.Map<Product>(request);
             await _dbContext.Products.AddAsync(product);
             await _dbContext.SaveChangesAsync();
+            await _screenStatusService.CheckFactoryProductScreenStatus(request.FactoryId,request.PeriodId);
             return new BaseResponse<ProductResultDto>
             {
                 Data = _mapper.Map<ProductResultDto>(product)
@@ -143,6 +147,8 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             
 
             await _dbContext.SaveChangesAsync();
+            await _screenStatusService.CheckFactoryProductScreenStatus(req.FactoryId, req.PeriodId);
+
 
             return new BaseResponse<ProductResultDto>
             {

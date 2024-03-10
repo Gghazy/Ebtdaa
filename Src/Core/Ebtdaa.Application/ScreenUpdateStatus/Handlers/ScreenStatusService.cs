@@ -148,6 +148,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             ScreenStatusRequestDto screenStatus = new ScreenStatusRequestDto();
             screenStatus.FactoryId = factoryId;
+            screenStatus.PeriodId = periodId;
             screenStatus.ScreenStatusId = ScreenStatusEnums.MonthlyFinancialData;
             screenStatus.UpdateStatus = result ? true : false;
            
@@ -178,6 +179,84 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             screenStatus.FactoryId = factoryId;
             screenStatus.ScreenStatusId = ScreenStatusEnums.FactoryContact;
             screenStatus.UpdateStatus = result ? true : false;
+
+            await AddAsync(screenStatus);
+        }
+
+        public async Task CheckFactoryProductScreenStatus(int factoryId,int periodId)
+        {
+
+            var activeProduct = await _dbContext.ProductPeriodActives
+                .Include(x => x.Product)
+                .Where(x => x.PeriodId == periodId && x.Product.FactoryId == factoryId)
+                .Select(x=>x.ProductId)
+                .ToListAsync();
+
+            var result = await _dbContext.Products
+                .AnyAsync(x => activeProduct.Contains(x.Id)&&x.PeperId!=null);
+
+
+            ScreenStatusRequestDto screenStatus = new ScreenStatusRequestDto();
+            screenStatus.FactoryId = factoryId;
+            screenStatus.ScreenStatusId = ScreenStatusEnums.ProductData;
+            screenStatus.PeriodId = periodId;
+            screenStatus.UpdateStatus = result ? true : false;
+
+            await AddAsync(screenStatus);
+        }
+
+        public async Task CheckActualProductionScreenStatus(int? factoryId, int periodId,FactoryStatusEnum? status)
+        {
+            ScreenStatusRequestDto screenStatus = new ScreenStatusRequestDto();
+            screenStatus.FactoryId = (int)factoryId;
+            screenStatus.PeriodId = (int)periodId;
+            screenStatus.ScreenStatusId = ScreenStatusEnums.ActualProduction;
+
+            var activeProduct = await _dbContext.ProductPeriodActives
+                .Include(x => x.Product)
+                .Where(x => x.PeriodId == periodId && x.Product.FactoryId == factoryId)
+                .Select(x => x.ProductId)
+                .ToListAsync();
+
+            bool result;
+            if (status==FactoryStatusEnum.Productive)
+            {
+                try
+                {
+                    result = await _dbContext.ActualProductionAndCapacities
+                                    .AnyAsync(x => activeProduct.Contains(x.ProductId) && x.ActualProduction != null);
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+                
+                screenStatus.UpdateStatus = result ? true : false;
+
+                var attachment = await _dbContext.ActualProductionAttachments
+              .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+                if (attachment
+                    .Any(x => x.Type == ActualProductionFileType.SalesQuantity) &&
+                    attachment.Any(x => x.Type == ActualProductionFileType.AuditedFinancialStatements) &&
+                    attachment.Any(x => x.Type == ActualProductionFileType.ProductionRecord)
+                    )
+
+                {
+                    screenStatus.UpdateStatus = true;
+                }
+                else
+                {
+                    screenStatus.UpdateStatus = false;
+                }
+            }
+            else
+            {
+                result = await _dbContext.ActualProductionAndCapacities
+                .AnyAsync(x => activeProduct.Contains(x.ProductId));
+                screenStatus.UpdateStatus = result ? true : false;
+            }
+           
 
             await AddAsync(screenStatus);
         }

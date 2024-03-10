@@ -116,6 +116,9 @@ namespace Ebtdaa.Application.Factories.Handlers
 
             await _dbContext.SaveChangesAsync();
             await _screenStatusService.CheckBasicInfoScreenStatus(req.PeriodId, req.FactoryId);
+            await _screenStatusService.CheckFactoryProductScreenStatus(req.FactoryId, req.PeriodId);
+            await _screenStatusService.CheckActualProductionScreenStatus(req.FactoryId, req.PeriodId, factory.FactoryStatusId);
+
 
 
             return new BaseResponse<bool>

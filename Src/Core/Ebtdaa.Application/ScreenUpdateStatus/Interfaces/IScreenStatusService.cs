@@ -1,10 +1,6 @@
 ﻿using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.ScreenUpdateStatus.Dtos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Ebtdaa.Common.Enums;
 
 namespace Ebtdaa.Application.ScreenUpdateStatus.Interfaces
 {
@@ -19,5 +15,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Interfaces
         Task CheckFactoryFinanicailScreenStatus(int factoryId);
         Task CheckFactoryLocationScreenStatus(int factoryId);
         Task CheckFactoryContactScreenStatus(int factoryId);
+        Task CheckFactoryProductScreenStatus(int factoryId, int periodId);
+        Task CheckActualProductionScreenStatus(int? factoryId, int periodId, FactoryStatusEnum? status);
     }
 }

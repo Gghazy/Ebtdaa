@@ -4,6 +4,7 @@ using Ebtdaa.Application.ActualProduction.Interfaces;
 using Ebtdaa.Application.ActualProduction.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
@@ -21,11 +22,14 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly ActualroductionAttachValidator _validator;
-        public ActualProductionAttachService(IEbtdaaDbContext dbContext, IMapper mapper, ActualroductionAttachValidator validator)
+        private readonly IScreenStatusService _screenStatusService;
+
+        public ActualProductionAttachService(IEbtdaaDbContext dbContext, IMapper mapper, ActualroductionAttachValidator validator, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _screenStatusService = screenStatusService;
         }
 
         public async Task<BaseResponse<List<ActualProductionAttacResultDto>>> GetAll(int factoryId,int periodId)
@@ -47,6 +51,12 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             await _dbContext.ActualProductionAttachments.AddAsync(file);
 
             await _dbContext.SaveChangesAsync();
+
+
+            var status = (await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.Id == req.FactoryId && x.PeriodId == req.PeriodId)).FactoryStatusId;
+
+            await _screenStatusService.CheckActualProductionScreenStatus(req.FactoryId,req.PeriodId, status);
+
             return new BaseResponse<ActualProductionAttacResultDto>
             {
                 Data = _mapper.Map<ActualProductionAttacResultDto>(file)
@@ -60,6 +70,10 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             _dbContext.ActualProductionAttachments.Remove(file);
 
             await _dbContext.SaveChangesAsync();
+
+            var status = (await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.Id == file.FactoryId && x.PeriodId == file.PeriodId)).FactoryStatusId;
+
+            await _screenStatusService.CheckActualProductionScreenStatus(file.FactoryId, file.PeriodId, status);
 
             return new BaseResponse<ActualProductionAttacResultDto>
             {

@@ -4,6 +4,7 @@ using Ebtdaa.Application.ActualProduction.Interfaces;
 using Ebtdaa.Application.ActualProduction.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.ActualProduction.Entity;
@@ -19,13 +20,16 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         private readonly ActualProductionValidator _actualProductionValidator;
         private readonly IActualProductionAttachService _actualProductionAttachService;
         private readonly IIncreaseActualProductionService _increaseActualProductionService;
+        private readonly IScreenStatusService _screenStatusService;
 
 
         public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAll(ActualProductionSearch search)
         {
 
-            var ProductPeriodActives = _dbContext.ProductPeriodActives
-                .Where(x => x.PeriodId == search.PeriodId).Select(x => x.ProductId);
+            var ProductPeriodActives =await _dbContext.ProductPeriodActives
+                .Include(x=>x.Product)
+                .Where(x => x.PeriodId == search.PeriodId&&x.Product.FactoryId==search.FactoryId)
+                .Select(x => x.ProductId).ToListAsync();
 
             var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
                         await _dbContext.Products
@@ -43,13 +47,14 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 Data = resualt
             };
         }
-        public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper, ActualProductionValidator actualProductionValidator, IActualProductionAttachService actualProductionAttachService, IIncreaseActualProductionService increaseActualProductionService)
+        public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper, ActualProductionValidator actualProductionValidator, IActualProductionAttachService actualProductionAttachService, IIncreaseActualProductionService increaseActualProductionService, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _actualProductionValidator = actualProductionValidator;
             _actualProductionAttachService = actualProductionAttachService;
             _increaseActualProductionService = increaseActualProductionService;
+            _screenStatusService = screenStatusService;
         }
 
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
@@ -74,6 +79,8 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
 
             await _dbContext.ActualProductionAndCapacities.AddAsync(actualProduction);
             await _dbContext.SaveChangesAsync();
+            var status =(await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.Id == request.FactoryId && x.PeriodId == request.PeriodId)).FactoryStatusId;
+            await _screenStatusService.CheckActualProductionScreenStatus(request.FactoryId, request.PeriodId, status);
 
             return new BaseResponse<ActualProductionResultDto>
             {
@@ -91,6 +98,10 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
+
+            var status = (await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.Id == request.FactoryId && x.PeriodId == request.PeriodId)).FactoryStatusId;
+            await _screenStatusService.CheckActualProductionScreenStatus(request.FactoryId, request.PeriodId, status);
+
 
             return new BaseResponse<ActualProductionResultDto>
             {
