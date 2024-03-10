@@ -17,6 +17,8 @@ namespace Ebtdaa.Common.Enums
         ProductData = 6,
         ActualProduction = 7,
         RawMaterial = 8,
-        ActualRawMaterila = 9
+        ActualRawMaterila = 9,
+        MonthlyFinancialData = 10
+
     }
 }

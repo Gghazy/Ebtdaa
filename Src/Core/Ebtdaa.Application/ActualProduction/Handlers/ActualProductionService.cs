@@ -23,8 +23,13 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
 
         public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAll(ActualProductionSearch search)
         {
+
+            var ProductPeriodActives = _dbContext.ProductPeriodActives
+                .Where(x => x.PeriodId == search.PeriodId).Select(x => x.ProductId);
+
             var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
                         await _dbContext.Products
+                        .Where(x=> ProductPeriodActives.Contains(x.Id))
                         .Where(x=>x.FactoryId==search.FactoryId)
                         .Include(x => x.ActualProductionAndCapacities.Where(x=>x.PeriodId==search.PeriodId))
                         .ThenInclude(x => x.DesignedCapacityUnit)

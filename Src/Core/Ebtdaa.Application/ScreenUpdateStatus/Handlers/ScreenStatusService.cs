@@ -30,6 +30,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             result.BasicFactoryInfo = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.BasicFactoryInfo)?.UpdateStatus;
             result.FinancialData = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.FinancialData)?.UpdateStatus;
+            result.MonthlyFinancialData = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.MonthlyFinancialData)?.UpdateStatus;
             result.FactoryLocation = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.FactoryLocation)?.UpdateStatus;
             result.FactoryContact = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.FactoryContact)?.UpdateStatus;
             result.CustomItemsUpdated = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.CustomItemsUpdated)?.UpdateStatus;
@@ -136,6 +137,20 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             {
                 screenStatus.UpdateStatus = false;
             }
+
+            await AddAsync(screenStatus);
+        }
+
+        public async Task CheckMonthlyFactoryFinanicailScreenStatus(int factoryId, int periodId )
+        {
+            var result = await _dbContext.FactoryMonthlyFinancials.AnyAsync(x => x.FactoryId == factoryId&&x.PeriodId==periodId);
+
+
+            ScreenStatusRequestDto screenStatus = new ScreenStatusRequestDto();
+            screenStatus.FactoryId = factoryId;
+            screenStatus.ScreenStatusId = ScreenStatusEnums.MonthlyFinancialData;
+            screenStatus.UpdateStatus = result ? true : false;
+           
 
             await AddAsync(screenStatus);
         }

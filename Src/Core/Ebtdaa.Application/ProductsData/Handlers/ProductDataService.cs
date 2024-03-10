@@ -61,8 +61,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     PhototId = a.PhototId,
                     IsActive=a.ProductPeriodActives.Any(x=>x.PeriodId==search.PeriodId&&x.ProductId== a.Id),
                 })
-                .ToQueryResult(search.PageNumber, search.PageSize)
-                ;
+                .ToQueryResult(search.PageNumber, search.PageSize);
 
            
             return new BaseResponse<QueryResult<ProductResultDto>>
@@ -165,8 +164,21 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         }
 
+        public async Task<BaseResponse<QueryResult<ProductResultDto>>> getAllProductsNotInFactory(ProductsNotInFactorySearch search)
+        {
+            var resualt =
+                      await _dbContext.Products
+                      .Include(x => x.Unit)
+                      .Include(x => x.ProductPeriodActives)
+                      .Where(x => x.FactoryId != search.FactoryId)
+                      .WhereIf(!string.IsNullOrEmpty(search.TxtSearch),x=>x.ProductName.Contains(search.TxtSearch))
+                      .ToQueryResult(search.PageNumber, search.PageSize);
 
 
-
+            return new BaseResponse<QueryResult<ProductResultDto>>
+            {
+                Data = _mapper.Map<QueryResult<ProductResultDto>>(resualt)
+            };
+        }
     }
 }

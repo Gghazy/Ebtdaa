@@ -7,6 +7,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Dtos
     {
         public bool? BasicFactoryInfo { get; set; }
         public bool? FinancialData { get; set; }
+        public bool? MonthlyFinancialData { get; set; }
         public bool? FactoryLocation { get; set; }
         public bool? FactoryContact { get; set; }
         public bool? CustomItemsUpdated { get; set; }
