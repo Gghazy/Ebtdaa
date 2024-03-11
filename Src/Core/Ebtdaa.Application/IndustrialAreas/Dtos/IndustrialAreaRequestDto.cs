@@ -10,7 +10,7 @@ namespace Ebtdaa.Application.IndustrialAreas.Dtos
     {
         public int Id { get; set; }
         public int CityCode { get; set; }
-        public string CityNameAr { get; set; }
+        public string NameAr { get; set; }
         public int IndustrialZoneTypeID { get; set; }
         public string IndustrialCityName_LandAuthority { get; set; }
     }

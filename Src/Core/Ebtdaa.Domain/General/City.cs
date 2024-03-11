@@ -10,6 +10,7 @@ namespace Ebtdaa.Domain.General
     public class City
     {
         public int Id { get; set; }
+        public int CityCode { get; set; }
         public string NameAr { get; set; }
         public string NameEn { get; set; }
         public int FactoryEntityId { get; set; }
