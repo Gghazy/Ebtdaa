@@ -1330,15 +1330,14 @@ namespace Ebtdaa.Persistence.Migrations
             migrationBuilder.DropTable(
                 name: "Reasons");
 
-            migrationBuilder.DropTable(
-                name: "Products");
+            //migrationBuilder.DropTable(
+            //    name: "Products");
 
             migrationBuilder.DropTable(
                 name: "RawMaterials");
 
             migrationBuilder.DropTable(
                 name: "Periods");
-
             migrationBuilder.DropTable(
                 name: "Cities");
 
