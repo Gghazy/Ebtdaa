@@ -15,5 +15,7 @@ namespace Ebtdaa.Domain.Factories.Entity
         public string NameEn { get; set; }
         public int CityId { get; set; }
         public virtual City City { get; set; }
+
+        public virtual ICollection<FactoryLocation> FactoryLocations { get; set; }
     }
 }

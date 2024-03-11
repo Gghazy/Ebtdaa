@@ -27,6 +27,13 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _FactoryUpdateStatus.UpdateAsync(req));
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetOne(int factoryId, int periodId)
+        {
+            return Ok(await _FactoryUpdateStatus.GetOne(factoryId, periodId));
+
+        }
     }
 }
 

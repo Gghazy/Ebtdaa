@@ -11,8 +11,8 @@ namespace Ebtdaa.Application.ProductsData.Interfaces
         Task<BaseResponse<QueryResult<ProductResultDto>>> getAllProductsNotInFactory(ProductsNotInFactorySearch search);
         Task<BaseResponse<List<ProductResultDto>>> GetAll(int factoryId);
         Task<BaseResponse<ProductResultDto>> GetOne(int Id);
-        Task<BaseResponse<ProductResultDto>> AddAsync(ProductRequestDto request);
-        Task<BaseResponse<ProductResultDto>> UpdateAsync(ProductRequestDto request);
+        Task<BaseResponse<bool>> AddAsync(ProductRequestDto request);
+        Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto request);
         Task<BaseResponse<QueryResult<UnitResultDto>>> GetUnit(UnitSearch search);
 
 

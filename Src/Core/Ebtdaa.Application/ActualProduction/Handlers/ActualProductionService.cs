@@ -4,8 +4,11 @@ using Ebtdaa.Application.ActualProduction.Interfaces;
 using Ebtdaa.Application.ActualProduction.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.Factories.Dtos;
+using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.ActualProduction.Entity;
 using FluentValidation;
@@ -23,19 +26,31 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         private readonly IScreenStatusService _screenStatusService;
 
 
+        public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper, ActualProductionValidator actualProductionValidator, IActualProductionAttachService actualProductionAttachService, IIncreaseActualProductionService increaseActualProductionService, IScreenStatusService screenStatusService)
+        {
+            _dbContext = dbContext;
+            _mapper = mapper;
+            _actualProductionValidator = actualProductionValidator;
+            _actualProductionAttachService = actualProductionAttachService;
+            _increaseActualProductionService = increaseActualProductionService;
+            _screenStatusService = screenStatusService;
+        }
+
         public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAll(ActualProductionSearch search)
         {
 
-            var ProductPeriodActives =await _dbContext.ProductPeriodActives
-                .Include(x=>x.Product)
-                .Where(x => x.PeriodId == search.PeriodId&&x.Product.FactoryId==search.FactoryId)
-                .Select(x => x.ProductId).ToListAsync();
+            var ProductPeriodActives = await _dbContext.ProductPeriodActives
+                .Include(x => x.FactoryProduct)
+                .ThenInclude(x => x.Product)
+                .Where(x => x.PeriodId == search.PeriodId && x.FactoryProduct.FactoryId == search.FactoryId)
+                .Select(x => x.FactoryProductId).ToListAsync();
 
             var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
-                        await _dbContext.Products
-                        .Where(x=> ProductPeriodActives.Contains(x.Id))
-                        .Where(x=>x.FactoryId==search.FactoryId)
-                        .Include(x => x.ActualProductionAndCapacities.Where(x=>x.PeriodId==search.PeriodId))
+                        await _dbContext.FactoryProducts
+                        .Include(x => x.Product)
+                        .Where(x => ProductPeriodActives.Contains(x.Id))
+                        .Where(x => x.FactoryId == search.FactoryId)
+                        .Include(x => x.ActualProductionAndCapacities.Where(x => x.PeriodId == search.PeriodId))
                         .ThenInclude(x => x.DesignedCapacityUnit)
                         .Include(x => x.ActualProductionAndCapacities)
                         .ThenInclude(x => x.ActualProductionUint)
@@ -46,15 +61,6 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             {
                 Data = resualt
             };
-        }
-        public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper, ActualProductionValidator actualProductionValidator, IActualProductionAttachService actualProductionAttachService, IIncreaseActualProductionService increaseActualProductionService, IScreenStatusService screenStatusService)
-        {
-            _dbContext = dbContext;
-            _mapper = mapper;
-            _actualProductionValidator = actualProductionValidator;
-            _actualProductionAttachService = actualProductionAttachService;
-            _increaseActualProductionService = increaseActualProductionService;
-            _screenStatusService = screenStatusService;
         }
 
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
@@ -79,9 +85,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
 
             await _dbContext.ActualProductionAndCapacities.AddAsync(actualProduction);
             await _dbContext.SaveChangesAsync();
-            var status =(await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.Id == request.FactoryId && x.PeriodId == request.PeriodId)).FactoryStatusId;
-            await _screenStatusService.CheckActualProductionScreenStatus(request.FactoryId, request.PeriodId, status);
-
+            
             return new BaseResponse<ActualProductionResultDto>
             {
                 Data = _mapper.Map<ActualProductionResultDto>(actualProduction)
@@ -98,21 +102,36 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
-
-            var status = (await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.Id == request.FactoryId && x.PeriodId == request.PeriodId)).FactoryStatusId;
-            await _screenStatusService.CheckActualProductionScreenStatus(request.FactoryId, request.PeriodId, status);
-
+           
 
             return new BaseResponse<ActualProductionResultDto>
             {
                 Data = _mapper.Map<ActualProductionResultDto>(actualproductionUpdated)
             };
         }
+        public async Task<BaseResponse<bool>> Delete(int factoryId, int periodId,List<int> factoryProducts)
+        {
+            var result = await _dbContext.ActualProductionAndCapacities
+                                      .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
+                                      .Where(x => factoryProducts.Contains(x.FactoryProductId))
+                                      .ToListAsync();
+
+
+            _dbContext.ActualProductionAndCapacities.RemoveRange(result);
+
+            
+
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
 
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
             var result = await _dbContext.ActualProductionAndCapacities
-                                      .Where(x => x.PeriodId == periodId && x.Product.FactoryId == factoryId).ToListAsync();
+                                      .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId).ToListAsync();
 
 
             await _actualProductionAttachService.delete(factoryId, periodId);
@@ -131,7 +150,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public async Task<BaseResponse<bool>> UpdateByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
             var result = await _dbContext.ActualProductionAndCapacities
-                                      .Where(x => x.PeriodId == periodId && x.Product.FactoryId == factoryId).ToListAsync();
+                                      .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId).ToListAsync();
 
 
             await _actualProductionAttachService.delete(factoryId, periodId);
@@ -150,5 +169,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 Data = true
             };
         }
+
+
     }
 }

@@ -13,5 +13,6 @@ namespace Ebtdaa.Application.ActualProduction.Interfaces
         Task<BaseResponse<ActualProductionResultDto>> GetOne (int id);
         Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId (int factoryId,int periodId);
         Task<BaseResponse<bool>> UpdateByFactoryIdAndPeriodId(int factoryId,int periodId);
+        Task<BaseResponse<bool>> Delete(int factoryId, int periodId, List<int> factoryProducts);
     }
 }

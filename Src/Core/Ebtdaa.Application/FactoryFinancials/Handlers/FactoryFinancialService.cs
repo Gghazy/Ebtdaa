@@ -54,7 +54,6 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             await _dbContext.FactoryFinancials.AddAsync(factoryFinancial);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckFactoryFinanicailScreenStatus(req.FactoryId);
 
 
             return new BaseResponse<FactoryFinancialResultDto>
@@ -72,7 +71,6 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckFactoryFinanicailScreenStatus(req.FactoryId);
 
 
             return new BaseResponse<FactoryFinancialResultDto>

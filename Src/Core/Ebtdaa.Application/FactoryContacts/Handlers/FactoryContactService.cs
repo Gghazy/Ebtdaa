@@ -56,7 +56,6 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
             await _dbContext.FactoryContacts.AddAsync(factoryContact);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckFactoryContactScreenStatus(req.FactoryId);
 
             return new BaseResponse<FactoryContactResultDto>
             {
@@ -74,7 +73,6 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
 
             await _dbContext.SaveChangesAsync();
 
-            await _screenStatusService.CheckFactoryContactScreenStatus(req.FactoryId);
 
 
             return new BaseResponse<FactoryContactResultDto>

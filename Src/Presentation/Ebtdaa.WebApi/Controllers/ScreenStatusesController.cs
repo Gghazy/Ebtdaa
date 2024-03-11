@@ -24,20 +24,6 @@ namespace Ebtdaa.WebApi.Controllers
 
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] ScreenStatusRequestDto req)
-        {
-
-            return Ok(await _screenStatusService.AddAsync(req));
-
-        }
-
-        [HttpPut]
-        public async Task<IActionResult> UpdateAsync([FromBody] ScreenStatusRequestDto req)
-        {
-
-            return Ok(await _screenStatusService.UpdateAsync(req));
-
-        }
+   
     }
 }

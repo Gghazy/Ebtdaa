@@ -50,7 +50,6 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Handlers
             await _dbContext.FactoryMonthlyFinancials.AddAsync(factoryFinancial);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckMonthlyFactoryFinanicailScreenStatus(req.FactoryId,req.PeriodId);
 
 
             return new BaseResponse<FactoryMonthlyFinancialResultDto>
@@ -71,7 +70,6 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckMonthlyFactoryFinanicailScreenStatus(req.FactoryId, req.PeriodId);
 
 
             return new BaseResponse<FactoryMonthlyFinancialResultDto>

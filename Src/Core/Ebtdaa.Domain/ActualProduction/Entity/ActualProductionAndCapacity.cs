@@ -14,7 +14,7 @@ namespace Ebtdaa.Domain.ActualProduction.Entity
     public class ActualProductionAndCapacity :BaseEntity
     {
         public int Id { get; set; }
-        public int ProductId { get; set; }
+        public int FactoryProductId { get; set; }
         public int? DesignedCapacity { get; set; }
         public int? DesignedCapacityUnitId { get; set; }
         public int? ActualProduction {  get; set; }
@@ -24,6 +24,6 @@ namespace Ebtdaa.Domain.ActualProduction.Entity
 
         public virtual Unit DesignedCapacityUnit { get; set; }
         public virtual Unit ActualProductionUint { get; set; }
-        public virtual Product Product { get; set; }
+        public virtual FactoryProduct FactoryProduct { get; set; }
     }
 }
