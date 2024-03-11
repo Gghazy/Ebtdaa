@@ -34,16 +34,19 @@ namespace Ebtdaa.Application.Factories.Handlers
         private readonly FactoryValidator _factoryValidator;
         private readonly IActualProductionService _actualProductionService;
         private readonly IActualRawMaterialService _actualRawMaterialService;
-        private readonly IScreenStatusService _screenStatusService;
 
-        public FactoryService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryValidator factoryValidator, IActualProductionService actualProductionService, IActualRawMaterialService actualRawMaterialService, IScreenStatusService screenStatusService)
+        public FactoryService(
+            IEbtdaaDbContext dbContext,
+            IMapper mapper,
+            FactoryValidator factoryValidator,
+            IActualProductionService actualProductionService,
+            IActualRawMaterialService actualRawMaterialService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _factoryValidator = factoryValidator;
             _actualProductionService = actualProductionService;
             _actualRawMaterialService = actualRawMaterialService;
-            _screenStatusService = screenStatusService;
         }
         public async Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search)
         {
@@ -115,10 +118,7 @@ namespace Ebtdaa.Application.Factories.Handlers
             }
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckBasicInfoScreenStatus(req.PeriodId, req.FactoryId);
-            await _screenStatusService.CheckFactoryProductScreenStatus(req.FactoryId, req.PeriodId);
-            await _screenStatusService.CheckActualProductionScreenStatus(req.FactoryId, req.PeriodId, factory.FactoryStatusId);
-
+           
 
 
             return new BaseResponse<bool>

@@ -54,6 +54,7 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<MappingProduct> MappingProducts { get; set; }
         public DbSet<MappingUnit> MappingUnits { get; set; }
         public DbSet<ProductPeriodActive> ProductPeriodActives { get; set; }
+        public DbSet<FactoryProduct> FactoryProducts { get; set; }
 
 
     }

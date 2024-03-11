@@ -52,7 +52,6 @@ namespace Ebtdaa.Application.Factories.Handlers
             await _dbContext.FactoryFiles.AddAsync(factoryFile);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckBasicInfoScreenStatus(req.PeriodId, req.FactoryId);
             return new BaseResponse<FactoryFileResultDto>
             {
                 Data = _mapper.Map<FactoryFileResultDto>(factoryFile)
@@ -66,7 +65,6 @@ namespace Ebtdaa.Application.Factories.Handlers
              _dbContext.FactoryFiles.Remove(factoryFile);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckBasicInfoScreenStatus(factoryFile.PeriodId, factoryFile.FactoryId);
             return new BaseResponse<FactoryFileResultDto>
             {
                 Data = _mapper.Map<FactoryFileResultDto>(factoryFile)

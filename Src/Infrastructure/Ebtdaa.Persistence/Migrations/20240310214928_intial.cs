@@ -28,20 +28,6 @@ namespace Ebtdaa.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Cities",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Cities", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "CustomItemRawMaterials",
                 columns: table => new
                 {
@@ -67,20 +53,6 @@ namespace Ebtdaa.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_FactoryEntities", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "IndustrialAreas",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_IndustrialAreas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -228,6 +200,27 @@ namespace Ebtdaa.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FactoryEntityId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Cities_FactoryEntities_FactoryEntityId",
+                        column: x => x.FactoryEntityId,
+                        principalTable: "FactoryEntities",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "InspectorFactories",
                 columns: table => new
                 {
@@ -247,6 +240,27 @@ namespace Ebtdaa.Persistence.Migrations
                         name: "FK_InspectorFactories_Inspectors_InspectorId",
                         column: x => x.InspectorId,
                         principalTable: "Inspectors",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "IndustrialAreas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    NameAr = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NameEn = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CityId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IndustrialAreas", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_IndustrialAreas_Cities_CityId",
+                        column: x => x.CityId,
+                        principalTable: "Cities",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -546,7 +560,7 @@ namespace Ebtdaa.Persistence.Migrations
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FactoryLocations_Factories_FactoryId",
                         column: x => x.FactoryId,
@@ -558,13 +572,13 @@ namespace Ebtdaa.Persistence.Migrations
                         column: x => x.FactoryEntityId,
                         principalTable: "FactoryEntities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_FactoryLocations_IndustrialAreas_IndustrialAreaId",
                         column: x => x.IndustrialAreaId,
                         principalTable: "IndustrialAreas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -669,19 +683,14 @@ namespace Ebtdaa.Persistence.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CommericalName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UnitId = table.Column<int>(type: "int", nullable: true),
-                    WiegthInKgm = table.Column<int>(type: "int", nullable: true),
-                    ProductCount = table.Column<int>(type: "int", nullable: true),
                     ItemNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CR = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    FactoryId = table.Column<int>(type: "int", nullable: true),
                     Review = table.Column<bool>(type: "bit", nullable: true),
                     Level12Number = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PeperId = table.Column<int>(type: "int", nullable: true),
-                    PhototId = table.Column<int>(type: "int", nullable: true),
                     Kilograms_Per_Unit = table.Column<double>(type: "float", nullable: true),
+                    FactoryId = table.Column<int>(type: "int", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
@@ -690,18 +699,6 @@ namespace Ebtdaa.Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Products", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Products_Attachments_PeperId",
-                        column: x => x.PeperId,
-                        principalTable: "Attachments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Products_Attachments_PhototId",
-                        column: x => x.PhototId,
-                        principalTable: "Attachments",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Products_Factories_FactoryId",
                         column: x => x.FactoryId,
@@ -854,18 +851,16 @@ namespace Ebtdaa.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ActualProductionAndCapacities",
+                name: "FactoryProducts",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    DesignedCapacity = table.Column<int>(type: "int", nullable: true),
-                    DesignedCapacityUnitId = table.Column<int>(type: "int", nullable: true),
-                    ActualProduction = table.Column<int>(type: "int", nullable: true),
-                    ActualProductionUintId = table.Column<int>(type: "int", nullable: true),
-                    ActualProductionWeight = table.Column<int>(type: "int", nullable: true),
-                    PeriodId = table.Column<int>(type: "int", nullable: false),
+                    FactoryId = table.Column<int>(type: "int", nullable: false),
+                    PeperId = table.Column<int>(type: "int", nullable: true),
+                    PhototId = table.Column<int>(type: "int", nullable: true),
+                    CommericalName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
@@ -873,25 +868,31 @@ namespace Ebtdaa.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ActualProductionAndCapacities", x => x.Id);
+                    table.PrimaryKey("PK_FactoryProducts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ActualProductionAndCapacities_Products_ProductId",
+                        name: "FK_FactoryProducts_Attachments_PeperId",
+                        column: x => x.PeperId,
+                        principalTable: "Attachments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FactoryProducts_Attachments_PhototId",
+                        column: x => x.PhototId,
+                        principalTable: "Attachments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_FactoryProducts_Factories_FactoryId",
+                        column: x => x.FactoryId,
+                        principalTable: "Factories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_FactoryProducts_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ActualProductionAndCapacities_Units_ActualProductionUintId",
-                        column: x => x.ActualProductionUintId,
-                        principalTable: "Units",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ActualProductionAndCapacities_Units_DesignedCapacityUnitId",
-                        column: x => x.DesignedCapacityUnitId,
-                        principalTable: "Units",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -1012,6 +1013,77 @@ namespace Ebtdaa.Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ActualProductionAndCapacities",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FactoryProductId = table.Column<int>(type: "int", nullable: false),
+                    DesignedCapacity = table.Column<int>(type: "int", nullable: true),
+                    DesignedCapacityUnitId = table.Column<int>(type: "int", nullable: true),
+                    ActualProduction = table.Column<int>(type: "int", nullable: true),
+                    ActualProductionUintId = table.Column<int>(type: "int", nullable: true),
+                    ActualProductionWeight = table.Column<int>(type: "int", nullable: true),
+                    PeriodId = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ActualProductionAndCapacities", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ActualProductionAndCapacities_FactoryProducts_FactoryProductId",
+                        column: x => x.FactoryProductId,
+                        principalTable: "FactoryProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ActualProductionAndCapacities_Units_ActualProductionUintId",
+                        column: x => x.ActualProductionUintId,
+                        principalTable: "Units",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ActualProductionAndCapacities_Units_DesignedCapacityUnitId",
+                        column: x => x.DesignedCapacityUnitId,
+                        principalTable: "Units",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductPeriodActives",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    FactoryProductId = table.Column<int>(type: "int", nullable: false),
+                    PeriodId = table.Column<int>(type: "int", nullable: false),
+                    CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UpdatedBy = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "smalldatetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductPeriodActives", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ProductPeriodActives_FactoryProducts_FactoryProductId",
+                        column: x => x.FactoryProductId,
+                        principalTable: "FactoryProducts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ProductPeriodActives_Periods_PeriodId",
+                        column: x => x.PeriodId,
+                        principalTable: "Periods",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ActualProductionAndCapacities_ActualProductionUintId",
                 table: "ActualProductionAndCapacities",
@@ -1023,9 +1095,9 @@ namespace Ebtdaa.Persistence.Migrations
                 column: "DesignedCapacityUnitId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ActualProductionAndCapacities_ProductId",
+                name: "IX_ActualProductionAndCapacities_FactoryProductId",
                 table: "ActualProductionAndCapacities",
-                column: "ProductId");
+                column: "FactoryProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ActualProductionAttachments_AttachmentId",
@@ -1066,6 +1138,11 @@ namespace Ebtdaa.Persistence.Migrations
                 name: "IX_BasicFactoryInfos_PeriodId",
                 table: "BasicFactoryInfos",
                 column: "PeriodId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cities_FactoryEntityId",
+                table: "Cities",
+                column: "FactoryEntityId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CustomsItemUpdates_FactoryId",
@@ -1163,6 +1240,26 @@ namespace Ebtdaa.Persistence.Migrations
                 column: "PeriodId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FactoryProducts_FactoryId",
+                table: "FactoryProducts",
+                column: "FactoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FactoryProducts_PeperId",
+                table: "FactoryProducts",
+                column: "PeperId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FactoryProducts_PhototId",
+                table: "FactoryProducts",
+                column: "PhototId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FactoryProducts_ProductId",
+                table: "FactoryProducts",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_FactoryUpdateStatuses_FactoryId",
                 table: "FactoryUpdateStatuses",
                 column: "FactoryId");
@@ -1183,6 +1280,11 @@ namespace Ebtdaa.Persistence.Migrations
                 column: "ReasonId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_IndustrialAreas_CityId",
+                table: "IndustrialAreas",
+                column: "CityId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_InspectorFactories_InspectorId",
                 table: "InspectorFactories",
                 column: "InspectorId");
@@ -1193,6 +1295,16 @@ namespace Ebtdaa.Persistence.Migrations
                 column: "RawMaterialId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductPeriodActives_FactoryProductId",
+                table: "ProductPeriodActives",
+                column: "FactoryProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductPeriodActives_PeriodId",
+                table: "ProductPeriodActives",
+                column: "PeriodId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductRawMaterials_rawMaterialId",
                 table: "ProductRawMaterials",
                 column: "rawMaterialId");
@@ -1201,16 +1313,6 @@ namespace Ebtdaa.Persistence.Migrations
                 name: "IX_Products_FactoryId",
                 table: "Products",
                 column: "FactoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_PeperId",
-                table: "Products",
-                column: "PeperId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_PhototId",
-                table: "Products",
-                column: "PhototId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_UnitId",
@@ -1304,6 +1406,9 @@ namespace Ebtdaa.Persistence.Migrations
                 name: "MappingUnits");
 
             migrationBuilder.DropTable(
+                name: "ProductPeriodActives");
+
+            migrationBuilder.DropTable(
                 name: "ProductRawMaterials");
 
             migrationBuilder.DropTable(
@@ -1331,7 +1436,7 @@ namespace Ebtdaa.Persistence.Migrations
                 name: "Reasons");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "FactoryProducts");
 
             migrationBuilder.DropTable(
                 name: "RawMaterials");
@@ -1340,25 +1445,28 @@ namespace Ebtdaa.Persistence.Migrations
                 name: "Periods");
 
             migrationBuilder.DropTable(
-                name: "Cities");
-
-            migrationBuilder.DropTable(
-                name: "FactoryEntities");
-
-            migrationBuilder.DropTable(
                 name: "IndustrialAreas");
 
             migrationBuilder.DropTable(
                 name: "Attachments");
 
             migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "CustomItemRawMaterials");
+
+            migrationBuilder.DropTable(
+                name: "Cities");
 
             migrationBuilder.DropTable(
                 name: "Factories");
 
             migrationBuilder.DropTable(
                 name: "Units");
+
+            migrationBuilder.DropTable(
+                name: "FactoryEntities");
 
             migrationBuilder.DropTable(
                 name: "InspectorFactories");

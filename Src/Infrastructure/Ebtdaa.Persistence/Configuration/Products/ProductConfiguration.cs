@@ -6,9 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Ebtdaa.Persistence.Configuration.Products
 {
-    public class ProductConfiguration : IEntityTypeConfiguration<Product>
+    public class ProductConfiguration : IEntityTypeConfiguration<FactoryProduct>
     {
-        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<Product> builder)
+        public void Configure(Microsoft.EntityFrameworkCore.Metadata.Builders.EntityTypeBuilder<FactoryProduct> builder)
         {
             builder.HasOne<Attachment>(s => s.Peper)
                .WithMany(g => g.Perpers)

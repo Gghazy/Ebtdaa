@@ -10,11 +10,10 @@ namespace Ebtdaa.Application.ProductsData.Dtos
     public class ProductResultDto
     {
         public int Id { get; set; }
+        public int ProductId { get; set; }
         public string ProductName { get; set; }
         public string? CommericalName { get; set; }
         public int? UnitId { get; set; }
-        public int? WiegthInKgm { get; set; }
-        public int? ProductCount { get; set; }
         public string? ItemNumber { get; set; }
         public string? Level12Number { get; set; }
         public string? Hs12NameEn { get; set; }
