@@ -39,11 +39,12 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
            
                 await _dbContext.RawMaterials.AddAsync(rawMaterial);
                 await _dbContext.SaveChangesAsync();
+
                 foreach (var item in req.ProductIds)
                 {
 
                     ProductRawMaterial x = new ProductRawMaterial();
-                    x.ProductId = item.Id;
+                    x.FactoryProductId = item;
                     x.rawMaterialId = rawMaterial.Id;
                     await _dbContext.ProductRawMaterials.AddAsync(x);
 
@@ -70,13 +71,14 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         {
             var result = await _dbContext.RawMaterials
                      .Include(s=>s.ProductRawMaterials)
-                     .ThenInclude(x=>x.Product)
+                     .ThenInclude(x=>x.FactoryProduct)
                      .FirstOrDefaultAsync(x => x.Id == id);
             try
             {
+                var x = _mapper.Map<RawMaterialResultDto>(result);
                 return new BaseResponse<RawMaterialResultDto>
                 {
-                    Data = _mapper.Map<RawMaterialResultDto>(result)
+                    Data = x
                 };
             }
             catch (Exception ex)
@@ -96,7 +98,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
            
             var rawMaterial = await _dbContext.RawMaterials
                                         .Include(s => s.ProductRawMaterials)
-                                        .ThenInclude(x => x.Product)
+                                        .ThenInclude(x => x.FactoryProduct)
                                         .FirstOrDefaultAsync(x => x.Id == req.Id);
             var rawMaterialUpdated = _mapper.Map(req, rawMaterial);
             var rawMaterialproductUpdated = _mapper.Map(req.ProductIds, rawMaterial.ProductRawMaterials);
@@ -119,35 +121,43 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             }
         }
 
-        public async Task<BaseResponse<List<RawMaterialResultDto>>> GetAll(int Factoryid, int Periodid)
+        public async Task<BaseResponse<List<RawMaterialResultDto>>> GetAll()
         {
-            var data =await _dbContext.RawMaterials
+            var data = await _dbContext.RawMaterials
                 .Include(x => x.ProductRawMaterials)
-                .ThenInclude(x => x.Product)
-                .Where(x => x.FactoryId == Factoryid)
+                .ThenInclude(x => x.FactoryProduct)
                 .ToListAsync();
-          var response=  _mapper.Map<List<RawMaterialResultDto>>(data);
+            var response = _mapper.Map<List<RawMaterialResultDto>>(data);
             return new BaseResponse<List<RawMaterialResultDto>>
             {
-                Data = response
+              Data = response
             };
         }
 
         public async Task<BaseResponse<QueryResult<RawMaterialResultDto>>> GetByFactory(RawMaterialSearch search,int id)
         {
-            var respose = _mapper.Map<QueryResult<RawMaterialResultDto>>
+            try
+            {
+
+            
+            var respose =
                             (await _dbContext.RawMaterials
-                                         .Include(s => s.ProductRawMaterials)
-                                        .ThenInclude(x => x.Product)
-                                             .Where(x => x.FactoryId == id )
-                                             .ToQueryResult(search.PageNumber, search.PageSize));
+                            .Include(x=>x.ProductRawMaterials)
+                            .ThenInclude(x=>x.FactoryProduct)
+                             .Where(x => x.FactoryId == id)
+                           .ToQueryResult(search.PageNumber, search.PageSize));
+           var x= _mapper.Map<QueryResult<RawMaterialResultDto>>(respose);
            
-          
             return new BaseResponse<QueryResult<RawMaterialResultDto>>
                 {
-                    Data = respose
+                   Data = x
                 };
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
 
 
 

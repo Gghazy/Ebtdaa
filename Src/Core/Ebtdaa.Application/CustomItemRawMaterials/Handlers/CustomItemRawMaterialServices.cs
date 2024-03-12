@@ -19,12 +19,12 @@ namespace Ebtdaa.Application.CustomItemRawMaterials.Handlers
         }
         public async Task<BaseResponse<List<CustomItemRawMaterialResultDto>>> GetAll()
         {
-            var respose = _mapper.Map<List<CustomItemRawMaterialResultDto>>
-                (await _dbContext.CustomItemRawMaterials.Where(x=>x.ItemName != "Out-licensing").ToListAsync());
+            //var respose = _mapper.Map<List<CustomItemRawMaterialResultDto>>
+            //    (await _dbContext.CustomItemRawMaterials.Where(x=>x.ItemName != "Out-licensing").ToListAsync());
 
             return new BaseResponse<List<CustomItemRawMaterialResultDto>>
             {
-                Data = respose
+             //   Data = respose
             };
         }
     }

@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240311182352_customrawmaterial")]
+    partial class customrawmaterial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1396,9 +1398,6 @@ namespace Ebtdaa.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
                     b.Property<int>("MaximumMonthlyConsumption")
                         .HasColumnType("int");
 
@@ -1422,8 +1421,6 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("FactoryId");
 
                     b.HasIndex("UnitId");
 
@@ -1950,19 +1947,11 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", b =>
                 {
-                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
-                        .WithMany()
-                        .HasForeignKey("FactoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Ebtdaa.Domain.General.Unit", "Unit")
                         .WithMany()
                         .HasForeignKey("UnitId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Factory");
 
                     b.Navigation("Unit");
                 });

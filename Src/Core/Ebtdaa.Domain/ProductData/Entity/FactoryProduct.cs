@@ -1,7 +1,7 @@
 ﻿using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
-
+using Ebtdaa.Domain.RawMaterials.Entity;
 
 namespace Ebtdaa.Domain.ProductData.Entity
 {
@@ -21,7 +21,7 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public virtual Attachment Photot { get; set; }
         public virtual ICollection<ProductPeriodActive> ProductPeriodActives { get; set; }
         public virtual ICollection<ActualProductionAndCapacity> ActualProductionAndCapacities { get; set; }
-
+        public virtual ICollection<ProductRawMaterial> ProductRawMaterials { get; set; }
 
     }
 }
