@@ -1,0 +1,16 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Ebtdaa.Application.ProductsData.Dtos
+{
+    public class ProductPeriodActiveRequestDto
+    {
+        public int Id { get; set; }
+        public int FactoryProductId { get; set; }
+        public int PeriodId { get; set; }
+        public int FactoryId { get; set; }
+    }
+}

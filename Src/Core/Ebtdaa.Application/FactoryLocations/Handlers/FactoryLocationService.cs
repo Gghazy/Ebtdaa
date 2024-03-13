@@ -53,7 +53,6 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
             await _dbContext.FactoryLocations.AddAsync(factoryLocation);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckFactoryLocationScreenStatus(req.FactoryId);
 
 
 
@@ -72,7 +71,6 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckFactoryLocationScreenStatus(req.FactoryId);
 
             return new BaseResponse<FactoryLocationResultDto>
             {

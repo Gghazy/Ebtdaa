@@ -50,7 +50,6 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
 
             var FactoryLocation= await _dbContext.FactoryLocations.FirstOrDefaultAsync(x=>x.Id==req.FactoryLocationId);
 
-            await _screenStatusService.CheckFactoryLocationScreenStatus(FactoryLocation.FactoryId);
 
             return new BaseResponse<FactoryLocationAttachmentResultDto>
             {
@@ -66,7 +65,6 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
 
             await _dbContext.SaveChangesAsync();
 
-            await _screenStatusService.CheckFactoryLocationScreenStatus(file.FactoryLocation.FactoryId);
 
 
             return new BaseResponse<FactoryLocationAttachmentResultDto>

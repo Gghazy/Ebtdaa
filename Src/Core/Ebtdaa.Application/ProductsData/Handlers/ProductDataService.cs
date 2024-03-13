@@ -14,7 +14,7 @@ using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
-
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -23,44 +23,56 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly ProductDataValidator _validator;
+        private readonly IScreenStatusService _screenStatusService;
 
-        public ProductDataService(IEbtdaaDbContext dbContext, IMapper mapper)
+        public ProductDataService(IEbtdaaDbContext dbContext, IMapper mapper, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
+            _screenStatusService = screenStatusService;
         }
 
         public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAll(ProductSearch search)
         {
 
+            var productActive = new List<int>();
+            if (search.IsActive)
+            {
+                 productActive =await _dbContext.ProductPeriodActives
+                    .Where(x => x.FactoryProduct.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                    .Select(x => x.FactoryProductId).ToListAsync();
+            }
+
 
             var resualt = 
-                await _dbContext.Products
-                .Include(x=>x.Unit)
+                await _dbContext.FactoryProducts
+                .Include(x=>x.Product)
+                .ThenInclude(x=>x.Unit)
+                .Include(x=>x.ProductPeriodActives)
                 .Where(x => x.FactoryId == search.FactoryId)
-                .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
+                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto {
                     Hs12NameEn= b.Hs12NameEn,
                     Hs12NameAr = b.Hs12NameAr,
                     Hs12Code = b.Hs12Code,
                     Id = a.Id,
-                    ProductName = a.ProductName,
+                    ProductName = a.Product.ProductName,
+                    ProductId=a.ProductId,
                     CommericalName = a.CommericalName,
-                    UnitId = a.UnitId,
-                    WiegthInKgm = a.WiegthInKgm,
-                    ProductCount = a.ProductCount,
-                    ItemNumber = a.ItemNumber,
-                    CR = a.CR,
-                    Status = a.Status,
+                    UnitId = a.Product.UnitId,
+                    ItemNumber = a.Product.ItemNumber,
+                    CR = a.Product.CR,
+                    Status = a.Product.Status,
                     FactoryId = a.FactoryId,
-                    Review = a.Review,
-                    Kilograms_Per_Unit = a.Kilograms_Per_Unit,
-                    UnitName = a.Unit.Name,
+                    Review = a.Product.Review,
+                    Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+                    UnitName = a.Product.Unit.Name,
                     PeperId = a.PeperId,
                     PhototId = a.PhototId,
+                    IsActive=a.ProductPeriodActives.Any(x=>x.PeriodId==search.PeriodId&&x.FactoryProductId== a.Id),
                 })
-                .ToQueryResult(search.PageNumber, search.PageSize)
-                ;
+                .ToQueryResult(search.PageNumber, search.PageSize,sort:"Id",descending:true);
 
            
             return new BaseResponse<QueryResult<ProductResultDto>>
@@ -71,34 +83,33 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         public async Task<BaseResponse<List<ProductResultDto>>> GetAll(int factoryId)
         {
-
-
             var resualt =
-                await _dbContext.Products
-                .Include(x => x.Unit)
+                await _dbContext.FactoryProducts
+                .Include(x => x.Product)
+                .ThenInclude(x => x.Unit)
+                .Include(x => x.ProductPeriodActives)
                 .Where(x => x.FactoryId == factoryId)
-                .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto
                 {
                     Hs12NameEn = b.Hs12NameEn,
                     Hs12NameAr = b.Hs12NameAr,
                     Hs12Code = b.Hs12Code,
                     Id = a.Id,
-                    ProductName = a.ProductName,
+                    ProductId = a.ProductId,
+                    ProductName = a.Product.ProductName,
                     CommericalName = a.CommericalName,
-                    UnitId = a.UnitId,
-                    WiegthInKgm = a.WiegthInKgm,
-                    ProductCount = a.ProductCount,
-                    ItemNumber = a.ItemNumber,
-                    CR = a.CR,
-                    Status = a.Status,
+                    UnitId = a.Product.UnitId,
+                    ItemNumber = a.Product.ItemNumber,
+                    CR = a.Product.CR,
+                    Status = a.Product.Status,
                     FactoryId = a.FactoryId,
-                    Review = a.Review,
-                    Kilograms_Per_Unit = a.Kilograms_Per_Unit,
-                    UnitName = a.Unit.Name,
+                    Review = a.Product.Review,
+                    Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+                    UnitName = a.Product.Unit.Name,
                     PeperId = a.PeperId,
                     PhototId = a.PhototId,
-                }).ToListAsync();                ;
+                }).ToListAsync();
 
 
             return new BaseResponse<List<ProductResultDto>>
@@ -107,23 +118,12 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             };
         }
 
-
-        public async Task<BaseResponse<QueryResult<ProductResultDto>>> ProductLevel10(ProductSearch search)
-        {
-            var resualt = _mapper.Map<QueryResult<ProductResultDto>>(
-            await _dbContext.Products
-                .Where(x => x.FactoryId == search.FactoryId)
-                .ToQueryResult(search.PageNumber, search.PageSize)
-                );
-            return new BaseResponse<QueryResult<ProductResultDto>>
-            {
-                Data = resualt
-            };
-        }
         public async Task<BaseResponse<ProductResultDto>> GetOne(int Id)
         {
             var result = await _dbContext
-                                .Products
+                                .FactoryProducts
+                                .Include(x=>x.Product)
+                                .ThenInclude(x=>x.Unit)
                                 .FirstOrDefaultAsync(x => x.Id == Id);
 
                       var response = _mapper.Map<ProductResultDto>(result);
@@ -136,29 +136,45 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             };
         }
 
-        public async Task<BaseResponse<ProductResultDto>> AddAsync (ProductRequestDto request)
+        public async Task<BaseResponse<bool>> AddAsync (ProductRequestDto request)
         {
-            var product = _mapper.Map<Product>(request);
-            await _dbContext.Products.AddAsync(product);
+            var factoryProduct = new FactoryProduct() ;
+            factoryProduct.CommericalName = request.CommericalName;
+            factoryProduct.PhototId = request.PhototId;
+            factoryProduct.PeperId = request.PeperId;
+            factoryProduct.FactoryId = request.FactoryId;
+            factoryProduct.ProductId = request.ProductId;
+
+            var product = await _dbContext.Products.FindAsync(request.ProductId);
+
+            product.Kilograms_Per_Unit = request.Kilograms_Per_Unit;
+
+            await _dbContext.FactoryProducts.AddAsync(factoryProduct);
             await _dbContext.SaveChangesAsync();
-            return new BaseResponse<ProductResultDto>
+            return new BaseResponse<bool>
             {
-                Data = _mapper.Map<ProductResultDto>(product)
+                Data =true
             };
 
         }
 
-        public async Task<BaseResponse<ProductResultDto>> UpdateAsync(ProductRequestDto req)
+        public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
         {
-            var getProduct = await _dbContext.Products.FirstOrDefaultAsync(x => x.Id == req.Id);
-            var productUpdated = _mapper.Map(req, getProduct);
             
+
+            var factoryProduct = await _dbContext.FactoryProducts.Include(x=>x.Product).FirstAsync(x => x.Id == req.Id);
+            factoryProduct.CommericalName = req.CommericalName;
+            factoryProduct.PhototId = req.PhototId;
+            factoryProduct.PeperId = req.PeperId;
+            factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
 
             await _dbContext.SaveChangesAsync();
 
-            return new BaseResponse<ProductResultDto>
+
+
+            return new BaseResponse<bool>
             {
-                Data = _mapper.Map<ProductResultDto>(productUpdated)
+                Data = true
             };
         }
 
@@ -176,8 +192,22 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         }
 
+        public async Task<BaseResponse<QueryResult<ProductResultDto>>> getAllProductsNotInFactory(ProductsNotInFactorySearch search)
+        {
+            var resualt =
+                      await _dbContext.FactoryProducts
+                      .Include(x=>x.Product)        
+                      .ThenInclude(x => x.Unit)
+                      .Include(x => x.ProductPeriodActives)
+                      .Where(x => x.FactoryId != search.FactoryId)
+                      .WhereIf(!string.IsNullOrEmpty(search.TxtSearch),x=>x.Product.ProductName.Contains(search.TxtSearch))
+                      .ToQueryResult(search.PageNumber, search.PageSize);
 
 
-
+            return new BaseResponse<QueryResult<ProductResultDto>>
+            {
+                Data = _mapper.Map<QueryResult<ProductResultDto>>(resualt)
+            };
+        }
     }
 }

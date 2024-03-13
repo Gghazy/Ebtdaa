@@ -33,23 +33,14 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
             {
 
                 await AddAllProducts(integrationProducts);
-            }
-            //else if (integrationProducts.Count > Products.Count)
-            //{
-            //    await AddNewProducts(integrationProducts, Products);
-            //}
-            //else
-            //{
-
-            //    await Update(integrationProducts);
-            //}
-           
+            }        
 
             return 1;
         }
         private async Task AddAllProducts(List<ProductIntegration> productIntegrations)
         {
             var products = _mapper.Map<List<Product>>(productIntegrations);
+            List<FactoryProduct> factoryProducts= new List<FactoryProduct>();
 
             var factories = await _dbContext.Factories.ToListAsync();
 
@@ -58,17 +49,27 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
 
             try
             {
-
+                var removeProducts=new List<Product>();
                 foreach (var product in products)
                 {
-
                     var factory = factories.FirstOrDefault(x => x.CommercialRegister == product.CR);
+                    if (factory == null)
+                    {
+                        removeProducts.Add(product);
+                        continue;
+                    }
+                    product.FactoryProducts = new List<FactoryProduct>
+                    {
+                        new FactoryProduct{FactoryId = factory.Id }
+                    };
 
-                    product.FactoryId = factory == null?null: factory.Id;
 
                     var unitId =await getUnitId(product.ItemNumber, mappUnits,units);
                     product.UnitId = unitId ;
                 }
+
+                products.RemoveAll(objToRemove => removeProducts.Any(obj => obj.ItemNumber.Trim(' ') == objToRemove.ItemNumber.Trim(' ')));
+
 
                 await _dbContext.Products.AddRangeAsync(products);
 
@@ -83,58 +84,7 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
             }
            
         }
-        private async Task AddNewProducts(List<ProductIntegration> productIntegrations, List<Product> products)
-        {
 
-
-            var productIds = products.Select(x => x.ItemNumber.Trim(' '));
-            var newProduct = productIntegrations.Where(x => !productIds.Contains(x.ItemNumber.Trim(' '))).ToList();
-
-            var _products = _mapper.Map<List<Product>>(newProduct);
-            foreach (var product in _products)
-            {
-                product.FactoryId = (await _dbContext.Factories.FirstOrDefaultAsync(x => x.CommercialRegister == product.CR)).Id;
-            }
-            await _dbContext.Products.AddRangeAsync(_products);
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-
-            }
-            catch (Exception ex)
-            {
-
-                throw;
-            }
-        }
-        private async Task Update(List<ProductIntegration> productIntegrations)
-        {
-            var factories= await _dbContext.Factories.ToListAsync();
-            var products= await _dbContext.Products.ToListAsync();
-
-            foreach (var item in productIntegrations)
-            {
-                var product =  products.FirstOrDefault(x => x.ItemNumber == item.ItemNumber);
-
-                var productUpdated = _mapper.Map(item, product);
-
-                var factory = factories.FirstOrDefault(x => x.CommercialRegister == productUpdated.CR);
-
-                productUpdated.FactoryId = factories==null?null: factory?.Id;
-
-            }
-            try
-            {
-                await _dbContext.SaveChangesAsync();
-            }
-            catch (Exception EX)
-            {
-
-                throw;
-            }
-
-
-        }
         private async Task<List<ProductIntegration>> GetAllIntegrationProducts()
         {
             return await _intgrationDbContext.ProductIntegrations.ToListAsync();

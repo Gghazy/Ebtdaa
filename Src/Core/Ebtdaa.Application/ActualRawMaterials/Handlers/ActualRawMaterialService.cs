@@ -6,6 +6,7 @@ using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Domain.ActualRawMaterials.Entity;
+using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -103,24 +104,27 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
         public async Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetByPeriod(int factoryid,int periodid)
         {
             var respose =
-           
+
                                 await _dbContext.ActualRawMaterials
                                 .Where(x => x.PeriodId == periodid
-                                && x.RawMaterial.FactoryId == factoryid)
+                                 && x.RawMaterial.FactoryId == factoryid)
                                .Include(x => x.RawMaterial)
                                .ToListAsync();
 
             return new BaseResponse<List<ActualRawMaterialResultDto>>
             {
-                   Data = _mapper.Map<List<ActualRawMaterialResultDto>>(respose)
+                Data = _mapper.Map<List<ActualRawMaterialResultDto>>(respose)
             };
-            }
+        }
 
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
             var result = await _dbContext.ActualRawMaterials
                                      .Include(x=>x.RawMaterial) 
-                                     .Where(x => x.PeriodId == periodId && x.RawMaterial.FactoryId == factoryId).ToListAsync();
+                                     .Where(x => x.PeriodId == periodId )
+                                     //.Select(x=>x.RawMaterial.ProductRawMaterials
+                                     .Where(x=>x.RawMaterial.FactoryId == factoryId)
+                                     .ToListAsync();
 
             await _actualRawFileService.delete(factoryId, periodId);
             _dbContext.ActualRawMaterials.RemoveRange(result);

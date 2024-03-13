@@ -1,9 +1,13 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.Factories.Dtos;
+using Ebtdaa.Application.Factories.Handlers;
+using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.ScreenUpdateStatus.Dtos;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.ScreenStatus.Entity;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,21 +25,23 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<ScreenStatusResultDto>> GetAll( int periodId , int factoryId)
+        public async Task<BaseResponse<ScreenStatusResultDto>> GetAll(int periodId, int factoryId)
         {
+            var factory = await GetFactory(factoryId, periodId);
+
             var response = await _dbContext.ScreenStatuses
-                .Where(x=> (x.PeriodId == periodId || x.PeriodId==null) && x.FactoryId == factoryId).ToListAsync();
+                .Where(x => (x.PeriodId == periodId || x.PeriodId == null) && x.FactoryId == factoryId).ToListAsync();
 
             var result = new ScreenStatusResultDto();
 
-            result.BasicFactoryInfo = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.BasicFactoryInfo)?.UpdateStatus;
-            result.FinancialData = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.FinancialData)?.UpdateStatus;
-            result.FactoryLocation = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.FactoryLocation)?.UpdateStatus;
-            result.FactoryContact = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.FactoryContact)?.UpdateStatus;
-            result.CustomItemsUpdated = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.CustomItemsUpdated)?.UpdateStatus;
-            result.CustomItemValidity = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.CustomItemValidity)?.UpdateStatus;
-            result.ProductData = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.ProductData)?.UpdateStatus;
-            result.ActualProduction = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.ActualProduction)?.UpdateStatus;
+            result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
+            result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId);
+            result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
+            result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId);
+            result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId);
+            result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
+            result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
+            result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
             result.RawMaterial = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.RawMaterial)?.UpdateStatus;
             result.ActualRawMaterila = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.ActualRawMaterila)?.UpdateStatus;
 
@@ -47,75 +53,19 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             };
         }
 
-        public async Task<BaseResponse<ScreenStatusResultDto>> AddAsync(ScreenStatusRequestDto req)
-        {
-            var screenStatus = await _dbContext.ScreenStatuses
-                .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId && x.PeriodId == req.PeriodId && x.ScreenStatusId == req.ScreenStatusId);
-
-
-            if (screenStatus!=null)
-            {
-                await UpdateAsync(req);
-            }
-            else
-            {
-                var newScreenStatus = _mapper.Map<ScreenStatus>(req);
-
-                await _dbContext.ScreenStatuses.AddAsync(newScreenStatus);
-            }
-           
-
-            await _dbContext.SaveChangesAsync();
-            return new BaseResponse<ScreenStatusResultDto>
-            {
-                Data = _mapper.Map<ScreenStatusResultDto>(screenStatus)
-            };
-        }
-
-        public async Task<BaseResponse<ScreenStatusResultDto>> UpdateAsync(ScreenStatusRequestDto req)
-        {
-            var screenStatus = await _dbContext.ScreenStatuses
-                .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId && x.PeriodId == req.PeriodId &&x.ScreenStatusId==req.ScreenStatusId);
-            screenStatus.PeriodId= req.PeriodId;
-            screenStatus.FactoryId= req.FactoryId;
-            screenStatus.ScreenStatusId= req.ScreenStatusId;
-            screenStatus.UpdateStatus= req.UpdateStatus;
-
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<ScreenStatusResultDto>
-            {
-                Data = _mapper.Map<ScreenStatusResultDto>(screenStatus)
-            };
-        } 
-        public async Task<BaseResponse<ScreenStatusResultDto>> ReverseApproval(ScreenStatusRequestDto req)
-        {
-            var screenStatus = await _dbContext.ScreenStatuses.FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId && x.PeriodId == req.PeriodId);
-            var screenStatusUpdated = _mapper.Map(req, screenStatus);
-
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<ScreenStatusResultDto>
-            {
-                Data = _mapper.Map<ScreenStatusResultDto>(screenStatus)
-            };
-        }
-
-        public async Task CheckBasicInfoScreenStatus(int periodId, int factoryId)
+        private async Task<bool> CheckBasicInfoScreenStatus(int periodId, int factoryId)
         {
             var result = await _dbContext.FactoryFiles.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
 
-            ScreenStatusRequestDto screenStatus = new ScreenStatusRequestDto();
-            screenStatus.FactoryId = factoryId;
-            screenStatus.PeriodId = periodId;
-            screenStatus.ScreenStatusId = ScreenStatusEnums.BasicFactoryInfo;
-            screenStatus.UpdateStatus = result ? true : false;
+            bool screenStatus = false;
 
-            await AddAsync(screenStatus);
+            screenStatus = result ? true : false;
+
+            return screenStatus;
         }
 
-        public async Task CheckFactoryFinanicailScreenStatus(int factoryId)
+        private async Task<bool> CheckFactoryFinanicailScreenStatus(int factoryId)
         {
             var result = await _dbContext.FactoryFinancials.AnyAsync(x => x.FactoryId == factoryId);
 
@@ -124,47 +74,169 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .Where(x => x.FactoryFinancial.FactoryId == factoryId).ToListAsync();
 
 
-            ScreenStatusRequestDto screenStatus = new ScreenStatusRequestDto();
-            screenStatus.FactoryId = factoryId;
-            screenStatus.ScreenStatusId = ScreenStatusEnums.FinancialData;
-            screenStatus.UpdateStatus = result ? true : false;
-            if (attachment.Any(x=>x.Type==FactoryFinancialFileType.FinancialStatement) && attachment.Any(x => x.Type == FactoryFinancialFileType.zakat))
+            bool screenStatus = false;
+
+            screenStatus = result ? true : false;
+            if (attachment.Any(x => x.Type == FactoryFinancialFileType.FinancialStatement) && attachment.Any(x => x.Type == FactoryFinancialFileType.zakat))
             {
-                screenStatus.UpdateStatus = true;
+                screenStatus = true;
             }
             else
             {
-                screenStatus.UpdateStatus = false;
+                screenStatus = false;
             }
 
-            await AddAsync(screenStatus);
+            return screenStatus;
+
         }
 
-        public async Task CheckFactoryLocationScreenStatus(int factoryId)
+        private async Task<bool> CheckMonthlyFactoryFinanicailScreenStatus(int factoryId, int periodId)
+        {
+            var result = await _dbContext.FactoryMonthlyFinancials.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+
+
+            bool screenStatus = false;
+
+            screenStatus = result ? true : false;
+
+
+            return screenStatus;
+        }
+
+        private async Task<bool> CheckFactoryLocationScreenStatus(int factoryId)
         {
             var result = await _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId);
 
-            var attachment= await _dbContext.FactoryLocationAttachments.Include(x=>x.FactoryLocation).AnyAsync(x => x.FactoryLocation.FactoryId ==factoryId);
+            var attachment = await _dbContext.FactoryLocationAttachments.Include(x => x.FactoryLocation).AnyAsync(x => x.FactoryLocation.FactoryId == factoryId);
 
-            ScreenStatusRequestDto screenStatus = new ScreenStatusRequestDto();
-            screenStatus.FactoryId = factoryId;
-            screenStatus.ScreenStatusId = ScreenStatusEnums.FactoryLocation;
-            screenStatus.UpdateStatus = result && attachment ? true : false;
+            bool screenStatus = false;
 
-            await AddAsync(screenStatus);
+            screenStatus = result && attachment ? true : false;
+
+            return screenStatus;
         }
 
-        public async Task CheckFactoryContactScreenStatus(int factoryId)
+        private async Task<bool> CheckFactoryContactScreenStatus(int factoryId)
         {
             var result = await _dbContext.FactoryContacts.AnyAsync(x => x.FactoryId == factoryId);
 
+            bool screenStatus = false;
 
-            ScreenStatusRequestDto screenStatus = new ScreenStatusRequestDto();
-            screenStatus.FactoryId = factoryId;
-            screenStatus.ScreenStatusId = ScreenStatusEnums.FactoryContact;
-            screenStatus.UpdateStatus = result ? true : false;
+            screenStatus = result ? true : false;
 
-            await AddAsync(screenStatus);
+            return screenStatus;
         }
+
+        private async Task<bool> CheckFactoryProductScreenStatus(int factoryId, int periodId)
+        {
+            bool screenStatus = false;
+
+            var activeProduct = await _dbContext.ProductPeriodActives
+                .Include(x => x.FactoryProduct)
+                .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
+                .Select(x => x.FactoryProductId)
+                .ToListAsync();
+
+            var result = await _dbContext.FactoryProducts
+                .AnyAsync(x => activeProduct.Contains(x.Id) && x.PeperId != null);
+
+
+
+            screenStatus = result ? true : false;
+
+            return screenStatus;
+        }
+        private async Task<bool> CheckCustomItemsUpdatedScreenStatus(int factoryId, int periodId)
+        {
+            bool screenStatus = false;
+
+            var activeProduct = await _dbContext.ProductPeriodActives
+                .Include(x => x.FactoryProduct)
+                .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
+                .Select(x => x.FactoryProductId)
+                .ToListAsync();
+
+            screenStatus = activeProduct.Any() ? true : false;
+
+            return screenStatus;
+        }
+
+        private async Task<bool> CheckActualProductionScreenStatus(int? factoryId, int periodId, FactoryStatusEnum? status)
+        {
+            bool screenStatus = false;
+
+            var activeProducts = await _dbContext.ProductPeriodActives
+                .Include(x => x.FactoryProduct)
+                .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
+                .Select(x => x.FactoryProductId)
+                .ToListAsync();
+
+            var result = await _dbContext.ActualProductionAndCapacities
+                .Include(x => x.FactoryProduct)
+                .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
+                .ToListAsync();
+
+            var differenceList = activeProducts.Except(result.Select(x => x.FactoryProductId)).ToList();
+
+            if (status == FactoryStatusEnum.Productive)
+            {
+                screenStatus = IsProductiveScreenValid(differenceList, result);
+
+                if (screenStatus)
+                {
+                    screenStatus = AreAttachmentsComplete(factoryId, periodId);
+                }
+            }
+            else
+            {
+                screenStatus = IsNonProductiveScreenValid(differenceList, result);
+            }
+
+            return screenStatus;
+        }
+
+        private bool IsProductiveScreenValid(List<int> differenceList, List<ActualProductionAndCapacity> result)
+        {
+            return !(differenceList.Any() || result.Any(x => x.ActualProduction == null) || result.Count == 0);
+        }
+
+        private bool AreAttachmentsComplete(int? factoryId, int periodId)
+        {
+            var attachments = _dbContext.ActualProductionAttachments
+                .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId)
+                .ToList();
+
+            return attachments.Any(x => x.Type == ActualProductionFileType.SalesQuantity) &&
+                   attachments.Any(x => x.Type == ActualProductionFileType.AuditedFinancialStatements) &&
+                   attachments.Any(x => x.Type == ActualProductionFileType.ProductionRecord);
+        }
+
+        private bool IsNonProductiveScreenValid(List<int> differenceList, List<ActualProductionAndCapacity> result)
+        {
+            return (!differenceList.Any() && result.Count>0 && result.Any(x=>x.DesignedCapacity!=null));
+        }
+        private async Task<BaseResponse<FactoryResualtDto>> GetFactory(int id, int periodId)
+        {
+            var resualt = await _dbContext.Factories
+                                .Include(x => x.BaiscFactoryInfos)
+                                .FirstOrDefaultAsync(x => x.Id == id);
+            if (resualt.BaiscFactoryInfos != null)
+            {
+
+                var basicinfo = resualt.BaiscFactoryInfos.FirstOrDefault(x => x.PeriodId == periodId);
+                if (basicinfo != null)
+                {
+                    resualt.Status = basicinfo.FactoryStatusId;
+                }
+
+            }
+
+            return new BaseResponse<FactoryResualtDto>
+            {
+                Data = _mapper.Map<FactoryResualtDto>(resualt)
+            };
+
+        }
+
     }
 }

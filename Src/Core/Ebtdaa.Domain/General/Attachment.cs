@@ -19,8 +19,8 @@ namespace Ebtdaa.Domain.General
         public virtual ICollection<FactoryFinancialAttachment> FactoryFinancialAttachments { get; set; }
         public virtual ICollection<FactoryLocationAttachment> FactoryLocationAttachments { get; set; }
         public virtual ICollection<ActualRawMaterialFile> ActualRawMaterialFiles { get; set; }
-        public virtual ICollection<Product> Perpers { get; set; }
-        public virtual ICollection<Product> Photos { get; set; }
+        public virtual ICollection<FactoryProduct> Perpers { get; set; }
+        public virtual ICollection<FactoryProduct> Photos { get; set; }
 
     }
 }

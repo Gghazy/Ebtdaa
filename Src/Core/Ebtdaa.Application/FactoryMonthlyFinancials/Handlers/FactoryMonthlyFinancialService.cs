@@ -6,6 +6,7 @@ using Ebtdaa.Application.FactoryFinancials.Validation;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Dtos;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Interfaces;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Validation;
+using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -18,14 +19,17 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryMonthlyFinancialValidator _validator;
+        private readonly IScreenStatusService _screenStatusService;
 
-        public FactoryMonthlyFinancialService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryMonthlyFinancialValidator validator)
+
+        public FactoryMonthlyFinancialService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryMonthlyFinancialValidator validator, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
+            _screenStatusService = screenStatusService;
         }
-        
+
         public async Task<BaseResponse<FactoryMonthlyFinancialResultDto>> GetOne(int id, int periodId)
         {
             var resualt = await _dbContext.FactoryMonthlyFinancials.FirstOrDefaultAsync(x => x.FactoryId == id && x.PeriodId == periodId);
@@ -47,6 +51,7 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Handlers
 
             await _dbContext.SaveChangesAsync();
 
+
             return new BaseResponse<FactoryMonthlyFinancialResultDto>
             {
                 Data = _mapper.Map<FactoryMonthlyFinancialResultDto>(factoryFinancial)
@@ -65,6 +70,7 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
+
 
             return new BaseResponse<FactoryMonthlyFinancialResultDto>
             {

@@ -3,6 +3,7 @@ using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.FactoriesUpdateStatus.Dtos;
 using Ebtdaa.Application.FactoriesUpdateStatus.Interfaces;
+using Ebtdaa.Application.FactoryFinancials.Dtos;
 using Ebtdaa.Domain.Factories.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -46,6 +47,16 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
             return new BaseResponse<FactUpdateStatusResultDto>
             {
                 Data = _mapper.Map<FactUpdateStatusResultDto>(factoryStatustUpdated)
+            };
+        }
+
+        public async Task<BaseResponse<FactUpdateStatusResultDto>> GetOne(int factoryId, int periodId)
+        {
+            var resualt = await _dbContext.FactoryUpdateStatuses.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+
+            return new BaseResponse<FactUpdateStatusResultDto>
+            {
+                Data = resualt != null ? _mapper.Map<FactUpdateStatusResultDto>(resualt) : new FactUpdateStatusResultDto()
             };
         }
     }

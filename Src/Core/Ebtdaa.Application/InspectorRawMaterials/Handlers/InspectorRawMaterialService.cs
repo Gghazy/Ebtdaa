@@ -57,16 +57,16 @@ namespace Ebtdaa.Application.InspectorRawMaterials.Handlers
 
         public async Task<BaseResponse<InspectorRawMaterialResultDto>> GetByFactory(int id)
         {
-            var respose = _mapper.Map<InspectorRawMaterialResultDto>
-                            (await _dbContext.InspectorRawMaterials
-                                         .Include(s => s.RawMaterial)
-                                             .Where(x => x.RawMaterial.FactoryId == id)
-                                             .ToListAsync());
+            //var respose = _mapper.Map<InspectorRawMaterialResultDto>
+            //                (await _dbContext.InspectorRawMaterials
+            //                             .Include(s => s.RawMaterial)
+            //                                 .Where(x => x.RawMaterial.FactoryId == id)
+            //                                 .ToListAsync());
 
 
             return new BaseResponse<InspectorRawMaterialResultDto>
             {
-                Data = respose
+            //    Data = respose
             };
         }
 

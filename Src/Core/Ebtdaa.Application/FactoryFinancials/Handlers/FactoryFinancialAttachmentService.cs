@@ -52,9 +52,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
 
             await _dbContext.SaveChangesAsync();
 
-            var factory =await _dbContext.FactoryFinancials.FirstOrDefaultAsync(x => x.Id == req.FactoryFinancialId);
 
-            await _screenStatusService.CheckFactoryFinanicailScreenStatus(factory.FactoryId);
             return new BaseResponse<FactoryFinancialAttachmentResultDto>
             {
                 Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file)
@@ -70,7 +68,6 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             _dbContext.FactoryFinancialAttachments.Remove(file);
 
             await _dbContext.SaveChangesAsync();
-            await _screenStatusService.CheckFactoryFinanicailScreenStatus(file.FactoryFinancial.FactoryId);
 
             return new BaseResponse<FactoryFinancialAttachmentResultDto>
             {

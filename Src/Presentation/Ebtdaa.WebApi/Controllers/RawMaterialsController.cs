@@ -16,9 +16,9 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int Factoryid, int Periodid)
+        public async Task<IActionResult> GetAll()
         {
-            return Ok(await _RawMaterialService.GetAll(Factoryid, Periodid));
+            return Ok(await _RawMaterialService.GetAll());
 
         }
 

@@ -15,6 +15,7 @@ using Ebtdaa.Persistence.Configuration.ProductRawMaterials;
 using Ebtdaa.Domain.InspectorRawMaterials.Entity;
 using Ebtdaa.Domain.Periods;
 using Ebtdaa.Domain.ScreenStatus.Entity;
+using Ebtdaa.Persistence.Configuration.FactoryLocations;
 
 namespace Ebtdaa.Persistence
 {
@@ -37,6 +38,7 @@ namespace Ebtdaa.Persistence
             builder.ApplyConfiguration(new ProductConfiguration());
             builder.ApplyConfiguration(new ActualProductionAndCapacityConfiguration());
             builder.ApplyConfiguration(new ProductRawMaterialConfiguration());
+            builder.ApplyConfiguration(new FactoryLocationConfigration());
 
 
            
@@ -73,12 +75,14 @@ namespace Ebtdaa.Persistence
         public DbSet<ProductRawMaterial> ProductRawMaterials { get; set; }
         public DbSet<InspectorRawMaterial> InspectorRawMaterials { get; set; }
         public DbSet<BaiscFactoryInfo> BasicFactoryInfos { get; set; }
-        public DbSet<CustomItemRawMaterial> CustomItemRawMaterials { get; set; }
         public DbSet<ScreenStatus> ScreenStatuses { get; set; }
         public DbSet<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
         public DbSet<FactoryUpdateStatus> FactoryUpdateStatuses { get; set; }
         public DbSet<MappingProduct> MappingProducts { get; set; }
         public DbSet<MappingUnit> MappingUnits { get; set; }
+        public DbSet<ProductPeriodActive> ProductPeriodActives { get; set; }
+        public DbSet<FactoryProduct> FactoryProducts { get; set; }
+
 
 
         public Task<int> SaveChangesAsync()

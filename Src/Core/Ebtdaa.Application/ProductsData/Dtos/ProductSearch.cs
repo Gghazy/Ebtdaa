@@ -10,5 +10,7 @@ namespace Ebtdaa.Application.ProductsData.Dtos
     public class ProductSearch:SearchCriteria
     {
         public int FactoryId { get; set; }
+        public int PeriodId { get; set; }
+        public bool IsActive { get; set; }
     }
 }

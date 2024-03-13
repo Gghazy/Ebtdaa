@@ -96,6 +96,7 @@ namespace Ebtdaa.Application
                services.AddScoped<IPeriodService, PeriodService>();
                services.AddScoped<IFactoryUpdateStatusService, FactoryUpdateStatusService>();
                services.AddScoped<IScreenStatusService, ScreenStatusService>();
+               services.AddScoped<IProductPeriodActiveService, ProductPeriodActiveService>();
 
             #endregion
 
