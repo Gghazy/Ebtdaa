@@ -16,6 +16,7 @@ namespace Ebtdaa.Domain.Periods
         public DateTime PeriodEndDate { get; set; }
         public virtual ICollection<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
         public virtual ICollection<ProductPeriodActive> ProductPeriodActives { get; set; }
+        public virtual ICollection<FactoryUpdateStatus> FactoryUpdateStatuses { get; set; }
 
     }
 }

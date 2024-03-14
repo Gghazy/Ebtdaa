@@ -21,7 +21,8 @@ namespace Ebtdaa.Application.Factories.Mapper
             CreateMap<QueryResult<Factory>, QueryResult<FactoryResualtDto>>();
 
             CreateMap<FactoryFile, FactoryFileResultDto>()
-                       .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path));
+                       .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path))
+                       .ForMember(d => d.Extension, opt => opt.MapFrom(src => src.Attachment.Extension));
 
             CreateMap<FactoryFileRequestDto, FactoryFile>();
 

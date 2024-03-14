@@ -16,5 +16,6 @@ namespace Ebtdaa.Application.Factories.Dtos
         public int PeriodId { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
+        public string Extension { get; set; }
     }
 }
