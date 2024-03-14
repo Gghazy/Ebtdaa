@@ -80,14 +80,12 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
                 if (result.ProductRawMaterials != null && result.ProductRawMaterials.Any())
                 {
-                    // Retrieve ProductIds from ProductRawMaterials
-                    x.FactoryProductId = result.ProductRawMaterials
+                   x.FactoryProductId = result.ProductRawMaterials
                         .Select(prm => prm.FactoryProductId)
                         .ToList();
                 }
                 else
                 {
-                    // If no related ProductRawMaterials found, set ProductIds to an empty list
                     x.FactoryProductId = new List<int>();
                 }
                 return new BaseResponse<RawMaterialResultDto>
@@ -123,7 +121,20 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
             await _dbContext.SaveChangesAsync();
 
-            return new BaseResponse<RawMaterialResultDto>
+
+                _dbContext.ProductRawMaterials.RemoveRange(rawMaterial.ProductRawMaterials);
+                foreach (var item in req.FactoryProductId)
+                {
+
+                    ProductRawMaterial x = new ProductRawMaterial();
+                    x.FactoryProductId = item;
+                    x.rawMaterialId = rawMaterial.Id;
+                    await _dbContext.ProductRawMaterials.AddAsync(x);
+
+                }
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<RawMaterialResultDto>
             {
                 Data = _mapper.Map<RawMaterialResultDto>(rawMaterialUpdated)
             };
@@ -154,18 +165,31 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             {
 
             
-            var respose =
-                            (await _dbContext.RawMaterials
+            var respose =await _dbContext.RawMaterials
                             .Include(x=>x.ProductRawMaterials)
                             .ThenInclude(x=>x.FactoryProduct)
-                             .Where(x => x.FactoryId == id)
-                           .ToQueryResult(search.PageNumber, search.PageSize));
-                
-           var x= _mapper.Map<QueryResult<RawMaterialResultDto>>(respose);
-           
-            return new BaseResponse<QueryResult<RawMaterialResultDto>>
+                             .Where(x => x.FactoryId == id).
+                             ToListAsync();
+
+                var resultDto = respose.Select(rawMaterial =>
                 {
-                   Data = x
+                    var dto = _mapper.Map<RawMaterialResultDto>(rawMaterial);
+                    dto.FactoryProductId = rawMaterial.ProductRawMaterials
+                        .Select(prm => prm.FactoryProductId)
+                        .ToList();
+                    return dto;
+                }).ToList();
+
+                var mappedResult = new QueryResult<RawMaterialResultDto>(
+                   resultDto,          // Pass the list of items
+    resultDto.Count,    // Set total count to the number of items in the list
+    search.PageSize,    // Set page size
+    search.PageNumber   
+                    );
+
+                return new BaseResponse<QueryResult<RawMaterialResultDto>>
+                {
+                    Data = mappedResult
                 };
             }
             catch (Exception)
