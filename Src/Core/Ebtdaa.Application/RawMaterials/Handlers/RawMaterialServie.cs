@@ -40,7 +40,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 await _dbContext.RawMaterials.AddAsync(rawMaterial);
                 await _dbContext.SaveChangesAsync();
 
-                foreach (var item in req.ProductIds)
+                foreach (var item in req.FactoryProductId)
                 {
 
                     ProductRawMaterial x = new ProductRawMaterial();
@@ -75,7 +75,21 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                      .FirstOrDefaultAsync(x => x.Id == id);
             try
             {
+
                 var x = _mapper.Map<RawMaterialResultDto>(result);
+
+                if (result.ProductRawMaterials != null && result.ProductRawMaterials.Any())
+                {
+                    // Retrieve ProductIds from ProductRawMaterials
+                    x.FactoryProductId = result.ProductRawMaterials
+                        .Select(prm => prm.FactoryProductId)
+                        .ToList();
+                }
+                else
+                {
+                    // If no related ProductRawMaterials found, set ProductIds to an empty list
+                    x.FactoryProductId = new List<int>();
+                }
                 return new BaseResponse<RawMaterialResultDto>
                 {
                     Data = x
@@ -101,7 +115,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                                         .ThenInclude(x => x.FactoryProduct)
                                         .FirstOrDefaultAsync(x => x.Id == req.Id);
             var rawMaterialUpdated = _mapper.Map(req, rawMaterial);
-            var rawMaterialproductUpdated = _mapper.Map(req.ProductIds, rawMaterial.ProductRawMaterials);
+         //   var rawMaterialproductUpdated = _mapper.Map(req.ProductIds, rawMaterial.ProductRawMaterials);
 
 
             var result = await _rawMaterialValidtor.ValidateAsync(rawMaterialUpdated);
@@ -146,6 +160,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                             .ThenInclude(x=>x.FactoryProduct)
                              .Where(x => x.FactoryId == id)
                            .ToQueryResult(search.PageNumber, search.PageSize));
+                
            var x= _mapper.Map<QueryResult<RawMaterialResultDto>>(respose);
            
             return new BaseResponse<QueryResult<RawMaterialResultDto>>

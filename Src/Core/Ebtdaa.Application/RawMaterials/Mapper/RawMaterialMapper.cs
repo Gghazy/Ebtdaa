@@ -12,19 +12,13 @@ namespace Ebtdaa.Application.RawMaterials.Mapper
             public RawMaterialMapper()
             {
             CreateMap<RawMaterialRequestDto, RawMaterial>();
-            CreateMap<ProductRawMaterial, RawMaterialResultDto>()
-                .ForMember(dest => dest.ProductIds, opt => opt.MapFrom(src => src.FactoryProductId));
-             //   .ForMember(dest => dest.RawMaterialProducts, opt => opt.MapFrom(src => src.ProductRawMaterials))
-             //   .ForMember(dest => dest.RawMaterialProducts.Select(x=>x.ProductId), opt => opt.MapFrom(src => src.ProductRawMaterials.Select(x => x.FactoryProductId)));
+            CreateMap<RawMaterial, RawMaterialResultDto>()
+             .ForMember(dest => dest.FactoryProductId, opt => opt.MapFrom(src => src.ProductRawMaterials.Select(prm => prm.FactoryProductId)));
 
 
-        
-           
+
             CreateMap<QueryResult<RawMaterial>, QueryResult<RawMaterialResultDto>>()
                 .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.Items));
-
-            CreateMap<ProductRawMaterial, RawMaterialProductDto>();
-            CreateMap<Product, ProductResultDto>();
 
 
 
