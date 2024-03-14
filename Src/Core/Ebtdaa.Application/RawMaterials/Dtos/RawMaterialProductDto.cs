@@ -11,8 +11,8 @@ namespace Ebtdaa.Application.RawMaterials.Dtos
     public class RawMaterialProductDto
     {
       //  public int Id { get; set; }
-       // public int RawMaterialId { get; set; }
+        public int rawMaterialId { get; set; }
         public int FactoryProductId { get; set; }
-       // public string ProductName { get; set; }
+      //  public string ProductName { get; set; }
     }
 }
