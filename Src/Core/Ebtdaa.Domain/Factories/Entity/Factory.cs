@@ -1,6 +1,7 @@
 ﻿using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.General;
+using Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using System;
 using System.Collections.Generic;
@@ -36,6 +37,7 @@ namespace Ebtdaa.Domain.Factories.Entity
         public virtual ICollection<BaiscFactoryInfo> BaiscFactoryInfos { get; set; }
         public virtual ICollection<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
         public virtual ICollection<FactoryProduct> FactoryProducts { get; set; }
+        public virtual ICollection<InspectBasicFactoryInfo> InspectorBasicFactoryInfos { get; set; }
 
 
 
