@@ -16,6 +16,8 @@ using Ebtdaa.Domain.InspectorRawMaterials.Entity;
 using Ebtdaa.Domain.Periods;
 using Ebtdaa.Domain.ScreenStatus.Entity;
 using Ebtdaa.Persistence.Configuration.FactoryLocations;
+using Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity;
+using Ebtdaa.Domain.InpectorFactoryContact.Entity;
 
 namespace Ebtdaa.Persistence
 {
@@ -82,6 +84,8 @@ namespace Ebtdaa.Persistence
         public DbSet<MappingUnit> MappingUnits { get; set; }
         public DbSet<ProductPeriodActive> ProductPeriodActives { get; set; }
         public DbSet<FactoryProduct> FactoryProducts { get; set; }
+        public DbSet<InspectBasicFactoryInfo> InspectBasicFactoryInfos { get; set; }
+        public DbSet<InspectFactoryContact> InspectFactoryContacts { get; set; }
 
 
 
