@@ -13,7 +13,9 @@ namespace Ebtdaa.Application.FactoryLocations.Mapper
             CreateMap<FactoryLocation,FactoryLocationResultDto>();
             CreateMap<FactoryLocationRequestDto,FactoryLocation>();
             
-            CreateMap<FactoryLocationAttachment, FactoryLocationAttachmentResultDto>();
+            CreateMap<FactoryLocationAttachment, FactoryLocationAttachmentResultDto>()
+                .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path))
+                .ForMember(d => d.Extension, opt => opt.MapFrom(src => src.Attachment.Extension));
             CreateMap<FactoryLocationAttachmentRequestDto, FactoryLocationAttachment>();
         }
     }

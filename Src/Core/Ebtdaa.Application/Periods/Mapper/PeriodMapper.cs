@@ -11,6 +11,7 @@ namespace Ebtdaa.Application.Periods.Mapper
         {
             CreateMap<Period, PeriodResultDto>()
                      .ForMember(b => b.Year, opt => opt.MapFrom(dest => dest.PeriodEndDate.Year))
+                     .ForMember(b => b.Month, opt => opt.MapFrom(dest => dest.PeriodEndDate.Month))
                      .ForMember(b => b.PeriodEndDate, opt => opt.MapFrom(dest => dest.PeriodEndDate.Date.ToString("yyyy-MM-dd")))
                      .ForMember(b => b.PeriodStartDate, opt => opt.MapFrom(dest => dest.PeriodStartDate.Date.ToString("yyyy-MM-dd")));
 

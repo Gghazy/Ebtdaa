@@ -31,7 +31,8 @@ namespace Ebtdaa.Application.ActualProduction.Mapper
             CreateMap<ActualProductionAttacRequestDto, ActualProductionAttachment>();
 
             CreateMap<ActualProductionAttachment, ActualProductionAttacResultDto>()
-                                                .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path));
+                                                .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path))
+                                                .ForMember(d => d.Extention, opt => opt.MapFrom(src => src.Attachment.Extension));
 
         }
     }

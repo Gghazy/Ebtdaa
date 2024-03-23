@@ -46,7 +46,8 @@ namespace Ebtdaa.Application.Attachments.Handler
             Attachment attachment = new Attachment
             {
                 Name = file.FileName,
-                Path = path + "/" + file.FileName
+                Path = path + "/" + file.FileName,
+                Extension= GetFileExtension(file)
 
             };
             var result = await _attachMentValidator.ValidateAsync(attachment);
@@ -125,6 +126,44 @@ namespace Ebtdaa.Application.Attachments.Handler
             }
 
             return path;
+        }
+
+        public string GetFileExtension(IFormFile file)
+        {
+            // Method 1: Using Path.GetExtension
+            string extension = Path.GetExtension(file.FileName);
+
+            // Method 2: Using ContentType
+            // Note: ContentType is not always reliable, but it can give you a hint about the file type
+            // Ensure you sanitize and validate it properly before usage
+            string contentType = file.ContentType;
+            string[] contentTypeParts = contentType.Split('/');
+            if (contentTypeParts.Length == 2)
+            {
+                extension = "." + contentTypeParts[1];
+            }
+
+            // Method 3: Using Stream's first few bytes
+            // Read the first few bytes of the stream and analyze to get the file extension
+            // Note: This method is more accurate but requires more code
+            // You might need to add more checks and validations
+            using (var reader = new BinaryReader(file.OpenReadStream()))
+            {
+                byte[] headerBytes = new byte[4]; // Adjust the number of bytes according to the file types you're supporting
+                reader.Read(headerBytes, 0, headerBytes.Length);
+                string header = string.Join("", headerBytes.Select(b => b.ToString("X2")));
+                // Compare headers to known file signatures to determine the file type and its extension
+                switch (header)
+                {
+                    // Example: JPEG
+                    case "FFD8FF":
+                        extension = ".jpg";
+                        break;
+                        // Add more cases for other file types as needed
+                }
+            }
+
+            return extension;
         }
     }
 }

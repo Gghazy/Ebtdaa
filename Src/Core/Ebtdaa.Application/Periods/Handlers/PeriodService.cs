@@ -22,16 +22,24 @@ namespace Ebtdaa.Application.Periods.Handlers
         }
         public async Task<BaseResponse<QueryResult<PeriodResultDto>>> GetAll(PeriodSearch search)
         {
-            var resualt = _mapper.Map<QueryResult<PeriodResultDto>>(
+            var resualt = 
                 await _dbContext.Periods
+                .Include(x=>x.FactoryUpdateStatuses)
                 .OrderByDescending(x=>x.PeriodStartDate.Year)
                 .ThenByDescending(x=>x.PeriodStartDate.Month)
-                .ToQueryResult(search.PageNumber, search.PageSize));
+                .ToQueryResult(search.PageNumber, search.PageSize);
 
+            var response = _mapper.Map<QueryResult<PeriodResultDto>>(resualt);
+            foreach (var item in resualt.Items)
+            {
+                response.Items.FirstOrDefault(x => x.Id == item.Id).Status =
+                   item.FactoryUpdateStatuses.FirstOrDefault()!=null?
+                   item.FactoryUpdateStatuses.FirstOrDefault().UpdateStatus:false;
+            }
 
             return new BaseResponse<QueryResult<PeriodResultDto>>
             {
-                Data = resualt
+                Data = response
             };
         }
 

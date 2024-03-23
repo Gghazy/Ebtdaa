@@ -15,6 +15,6 @@ namespace Ebtdaa.Domain.Inspectors.Entity
         public int InspectorId { get; set; }
 
         public virtual Inspector Inspector { get; set; }
-        public ICollection<Factory> Factories { get;}
+        public virtual Factory Factories { get; set; }
     }
 }

@@ -3,7 +3,6 @@ using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Application.FactoryContacts.Interfaces;
-using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Application.FactoryContacts.Validation;
 using Ebtdaa.Domain.Factories.Entity;
 using System;

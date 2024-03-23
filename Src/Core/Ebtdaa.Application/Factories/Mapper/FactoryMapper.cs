@@ -15,13 +15,16 @@ namespace Ebtdaa.Application.Factories.Mapper
     {
         public FactoryMapper()
         {
-            CreateMap<Factory, FactoryResualtDto>();
+            CreateMap<Factory, FactoryResualtDto>()
+                .ForMember(d => d.CityNameAr, opt => opt.MapFrom(src => src.FactoryLocations.Any()? src.FactoryLocations.FirstOrDefault().City.NameAr:""))
+                .ForMember(d => d.CityNameEn, opt => opt.MapFrom(src => src.FactoryLocations.Any() ? src.FactoryLocations.FirstOrDefault().City.NameEn:""));
 
             CreateMap<FactoryRequestDto, Factory>();
             CreateMap<QueryResult<Factory>, QueryResult<FactoryResualtDto>>();
 
             CreateMap<FactoryFile, FactoryFileResultDto>()
-                       .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path));
+                       .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path))
+                       .ForMember(d => d.Extension, opt => opt.MapFrom(src => src.Attachment.Extension));
 
             CreateMap<FactoryFileRequestDto, FactoryFile>();
 
