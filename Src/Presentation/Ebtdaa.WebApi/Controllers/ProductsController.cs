@@ -1,6 +1,7 @@
 ﻿using Ebtdaa.Application.ActualProduction.Dtos;
 using Ebtdaa.Application.ProductsData.Dtos;
 using Ebtdaa.Application.ProductsData.Interfaces;
+using Ebtdaa.Common.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -21,6 +22,12 @@ namespace Ebtdaa.WebApi.Controllers
         public async Task<IActionResult> GetAll(ProductSearch search)
         {
             return Ok(await _productDataService.GetAll(search));
+        }
+
+        [HttpPost("AllProducts")]
+        public async Task<IActionResult> GetAllProducts(SearchCriteria search)
+        {
+            return Ok(await _productDataService.GetAllProducts(search));
         }
 
         [HttpPost("getAllProductsNotInFactory")]

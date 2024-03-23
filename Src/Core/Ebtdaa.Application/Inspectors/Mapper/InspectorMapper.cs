@@ -13,7 +13,7 @@ namespace Ebtdaa.Application.Inspectors.Mapper
     {
         public InspectorMapper()
         {
-            CreateMap<Inspector, InspectorRequestDto>();
+            CreateMap<Inspector,InspectorResultDto >();
             CreateMap<InspectorRequestDto, Inspector>();
 
         }

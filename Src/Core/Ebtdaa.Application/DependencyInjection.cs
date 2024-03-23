@@ -55,6 +55,9 @@ using Ebtdaa.Application.FactoriesUpdateStatus.Interfaces;
 using Ebtdaa.Application.FactoriesUpdateStatus.Handlers;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Application.ScreenUpdateStatus.Handlers;
+using Ebtdaa.Application.Inspectors.Interfaces;
+using Ebtdaa.Application.Inspectors.Handlers;
+using Ebtdaa.Application.Inspectors.Validation;
 
 namespace Ebtdaa.Application
 {
@@ -97,6 +100,7 @@ namespace Ebtdaa.Application
                services.AddScoped<IFactoryUpdateStatusService, FactoryUpdateStatusService>();
                services.AddScoped<IScreenStatusService, ScreenStatusService>();
                services.AddScoped<IProductPeriodActiveService, ProductPeriodActiveService>();
+               services.AddScoped<IInspectorService, InspectorService>();
 
             #endregion
 
@@ -118,6 +122,7 @@ namespace Ebtdaa.Application
                 services.AddScoped<ActualRawMaterialFileValidator>();
                 services.AddScoped<ActualroductionAttachValidator>();
                 services.AddScoped<InspectorRawMaterialValidator>();
+                services.AddScoped<InspectorValidator>();
 
             #endregion
 

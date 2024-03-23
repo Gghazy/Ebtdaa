@@ -117,6 +117,41 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = resualt
             };
         }
+        public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAllProducts(SearchCriteria search)
+        {
+            var resualt =
+                await _dbContext.FactoryProducts
+                .Include(x => x.Product)
+                .ThenInclude(x => x.Unit)
+                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
+                new ProductResultDto
+                {
+                    Hs12NameEn = b.Hs12NameEn,
+                    Hs12NameAr = b.Hs12NameAr,
+                    Hs12Code = b.Hs12Code,
+                    Id = a.Id,
+                    ProductId = a.ProductId,
+                    ProductName = a.Product.ProductName,
+                    CommericalName = a.CommericalName,
+                    UnitId = a.Product.UnitId,
+                    ItemNumber = a.Product.ItemNumber,
+                    CR = a.Product.CR,
+                    Status = a.Product.Status,
+                    FactoryId = a.FactoryId,
+                    Review = a.Product.Review,
+                    Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+                    UnitName = a.Product.Unit.Name,
+                    PeperId = a.PeperId,
+                    PhototId = a.PhototId,
+                })
+                .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
+
+
+            return new BaseResponse<QueryResult<ProductResultDto>>
+            {
+                Data = resualt
+            };
+        }
 
         public async Task<BaseResponse<ProductResultDto>> GetOne(int Id)
         {
