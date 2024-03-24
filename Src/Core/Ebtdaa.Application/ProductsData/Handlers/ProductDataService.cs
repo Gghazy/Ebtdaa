@@ -117,7 +117,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = resualt
             };
         }
-        public async Task<BaseResponse<QueryResult<ProductResultDto>>> GetAllProducts(SearchCriteria search)
+        public async Task<BaseResponse<List<ProductResultDto>>> GetAllProducts()
         {
             var resualt =
                 await _dbContext.FactoryProducts
@@ -144,10 +144,10 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     PeperId = a.PeperId,
                     PhototId = a.PhototId,
                 })
-                .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
+                //.ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
+                .ToListAsync();
 
-
-            return new BaseResponse<QueryResult<ProductResultDto>>
+            return new BaseResponse<List<ProductResultDto>>
             {
                 Data = resualt
             };
