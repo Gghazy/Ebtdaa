@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Ebtdaa.Application.InspectionFactoryContact.Dtos;
+using Ebtdaa.Domain.InpectorFactoryContact.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,8 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Mapper
     {
         public InspectFactoryContactMapper() 
         { 
-         
+          CreateMap<InspectFactoryContact , InspectFactContactRequestDto>();
+            CreateMap<InspectFactContactResultDto , InspectFactoryContact>();
         }
     }
 }
