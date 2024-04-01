@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Ebtdaa.Domain.Inspectors.Entity
 {
-    public class InspectorFactory : BaseEntity
+    public class InspectorFactory 
     {
         public int Id { get; set; }
         public int FactoryId { get; set; }

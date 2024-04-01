@@ -1,9 +1,5 @@
 ﻿using Ebtdaa.Application.ActualRawMaterials.Dtos;
 using Ebtdaa.Application.ActualRawMaterials.Interfaces;
-using Ebtdaa.Application.Factories.Dtos;
-using Ebtdaa.Application.Factories.Handlers;
-using Ebtdaa.Application.Factories.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ebtdaa.WebApi.Controllers
@@ -19,10 +15,10 @@ namespace Ebtdaa.WebApi.Controllers
             _actualRawMaterialService = actualRawMaterialService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
+        [HttpPost("Pagination")]
+        public async Task<IActionResult> GetAll(ActualRawMaterialSearch search)
         {
-            return Ok(await _actualRawMaterialService.GetAll());
+            return Ok(await _actualRawMaterialService.GetAll(search));
 
         }
 

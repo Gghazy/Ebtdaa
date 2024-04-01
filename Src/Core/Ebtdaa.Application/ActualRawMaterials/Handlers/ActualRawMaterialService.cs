@@ -4,12 +4,11 @@ using Ebtdaa.Application.ActualRawMaterials.Interfaces;
 using Ebtdaa.Application.ActualRawMaterials.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.RawMaterials.Dtos;
+using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.ActualRawMaterials.Entity;
-using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace Ebtdaa.Application.ActualRawMaterials.Handlers
 {
@@ -28,14 +27,20 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             _actualRawFileService = actualRawFileService;
         }
 
-        public async Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetAll()
+        public async Task<BaseResponse<QueryResult<ActualRawMaterialResultDto>>> GetAll(ActualRawMaterialSearch search)
         {
-            var respose = _mapper.Map<List<ActualRawMaterialResultDto>>(await _dbContext.ActualRawMaterials.ToListAsync());
-
-            return new BaseResponse<List<ActualRawMaterialResultDto>>
+            var respose = _mapper.Map<QueryResult<ActualRawMaterialResultDto>>(
+                           await _dbContext.ActualRawMaterials
+                           .Where(x=>x.RawMaterial.FactoryId== search.FactoryId &&
+                           x.PeriodId == search.PeriodId)
+                             .Include(x => x.RawMaterial)
+                          .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true));
+               
+            return new BaseResponse<QueryResult<ActualRawMaterialResultDto>>
             {
                 Data = respose
             };
+           
         }
 
 

@@ -27,8 +27,14 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _factoryService.GetOne(factoryId, periodId));
 
-        } 
+        }
 
+        [HttpGet("FactoryByEntity")]
+        public async Task<IActionResult> GetFactoryByEntity(int factoryEntityId)
+        {
+            return Ok(await _factoryService.GetFactoryByEntity(factoryEntityId));
+
+        }
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] FactoryRequestDto req)
         {

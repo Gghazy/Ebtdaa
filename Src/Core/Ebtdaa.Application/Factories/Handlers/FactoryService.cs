@@ -131,6 +131,21 @@ namespace Ebtdaa.Application.Factories.Handlers
                 Data =true
             };
         }
-      
+
+        public async Task<BaseResponse<List<FactoryResualtDto>>> GetFactoryByEntity(int factoryEntityId)
+        {
+            var resualt = _mapper.Map<List<FactoryResualtDto>>(
+               await _dbContext.Factories
+               .Where(f => f.FactoryLocations.Select(x=>x.FactoryEntityId)
+               .Contains(factoryEntityId))
+               .ToListAsync());
+
+
+
+            return new BaseResponse<List<FactoryResualtDto>>
+            {
+                Data = resualt
+            };
+        }
     }
 }
