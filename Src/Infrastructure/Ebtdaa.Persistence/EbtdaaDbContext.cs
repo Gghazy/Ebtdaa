@@ -18,6 +18,7 @@ using Ebtdaa.Domain.ScreenStatus.Entity;
 using Ebtdaa.Persistence.Configuration.FactoryLocations;
 using Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity;
 using Ebtdaa.Domain.InpectorFactoryContact.Entity;
+using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
 
 namespace Ebtdaa.Persistence
 {
@@ -86,7 +87,7 @@ namespace Ebtdaa.Persistence
         public DbSet<FactoryProduct> FactoryProducts { get; set; }
         public DbSet<InspectBasicFactoryInfo> InspectBasicFactoryInfos { get; set; }
         public DbSet<InspectFactoryContact> InspectFactoryContacts { get; set; }
-
+        public DbSet<InspectFactoryLocation> InspectFactoryLocations { get; set; }
 
 
         public Task<int> SaveChangesAsync()

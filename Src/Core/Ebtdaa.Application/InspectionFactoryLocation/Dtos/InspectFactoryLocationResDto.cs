@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.InspectionFactoryLocation.Dtos
 {
-    public class InspectFactoryLocationReqDto
+    public class InspectFactoryLocationResDto
     {
         public int Id { get; set; }
         public int FactoryId { get; set; }
@@ -23,6 +23,5 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Dtos
         public int? NewIndustrialAreaId { get; set; }
         public string? NewWebSite { get; set; }
         public string Comment { get; set; }
-
     }
 }
