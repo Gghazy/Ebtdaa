@@ -20,6 +20,8 @@ namespace Ebtdaa.Application.Factories.Dtos
         public string OwnerIdentity { get; set; }
         public string FactoryNumber { get; set; }
         public string LicenseNumber { get; set; }
+        public string CityNameAr { get; set; }
+        public string CityNameEn { get; set; }
         public DateTime LicenseExpirDate { get; set; }
         public int Status { get; set; }
         public int FactoryId {  get; set; }

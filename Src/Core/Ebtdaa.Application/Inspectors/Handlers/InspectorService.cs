@@ -31,7 +31,8 @@ namespace Ebtdaa.Application.Inspectors.Handlers
 
         public async Task<BaseResponse<List<InspectorResultDto>>> GetAll()
         {
-            var respose = _mapper.Map<List<InspectorResultDto>>(await _dbContext.Inspectors.ToListAsync());
+            var resonse = await _dbContext.Inspectors.ToListAsync();
+            var respose = _mapper.Map<List<InspectorResultDto>>(resonse);
 
             return new BaseResponse<List<InspectorResultDto>>
             {
@@ -96,25 +97,25 @@ namespace Ebtdaa.Application.Inspectors.Handlers
             };
         }
 
-        public async Task<BaseResponse<InspectorFactoriesResultDto>> AssingFactoriesAsync(InspectorFactoriesRequestDto req)
-        {
-            InspectorFactory inspectorFactory = new InspectorFactory();
-            foreach (var item in req.FactoryIds)
-            {
-                inspectorFactory.FactoryId = item.FactoryId;
-                inspectorFactory.InspectorId = req.InspectorId;
+        //public async Task<BaseResponse<InspectorFactoriesResultDto>> AssingFactoriesAsync(InspectorFactoriesRequestDto req)
+        //{
+        //    InspectorFactory inspectorFactory = new InspectorFactory();
+        //    foreach (var item in req.FactoryIds)
+        //    {
+        //        inspectorFactory.FactoryId = item.FactoryId;
+        //        inspectorFactory.InspectorId = req.InspectorId;
 
-                await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
+        //        await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
 
-            }
+        //    }
             
-            await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
+        //    await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
 
-            await _dbContext.SaveChangesAsync();
-            return new BaseResponse<InspectorFactoriesResultDto>
-            {
-                Data = _mapper.Map<InspectorFactoriesResultDto>(inspectorFactory)
-            };
-        }
+        //    await _dbContext.SaveChangesAsync();
+        //    return new BaseResponse<InspectorFactoriesResultDto>
+        //    {
+        //        Data = _mapper.Map<InspectorFactoriesResultDto>(inspectorFactory)
+        //    };
+        //}
     }
 }
