@@ -15,7 +15,9 @@ namespace Ebtdaa.Application.Factories.Mapper
     {
         public FactoryMapper()
         {
-            CreateMap<Factory, FactoryResualtDto>();
+            CreateMap<Factory, FactoryResualtDto>()
+                .ForMember(d => d.CityNameAr, opt => opt.MapFrom(src => src.FactoryLocations.Any()? src.FactoryLocations.FirstOrDefault().City.NameAr:""))
+                .ForMember(d => d.CityNameEn, opt => opt.MapFrom(src => src.FactoryLocations.Any() ? src.FactoryLocations.FirstOrDefault().City.NameEn:""));
 
             CreateMap<FactoryRequestDto, Factory>();
             CreateMap<QueryResult<Factory>, QueryResult<FactoryResualtDto>>();

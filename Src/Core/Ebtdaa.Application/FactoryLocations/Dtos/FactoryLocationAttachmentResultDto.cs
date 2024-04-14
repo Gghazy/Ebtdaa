@@ -13,6 +13,7 @@ namespace Ebtdaa.Application.FactoryLocations.Dtos
         public string Type { get; set; }
         public string Name { get; set; }
         public string Path { get; set; }
+        public string Extension { get; set; }
         public int AttachmentId { get; set; }
         public int FactoryLocationId { get; set; }
     }

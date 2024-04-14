@@ -51,7 +51,12 @@ namespace Ebtdaa.Application.Factories.Handlers
         public async Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search)
         {
            
-            var resualt = _mapper.Map<QueryResult<FactoryResualtDto>>(await _dbContext.Factories.Where(f => f.OwnerIdentity == search.OwnerIdentity.ToString()).ToQueryResult(search.PageNumber,search.PageSize));
+            var resualt = _mapper.Map<QueryResult<FactoryResualtDto>>(
+                await _dbContext.Factories
+                .Include(x=>x.FactoryLocations)
+                .ThenInclude(x=>x.City)
+                .Where(f => f.OwnerIdentity == search.OwnerIdentity.ToString()).ToQueryResult(search.PageNumber,search.PageSize));
+
 
 
             return new BaseResponse<QueryResult<FactoryResualtDto>>
