@@ -9,12 +9,7 @@ namespace Ebtdaa.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "Extension",
-                table: "Attachments",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+           
 
             migrationBuilder.CreateTable(
                 name: "InspectFactoryLocations",
@@ -49,7 +44,7 @@ namespace Ebtdaa.Persistence.Migrations
                         column: x => x.CityId,
                         principalTable: "Cities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_InspectFactoryLocations_Factories_FactoryId",
                         column: x => x.FactoryId,
@@ -61,7 +56,7 @@ namespace Ebtdaa.Persistence.Migrations
                         column: x => x.FactoryEntityId,
                         principalTable: "FactoryEntities",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_InspectFactoryLocations_IndustrialAreas_IndustrialAreaId",
                         column: x => x.IndustrialAreaId,
