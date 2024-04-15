@@ -15,7 +15,9 @@ namespace Ebtdaa.Domain.Factories.Entity
         public int FactoryId {  get; set; }
         public int PeriodId {  get; set; }
         public FactoryStatusEnum FactoryStatusId {  get; set; }
-
+        public string DataEntry {  get; set; }
+        public string DataReviewer { get; set; }
+        public string DataApprover {  get; set; } 
         public virtual Factory Factory { get; set; }
         public virtual Period Period { get; set; }
         

@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.General;
+using Ebtdaa.Domain.Periods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,7 @@ namespace Ebtdaa.Domain.Factories.Entity
         public virtual Attachment Attachment { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
+        public virtual Period Period { get; set; }
         public virtual Factory Factory { get; set; }
     }
 }

@@ -26,6 +26,9 @@ namespace Ebtdaa.Application.Factories.Dtos
         public int? FactoryContactId { get; set; }
         public DateTime? LicenseExpirDate { get; set; }
         public FactoryStatusEnum Status { get; set; }
+        public string DataEntry { get; set; }
+        public string DataReviewer { get; set; }
+        public string DataApprover { get; set; }
         public int FactoryId {  get; set; }
         public int PeriodId {  get; set; }
     }

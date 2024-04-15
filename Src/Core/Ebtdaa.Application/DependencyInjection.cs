@@ -107,10 +107,10 @@ namespace Ebtdaa.Application
                services.AddScoped<IScreenStatusService, ScreenStatusService>();
                services.AddScoped<IProductPeriodActiveService, ProductPeriodActiveService>();
                services.AddScoped<IInspectorService, InspectorService>();
-               services.AddScoped<IInspectBasicFactInfoService, InspectBasicFactInfoService>();
-               services.AddScoped<IInspectFactoryFIleService, InspectFactoryFileService > ();
-               services.AddScoped<IInspectFactoryContactService, InspectFactoryContactService > ();
-               services.AddScoped<IInspectFactoryLocationService, InspectFactoryLocationService>();
+               //services.AddScoped<IInspectBasicFactInfoService, InspectBasicFactInfoService>();
+               //services.AddScoped<IInspectFactoryFIleService, InspectFactoryFileService > ();
+               //services.AddScoped<IInspectFactoryContactService, InspectFactoryContactService > ();
+               //services.AddScoped<IInspectFactoryLocationService, InspectFactoryLocationService>();
                
 
             #endregion

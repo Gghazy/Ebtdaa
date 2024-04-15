@@ -31,13 +31,13 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
             _validator = validator;
             _screenStatusService = screenStatusService;
         }
-        public async Task<BaseResponse<FactoryContactResultDto>> GetOne(int factoryId)
+        public async Task<BaseResponse<FactoryContactResultDto>> GetOne(int factoryId , int periodId)
         {
             var resualt = await _dbContext.FactoryContacts
                 .Include(x=>x.FinanceManagerPhone)
                 .Include(x=>x.OfficerPhone)
                 .Include(x=>x.ProductionManagerPhone)
-                .FirstOrDefaultAsync(x => x.FactoryId == factoryId);
+                .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             return new BaseResponse<FactoryContactResultDto>
             {

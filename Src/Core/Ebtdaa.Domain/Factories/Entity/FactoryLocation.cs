@@ -16,10 +16,9 @@ namespace Ebtdaa.Domain.Factories.Entity
         public int IndustrialAreaId { get; set; }
         public string WebSite { get; set; }
         public int FactoryId { get; set; }
+        public int PeriodId { get; set; }
 
-
-
-
+        public virtual Period Period { get; set; }
         public virtual FactoryEntity FactoryEntity { get; set; }
         public virtual City City { get; set; }
         public virtual IndustrialArea  IndustrialArea { get; set; }
