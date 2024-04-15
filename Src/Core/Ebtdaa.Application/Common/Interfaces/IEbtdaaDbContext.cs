@@ -60,6 +60,8 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<InspectBasicFactoryInfo> InspectBasicFactoryInfos { get; set; }
         public DbSet<InspectFactoryContact> InspectFactoryContacts { get; set; }
         public DbSet<InspectFactoryLocation> InspectFactoryLocations { get; set; }
+        public DbSet<InspectFactoryFile> InspectFactoryFiles { get; set; }
+
 
     }
 }
