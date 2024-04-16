@@ -105,6 +105,9 @@ namespace Ebtdaa.Application.Factories.Handlers
                     FactoryId = req.FactoryId,
                     PeriodId = req.PeriodId,
                     FactoryStatusId = req.Status,
+                    DataApprover = req.DataApprover,
+                    DataEntry =req.DataEntry,
+                    DataReviewer = req.DataReviewer
                 };
 
                 await _dbContext.BasicFactoryInfos.AddAsync(factory);

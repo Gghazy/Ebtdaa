@@ -1,26 +1,27 @@
 ﻿using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
-using Ebtdaa.Domain.Periods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Ebtdaa.Domain.Factories.Entity
+namespace Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity
 {
-    public class FactoryFile
+    public class InspectFactoryFile : BaseEntity
     {
         public int Id { get; set; }
         public FactoryFileType Type { get; set; }
         public int AttachmentId { get; set; }
         public string Name { get; set; }
-        
+        //public string Comments {  get; set; }
+        //public bool IsCorrectPhoto {  get; set; }
+
 
         public virtual Attachment Attachment { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
-        public virtual Period Period { get; set; }
         public virtual Factory Factory { get; set; }
     }
 }

@@ -37,8 +37,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
             result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId);
             result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
-            result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId);
-            result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId);
+            result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId , periodId);
+            result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
             result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
             result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
             result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
@@ -103,9 +103,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             return screenStatus;
         }
 
-        private async Task<bool> CheckFactoryLocationScreenStatus(int factoryId)
+        private async Task<bool> CheckFactoryLocationScreenStatus(int factoryId , int periodId)
         {
-            var result = await _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId);
+            var result = await _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             var attachment = await _dbContext.FactoryLocationAttachments.Include(x => x.FactoryLocation).AnyAsync(x => x.FactoryLocation.FactoryId == factoryId);
 
@@ -116,9 +116,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             return screenStatus;
         }
 
-        private async Task<bool> CheckFactoryContactScreenStatus(int factoryId)
+        private async Task<bool> CheckFactoryContactScreenStatus(int factoryId , int periodId)
         {
-            var result = await _dbContext.FactoryContacts.AnyAsync(x => x.FactoryId == factoryId);
+            var result = await _dbContext.FactoryContacts.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             bool screenStatus = false;
 
