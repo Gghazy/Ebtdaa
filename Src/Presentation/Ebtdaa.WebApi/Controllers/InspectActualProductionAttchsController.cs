@@ -26,7 +26,7 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync(InspectActualProductionAttachReqDto request)
+        public async Task<IActionResult> CreateAsync([FromBody] InspectActualProductionAttachReqDto request)
         {
             return Ok(await _service.AddAsync(request));
         }

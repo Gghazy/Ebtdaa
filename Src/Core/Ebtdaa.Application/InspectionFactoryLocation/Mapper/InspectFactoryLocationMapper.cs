@@ -15,6 +15,11 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Mapper
         {
             CreateMap<InspectFactoryLocation,InspectFactoryLocationResDto>();
             CreateMap<InspectFactoryLocationReqDto, InspectFactoryLocation>();
+
+            CreateMap<InspectFactoryLocationAttachment, InspectFactoryLocationAttachResDto>()
+                .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path))
+                .ForMember(d => d.Extension, opt => opt.MapFrom(src => src.Attachment.Extension));
+            CreateMap<InspectFactoryLocationAttachReqDto, InspectFactoryLocationAttachment>();
         }
     }
 }

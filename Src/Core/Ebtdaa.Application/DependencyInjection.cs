@@ -118,7 +118,7 @@ namespace Ebtdaa.Application
               services.AddScoped<IInspectActualProductionService, InspectActualProductionService>();
               services.AddScoped<IInspectActualProductionAttachService , InspectActualProductionAttachService>();
               services.AddScoped<IInspectProductsService , InspectProductsService>();
-
+              services.AddScoped<IInspectFactoryLocationAttachService ,  InspectFactoryLocationAttachService>();
             #endregion
 
             #region Validation

@@ -1,6 +1,5 @@
 ﻿using Ebtdaa.Application.InspectionProductData.Dtos;
 using Ebtdaa.Application.InspectionProductData.Interfaces;
-using Ebtdaa.Common.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
 
