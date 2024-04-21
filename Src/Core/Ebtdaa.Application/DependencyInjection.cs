@@ -64,6 +64,10 @@ using Ebtdaa.Application.InspectionFactoryContact.Handlers;
 using Ebtdaa.Application.InspectionFactoryContact.Interfaces;
 using Ebtdaa.Application.InspectionFactoryLocation.Handlers;
 using Ebtdaa.Application.InspectionFactoryLocation.Interfaces;
+using Ebtdaa.Application.InspectionActualProduction.Interfaces;
+using Ebtdaa.Application.InspectionActualProduction.Handlers;
+using Ebtdaa.Application.InspectionProductData.Interfaces;
+using Ebtdaa.Application.InspectionProductData.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -107,11 +111,13 @@ namespace Ebtdaa.Application
                services.AddScoped<IScreenStatusService, ScreenStatusService>();
                services.AddScoped<IProductPeriodActiveService, ProductPeriodActiveService>();
                services.AddScoped<IInspectorService, InspectorService>();
-               //services.AddScoped<IInspectBasicFactInfoService, InspectBasicFactInfoService>();
-               //services.AddScoped<IInspectFactoryFIleService, InspectFactoryFileService > ();
-               //services.AddScoped<IInspectFactoryContactService, InspectFactoryContactService > ();
-               //services.AddScoped<IInspectFactoryLocationService, InspectFactoryLocationService>();
-               
+            //services.AddScoped<IInspectBasicFactInfoService, InspectBasicFactInfoService>();
+            //services.AddScoped<IInspectFactoryFIleService, InspectFactoryFileService > ();
+            //services.AddScoped<IInspectFactoryContactService, InspectFactoryContactService > ();
+            //services.AddScoped<IInspectFactoryLocationService, InspectFactoryLocationService>();
+              services.AddScoped<IInspectActualProductionService, InspectActualProductionService>();
+              services.AddScoped<IInspectActualProductionAttachService , InspectActualProductionAttachService>();
+              services.AddScoped<IInspectProductsService , InspectProductsService>();
 
             #endregion
 
