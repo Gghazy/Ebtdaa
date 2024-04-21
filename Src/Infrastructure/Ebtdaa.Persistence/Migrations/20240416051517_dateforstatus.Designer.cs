@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240416051517_dateforstatus")]
+    partial class dateforstatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -810,7 +812,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("ApprovedAt")
+                    b.Property<DateTime>("ApprovedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
@@ -822,7 +824,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("DataStatus")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("EnteredAt")
+                    b.Property<DateTime>("EnteredAt")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("FactoryId")
@@ -831,7 +833,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("PeriodId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ReviewedAt")
+                    b.Property<DateTime>("ReviewedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<bool>("UpdateStatus")
@@ -1081,10 +1083,6 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -1154,9 +1152,10 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FactoryName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FactoryStatus")
+                    b.Property<int>("FactoryStatus")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsFactNameCorrect")
@@ -1166,6 +1165,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("OwnerIdentity")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PeriodId")

@@ -5,6 +5,7 @@ using Ebtdaa.Application.Inspectors.Dtos;
 using Ebtdaa.Application.Inspectors.Interfaces;
 using Ebtdaa.Application.Inspectors.Validation;
 using Ebtdaa.Domain.Inspectors.Entity;
+using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -41,7 +42,9 @@ namespace Ebtdaa.Application.Inspectors.Handlers
 
         public async Task<BaseResponse<InspectorResultDto>> GetOne(int id)
         {
-            var result = await _dbContext.Inspectors.Include(x=> x.InspectorFactories)
+            var result = await _dbContext.Inspectors
+                .Include(x=> x.InspectorFactories)
+                .ThenInclude(x=>x.Factories)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             return new BaseResponse<InspectorResultDto>
@@ -57,23 +60,49 @@ namespace Ebtdaa.Application.Inspectors.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.Inspectors.AddAsync(inspector);
+                await _dbContext.SaveChangesAsync();
+                foreach (var item in req.FactoryIds)
+            {
+                InspectorFactory inspectorFactory = new InspectorFactory();
+                inspectorFactory.FactoryId = item;
+                inspectorFactory.InspectorId = inspector.Id;
+
+                await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
+
+            }
+
 
             await _dbContext.SaveChangesAsync();
+                
             return new BaseResponse<InspectorResultDto>
             {
                 Data = _mapper.Map<InspectorResultDto>(inspector)
             };
+            
         }
 
         public async Task<BaseResponse<InspectorResultDto>> UpdateAsync(InspectorRequestDto req)
         {
-            var getInspector = await _dbContext.Inspectors.FirstOrDefaultAsync(x => x.Id == req.Id);
+            var getInspector = await _dbContext.Inspectors
+                                    .Include(x=>x.InspectorFactories)           
+                                    .FirstOrDefaultAsync(x => x.Id == req.Id);
             var inspectorUpdated = _mapper.Map(req, getInspector);
 
             // Validation
             var result = await _inspectorValidator.ValidateAsync(inspectorUpdated);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
+            await _dbContext.SaveChangesAsync();
 
+            _dbContext.InspectorFactories.RemoveRange(getInspector.InspectorFactories);
+            foreach (var item in req.FactoryIds)
+            {
+                InspectorFactory inspectorFactory = new InspectorFactory();
+                inspectorFactory.FactoryId = item;
+                inspectorFactory.InspectorId = req.Id;
+
+                await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
+
+            }
             await _dbContext.SaveChangesAsync();
 
             return new BaseResponse<InspectorResultDto>
@@ -115,6 +144,21 @@ namespace Ebtdaa.Application.Inspectors.Handlers
             {
                 Data = _mapper.Map<InspectorFactoriesResultDto>(inspectorFactory)
             };
+        }
+
+        public async Task<BaseResponse<List<InspectorFactoriesResultDto>>> GetInspectorFactories(int InspectorId)
+        {
+           
+            var result = await _dbContext.InspectorFactories
+                 .Include(x => x.Factories)
+                 .Where(x => x.InspectorId == InspectorId)
+                 .ToListAsync();
+
+            return new BaseResponse< List<InspectorFactoriesResultDto>>
+            {
+                Data = _mapper.Map <List<InspectorFactoriesResultDto>>(result)
+            };
+            
         }
     }
 }

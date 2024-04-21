@@ -13,8 +13,16 @@ namespace Ebtdaa.Application.Inspectors.Mapper
     {
         public InspectorMapper()
         {
-            CreateMap<Inspector, InspectorResultDto>();
+            CreateMap<Inspector, InspectorResultDto>()
+              .ForMember(dest => dest.FactoryIds, opt => opt.MapFrom(src => src.InspectorFactories.Select(prm => prm.FactoryId)));
+               
             CreateMap<InspectorRequestDto, Inspector>();
+
+            CreateMap<InspectorFactory, InspectorFactoriesResultDto>()
+                 .ForMember(dest => dest.FactoryName, opt => opt.MapFrom(src => src.Factories.NameAr))
+                 .ForMember(dest => dest.FactoryId, opt => opt.MapFrom(src => src.Factories.Id))
+                 .ForMember(dest => dest.CommerialNumber, opt => opt.MapFrom(src => src.Factories.CommercialRegister));
+
 
         }
     }

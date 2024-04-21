@@ -62,8 +62,8 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
             var inspectBasicFactory = _mapper.Map<InspectBasicFactoryInfo>(req);
 
             // Validation
-            var result = await _validations.ValidateAsync(inspectBasicFactory);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
+            //var result = await _validations.ValidateAsync(inspectBasicFactory);
+            //if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.InspectBasicFactoryInfos.AddAsync(inspectBasicFactory);
 

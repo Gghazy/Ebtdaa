@@ -64,6 +64,8 @@ using Ebtdaa.Application.InspectionFactoryContact.Handlers;
 using Ebtdaa.Application.InspectionFactoryContact.Interfaces;
 using Ebtdaa.Application.InspectionFactoryLocation.Handlers;
 using Ebtdaa.Application.InspectionFactoryLocation.Interfaces;
+using Ebtdaa.Application.InspectionBasicFactInfos.Validation;
+using Ebtdaa.Application.InspectionFactoryContact.Validation;
 
 namespace Ebtdaa.Application
 {
@@ -107,17 +109,17 @@ namespace Ebtdaa.Application
                services.AddScoped<IScreenStatusService, ScreenStatusService>();
                services.AddScoped<IProductPeriodActiveService, ProductPeriodActiveService>();
                services.AddScoped<IInspectorService, InspectorService>();
-               //services.AddScoped<IInspectBasicFactInfoService, InspectBasicFactInfoService>();
-               //services.AddScoped<IInspectFactoryFIleService, InspectFactoryFileService > ();
-               //services.AddScoped<IInspectFactoryContactService, InspectFactoryContactService > ();
-               //services.AddScoped<IInspectFactoryLocationService, InspectFactoryLocationService>();
-               
+               services.AddScoped<IInspectBasicFactInfoService, InspectBasicFactInfoService>();
+            services.AddScoped<IInspectFactoryFIleService, InspectFactoryFileService>();
+            services.AddScoped<IInspectFactoryContactService, InspectFactoryContactService>();
+            services.AddScoped<IInspectFactoryLocationService, InspectFactoryLocationService>();
+
 
             #endregion
 
             #region Validation
 
-                services.AddScoped<AttachmentValidator>();
+            services.AddScoped<AttachmentValidator>();
                 services.AddScoped<FactoryValidator>();
                 services.AddScoped<FactoryFileValidator>();
                 services.AddScoped<FactoryFinancialValidator>();
@@ -134,6 +136,8 @@ namespace Ebtdaa.Application
                 services.AddScoped<ActualroductionAttachValidator>();
                 services.AddScoped<InspectorRawMaterialValidator>();
                 services.AddScoped<InspectorValidator>();
+                services.AddScoped<InspectBasicDataValidator>();
+                services.AddScoped<InspectFactoryContactValidation>();
 
             #endregion
 

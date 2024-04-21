@@ -15,9 +15,9 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Dtos
         public int PeriodId { get; set; }
         public bool IsFactNameCorrect { get; set; }
         public bool IsFactStatusCorrect { get; set; }
-        public string FactoryName { get; set; }
+        public string? FactoryName { get; set; }
         public string OwnerIdentity { get; set; }
         public string Comments { get; set; }
-        public FactoryStatusEnum FactoryStatus { get; set; }
+        public FactoryStatusEnum? FactoryStatus { get; set; }
     }
 }

@@ -97,6 +97,9 @@ namespace Ebtdaa.Application.Factories.Handlers
             if (factory != null)
             {
                 factory.FactoryStatusId = req.Status;
+                factory.DataApprover = req.DataApprover;
+                factory.DataEntry = req.DataEntry;
+                factory.DataReviewer = req.DataReviewer;
             }
             else
             {

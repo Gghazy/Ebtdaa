@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ebtdaa.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,5 +13,6 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Dtos
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
         public bool UpdateStatus { get; set; }
+        public DataStatus DataStatus { get; set; }
     }
 }

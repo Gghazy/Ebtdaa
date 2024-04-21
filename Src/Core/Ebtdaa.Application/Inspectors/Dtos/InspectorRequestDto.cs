@@ -17,6 +17,6 @@ namespace Ebtdaa.Application.Inspectors.Dtos
         public string OwnerIdentity { get; set; }
         public int FactoryEntityId { get; set; }
         public InspectorStatusEnum Status { get; set; }
-        
+        public List<int> FactoryIds { get; set; }
     }
 }

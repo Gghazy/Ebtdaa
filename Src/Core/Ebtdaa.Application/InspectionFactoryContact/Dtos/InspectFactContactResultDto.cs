@@ -17,5 +17,6 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Dtos
         public bool IsOfficerMailCorrect { get; set; }
         public int NewOfficerPhoneId { get; set; }
         public string NewOfficerEmail { get; set; }
+        public string Comments { get; set; }
     }
 }

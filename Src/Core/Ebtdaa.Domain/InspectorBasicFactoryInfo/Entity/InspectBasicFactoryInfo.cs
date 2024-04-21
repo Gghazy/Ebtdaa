@@ -17,10 +17,10 @@ namespace Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity
         public int PeriodId { get; set; }
         public bool IsFactNameCorrect { get; set; }
         public bool IsFactStatusCorrect { get; set; }
-        public string FactoryName { get; set; }
-        public string OwnerIdentity { get; set; }
+        public string? FactoryName { get; set; }
+        public string? OwnerIdentity { get; set; }
         public string Comments { get; set; }
-        public FactoryStatusEnum FactoryStatus { get; set; }
+        public FactoryStatusEnum? FactoryStatus { get; set; }
 
         public virtual Factory Factory { get; set; }
         public virtual Period Period { get; set; }
