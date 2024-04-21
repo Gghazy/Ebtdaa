@@ -15,14 +15,16 @@ namespace Ebtdaa.Domain.InspectorProductData.Entity
         public int Id { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
-        public int ProductPhotoId { get; set; }
-        public string ProductId { get; set; }
+        public int? PhotoId { get; set; }
+        public int ProductId { get; set; }
         public bool IsProductPhotoCorrect { get; set; }
         public int NewProductPhotoId { get; set; }
         public string Comments { get; set; }
+        public string? CommericalName { get; set; }
 
+        public virtual Attachment Photot { get; set; }
         public virtual Factory Factory { get; set; }
         public virtual Period Period { get; set; }
-        public virtual FactoryProduct FactoryProduct { get; set; }
+        public virtual Product Product { get; set; }
     }
 }
