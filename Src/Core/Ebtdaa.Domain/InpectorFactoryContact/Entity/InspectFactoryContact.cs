@@ -20,6 +20,7 @@ namespace Ebtdaa.Domain.InpectorFactoryContact.Entity
         public bool IsOfficerMailCorrect { get; set; }
         public int NewOfficerPhoneId { get; set; }
         public string NewOfficerEmail { get; set; }
+        public string Comments { get; set; }
 
         public virtual Factory Factory { get; set; }
         public virtual Period Period { get; set; }

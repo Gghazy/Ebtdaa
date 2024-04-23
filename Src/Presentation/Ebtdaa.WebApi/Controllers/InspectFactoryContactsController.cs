@@ -24,7 +24,7 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] InspectFactContactRequestDto req)
+        public async Task<IActionResult> CreateAsync(InspectFactContactRequestDto req)
         {
 
             return Ok(await _InspectFactoryContactervice.AddAsync(req));

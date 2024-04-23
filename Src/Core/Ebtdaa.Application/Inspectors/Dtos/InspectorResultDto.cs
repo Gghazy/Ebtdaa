@@ -14,7 +14,8 @@ namespace Ebtdaa.Application.Inspectors.Dtos
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string OwnerIdentity { get; set; }
-        public int IndustiryalZoneTypeId { get; set; }
+        public int FactoryEntityId { get; set; }
         public InspectorStatusEnum Status { get; set; }
+        public List<int> FactoryIds { get; set; }
     }
 }

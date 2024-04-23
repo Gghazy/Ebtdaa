@@ -13,8 +13,8 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Mapper
     {
         public InspectFactoryContactMapper() 
         { 
-          CreateMap<InspectFactoryContact , InspectFactContactRequestDto>();
-            CreateMap<InspectFactContactResultDto , InspectFactoryContact>();
+          CreateMap<InspectFactoryContact , InspectFactContactResultDto>();
+            CreateMap< InspectFactContactRequestDto  , InspectFactoryContact>();
         }
     }
 }

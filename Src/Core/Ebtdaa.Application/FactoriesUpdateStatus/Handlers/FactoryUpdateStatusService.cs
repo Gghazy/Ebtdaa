@@ -6,6 +6,7 @@ using Ebtdaa.Application.FactoriesUpdateStatus.Interfaces;
 using Ebtdaa.Application.FactoryFinancials.Dtos;
 using Ebtdaa.Domain.Factories.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,9 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         public async Task<BaseResponse<FactUpdateStatusResultDto>> AddAsync(FactUpdateStatusRequestDto req)
         {
             var factoryUpdateStatus = _mapper.Map<FactoryUpdateStatus>(req);
-            
+           
+            factoryUpdateStatus.DataStatus = Ebtdaa.Common.Enums.DataStatus.Added;
+            factoryUpdateStatus.EnteredAt = DateTime.Now;
             await _dbContext.FactoryUpdateStatuses.AddAsync(factoryUpdateStatus);
 
             await _dbContext.SaveChangesAsync();
@@ -41,6 +44,19 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         {
             var factoryStatus = await _dbContext.FactoryUpdateStatuses.FirstOrDefaultAsync(x => x.Id == req.Id);
             var factoryStatustUpdated = _mapper.Map(req, factoryStatus);
+            if (factoryStatus.DataStatus==Ebtdaa.Common.Enums.DataStatus.Added)
+            {
+                factoryStatus.DataStatus = Ebtdaa.Common.Enums.DataStatus.Reviwed;
+                factoryStatus.ReviewedAt = DateTime.Now;
+
+            }
+            else if (factoryStatus.DataStatus == Ebtdaa.Common.Enums.DataStatus.Reviwed)
+            {
+                factoryStatus.DataStatus = Ebtdaa.Common.Enums.DataStatus.Approved;
+                factoryStatus.ApprovedAt = DateTime.Now;
+
+            }
+
 
             await _dbContext.SaveChangesAsync();
 

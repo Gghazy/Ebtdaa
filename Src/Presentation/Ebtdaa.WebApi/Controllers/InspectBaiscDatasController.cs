@@ -31,7 +31,7 @@ namespace Ebtdaa.WebApi.Controllers
 
         // POST api/<InspectBaiscDatasController>
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] InspectBasicFactInfoRequestDto req)
+        public async Task<IActionResult> AddAsync( InspectBasicFactInfoRequestDto req)
         {
             return Ok(await _inspectBasicFactInfoService.AddAsync(req));
         }

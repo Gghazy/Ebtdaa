@@ -32,7 +32,7 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] InspectorRawMaterialRequestDto request)
+        public async Task<IActionResult> CreateAsync(InspectorRawMaterialRequestDto request)
         {
             return Ok(await _InspectorRawMaterialService.AddAsync(request));
         }

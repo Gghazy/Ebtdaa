@@ -59,8 +59,8 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Handlers
         {
             var factoryContact = _mapper.Map<InspectFactoryContact>(req);
 
-            var result = await _validations.ValidateAsync(factoryContact);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
+            //var result = await _validations.ValidateAsync(factoryContact);
+            //if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.InspectFactoryContacts.AddAsync(factoryContact);
 

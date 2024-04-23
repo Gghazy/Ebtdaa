@@ -8,5 +8,8 @@
         public string Comment { get; set; }
         public int? PhotoId { get; set; }
         public int? PaperId { get; set; }
+
+        public int PeriodId { get; set; }
+        public int FactoryId { get; set; }
     }
 }

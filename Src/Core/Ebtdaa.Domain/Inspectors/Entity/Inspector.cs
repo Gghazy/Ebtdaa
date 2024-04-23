@@ -1,4 +1,5 @@
 ﻿using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,8 @@ namespace Ebtdaa.Domain.Inspectors.Entity
         public string? Email { get; set; }
         public string? Phone { get; set; }
         public string OwnerIdentity { get; set; }
+        public int FactoryEntityId { get; set; }
+        public FactoryEntity FactoryEntity { get; set; }
         public InspectorStatusEnum Status { get; set; }
 
         public virtual ICollection<InspectorFactory> InspectorFactories { get; set; }

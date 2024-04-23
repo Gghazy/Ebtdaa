@@ -67,6 +67,7 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<InspectActualProduction> InspectActualProductions { get; set; }
         public DbSet<InspectActualProductionAttachment> InspectActualProductionAttachments { get; set; }
         public DbSet<InspectFactoryLocationAttachment> InspectFactoryLocationAttachments {  get; set; }
+        public DbSet<InspectorRawMaterialFile> InspectorRawMaterialFiles { get; set; }
         public DbSet<InspectProductDataAttachment> InspectProductDataAttachments { get; set; }
 
 

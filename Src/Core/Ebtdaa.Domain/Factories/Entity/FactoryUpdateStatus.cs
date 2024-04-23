@@ -1,4 +1,5 @@
-﻿using Ebtdaa.Domain.General;
+﻿using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.General;
 using Ebtdaa.Domain.Periods;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,10 @@ namespace Ebtdaa.Domain.Factories.Entity
         public int FactoryId {  get; set; }
         public int PeriodId {  get; set; }
         public bool UpdateStatus {  get; set; }
-
+        public DateTime? EnteredAt { get; set; }
+        public DateTime? ReviewedAt { get; set; }
+        public DateTime? ApprovedAt { get; set; }
+        public DataStatus DataStatus { get; set; }
         public virtual Factory Factory { get; set; }
         public virtual Period Period { get; set; }
     }

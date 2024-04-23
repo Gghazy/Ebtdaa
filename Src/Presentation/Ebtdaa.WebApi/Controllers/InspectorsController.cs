@@ -63,11 +63,11 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _inspectorService.AssingFactoriesAsync(req));
 
         }
-        //[HttpGet("GetInspectorFactories")]
-        //public async Task<IActionResult> GetInspectorFactories(int id)
-        //{
-        //    return Ok(await _inspectorService.GetInspectorFactories(id));
+        [HttpGet("GetInspectorFactories")]
+        public async Task<IActionResult> GetInspectorFactories(int id)
+        {
+            return Ok(await _inspectorService.GetInspectorFactories(id));
 
-        //}
+        }
     }
 }
