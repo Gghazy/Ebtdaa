@@ -9,7 +9,6 @@ namespace Ebtdaa.Application.ReverseApproval.Dtos
     public class ReverseApprovalResultDto
     {
         public int Id { get; set; }
-        public int FactoryId { get; set; }
         public int PeriodId {  get; set; }
         public string CommericalRegistration { get; set; }
 
