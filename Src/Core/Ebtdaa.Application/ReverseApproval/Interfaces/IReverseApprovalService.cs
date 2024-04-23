@@ -1,4 +1,6 @@
 ﻿using Ebtdaa.Application.Common.Dtos;
+using Ebtdaa.Application.RawMaterials.Dtos;
+using Ebtdaa.Application.ReverseApproval.Dtos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +11,7 @@ namespace Ebtdaa.Application.ReverseApproval.Interfaces
 {
     public interface IReverseApprovalService
     {
-        
+        Task<BaseResponse<ReverseApprovalResultDto>> UpdateAsync(ReverseApprovalRequestDto req);
+
     }
 }

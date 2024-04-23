@@ -10,5 +10,6 @@ namespace Ebtdaa.Application.Factories.Dtos
     public class FactorySearch :SearchCriteria
     {
         public string? OwnerIdentity { get; set; }
+        public string? CommericalRegistrationNo { get; set; }
     }
 }

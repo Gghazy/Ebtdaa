@@ -13,6 +13,8 @@ using Ebtdaa.Domain.ScreenStatus.Entity;
 using Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity;
 using Ebtdaa.Domain.InpectorFactoryContact.Entity;
 using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
+using Ebtdaa.Domain.InspectorProductData.Entity;
+using Ebtdaa.Domain.InspectorActualProduction.Entity;
 
 namespace Ebtdaa.Application.Common.Interfaces
 {
@@ -61,6 +63,10 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<InspectFactoryContact> InspectFactoryContacts { get; set; }
         public DbSet<InspectFactoryLocation> InspectFactoryLocations { get; set; }
         public DbSet<InspectFactoryFile> InspectFactoryFiles { get; set; }
+        public DbSet<InspectProductPhoto> InspectProductPhotos { get; set; }
+        public DbSet<InspectActualProduction> InspectActualProductions { get; set; }
+        public DbSet<InspectActualProductionAttachment> InspectActualProductionAttachments { get; set; }
+        public DbSet<InspectFactoryLocationAttachment> InspectFactoryLocationAttachments {  get; set; }
         public DbSet<InspectorRawMaterialFile> InspectorRawMaterialFiles { get; set; }
 
 

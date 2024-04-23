@@ -24,6 +24,7 @@
     <Folder Include="FactoryRawMaterials\Mapper\" />
     <Folder Include="FactoriesUpdateStatus\Validation\" />
     <Folder Include="IndustrialAreas\Validation\" />
+    <Folder Include="InspectionActualProduction\Validation\" />
     <Folder Include="InspectionFactoryLocation\Validation\" />
     <Folder Include="InspectionProductData\Validation\" />
     <Folder Include="LogIn\Validation\" />

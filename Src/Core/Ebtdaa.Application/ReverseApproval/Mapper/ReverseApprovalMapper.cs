@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Ebtdaa.Application.ReverseApproval.Dtos;
+using Ebtdaa.Domain.Factories.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +13,8 @@ namespace Ebtdaa.Application.ReverseApproval.Mapper
     {
         public ReverseApprovalMapper() 
         {
+            CreateMap<FactoryUpdateStatus, ReverseApprovalResultDto>();
+            CreateMap<ReverseApprovalRequestDto, FactoryUpdateStatus>();
 
         }
     }
