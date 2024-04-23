@@ -113,6 +113,7 @@ namespace Ebtdaa.Application
             services.AddScoped<IInspectFactoryFIleService, InspectFactoryFileService>();
             services.AddScoped<IInspectFactoryContactService, InspectFactoryContactService>();
             services.AddScoped<IInspectFactoryLocationService, InspectFactoryLocationService>();
+            services.AddScoped<IInspectorRawMaterialFileService, InspectorRawMaterialFileService > ();
 
 
             #endregion

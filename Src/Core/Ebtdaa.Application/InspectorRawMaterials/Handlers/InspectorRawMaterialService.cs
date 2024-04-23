@@ -27,6 +27,7 @@ namespace Ebtdaa.Application.InspectorRawMaterials.Handlers
 
         public async Task<BaseResponse<InspectorRawMaterialResultDto>> AddAsync(InspectorRawMaterialRequestDto req)
         {
+         
             var InspectorrawMaterial = _mapper.Map<InspectorRawMaterial>(req);
             var result = await _inspectorRawMaterialValidtor.ValidateAsync(InspectorrawMaterial);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
@@ -40,6 +41,7 @@ namespace Ebtdaa.Application.InspectorRawMaterials.Handlers
             {
                 Data = _mapper.Map<InspectorRawMaterialResultDto>(InspectorrawMaterial)
             };
+          
         }
 
         public async Task<BaseResponse<List<InspectorRawMaterialResultDto>>> GetAll()
