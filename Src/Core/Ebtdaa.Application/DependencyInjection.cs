@@ -68,6 +68,8 @@ using Ebtdaa.Application.InspectionActualProduction.Interfaces;
 using Ebtdaa.Application.InspectionActualProduction.Handlers;
 using Ebtdaa.Application.InspectionProductData.Interfaces;
 using Ebtdaa.Application.InspectionProductData.Handlers;
+using Ebtdaa.Application.ReverseApproval.Interfaces;
+using Ebtdaa.Application.ReverseApproval.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -119,6 +121,8 @@ namespace Ebtdaa.Application
               services.AddScoped<IInspectActualProductionAttachService , InspectActualProductionAttachService>();
               services.AddScoped<IInspectProductsService , InspectProductsService>();
               services.AddScoped<IInspectFactoryLocationAttachService ,  InspectFactoryLocationAttachService>();
+              services.AddScoped<IReverseApprovalService,  ReverseApprovalService>();
+
             #endregion
 
             #region Validation

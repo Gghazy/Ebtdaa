@@ -10,6 +10,9 @@ namespace Ebtdaa.Application.ReverseApproval.Dtos
     {
         public int Id { get; set; }
         public int FactoryId { get; set; }
+        public int PeriodId {  get; set; }
+        public string CommericalRegistration { get; set; }
+
         public bool UpdateSataus { get; set; } = false;
     }
 }
