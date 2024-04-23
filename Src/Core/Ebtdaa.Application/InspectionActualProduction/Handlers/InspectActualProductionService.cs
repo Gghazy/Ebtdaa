@@ -24,18 +24,29 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<InspectActualProductionResultDto>> GetOne(int factoryId , int periodId)
+        public async Task<BaseResponse<InspectActualProductionResultDto>> GetOne(int factoryId , int periodId , string ownerIdentity)
         {
-            var getForInspector = await _dbContext.InspectActualProductions.FirstOrDefaultAsync(x => x.FactoryId==factoryId && x.PeriodId == periodId);
+            var getForInspector = await _dbContext.InspectActualProductions.FirstOrDefaultAsync(x => x.FactoryId==factoryId && x.PeriodId == periodId && x.CreatedBy == ownerIdentity);
              if (getForInspector == null)
              {
                 var result = await _dbContext.ActualProductionAndCapacities
                                          .FirstOrDefaultAsync(x => x.PeriodId == periodId);
-                var response = _mapper.Map<InspectActualProductionResultDto>(result);
+                var map = new InspectActualProductionResultDto()
+                {
+                    Id = result.Id,
+                    ActualProductionUintId = result.ActualProductionUintId,
+                    ActualProduction = result.ActualProduction,
+                    DesignedCapacity = result.DesignedCapacity,
+                    DesignedCapacityUnitId = result.DesignedCapacityUnitId,
+                    FactoryId = factoryId,
+                    PeriodId = periodId,
+                    FactoryProductId = result.FactoryProductId
+                };
+                var response = _mapper.Map<InspectActualProductionResultDto>(map);
 
                 return new BaseResponse<InspectActualProductionResultDto>
                 {
-                    Data = result != null ? response : new InspectActualProductionResultDto()
+                    Data = map != null ? response : new InspectActualProductionResultDto()
                 };
              }
             else

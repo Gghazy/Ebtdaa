@@ -22,22 +22,39 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public async Task<BaseResponse<InspectProductsResultDto>> GetOne(int factoryId)
+        public async Task<BaseResponse<InspectProductsResultDto>> GetOne(int factoryId, int periodId, string ownerIdentity)
         {
-            var result = await _dbContext
-                                .FactoryProducts
-                                .Include(x => x.Product)
-                                .ThenInclude(x => x.Unit)
-                                .FirstOrDefaultAsync(x => x.FactoryId == factoryId);
-
-            var response = _mapper.Map<InspectProductsResultDto>(result);
-
-
-
-            return new BaseResponse<InspectProductsResultDto>
+            var getInspectData = await _dbContext.InspectProductPhotos.FirstOrDefaultAsync(i => i.FactoryId == factoryId && i.CreatedBy == ownerIdentity);
+            if (getInspectData == null)
             {
-                Data = response
-            };
+                var result = await _dbContext.FactoryProducts.Include(x => x.Product).ThenInclude(x => x.Unit).FirstOrDefaultAsync(x => x.FactoryId == factoryId);
+
+                var mapData = new InspectProductsResultDto()
+                {
+                    FactoryId = factoryId,
+                    Id = result.Id,
+                    ProductId = result.ProductId,
+                    ProductPhotoId = result.PhototId
+                };
+                var response = _mapper.Map<InspectProductsResultDto>(mapData);
+
+                return new BaseResponse<InspectProductsResultDto>
+                {
+                    Data = response
+                };
+            }
+            else
+            {
+                var Inspectresponse = _mapper.Map<InspectProductsResultDto>(getInspectData);
+
+
+
+                return new BaseResponse<InspectProductsResultDto>
+                {
+                    Data = Inspectresponse
+                };
+            }
+            
         }
 
         public async Task<BaseResponse<bool>> AddAsync(InspectProductsRequestDto request)
@@ -50,6 +67,7 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             factoryProduct.IsProductPhotoCorrect = request.IsProductPhotoCorrect;
             factoryProduct.Comments = request.Comments;
             factoryProduct.NewProductPhotoId = request.NewProductPhotoId;
+            factoryProduct.PeriodId = request.PeriodId;
 
             
             await _dbContext.InspectProductPhotos.AddAsync(factoryProduct);

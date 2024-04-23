@@ -12,6 +12,6 @@ namespace Ebtdaa.Application.InspectionActualProduction.Interfaces
     {
         Task<BaseResponse<InspectActualProductionResultDto>> AddAsync(InspectActualProductionReqDto result);
         Task<BaseResponse<InspectActualProductionResultDto>> UpdateAsync(InspectActualProductionReqDto result);
-        Task<BaseResponse<InspectActualProductionResultDto>> GetOne(int factoryId , int periodId);
+        Task<BaseResponse<InspectActualProductionResultDto>> GetOne(int factoryId , int periodId , string ownerIdentity);
     }
 }

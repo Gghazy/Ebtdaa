@@ -18,10 +18,10 @@ namespace Ebtdaa.WebApi.Controllers
 
 
         // GET: api/<InspectProductsController>/id
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOne(int id)
+        [HttpGet]
+        public async Task<IActionResult> GetOne(int factoryId , int periodId , string ownerIdentity)
         {
-            return Ok(await _productDataService.GetOne(id));
+            return Ok(await _productDataService.GetOne(factoryId , periodId , ownerIdentity));
         }
 
         // POST api/<InspectProductsController>

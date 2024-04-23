@@ -56,12 +56,18 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _inspectorService.DeleteAsync(id));
         }
 
-        [HttpPut]
+        [HttpPost("AssginFactory")]
         public async Task<IActionResult> AssingFactoryAsync([FromBody] InspectorFactoriesRequestDto req)
         {
 
             return Ok(await _inspectorService.AssingFactoriesAsync(req));
 
         }
+        //[HttpGet("GetInspectorFactories")]
+        //public async Task<IActionResult> GetInspectorFactories(int id)
+        //{
+        //    return Ok(await _inspectorService.GetInspectorFactories(id));
+
+        //}
     }
 }
