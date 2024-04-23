@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Ebtdaa.Application.InspectionFactoryLocation.Dtos;
 using Ebtdaa.Application.InspectionProductData.Dtos;
+using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
 using Ebtdaa.Domain.InspectorProductData.Entity;
 using System;
 using System.Collections.Generic;
@@ -15,6 +17,11 @@ namespace Ebtdaa.Application.InspectionProductData.Mapper
         {
             CreateMap<InspectProductsRequestDto, InspectProductPhoto>();
             CreateMap<InspectProductPhoto, InspectProductsResultDto>();
+
+            CreateMap<InspectProductDataAttachment, InspectProductAttachResDto>()
+                .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path))
+                .ForMember(d => d.Extension, opt => opt.MapFrom(src => src.Attachment.Extension));
+            CreateMap<InspectProductAttachReqDto, InspectProductDataAttachment>();
 
         }
     }

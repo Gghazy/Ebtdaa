@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.FactoryFinancials.Dtos;
-using Ebtdaa.Application.FactoryFinancials.Validation;
 using Ebtdaa.Application.FactoryLocations.Dtos;
 using Ebtdaa.Application.FactoryLocations.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Validation;
