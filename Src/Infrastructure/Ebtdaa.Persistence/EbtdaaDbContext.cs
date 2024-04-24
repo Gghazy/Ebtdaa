@@ -108,9 +108,11 @@ namespace Ebtdaa.Persistence
                 {
                     case EntityState.Added:
                         entry.Entity.CreatedDate = DateTime.UtcNow;
+                        entry.Entity.CreatedBy = "1012955132";
                         break;
                     case EntityState.Modified:
                         entry.Entity.UpdatedDate = DateTime.UtcNow;
+                        entry.Entity.UpdatedBy = "1012955132";
                         break;
                 }
             }

@@ -71,7 +71,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryProductId");
 
-                    b.ToTable("ActualProductionAndCapacities");
+                    b.ToTable("ActualProductionAndCapacities", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAttachment", b =>
@@ -116,7 +116,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryId");
 
-                    b.ToTable("ActualProductionAttachments");
+                    b.ToTable("ActualProductionAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.IncreaseActualProduction", b =>
@@ -142,7 +142,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("ReasonId");
 
-                    b.ToTable("IncreaseActualProductions");
+                    b.ToTable("IncreaseActualProductions", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.Reason", b =>
@@ -159,7 +159,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Reasons");
+                    b.ToTable("Reasons", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualRawMaterials.Entity.ActualRawMaterial", b =>
@@ -215,7 +215,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("RawMaterialId");
 
-                    b.ToTable("ActualRawMaterials");
+                    b.ToTable("ActualRawMaterials", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualRawMaterials.Entity.ActualRawMaterialFile", b =>
@@ -257,7 +257,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryId");
 
-                    b.ToTable("ActualRawMaterialFiles");
+                    b.ToTable("ActualRawMaterialFiles", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.CustomsItemUpdateData.Entity.CustomsItemUpdate", b =>
@@ -302,7 +302,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryId");
 
-                    b.ToTable("CustomsItemUpdates");
+                    b.ToTable("CustomsItemUpdates", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.BaiscFactoryInfo", b =>
@@ -352,7 +352,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("BasicFactoryInfos");
+                    b.ToTable("BasicFactoryInfos", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.Factory", b =>
@@ -418,7 +418,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Factories");
+                    b.ToTable("Factories", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryContact", b =>
@@ -480,7 +480,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("ProductionManagerPhoneId");
 
-                    b.ToTable("FactoryContacts");
+                    b.ToTable("FactoryContacts", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryEntity", b =>
@@ -501,7 +501,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FactoryEntities");
+                    b.ToTable("FactoryEntities", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryFile", b =>
@@ -536,7 +536,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("FactoryFiles");
+                    b.ToTable("FactoryFiles", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryFinancial", b =>
@@ -605,7 +605,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryId");
 
-                    b.ToTable("FactoryFinancials");
+                    b.ToTable("FactoryFinancials", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryFinancialAttachment", b =>
@@ -647,7 +647,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryFinancialId");
 
-                    b.ToTable("FactoryFinancialAttachments");
+                    b.ToTable("FactoryFinancialAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryLocation", b =>
@@ -701,7 +701,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("FactoryLocations");
+                    b.ToTable("FactoryLocations", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryLocationAttachment", b =>
@@ -743,7 +743,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryLocationId");
 
-                    b.ToTable("FactoryLocationAttachments");
+                    b.ToTable("FactoryLocationAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryMonthlyFinancial", b =>
@@ -799,7 +799,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("FactoryMonthlyFinancials");
+                    b.ToTable("FactoryMonthlyFinancials", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.FactoryUpdateStatus", b =>
@@ -810,29 +810,17 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime?>("ApprovedAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int>("DataStatus")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("EnteredAt")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("PeriodId")
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("ReviewedAt")
-                        .HasColumnType("datetime2");
 
                     b.Property<bool>("UpdateStatus")
                         .HasColumnType("bit");
@@ -849,7 +837,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("FactoryUpdateStatuses");
+                    b.ToTable("FactoryUpdateStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.IndustrialArea", b =>
@@ -875,7 +863,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("CityId");
 
-                    b.ToTable("IndustrialAreas");
+                    b.ToTable("IndustrialAreas", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Factories.Entity.Phone", b =>
@@ -924,7 +912,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Phone");
+                    b.ToTable("Phone", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.General.Attachment", b =>
@@ -961,7 +949,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Attachments");
+                    b.ToTable("Attachments", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.General.City", b =>
@@ -990,7 +978,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryEntityId");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.General.MappingUnit", b =>
@@ -1011,7 +999,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MappingUnits");
+                    b.ToTable("MappingUnits", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.General.ReasonIncreasCapacity", b =>
@@ -1028,7 +1016,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ReasonIncreasCapacities");
+                    b.ToTable("ReasonIncreasCapacities", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.General.Setting", b =>
@@ -1049,7 +1037,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.General.Unit", b =>
@@ -1070,7 +1058,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Units");
+                    b.ToTable("Units", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InpectorFactoryContact.Entity.InspectFactoryContact", b =>
@@ -1080,10 +1068,6 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Comments")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -1129,7 +1113,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("InspectFactoryContacts");
+                    b.ToTable("InspectFactoryContacts", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorActualProduction.Entity.InspectActualProduction", b =>
@@ -1181,7 +1165,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryProductId");
 
-                    b.ToTable("InspectActualProductions");
+                    b.ToTable("InspectActualProductions", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorActualProduction.Entity.InspectActualProductionAttachment", b =>
@@ -1226,7 +1210,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryId");
 
-                    b.ToTable("InspectActualProductionAttachments");
+                    b.ToTable("InspectActualProductionAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity.InspectBasicFactoryInfo", b =>
@@ -1251,9 +1235,10 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("FactoryName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("FactoryStatus")
+                    b.Property<int>("FactoryStatus")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsFactNameCorrect")
@@ -1263,6 +1248,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("OwnerIdentity")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("PeriodId")
@@ -1280,7 +1266,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("InspectBasicFactoryInfos");
+                    b.ToTable("InspectBasicFactoryInfos", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity.InspectFactoryFile", b =>
@@ -1325,7 +1311,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryId");
 
-                    b.ToTable("InspectFactoryFiles");
+                    b.ToTable("InspectFactoryFiles", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorFactoryLocation.Entity.InspectFactoryLocation", b =>
@@ -1405,7 +1391,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("InspectFactoryLocations");
+                    b.ToTable("InspectFactoryLocations", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorFactoryLocation.Entity.InspectFactoryLocationAttachment", b =>
@@ -1447,7 +1433,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("FactoryLocationId");
 
-                    b.ToTable("InspectFactoryLocationAttachments");
+                    b.ToTable("InspectFactoryLocationAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorProductData.Entity.InspectProductDataAttachment", b =>
@@ -1486,7 +1472,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("InspectProductDataAttachments");
+                    b.ToTable("InspectProductDataAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorProductData.Entity.InspectProductPhoto", b =>
@@ -1544,7 +1530,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("InspectProductPhotos");
+                    b.ToTable("InspectProductPhotos", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorRawMaterials.Entity.InspectorRawMaterial", b =>
@@ -1565,16 +1551,10 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsClearImage")
                         .HasColumnType("bit");
 
                     b.Property<int?>("PaperId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("PeriodId")
                         .HasColumnType("int");
 
                     b.Property<int?>("PhotoId")
@@ -1591,48 +1571,9 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FactoryId");
-
-                    b.HasIndex("PeriodId");
-
                     b.HasIndex("RawMaterialId");
 
-                    b.ToTable("InspectorRawMaterials");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.InspectorRawMaterials.Entity.InspectorRawMaterialFile", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AttachmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PeriodId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RawMaterialId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AttachmentId");
-
-                    b.HasIndex("FactoryId");
-
-                    b.HasIndex("RawMaterialId");
-
-                    b.ToTable("InspectorRawMaterialFiles");
+                    b.ToTable("InspectorRawMaterials", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Inspectors.Entity.Inspector", b =>
@@ -1651,9 +1592,6 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("FactoryEntityId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -1677,11 +1615,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FactoryEntityId");
-
-                    b.ToTable("Inspectors");
                     b.ToTable("Inspectors", (string)null);
-                    b.ToTable("Inspectors");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Inspectors.Entity.InspectorFactory", b =>
@@ -1692,11 +1626,23 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("smalldatetime");
+
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
 
                     b.Property<int>("InspectorId")
                         .HasColumnType("int");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("smalldatetime");
 
                     b.HasKey("Id");
 
@@ -1704,7 +1650,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("InspectorId");
 
-                    b.ToTable("InspectorFactories");
+                    b.ToTable("InspectorFactories", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Periods.Period", b =>
@@ -1714,6 +1660,15 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("DataStatus")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateApprove")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("EnterDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("PeriodEndDate")
                         .HasColumnType("datetime2");
@@ -1725,9 +1680,12 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("PeriodStartDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("ReviewDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
-                    b.ToTable("Periods");
+                    b.ToTable("Periods", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.FactoryProduct", b =>
@@ -1775,7 +1733,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("FactoryProducts");
+                    b.ToTable("FactoryProducts", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.MappingProduct", b =>
@@ -1812,7 +1770,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("MappingProducts");
+                    b.ToTable("MappingProducts", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.Product", b =>
@@ -1869,7 +1827,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.ProductPeriodActive", b =>
@@ -1904,7 +1862,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("ProductPeriodActives");
+                    b.ToTable("ProductPeriodActives", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.ProductRawMaterial", b =>
@@ -1919,7 +1877,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("rawMaterialId");
 
-                    b.ToTable("ProductRawMaterials");
+                    b.ToTable("ProductRawMaterials", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", b =>
@@ -1978,7 +1936,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("UnitId");
 
-                    b.ToTable("RawMaterials");
+                    b.ToTable("RawMaterials", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.RawMaterialAttachment", b =>
@@ -2013,7 +1971,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("RawMaterialId");
 
-                    b.ToTable("RawMaterialAttachments");
+                    b.ToTable("RawMaterialAttachments", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ScreenStatus.Entity.ScreenStatus", b =>
@@ -2054,7 +2012,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("PeriodId");
 
-                    b.ToTable("ScreenStatuses");
+                    b.ToTable("ScreenStatuses", (string)null);
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.ActualProduction.Entity.ActualProductionAndCapacity", b =>
@@ -2625,67 +2583,13 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorRawMaterials.Entity.InspectorRawMaterial", b =>
                 {
-                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
-                        .WithMany()
-                        .HasForeignKey("FactoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
-                        .WithMany()
-                        .HasForeignKey("PeriodId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", "RawMaterial")
                         .WithMany()
                         .HasForeignKey("RawMaterialId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Factory");
-
-                    b.Navigation("Period");
-
                     b.Navigation("RawMaterial");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.InspectorRawMaterials.Entity.InspectorRawMaterialFile", b =>
-                {
-                    b.HasOne("Ebtdaa.Domain.General.Attachment", "Attachment")
-                        .WithMany()
-                        .HasForeignKey("AttachmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
-                        .WithMany()
-                        .HasForeignKey("FactoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Ebtdaa.Domain.RawMaterials.Entity.RawMaterial", "RawMaterial")
-                        .WithMany()
-                        .HasForeignKey("RawMaterialId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Attachment");
-
-                    b.Navigation("Factory");
-
-                    b.Navigation("RawMaterial");
-                });
-
-            modelBuilder.Entity("Ebtdaa.Domain.Inspectors.Entity.Inspector", b =>
-                {
-                    b.HasOne("Ebtdaa.Domain.Factories.Entity.FactoryEntity", "FactoryEntity")
-                        .WithMany()
-                        .HasForeignKey("FactoryEntityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("FactoryEntity");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Inspectors.Entity.InspectorFactory", b =>
