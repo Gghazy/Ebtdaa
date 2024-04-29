@@ -26,7 +26,8 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
 
         public async Task<BaseResponse<List<InspectActualProductionAttachResDto>>> GetAll(int factoryId, int periodId)
         {
-            var respose = _mapper.Map<List<InspectActualProductionAttachResDto>>(await _dbContext.InspectActualProductionAttachments.Include(x => x.Attachment).Where(x => x.FactoryId == factoryId).ToListAsync());
+            var respose = _mapper.Map<List<InspectActualProductionAttachResDto>>
+                (await _dbContext.InspectActualProductionAttachments.Include(x => x.Attachment).Where(x => x.FactoryId == factoryId).ToListAsync());
 
             return new BaseResponse<List<InspectActualProductionAttachResDto>>
             {

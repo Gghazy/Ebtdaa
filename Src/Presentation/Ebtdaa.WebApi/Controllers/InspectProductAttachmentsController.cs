@@ -33,6 +33,12 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _service.AddAsync(request));
         }
+        [HttpGet("ProductsFiles")]
+        public async Task<IActionResult> GetAllFiles(int factoryId)
+        {
+            return Ok(await _service.GetAllFiles(factoryId));
+
+        }
 
     }
 }

@@ -10,7 +10,7 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Interfaces
 {
     public interface IInspectFactoryLocationAttachService
     {
-        Task<BaseResponse<List<InspectFactoryLocationAttachResDto>>> GetAll(int id);
+        Task<BaseResponse<List<InspectFactoryLocationAttachResDto>>> GetAll(int factoryId, int periodId);
         Task<BaseResponse<InspectFactoryLocationAttachResDto>> AddAsync(InspectFactoryLocationAttachReqDto req);
     }
 }

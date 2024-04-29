@@ -72,6 +72,8 @@ using Ebtdaa.Application.InspectionProductData.Handlers;
 using Ebtdaa.Application.ReverseApproval.Handlers;
 using Ebtdaa.Application.InspectionBasicFactInfos.Validation;
 using Ebtdaa.Application.InspectionFactoryContact.Validation;
+using Ebtdaa.Application.InspectorScreenStatus.Interfaces;
+using Ebtdaa.Application.InspectorScreenStatus.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -129,6 +131,8 @@ namespace Ebtdaa.Application
             services.AddScoped<IInspectFactoryContactService, InspectFactoryContactService>();
             services.AddScoped<IInspectFactoryLocationService, InspectFactoryLocationService>();
             services.AddScoped<IInspectorRawMaterialFileService, InspectorRawMaterialFileService > ();
+            services.AddScoped<IInspectorScreenStatusService, InspectorScreenStatusService > ();
+            services.AddScoped<IInspectProductDataAttachService, InspectProductDataAttachService > ();
 
 
             #endregion

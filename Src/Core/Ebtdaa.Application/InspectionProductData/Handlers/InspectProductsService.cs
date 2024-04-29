@@ -4,7 +4,9 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.InspectionProductData.Dtos;
 using Ebtdaa.Application.InspectionProductData.Interfaces;
 using Ebtdaa.Domain.InspectorProductData.Entity;
+using Ebtdaa.Domain.ProductData.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,43 +24,54 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public async Task<BaseResponse<InspectProductsResultDto>> GetOne(int factoryId, int periodId, string ownerIdentity)
+        public async  Task<BaseResponse<List<InspectProductsResultDto>>> GetProducts(int factoryId, int periodId)
         {
-            var getInspectData = await _dbContext.InspectProductPhotos.FirstOrDefaultAsync(i => i.FactoryId == factoryId && i.CreatedBy == ownerIdentity);
-            if (getInspectData == null)
+            var getInspectData = await _dbContext.InspectProductPhotos
+                .Include(x => x.Product).Where(i => i.FactoryId == factoryId 
+                                && i.PeriodId == periodId).ToListAsync();
+            if (getInspectData.Count == 0)
             {
-                var result = await _dbContext.FactoryProducts.Include(x => x.Product).ThenInclude(x => x.Unit).FirstOrDefaultAsync(x => x.FactoryId == factoryId);
+                var result = await _dbContext.FactoryProducts
+                    .Include(x => x.Product).Where(x => x.FactoryId == factoryId )
+                    .Select(x=> new InspectProductsResultDto()
+                    {
+                        FactoryId = factoryId,
+                        PeriodId=periodId,
+                        ProductId = x.ProductId,
+                        PhotoId = x.PhototId ?? 0,
+                        ProductName = x.Product.ProductName+ x.Product.Level12Number,
+                        IsProductPhotoCorrect = true,
+                        Comments = "",
+                        NewProductPhotoId = 0,
 
-                var mapData = new InspectProductsResultDto()
-                {
-                    FactoryId = factoryId,
-                    Id = result.Id,
-                    ProductId = result.ProductId,
-                    ProductPhotoId = result.PhototId
-                };
-                var response = _mapper.Map<InspectProductsResultDto>(mapData);
+                    }  )
+                    .ToListAsync();
+                var response = _mapper.Map< List< InspectProductsResultDto>>(result);
 
-                return new BaseResponse<InspectProductsResultDto>
+                return new BaseResponse<List<InspectProductsResultDto>>
                 {
                     Data = response
                 };
             }
             else
             {
-                var Inspectresponse = _mapper.Map<InspectProductsResultDto>(getInspectData);
+                var Inspectresponse = _mapper.Map<List<InspectProductsResultDto>>(getInspectData);
 
 
 
-                return new BaseResponse<InspectProductsResultDto>
+                return new BaseResponse<List<InspectProductsResultDto>>
                 {
                     Data = Inspectresponse
                 };
             }
-            
+
+
+              
         }
 
         public async Task<BaseResponse<bool>> AddAsync(InspectProductsRequestDto request)
         {
+            
             var factoryProduct = new InspectProductPhoto();
             factoryProduct.ProductId = request.ProductId;
             factoryProduct.PhotoId = request.PhotoId;
@@ -76,7 +89,7 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             {
                 Data = true
             };
-
+           
         }
 
         public async Task<BaseResponse<bool>> UpdateAsync(InspectProductsRequestDto req)

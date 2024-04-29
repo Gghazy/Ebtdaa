@@ -10,7 +10,8 @@ namespace Ebtdaa.Application.InspectionProductData.Dtos
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public int InspectProductId { get; set; }
+        public int PeriodId { get; set; }
+        public int FactoryId { get; set; }
         public int AttachmentId { get; set; }
         public string Name { get; set; }
     }

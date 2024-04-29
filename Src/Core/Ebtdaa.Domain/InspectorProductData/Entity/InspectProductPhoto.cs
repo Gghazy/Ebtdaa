@@ -15,7 +15,7 @@ namespace Ebtdaa.Domain.InspectorProductData.Entity
         public int Id { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
-        public int? PhotoId { get; set; }
+        public int PhotoId { get; set; }
         public int ProductId { get; set; }
         public bool IsProductPhotoCorrect { get; set; } = false;
         public int? NewProductPhotoId { get; set; }

@@ -10,6 +10,7 @@ namespace Ebtdaa.Application.InspectionProductData.Interfaces
 {
     public interface IInspectProductDataAttachService
     {
+        Task<BaseResponse<List<InspectProductAttachResDto>>> GetAllFiles(int factoryid);
         Task<BaseResponse<List<InspectProductAttachResDto>>> GetAll(int id);
         Task<BaseResponse<InspectProductAttachResDto>> AddAsync(InspectProductAttachReqDto req);
     }

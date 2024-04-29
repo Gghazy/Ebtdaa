@@ -3,6 +3,7 @@ using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.InspectionActualProduction.Dtos;
 using Ebtdaa.Application.InspectionActualProduction.Interfaces;
+using Ebtdaa.Application.InspectionProductData.Dtos;
 using Ebtdaa.Domain.InspectorActualProduction.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -24,39 +25,56 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<InspectActualProductionResultDto>> GetOne(int factoryId , int periodId , string ownerIdentity)
+        public async Task<BaseResponse<List<InspectActualProductionResultDto>>> GetAll(int factoryId, int periodId)
         {
-            var getForInspector = await _dbContext.InspectActualProductions.FirstOrDefaultAsync(x => x.FactoryId==factoryId && x.PeriodId == periodId && x.CreatedBy == ownerIdentity);
-             if (getForInspector == null)
-             {
-                var result = await _dbContext.ActualProductionAndCapacities
-                                         .FirstOrDefaultAsync(x => x.PeriodId == periodId);
-                var map = new InspectActualProductionResultDto()
-                {
-                    Id = result.Id,
-                    ActualProductionUintId = result.ActualProductionUintId,
-                    ActualProduction = result.ActualProduction,
-                    DesignedCapacity = result.DesignedCapacity,
-                    DesignedCapacityUnitId = result.DesignedCapacityUnitId,
-                    FactoryId = factoryId,
-                    PeriodId = periodId,
-                    FactoryProductId = result.FactoryProductId
-                };
-                var response = _mapper.Map<InspectActualProductionResultDto>(map);
+            var getInspectData = await _dbContext.InspectActualProductions
+                          .Include(x => x.FactoryProduct)
+                          .ThenInclude(x=>x.Product)
+                          .Where(i => i.FactoryId == factoryId
+                                          && i.PeriodId == periodId).ToListAsync();
 
-                return new BaseResponse<InspectActualProductionResultDto>
+            if (getInspectData.Count == 0)
+            {
+                var result = await _dbContext.ActualProductionAndCapacities
+                    .Include(x => x.FactoryProduct)
+                    .Where(x => x.FactoryProduct.FactoryId == factoryId && x.PeriodId == periodId)
+                    .Select(x => new InspectActualProductionResultDto()
+                    {
+                        ActualProductionUintId = x.ActualProductionUintId ?? 0,
+                        ActualProduction = x.ActualProduction ?? 0,
+                        DesignedCapacity = x.DesignedCapacity ?? 0,
+                        DesignedCapacityUnitId = x.DesignedCapacityUnitId ?? 0,
+                        FactoryId = factoryId,
+                        PeriodId = periodId,
+                        FactoryProductId = x.FactoryProductId,
+                        ProductName = x.FactoryProduct.Product.ProductName,
+                        IsActualProductionCorrect=true,
+                        IsDesignedCapacityCorrect=true,
+                        CorrectActualProduction=0,
+                        CorrectDesignedCapacity=0,
+                        Comments=""
+                    })
+                    .ToListAsync();
+                var response = _mapper.Map< List<InspectActualProductionResultDto>>(result);
+
+                return new BaseResponse<List<InspectActualProductionResultDto>>
                 {
-                    Data = map != null ? response : new InspectActualProductionResultDto()
+                    Data =  response
                 };
-             }
+
+            }
+
             else
             {
-                return new BaseResponse<InspectActualProductionResultDto>
+                var Inspectresponse = _mapper.Map<List<InspectActualProductionResultDto>>(getInspectData);
+
+                return new BaseResponse<List<InspectActualProductionResultDto>>
                 {
-                    Data = _mapper.Map<InspectActualProductionResultDto>(getForInspector) 
+                    Data = Inspectresponse
                 };
             }
         }
+          
 
         public async Task<BaseResponse<InspectActualProductionResultDto>> AddAsync(InspectActualProductionReqDto request)
         {

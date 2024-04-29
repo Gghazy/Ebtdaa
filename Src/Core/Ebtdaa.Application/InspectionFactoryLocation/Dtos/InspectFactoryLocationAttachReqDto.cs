@@ -13,6 +13,7 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Dtos
         public FactoryLocationAttachmentType Type { get; set; }
         public string Name { get; set; }
         public int AttachmentId { get; set; }
-        public int FactoryLocationId { get; set; }
+        public int FactoryId { get; set; }
+        public int PeriodId { get; set; }
     }
 }

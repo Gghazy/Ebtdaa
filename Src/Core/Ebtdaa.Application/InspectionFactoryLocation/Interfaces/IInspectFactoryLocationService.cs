@@ -11,7 +11,7 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Interfaces
 {
     public interface IInspectFactoryLocationService
     {
-        Task<BaseResponse<InspectFactoryLocationResDto>> GetOne(int factoryId);
+        Task<BaseResponse<InspectFactoryLocationResDto>> GetAll(int factoryId, int periodId);
         Task<BaseResponse<InspectFactoryLocationResDto>> UpdateAsync(InspectFactoryLocationReqDto req);
         Task<BaseResponse<InspectFactoryLocationResDto>> AddAsync(InspectFactoryLocationReqDto req);
     }

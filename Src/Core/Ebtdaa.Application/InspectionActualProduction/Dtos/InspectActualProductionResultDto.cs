@@ -12,10 +12,15 @@ namespace Ebtdaa.Application.InspectionActualProduction.Dtos
         public int FactoryProductId { get; set; }
         public string ProductName { get; set; }
 
-        public int? DesignedCapacity { get; set; }
-        public int? ActualProduction { get; set; }
-        public int? DesignedCapacityUnitId { get; set; }
-        public int? ActualProductionUintId { get; set; }
+        public int DesignedCapacity { get; set; }
+        public int ActualProduction { get; set; }
+        public int DesignedCapacityUnitId { get; set; }
+        public int ActualProductionUintId { get; set; }
+        public bool IsDesignedCapacityCorrect { get; set; }
+        public bool IsActualProductionCorrect { get; set; }
+        public int? CorrectDesignedCapacity { get; set; }
+        public int? CorrectActualProduction { get; set; }
+        public string Comments { get; set; }
         public int PeriodId { get; set; }
         public int FactoryId { get; set; }
     }

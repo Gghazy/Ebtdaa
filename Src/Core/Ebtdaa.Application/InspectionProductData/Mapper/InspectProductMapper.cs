@@ -13,15 +13,23 @@ namespace Ebtdaa.Application.InspectionProductData.Mapper
 {
     public class InspectProductMapper : Profile
     {
+   	
+	
         public InspectProductMapper() 
         {
             CreateMap<InspectProductsRequestDto, InspectProductPhoto>();
-            CreateMap<InspectProductPhoto, InspectProductsResultDto>();
+            CreateMap<InspectProductPhoto, InspectProductsResultDto>()
+                  .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.Product.ProductName + src.Product.Level12Number));
+
+
 
             CreateMap<InspectProductDataAttachment, InspectProductAttachResDto>()
                 .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path))
                 .ForMember(d => d.Extension, opt => opt.MapFrom(src => src.Attachment.Extension));
+               // .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.Product.ProductName));
+
             CreateMap<InspectProductAttachReqDto, InspectProductDataAttachment>();
+           
 
         }
     }

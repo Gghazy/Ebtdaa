@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240427113033_nullableFields")]
+    partial class nullableFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1383,13 +1385,13 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<bool>("IsIndustrialAreaCorrect")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("NewCityId")
+                    b.Property<int>("NewCityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("NewFactoryEntityId")
+                    b.Property<int>("NewFactoryEntityId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("NewIndustrialAreaId")
+                    b.Property<int>("NewIndustrialAreaId")
                         .HasColumnType("int");
 
                     b.Property<string>("NewWebSite")
@@ -1441,15 +1443,12 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int>("FactoryId")
+                    b.Property<int>("FactoryLocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PeriodId")
-                        .HasColumnType("int");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -1464,7 +1463,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     b.HasIndex("AttachmentId");
 
-                    b.HasIndex("FactoryId");
+                    b.HasIndex("FactoryLocationId");
 
                     b.ToTable("InspectFactoryLocationAttachments");
                 });
@@ -2591,15 +2590,15 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
+                    b.HasOne("Ebtdaa.Domain.Factories.Entity.FactoryLocation", "FactoryLocation")
                         .WithMany()
-                        .HasForeignKey("FactoryId")
+                        .HasForeignKey("FactoryLocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Attachment");
 
-                    b.Navigation("Factory");
+                    b.Navigation("FactoryLocation");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.InspectorProductData.Entity.InspectProductDataAttachment", b =>

@@ -21,9 +21,9 @@ namespace Ebtdaa.Domain.InspectorFactoryLocation.Entity
         public bool IsFactoryEntityCorrect { get; set; }
         public bool IsCityCorrect { get; set; }
         public bool IsIndustrialAreaCorrect { get; set; }
-        public int NewFactoryEntityId { get; set; }
-        public int NewCityId { get; set; }
-        public int NewIndustrialAreaId { get; set; }
+        public int? NewFactoryEntityId { get; set; }
+        public int? NewCityId { get; set; }
+        public int? NewIndustrialAreaId { get; set; }
         public string NewWebSite { get; set; }
         public string Comment {  get; set; }
 

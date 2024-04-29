@@ -24,10 +24,12 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<List<InspectFactoryLocationAttachResDto>>> GetAll(int id)
+        public async Task<BaseResponse<List<InspectFactoryLocationAttachResDto>>> GetAll(int FactoryId, int periodId)
         {
             var response = _mapper.Map<List<InspectFactoryLocationAttachResDto>>(
-                await _dbContext.InspectFactoryLocationAttachments.Include(x => x.Attachment).ToListAsync());
+                await _dbContext.InspectFactoryLocationAttachments
+                .Where(x=>x.FactoryId == FactoryId   && x.PeriodId== periodId)
+                .Include(x => x.Attachment).ToListAsync());
 
             return new BaseResponse<List<InspectFactoryLocationAttachResDto>>
             {
