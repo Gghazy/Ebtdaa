@@ -31,14 +31,29 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Handlers
 
         public async Task<BaseResponse<InspectFactContactResultDto>> GetOne(int factoryId , int periodId,string ownerIdentity)
         {
-            var checkIsExist = await _dbContext.InspectFactoryContacts.FirstOrDefaultAsync(i => i.FactoryId == factoryId && i.PeriodId == periodId && i.CreatedBy == ownerIdentity);
-            if (checkIsExist == null) 
+            var checkIsExist = await _dbContext.InspectFactoryContacts
+                .Include(x=>x.Factory.FactoryContacts)
+                .ThenInclude(x=>x.OfficerPhone)
+                .FirstOrDefaultAsync(i => i.FactoryId == factoryId && i.PeriodId == periodId && i.CreatedBy == ownerIdentity);
+           
+                if (checkIsExist == null) 
             {
                 var resualt = await _dbContext.FactoryContacts
-                .Include(x => x.FinanceManagerPhone)
                 .Include(x => x.OfficerPhone)
-                .Include(x => x.ProductionManagerPhone)
-                .FirstOrDefaultAsync(x => x.FactoryId == factoryId);
+                .Select(x => new InspectFactContactResultDto()
+                 {
+                     FactoryId = factoryId,
+                     PeriodId = periodId,
+                     OldOfficerPhoneId = x.OfficerPhone.NationalNumber,
+                     OldOfficerEmail = x.OfficerEmail ,
+                   IsOfficerMailCorrect=true,
+                    IsOfficerPhoneCorrect = true,
+                    NewOfficerEmail = "",
+                    NewOfficerPhoneId ="",
+                    Comments = "",
+
+                 })
+                .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
                 return new BaseResponse<InspectFactContactResultDto>
                 {
@@ -53,6 +68,7 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Handlers
                     Data = checkIsExist != null ? _mapper.Map<InspectFactContactResultDto>(checkIsExist) : new InspectFactContactResultDto()
                 };
             }
+           
         }
 
         public async Task<BaseResponse<InspectFactContactResultDto>> AddAsync(InspectFactContactRequestDto req)

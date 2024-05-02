@@ -14,11 +14,11 @@ namespace Ebtdaa.Domain.InpectorFactoryContact.Entity
         public int Id { get; set; }
         public int FactoryId {  get; set; }
         public int PeriodId { get; set; }
-        public int OldOfficerPhoneId { get; set; }
+        public string OldOfficerPhoneId { get; set; }
         public string OldOfficerEmail { get; set; }
         public bool IsOfficerPhoneCorrect { get; set; }
         public bool IsOfficerMailCorrect { get; set; }
-        public int NewOfficerPhoneId { get; set; }
+        public string NewOfficerPhoneId { get; set; }
         public string NewOfficerEmail { get; set; }
         public string Comments { get; set; }
 
