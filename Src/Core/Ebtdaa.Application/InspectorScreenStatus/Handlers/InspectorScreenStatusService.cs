@@ -81,17 +81,13 @@ namespace Ebtdaa.Application.InspectorScreenStatus.Handlers
 
         private async Task<bool> CheckFactoryProductScreenStatus(int factoryId, int periodId)
         {
-            bool screenStatus = false;
+            
 
             var result = await _dbContext.InspectProductPhotos
                 .AnyAsync(x => x.PeriodId == periodId && x.FactoryId == factoryId);
 
-            var attachment = await _dbContext.InspectProductDataAttachments
-                .Include(x => x.Attachment)
-                .AnyAsync(x => x.AttachmentId == x.Attachment.Id);
-             
-
-            screenStatus = result && attachment ? true : false;
+            bool screenStatus = false;
+            screenStatus = result ? true : false;
 
             return screenStatus;
         }

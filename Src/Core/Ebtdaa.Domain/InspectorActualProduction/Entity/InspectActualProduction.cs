@@ -21,8 +21,10 @@ namespace Ebtdaa.Domain.InspectorActualProduction.Entity
         public bool IsActualProductionCorrect { get; set; }
         public int? CorrectDesignedCapacity { get; set; }
         public int? CorrectActualProduction { get; set; }
+        public int IncreaseReasonId { get; set; }
+        public int? IncreaseReasonCorrect { get; set; }
+        public bool IsIncreaseReasonCorrect { get; set; }
         public string Comments { get; set; }
-
         public int PeriodId { get; set; }
         public int FactoryId {  get; set; }
 

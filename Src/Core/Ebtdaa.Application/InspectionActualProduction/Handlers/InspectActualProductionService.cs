@@ -25,13 +25,13 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<List<InspectActualProductionResultDto>>> GetAll(int factoryId, int periodId)
+        public async Task<BaseResponse<List<InspectActualProductionResultDto>>> GetAll(int factoryId, int periodId, string OwnerIdentity)
         {
             var getInspectData = await _dbContext.InspectActualProductions
                           .Include(x => x.FactoryProduct)
                           .ThenInclude(x=>x.Product)
                           .Where(i => i.FactoryId == factoryId
-                                          && i.PeriodId == periodId).ToListAsync();
+                                          && i.PeriodId == periodId && i.CreatedBy==OwnerIdentity).ToListAsync();
 
             if (getInspectData.Count == 0)
             {
@@ -52,6 +52,10 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
                         IsDesignedCapacityCorrect=true,
                         CorrectActualProduction=0,
                         CorrectDesignedCapacity=0,
+                        IsIncreaseReasonCorrect=true,
+                        IncreaseReasonCorrect=0,
+                        IncreaseReasonId=0,
+                        IncreaseReason="",
                         Comments=""
                     })
                     .ToListAsync();

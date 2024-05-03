@@ -10,7 +10,7 @@ namespace Ebtdaa.Application.InspectionProductData.Interfaces
 {
     public interface IInspectProductsService
     {
-        Task<BaseResponse<List<InspectProductsResultDto>>> GetProducts(int factoryId, int periodId);
+        Task<BaseResponse<List<InspectProductsResultDto>>> GetProducts(int factoryId, int periodId, string ownerIdentity);
         Task<BaseResponse<bool>> AddAsync(InspectProductsRequestDto request);
         Task<BaseResponse<bool>> UpdateAsync(InspectProductsRequestDto request);
     }

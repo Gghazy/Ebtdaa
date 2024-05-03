@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Ebtdaa.Application.ActualProduction.Dtos;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.InspectionActualProduction.Dtos;
@@ -24,10 +25,11 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<List<InspectActualProductionAttachResDto>>> GetAll(int factoryId, int periodId)
+        public async Task<BaseResponse<List<InspectActualProductionAttachResDto>>> GetAll(int factoryId, int periodId, string OwnerIdentity)
         {
             var respose = _mapper.Map<List<InspectActualProductionAttachResDto>>
-                (await _dbContext.InspectActualProductionAttachments.Include(x => x.Attachment).Where(x => x.FactoryId == factoryId).ToListAsync());
+                (await _dbContext.InspectActualProductionAttachments.Include(x => x.Attachment)
+                .Where(x => x.FactoryId == factoryId && x.CreatedBy == OwnerIdentity).ToListAsync());
 
             return new BaseResponse<List<InspectActualProductionAttachResDto>>
             {
@@ -49,6 +51,21 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
             {
                 Data = _mapper.Map<InspectActualProductionAttachResDto>(file)
             };
+        }
+
+        public async Task<BaseResponse<InspectActualProductionAttachResDto>> DeleteAsync(int id)
+        {
+            var file = await _dbContext.InspectActualProductionAttachments.FindAsync(id);
+
+            _dbContext.InspectActualProductionAttachments.Remove(file);
+
+            await _dbContext.SaveChangesAsync();
+
+            return new BaseResponse<InspectActualProductionAttachResDto>
+            {
+                Data = _mapper.Map<InspectActualProductionAttachResDto>(file)
+            };
+        
         }
     }
 }

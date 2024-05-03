@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240502081929_paperIdInProduct")]
+    partial class paperIdInProduct
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1176,19 +1178,10 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("FactoryProductId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IncreaseReasonCorrect")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IncreaseReasonId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsActualProductionCorrect")
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsDesignedCapacityCorrect")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsIncreaseReasonCorrect")
                         .HasColumnType("bit");
 
                     b.Property<int>("PeriodId")

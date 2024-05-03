@@ -19,9 +19,9 @@ namespace Ebtdaa.WebApi.Controllers
 
         // GET: api/<InspectActualProductionAttchsController>
         [HttpGet]
-        public async Task<IActionResult> GetAll(int factoryId, int periodId)
+        public async Task<IActionResult> GetAll(int factoryId, int periodId, string ownerIdentity)
         {
-            return Ok(await _service.GetAll(factoryId, periodId));
+            return Ok(await _service.GetAll(factoryId, periodId,  ownerIdentity));
 
         }
 
@@ -30,6 +30,11 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _service.AddAsync(request));
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            return Ok(await _service.DeleteAsync(id));
 
+        }
     }
 }

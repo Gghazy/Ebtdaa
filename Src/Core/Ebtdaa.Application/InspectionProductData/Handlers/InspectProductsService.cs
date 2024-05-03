@@ -24,11 +24,11 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             _dbContext = dbContext;
             _mapper = mapper;
         }
-        public async  Task<BaseResponse<List<InspectProductsResultDto>>> GetProducts(int factoryId, int periodId)
+        public async  Task<BaseResponse<List<InspectProductsResultDto>>> GetProducts(int factoryId, int periodId , string ownerIdentity)
         {
             var getInspectData = await _dbContext.InspectProductPhotos
                 .Include(x => x.Product).Where(i => i.FactoryId == factoryId 
-                                && i.PeriodId == periodId).ToListAsync();
+                                && i.PeriodId == periodId && i.CreatedBy == ownerIdentity).ToListAsync();
             if (getInspectData.Count == 0)
             {
                 var result = await _dbContext.FactoryProducts
@@ -39,10 +39,12 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
                         PeriodId=periodId,
                         ProductId = x.ProductId,
                         PhotoId = x.PhototId ?? 0,
+                        PaperId = x.PeperId ?? 0,
                         ProductName = x.Product.ProductName+ x.Product.Level12Number,
                         IsProductPhotoCorrect = true,
                         Comments = "",
                         NewProductPhotoId = 0,
+                        NewProductPaperId = 0,
 
                     }  )
                     .ToListAsync();
@@ -77,9 +79,11 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             factoryProduct.PhotoId = request.PhotoId;
             factoryProduct.FactoryId = request.FactoryId;
             factoryProduct.ProductId = request.ProductId;
+            factoryProduct.PaperId = request.PaperId;
             factoryProduct.IsProductPhotoCorrect = request.IsProductPhotoCorrect;
             factoryProduct.Comments = request.Comments;
             factoryProduct.NewProductPhotoId = request.NewProductPhotoId;
+            factoryProduct.NewProductPaperId = request.NewProductPaperId;
             factoryProduct.PeriodId = request.PeriodId;
 
             
@@ -101,6 +105,7 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             factoryProduct.IsProductPhotoCorrect = req.IsProductPhotoCorrect;
             factoryProduct.Comments = req.Comments;
             factoryProduct.NewProductPhotoId= req.NewProductPhotoId;
+            factoryProduct.NewProductPaperId= req.NewProductPaperId;
 
             await _dbContext.SaveChangesAsync();
 

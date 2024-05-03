@@ -12,6 +12,8 @@ namespace Ebtdaa.Application.InspectionActualProduction.Interfaces
     public interface IInspectActualProductionAttachService
     {
         Task<BaseResponse<InspectActualProductionAttachResDto>> AddAsync(InspectActualProductionAttachReqDto result);
-        Task<BaseResponse<List<InspectActualProductionAttachResDto>>> GetAll(int factoryId, int periodId);
+        Task<BaseResponse<List<InspectActualProductionAttachResDto>>> GetAll(int factoryId, int periodId, string OwnerIdentity);
+        Task<BaseResponse<InspectActualProductionAttachResDto>> DeleteAsync(int id);
+
     }
 }
