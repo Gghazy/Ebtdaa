@@ -16,9 +16,9 @@ namespace Ebtdaa.WebApi.Controllers
 
         // GET: api/<InspectBaiscDatasController>
         [HttpGet]
-        public async Task<IActionResult> GetOne(int factoryId, int periodId, string ownerIdentity)
+        public async Task<IActionResult> GetAll(int factoryId, int periodId, string ownerIdentity)
         {
-            return Ok(await _inspectBasicFactInfoService.GetOne(factoryId, periodId, ownerIdentity));
+            return Ok(await _inspectBasicFactInfoService.GetAll(factoryId, periodId, ownerIdentity));
 
         }
 

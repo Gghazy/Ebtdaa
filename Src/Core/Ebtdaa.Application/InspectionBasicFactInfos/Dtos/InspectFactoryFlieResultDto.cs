@@ -10,7 +10,7 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Dtos
     public class InspectFactoryFlieResultDto
     {
         public int Id { get; set; }
-        public FactoryFileType Type { get; set; }
+        public string Type { get; set; }
         public int AttachmentId { get; set; }
         public string Name { get; set; }
         public int FactoryId { get; set; }

@@ -26,9 +26,10 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<InspectBasicFactInfoResultDto>> GetOne(int factoryId, int periodId , string OwnerIdentity)
+        public async Task<BaseResponse<InspectBasicFactInfoResultDto>> GetAll(int factoryId, int periodId , string OwnerIdentity)
         {
-            var checkIsExist = await _dbContext.InspectBasicFactoryInfos.FirstOrDefaultAsync(i => i.FactoryId == factoryId && i.PeriodId == periodId && i.OwnerIdentity == OwnerIdentity);
+            var checkIsExist = await _dbContext.InspectBasicFactoryInfos
+                .FirstOrDefaultAsync(i => i.FactoryId == factoryId && i.PeriodId == periodId && i.CreatedBy == OwnerIdentity);
             if (checkIsExist == null)
             {
                 var resualt = await _dbContext.Factories
@@ -37,11 +38,27 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
                 if (resualt.BaiscFactoryInfos != null)
                 {
 
-                    var basicinfo = resualt.BaiscFactoryInfos.FirstOrDefault(x => x.PeriodId == periodId);
-                    if (basicinfo != null)
-                    {
-                        resualt.Status = basicinfo.FactoryStatusId;
-                    }
+                    var basicinfo = resualt.BaiscFactoryInfos
+                        .Where(x => x.PeriodId == periodId)
+                        .Select(x=> new InspectBasicFactInfoResultDto
+                        {
+                            FactoryId= factoryId, 
+                            PeriodId= periodId,
+                            IsFactNameCorrect= true,
+                            IsFactStatusCorrect= true,
+                            FactoryStatus= x.FactoryStatusId,
+                            FactoryName= x.Factory.NameAr,
+                            Comments= "",
+                            OwnerIdentity = x.Factory.OwnerIdentity
+
+
+
+
+                        });
+                    //if (basicinfo != null)
+                    //{
+                    //    resualt.Status = basicinfo.FactoryStatusId;
+                    //}
 
                 }
                 return new BaseResponse<InspectBasicFactInfoResultDto>
@@ -80,8 +97,8 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
             var inspectFactUpdated = _mapper.Map(req, inspectFact);
 
             //// Validation
-            var result = await _validations.ValidateAsync(inspectFactUpdated);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
+          //  var result = await _validations.ValidateAsync(inspectFactUpdated);
+            //if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
 

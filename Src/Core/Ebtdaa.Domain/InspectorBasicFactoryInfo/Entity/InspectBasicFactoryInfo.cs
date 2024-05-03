@@ -20,6 +20,9 @@ namespace Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity
         public string? FactoryName { get; set; }
         public string? OwnerIdentity { get; set; }
         public string Comments { get; set; }
+        public string? CorrectFactoryName { get; set; }
+        public int? CorrectFactoryStatus { get; set; }
+
         public FactoryStatusEnum? FactoryStatus { get; set; }
 
         public virtual Factory Factory { get; set; }

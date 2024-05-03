@@ -1,4 +1,5 @@
 ﻿using Ebtdaa.Application.Common.Dtos;
+using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.InspectionBasicFactInfos.Dtos;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,6 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Interfaces
     {
         Task<BaseResponse<List<InspectFactoryFlieResultDto>>> GetAll(int factoryId, int periodId);
         Task<BaseResponse<InspectFactoryFlieResultDto>> AddAsync(InspectFactoryFlieRequestDto req);
+        Task<BaseResponse<InspectFactoryFlieResultDto>> DeleteAsync(int id);
     }
 }

@@ -28,6 +28,7 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
         }
         public async Task<BaseResponse<List<InspectFactoryFlieResultDto>>> GetAll(int factoryId, int periodId)
         {
+        
             var inspectorRespose = _mapper.Map<List<InspectFactoryFlieResultDto>>(
                 await _dbContext.InspectFactoryFiles.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).Include(x => x.Attachment).ToListAsync()
 
@@ -51,12 +52,27 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
                     Data = inspectorRespose
                 };
             }
+            
         }
         public async Task<BaseResponse<InspectFactoryFlieResultDto>> AddAsync(InspectFactoryFlieRequestDto req)
         {
             InspectFactoryFile factoryFile = _mapper.Map<InspectFactoryFile>(req);
           
             await _dbContext.InspectFactoryFiles.AddAsync(factoryFile);
+
+            await _dbContext.SaveChangesAsync();
+            return new BaseResponse<InspectFactoryFlieResultDto>
+            {
+                Data = _mapper.Map<InspectFactoryFlieResultDto>(factoryFile)
+            };
+        }
+
+
+        public async Task<BaseResponse<InspectFactoryFlieResultDto>> DeleteAsync(int id)
+        {
+            var factoryFile = await _dbContext.InspectFactoryFiles.FindAsync(id);
+
+            _dbContext.InspectFactoryFiles.Remove(factoryFile);
 
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<InspectFactoryFlieResultDto>
