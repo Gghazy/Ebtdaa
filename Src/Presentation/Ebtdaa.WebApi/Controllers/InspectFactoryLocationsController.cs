@@ -17,9 +17,9 @@ namespace Ebtdaa.WebApi.Controllers
 
 
         [HttpGet]
-        public async Task<IActionResult> GetAll(int factoryId, int periodId)
+        public async Task<IActionResult> GetAll(int factoryId, int periodId, string ownerIdentity)
         {
-            return Ok(await _InspectFactoryLocationservice.GetAll(factoryId,periodId));
+            return Ok(await _InspectFactoryLocationservice.GetAll(factoryId,periodId,ownerIdentity));
 
         }
 

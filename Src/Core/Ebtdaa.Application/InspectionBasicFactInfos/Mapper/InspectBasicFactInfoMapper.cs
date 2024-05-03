@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.InspectionBasicFactInfos.Dtos;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.InspectorBasicFactoryInfo.Entity;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Mapper
         public InspectBasicFactInfoMapper() 
         {
             CreateMap<InspectBasicFactoryInfo, InspectBasicFactInfoResultDto>();
+            CreateMap<Factory, InspectBasicFactInfoResultDto>();
+            CreateMap<BaiscFactoryInfo, InspectBasicFactInfoResultDto>();
             CreateMap<InspectBasicFactInfoRequestDto, InspectBasicFactoryInfo>();
 
 

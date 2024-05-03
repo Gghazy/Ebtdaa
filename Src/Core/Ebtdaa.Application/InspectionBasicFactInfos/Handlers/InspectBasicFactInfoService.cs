@@ -39,7 +39,7 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
                 {
 
                     var basicinfo = resualt.BaiscFactoryInfos
-                        .Where(x => x.PeriodId == periodId)
+                        .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
                         .Select(x=> new InspectBasicFactInfoResultDto
                         {
                             FactoryId= factoryId, 
@@ -54,13 +54,14 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
 
 
 
-                        });
-                    //if (basicinfo != null)
-                    //{
-                    //    resualt.Status = basicinfo.FactoryStatusId;
-                    //}
+                        }).FirstOrDefault();
 
+                    return new BaseResponse<InspectBasicFactInfoResultDto>
+                    {
+                        Data = _mapper.Map<InspectBasicFactInfoResultDto>(basicinfo)
+                    };
                 }
+
                 return new BaseResponse<InspectBasicFactInfoResultDto>
                 {
                     Data = _mapper.Map<InspectBasicFactInfoResultDto>(resualt)

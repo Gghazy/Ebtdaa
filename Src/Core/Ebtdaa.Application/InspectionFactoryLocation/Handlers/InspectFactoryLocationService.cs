@@ -25,10 +25,11 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Handlers
             _mapper = mapper;
         }
 
-        public async Task<BaseResponse<InspectFactoryLocationResDto>> GetAll(int factoryId, int periodId)
+        public async Task<BaseResponse<InspectFactoryLocationResDto>> GetAll(int factoryId, int periodId, string ownerIdentity)
         {
             var inspectResult = _dbContext.InspectFactoryLocations
-                .Where(i => i.FactoryId == factoryId && i.PeriodId == periodId).FirstOrDefaultAsync();
+                .Where(i => i.FactoryId == factoryId 
+                && i.PeriodId == periodId && i.CreatedBy == ownerIdentity).FirstOrDefault();
             if (inspectResult != null) 
             {
                 return new BaseResponse<InspectFactoryLocationResDto>
@@ -42,21 +43,22 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Handlers
                     .Select(x=> new InspectFactoryLocationResDto
                     {
                          FactoryId=factoryId,
-       PeriodId =periodId,
-       FactoryEntityId =x.FactoryEntityId,
-      CityId =x.CityId,
-        IndustrialAreaId =x.IndustrialAreaId,
-      WebSite =x.WebSite,
-      IsFactoryEntityCorrect =true,
-      IsCityCorrect =true,
-       IsIndustrialAreaCorrect =true,
-        NewFactoryEntityId =0,
-      NewCityId =0,
-       NewIndustrialAreaId =0,
-       NewWebSite ="",
-       Comment =""
-    })
-                    .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId==periodId);
+                         PeriodId =periodId,
+                         FactoryEntityId =x.FactoryEntityId,
+                         CityId =x.CityId,
+                         IndustrialAreaId =x.IndustrialAreaId,
+                         WebSite =x.WebSite,
+                         IsFactoryEntityCorrect =true,
+                         IsCityCorrect =true,
+                         IsIndustrialAreaCorrect =true,
+                         IsWebSiteCorrect =true,
+                         NewFactoryEntityId =0,
+                         NewCityId =0,
+                         NewIndustrialAreaId =0,
+                         NewWebSite ="",
+                         Comment =""
+                    })
+                    .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId==periodId );
 
                 return new BaseResponse<InspectFactoryLocationResDto>
                 {

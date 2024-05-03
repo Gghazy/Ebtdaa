@@ -1,4 +1,5 @@
 ﻿using Ebtdaa.Application.Common.Dtos;
+using Ebtdaa.Application.FactoryLocations.Dtos;
 using Ebtdaa.Application.InspectionFactoryLocation.Dtos;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,6 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Interfaces
     {
         Task<BaseResponse<List<InspectFactoryLocationAttachResDto>>> GetAll(int factoryId, int periodId);
         Task<BaseResponse<InspectFactoryLocationAttachResDto>> AddAsync(InspectFactoryLocationAttachReqDto req);
+        Task<BaseResponse<InspectFactoryLocationAttachResDto>> DeleteAsync(int id);
     }
 }

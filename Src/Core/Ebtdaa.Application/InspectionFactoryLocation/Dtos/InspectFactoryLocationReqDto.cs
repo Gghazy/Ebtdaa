@@ -12,6 +12,8 @@
         public bool IsFactoryEntityCorrect { get; set; }
         public bool IsCityCorrect { get; set; }
         public bool IsIndustrialAreaCorrect { get; set; }
+        public bool IsLocationLinkCorrect { get; set; }
+        public bool IsWebSiteCorrect { get; set; }
         public int? NewFactoryEntityId { get; set; }
         public int? NewCityId { get; set; }
         public int? NewIndustrialAreaId { get; set; }

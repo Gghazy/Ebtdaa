@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.FactoryLocations.Dtos;
 using Ebtdaa.Application.InspectionFactoryLocation.Dtos;
 using Ebtdaa.Application.InspectionFactoryLocation.Interfaces;
 using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
@@ -44,6 +45,22 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Handlers
             await _dbContext.InspectFactoryLocationAttachments.AddAsync(file);
 
             await _dbContext.SaveChangesAsync();
+
+            return new BaseResponse<InspectFactoryLocationAttachResDto>
+            {
+                Data = _mapper.Map<InspectFactoryLocationAttachResDto>(file)
+            };
+        }
+
+        public async Task<BaseResponse<InspectFactoryLocationAttachResDto>> DeleteAsync(int id)
+        {
+            var file = await _dbContext.InspectFactoryLocationAttachments.FirstOrDefaultAsync(x => x.Id == id);
+
+            _dbContext.InspectFactoryLocationAttachments.Remove(file);
+
+            await _dbContext.SaveChangesAsync();
+
+
 
             return new BaseResponse<InspectFactoryLocationAttachResDto>
             {

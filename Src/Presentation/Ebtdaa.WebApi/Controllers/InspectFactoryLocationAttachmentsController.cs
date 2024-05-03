@@ -29,5 +29,11 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _service.AddAsync(request));
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+            return Ok(await _service.DeleteAsync(id));
+
+        }
     }
 }
