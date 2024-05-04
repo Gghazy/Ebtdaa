@@ -74,6 +74,8 @@ using Ebtdaa.Application.InspectionBasicFactInfos.Validation;
 using Ebtdaa.Application.InspectionFactoryContact.Validation;
 using Ebtdaa.Application.InspectorScreenStatus.Interfaces;
 using Ebtdaa.Application.InspectorScreenStatus.Handlers;
+using Ebtdaa.Application.InspectorUpdateStatus.Interfaces;
+using Ebtdaa.Application.InspectorUpdateStatus.Handlers;
 
 namespace Ebtdaa.Application
 {
@@ -133,6 +135,7 @@ namespace Ebtdaa.Application
             services.AddScoped<IInspectorRawMaterialFileService, InspectorRawMaterialFileService > ();
             services.AddScoped<IInspectorScreenStatusService, InspectorScreenStatusService > ();
             services.AddScoped<IInspectProductDataAttachService, InspectProductDataAttachService > ();
+            services.AddScoped<IInspectorUpdateStatusService, InspectorUpdateStatusService > ();
 
 
             #endregion

@@ -16,6 +16,6 @@ namespace Ebtdaa.Application.Inspectors.Interfaces
         Task<BaseResponse<InspectorResultDto>> UpdateAsync(InspectorRequestDto req);
         Task<BaseResponse<InspectorResultDto>> DeleteAsync(int id);
         Task<BaseResponse<InspectorFactoriesResultDto>> AssingFactoriesAsync(InspectorFactoriesRequestDto req);
-        Task<BaseResponse<List<InspectorFactoriesResultDto>>> GetInspectorFactories(int InspectorId);
+        Task<BaseResponse<List<InspectorFactoriesResultDto>>> GetInspectorFactories(string InspectorId);
     }
 }

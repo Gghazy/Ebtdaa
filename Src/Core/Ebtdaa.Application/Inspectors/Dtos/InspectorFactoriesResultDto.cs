@@ -13,5 +13,6 @@ namespace Ebtdaa.Application.Inspectors.Dtos
         public int InspectorId { get; set; }
         public string FactoryName { get; set; }
         public string? CommerialNumber { get; set; }
+        public string? CityName { get; set; }
     }
 }

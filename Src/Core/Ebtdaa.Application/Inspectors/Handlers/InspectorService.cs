@@ -146,12 +146,20 @@ namespace Ebtdaa.Application.Inspectors.Handlers
             };
         }
 
-        public async Task<BaseResponse<List<InspectorFactoriesResultDto>>> GetInspectorFactories(int InspectorId)
+        public async Task<BaseResponse<List<InspectorFactoriesResultDto>>> GetInspectorFactories(string InspectorId)
         {
-           
+
             var result = await _dbContext.InspectorFactories
                  .Include(x => x.Factories)
-                 .Where(x => x.InspectorId == InspectorId)
+                 .Where(x => x.Inspector.OwnerIdentity == InspectorId)
+                 .Select(x => new InspectorFactoriesResultDto
+                 {
+                     InspectorId = x.Id,
+                     FactoryId = x.FactoryId,
+                     FactoryName = x.Factories.NameAr,
+                     CommerialNumber = x.Factories.CommercialRegister,
+                     CityName = x.Factories.FactoryLocations.Select(x=>x.City.NameAr).First(),
+                 })
                  .ToListAsync();
 
             return new BaseResponse< List<InspectorFactoriesResultDto>>
