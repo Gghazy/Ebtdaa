@@ -55,6 +55,7 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
                         IsIncreaseReasonCorrect=true,
                         IncreaseReasonCorrect=0,
                         IncreaseReasonId=0,
+                        ActualProductionWeight= x.ActualProductionWeight ?? 0,
                         IncreaseReason="",
                         Comments=""
                     })

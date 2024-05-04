@@ -5,9 +5,7 @@ namespace Ebtdaa.Application.InspectorRawMaterials.Interfaces
 {
     public interface IInspectorRawMaterialService
     {
-        Task<BaseResponse<List<InspectorRawMaterialResultDto>>> GetAll();
-        Task<BaseResponse<InspectorRawMaterialResultDto>> GetByFactory( int id);
-        Task<BaseResponse<InspectorRawMaterialResultDto>> GetOne(int id);
+       Task<BaseResponse<List<InspectorRawMaterialResultDto>>> GetAll(int factoryId, int periodId, string ownerIdentity);
         Task<BaseResponse<InspectorRawMaterialResultDto>> AddAsync(InspectorRawMaterialRequestDto req);
         Task<BaseResponse<InspectorRawMaterialResultDto>> UpdateAsync(InspectorRawMaterialRequestDto req);
 

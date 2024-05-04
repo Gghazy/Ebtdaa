@@ -16,18 +16,10 @@ namespace Ebtdaa.WebApi.Controllers
             _InspectorRawMaterialService = inspectorRawMaterialService;
         }
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetAll()
-        //{
-        //    return Ok(await _RawMaterialService.GetAll());
-
-        //}
-
-
-        [HttpPost("All")]
-        public async Task<IActionResult> GetByFactory( int Factoryid)
+        [HttpGet]
+        public async Task<IActionResult> GetAll(int factoryId, int periodId, string ownerIdentity)
         {
-            return Ok(await _InspectorRawMaterialService.GetByFactory(Factoryid));
+            return Ok(await _InspectorRawMaterialService.GetAll(factoryId,periodId,ownerIdentity));
 
         }
 
@@ -37,12 +29,7 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _InspectorRawMaterialService.AddAsync(request));
         }
 
-        [HttpGet("{id}")]
-        public async Task<IActionResult> GetOne(int id)
-        {
-            return Ok(await _InspectorRawMaterialService.GetOne(id));
-
-        }
+      
 
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] InspectorRawMaterialRequestDto req)

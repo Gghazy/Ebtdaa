@@ -14,6 +14,7 @@ namespace Ebtdaa.Application.InspectionActualProduction.Dtos
         public int ActualProduction { get; set; }
         public int DesignedCapacityUnitId { get; set; }
         public int ActualProductionUintId { get; set; }
+        public int ActualProductionWeight { get; set; }
         public bool IsDesignedCapacityCorrect { get; set; }
         public bool IsActualProductionCorrect { get; set; }
         public int? CorrectDesignedCapacity { get; set; }

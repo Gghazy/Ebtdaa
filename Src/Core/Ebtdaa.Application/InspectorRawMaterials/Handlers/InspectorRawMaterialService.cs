@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.InspectionProductData.Dtos;
 using Ebtdaa.Application.InspectorRawMaterials.Dtos;
 using Ebtdaa.Application.InspectorRawMaterials.Interfaces;
 using Ebtdaa.Application.InspectorRawMaterials.Validation;
@@ -44,44 +45,8 @@ namespace Ebtdaa.Application.InspectorRawMaterials.Handlers
           
         }
 
-        public async Task<BaseResponse<List<InspectorRawMaterialResultDto>>> GetAll()
-        {
-            var respose = _mapper.Map<List<InspectorRawMaterialResultDto>>
-                (await _dbContext.InspectorRawMaterials
-                  .Include(x => x.RawMaterial)
-                  .ToListAsync());
+      
 
-            return new BaseResponse<List<InspectorRawMaterialResultDto>>
-            {
-                Data = respose
-            };
-        }
-
-        public async Task<BaseResponse<InspectorRawMaterialResultDto>> GetByFactory(int id)
-        {
-            //var respose = _mapper.Map<InspectorRawMaterialResultDto>
-            //                (await _dbContext.InspectorRawMaterials
-            //                             .Include(s => s.RawMaterial)
-            //                                 .Where(x => x.RawMaterial.FactoryId == id)
-            //                                 .ToListAsync());
-
-
-            return new BaseResponse<InspectorRawMaterialResultDto>
-            {
-            //    Data = respose
-            };
-        }
-
-        public async Task<BaseResponse<InspectorRawMaterialResultDto>> GetOne(int id)
-        {
-            var result = await _dbContext.InspectorRawMaterials
-                   .FirstOrDefaultAsync(x => x.Id == id);
-
-            return new BaseResponse<InspectorRawMaterialResultDto>
-            {
-                Data = _mapper.Map<InspectorRawMaterialResultDto>(result)
-            };
-        }
 
         public async Task<BaseResponse<InspectorRawMaterialResultDto>> UpdateAsync(InspectorRawMaterialRequestDto req)
         {
@@ -99,5 +64,50 @@ namespace Ebtdaa.Application.InspectorRawMaterials.Handlers
                 Data = _mapper.Map<InspectorRawMaterialResultDto>(InspectorrawMaterialUpdated)
             };
         }
+
+        public async Task<BaseResponse<List<InspectorRawMaterialResultDto>>> GetAll(int factoryId, int periodId, string ownerIdentity)
+        {
+            var respose =await _dbContext.InspectorRawMaterials
+                  .Include(x => x.RawMaterial)
+                  .Where(i => i.FactoryId == factoryId
+                                && i.PeriodId == periodId && i.CreatedBy == ownerIdentity).ToListAsync();
+            if (respose.Count == 0)
+            {
+                var result = await _dbContext.RawMaterials
+                    .Where(x => x.FactoryId == factoryId)
+                    .Select(x => new InspectorRawMaterialResultDto()
+                    {
+                        FactoryId = factoryId,
+                        PeriodId = periodId,
+                        RawMaterialId = x.Id,
+                        PhotoId = x.PhotoId ,
+                        PaperId = x.PaperId,
+                        RawMaterialName = x.Name,
+                        IsImageClear = true,
+                        IsPaperClear = true,
+                        Comment = "",
+                        CorrectPaperId = 0,
+                        CorrectPhotoId = 0,
+
+                    })
+                    .ToListAsync();
+                var response = _mapper.Map<List<InspectorRawMaterialResultDto>>(result);
+
+                return new BaseResponse<List<InspectorRawMaterialResultDto>>
+                {
+                    Data = response
+                };
+            }
+            else
+            {
+                var Inspectresponse = _mapper.Map<List<InspectorRawMaterialResultDto>>(respose);
+
+                return new BaseResponse<List<InspectorRawMaterialResultDto>>
+                {
+                    Data = Inspectresponse
+                };
+            }
+        }
+
     }
 }

@@ -24,6 +24,7 @@ namespace Ebtdaa.Domain.InspectorActualProduction.Entity
         public int IncreaseReasonId { get; set; }
         public int? IncreaseReasonCorrect { get; set; }
         public bool IsIncreaseReasonCorrect { get; set; }
+        public int ActualProductionWeight { get; set; }
         public string Comments { get; set; }
         public int PeriodId { get; set; }
         public int FactoryId {  get; set; }
