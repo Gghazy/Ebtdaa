@@ -23,7 +23,7 @@ namespace Ebtdaa.Application.InspectionActualProduction.Dtos
         public string IncreaseReason { get; set; }
         public int? IncreaseReasonCorrect { get; set; }
         public bool IsIncreaseReasonCorrect { get; set; }
-        public int ActualProductionWeight { get; set; }
+        public double ActualProductionWeight { get; set; }
         public string Comments { get; set; }
         public int PeriodId { get; set; }
         public int FactoryId { get; set; }
