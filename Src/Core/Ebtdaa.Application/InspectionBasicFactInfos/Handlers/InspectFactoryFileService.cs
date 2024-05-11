@@ -57,7 +57,9 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
         public async Task<BaseResponse<InspectFactoryFlieResultDto>> AddAsync(InspectFactoryFlieRequestDto req)
         {
             InspectFactoryFile factoryFile = _mapper.Map<InspectFactoryFile>(req);
-          
+            factoryFile.Name = factoryFile.FactoryId
+                           + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                           + factoryFile.AttachmentId;
             await _dbContext.InspectFactoryFiles.AddAsync(factoryFile);
 
             await _dbContext.SaveChangesAsync();

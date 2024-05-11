@@ -40,6 +40,10 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> AddAsync(FactoryLocationAttachmentRequestDto req)
         {
             var file = _mapper.Map<FactoryLocationAttachment>(req);
+            file.Name = file.FactoryLocation.FactoryId
+                           + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                           + file.AttachmentId;
+
             var result = await _validator.ValidateAsync(file);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 

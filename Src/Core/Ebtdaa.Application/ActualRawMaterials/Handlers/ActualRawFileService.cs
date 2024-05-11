@@ -24,6 +24,10 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
         public async Task<BaseResponse<ActualRawFileResultDto>> AddAsync(ActualRawFileRequestDto req)
         {
             ActualRawMaterialFile file = _mapper.Map<ActualRawMaterialFile>(req);
+            file.Name = file.FactoryId
+                           + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                           + file.AttachmentId;
+
             var result = await _actualMaterialFileValidator.ValidateAsync(file);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
