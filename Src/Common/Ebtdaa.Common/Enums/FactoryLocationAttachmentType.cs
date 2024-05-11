@@ -9,7 +9,7 @@ namespace Ebtdaa.Common.Enums
     public enum FactoryLocationAttachmentType
     {
         NationalAddress=0,
-        FactoryEntranceImage=1,
+        صورةمدخل_المصنع=1,
         Electricity_Or_Electricity_Invoice=2
     }
 }

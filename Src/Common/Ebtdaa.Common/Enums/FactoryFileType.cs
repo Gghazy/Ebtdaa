@@ -8,7 +8,7 @@ namespace Ebtdaa.Common.Enums
 {
     public enum FactoryFileType
     {
-        factoryFace=0,
+        صورة_واجهة_المصنع=0,
         factoryStatus=1,
         Photo=2,
         BaseFile=3,
