@@ -47,6 +47,9 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public async Task<BaseResponse<ActualProductionAttacResultDto>> AddAsync(ActualProductionAttacRequestDto req)
         {
             var file = _mapper.Map<ActualProductionAttachment>(req);
+            file.Name = file.FactoryId
+                           + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                           + file.AttachmentId;
             var result = await _validator.ValidateAsync(file);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 

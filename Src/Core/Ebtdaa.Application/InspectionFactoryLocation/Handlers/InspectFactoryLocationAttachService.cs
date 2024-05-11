@@ -41,7 +41,9 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Handlers
         public async Task<BaseResponse<InspectFactoryLocationAttachResDto>> AddAsync(InspectFactoryLocationAttachReqDto req)
         {
             var file = _mapper.Map<InspectFactoryLocationAttachment>(req);
-           
+            file.Name = file.FactoryId
+                + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                + file.AttachmentId;
             await _dbContext.InspectFactoryLocationAttachments.AddAsync(file);
 
             await _dbContext.SaveChangesAsync();

@@ -45,6 +45,9 @@ namespace Ebtdaa.Application.Factories.Handlers
         public async Task<BaseResponse<FactoryFileResultDto>> AddAsync(FactoryFileRequestDto req)
         {
             FactoryFile factoryFile = _mapper.Map<FactoryFile>(req);
+            factoryFile.Name = factoryFile.FactoryId
+                            + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                            + factoryFile.AttachmentId;
             var result = await _factoryFileValidator.ValidateAsync(factoryFile);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 

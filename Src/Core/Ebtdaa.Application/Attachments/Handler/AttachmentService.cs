@@ -43,13 +43,20 @@ namespace Ebtdaa.Application.Attachments.Handler
         public async Task<BaseResponse<Attachment>> AddAsync(IFormFile file)
         {
             var path = await UploadFile(file);
-            Attachment attachment = new Attachment
+            var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg" };
+            Attachment attachment = new Attachment 
             {
                 Name = file.FileName,
                 Path = path + "/" + file.FileName,
                 Extension= GetFileExtension(file)
 
             };
+            if (!allowedExtensions.Contains(attachment.Extension))
+                return new BaseResponse<Attachment>
+                {
+                    Data =null
+                };
+
             var result = await _attachMentValidator.ValidateAsync(attachment);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 

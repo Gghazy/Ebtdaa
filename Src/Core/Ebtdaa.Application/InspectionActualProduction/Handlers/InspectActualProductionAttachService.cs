@@ -40,7 +40,9 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
         public async Task<BaseResponse<InspectActualProductionAttachResDto>> AddAsync(InspectActualProductionAttachReqDto req)
         {
             var file = _mapper.Map<InspectActualProductionAttachment>(req);
-           
+            file.Name = file.FactoryId
+                + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                + file.AttachmentId;
             await _dbContext.InspectActualProductionAttachments.AddAsync(file);
 
             await _dbContext.SaveChangesAsync();
