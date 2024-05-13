@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.InspectorUpdateStatus.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using System;
 using System.Collections.Generic;
@@ -20,6 +21,7 @@ namespace Ebtdaa.Domain.Periods
         public virtual ICollection<FactoryMonthlyFinancial> FactoryMonthlyFinancials { get; set; }
         public virtual ICollection<ProductPeriodActive> ProductPeriodActives { get; set; }
         public virtual ICollection<FactoryUpdateStatus> FactoryUpdateStatuses { get; set; }
+        public virtual ICollection<InspectorUpdateStatuses> InspectorUpdateStatuses { get; set; }
 
     }
 }

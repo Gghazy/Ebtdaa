@@ -29,12 +29,16 @@ namespace Ebtdaa.Application.Periods.Handlers
                 .ThenByDescending(x=>x.PeriodStartDate.Month)
                 .ToQueryResult(search.PageNumber, search.PageSize);
 
+         
+
             var response = _mapper.Map<QueryResult<PeriodResultDto>>(resualt);
+
             foreach (var item in resualt.Items)
             {
-                response.Items.FirstOrDefault(x => x.Id == item.Id).Status =
+                   response.Items.FirstOrDefault(x => x.Id == item.Id).Status =
                    item.FactoryUpdateStatuses.FirstOrDefault()!=null?
                    item.FactoryUpdateStatuses.FirstOrDefault().UpdateStatus:false;
+            
             }
 
             return new BaseResponse<QueryResult<PeriodResultDto>>

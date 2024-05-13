@@ -14,6 +14,7 @@ namespace Ebtdaa.Application.Periods.Dtos
         public string PeriodStartDate { get; set; }
         public string PeriodEndDate { get; set; }
         public bool Status { get; set; }
+        public bool InspectorStatus { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }
 

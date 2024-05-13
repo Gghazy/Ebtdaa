@@ -43,7 +43,7 @@ namespace Ebtdaa.Application.Attachments.Handler
         public async Task<BaseResponse<Attachment>> AddAsync(IFormFile file)
         {
             var path = await UploadFile(file);
-            var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg" };
+            var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
             Attachment attachment = new Attachment 
             {
                 Name = file.FileName,
