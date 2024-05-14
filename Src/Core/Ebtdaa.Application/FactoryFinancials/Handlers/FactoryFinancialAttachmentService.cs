@@ -33,7 +33,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         public async Task<BaseResponse<List<FactoryFinancialAttachmentResultDto>>> GetAll(int id)
         {
             var respose = _mapper.Map<List<FactoryFinancialAttachmentResultDto>>(
-                await _dbContext.FactoryFinancialAttachments.Where(x=>x.FactoryFinancialId==id).Include(x=>x.Attachment).ToListAsync()
+                await _dbContext.FactoryFinancialAttachments.Where(x=>x.FactoryFinancial.FactoryId==id).Include(x=>x.Attachment).ToListAsync()
                 
                 );
 
@@ -45,6 +45,10 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         public async Task<BaseResponse<FactoryFinancialAttachmentResultDto>> AddAsync(FactoryFinancialAttachmentRequestDto req)
         {
             var file = _mapper.Map<FactoryFinancialAttachment>(req);
+            file.Name = file.FactoryFinancial.FactoryId
+                           + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                           + file.AttachmentId;
+
             var result = await _validator.ValidateAsync(file);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 

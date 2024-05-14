@@ -129,7 +129,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private async Task<bool> CheckFactoryProductScreenStatus(int factoryId, int periodId)
         {
-            bool screenStatus = false;
+           
 
             var activeProduct = await _dbContext.ProductPeriodActives
                 .Include(x => x.FactoryProduct)
@@ -138,11 +138,11 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .ToListAsync();
 
             var result = await _dbContext.FactoryProducts
-                .AnyAsync(x => activeProduct.Contains(x.Id) && x.PeperId == null);
+                .AnyAsync(x => activeProduct.Contains(x.Id) && x.PeperId != null);
+            bool screenStatus = false;
 
 
-
-            screenStatus = result ? false : true;
+            screenStatus = result ? true : false;
 
             return screenStatus;
         }
