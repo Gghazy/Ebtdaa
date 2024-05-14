@@ -30,7 +30,7 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         public async Task<BaseResponse<List<FactoryLocationAttachmentResultDto>>> GetAll(int id)
         {
             var respose = _mapper.Map<List<FactoryLocationAttachmentResultDto>>(
-                await _dbContext.FactoryLocationAttachments.Include(x=>x.Attachment).ToListAsync());
+                await _dbContext.FactoryLocationAttachments.Where(x=>x.FactoryLocation.FactoryId==id).Include(x=>x.Attachment).ToListAsync());
 
             return new BaseResponse<List<FactoryLocationAttachmentResultDto>>
             {
@@ -40,7 +40,7 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> AddAsync(FactoryLocationAttachmentRequestDto req)
         {
             var file = _mapper.Map<FactoryLocationAttachment>(req);
-            file.Name = file.FactoryLocation.FactoryId
+            file.Name = req.FactoryId
                            + DateTime.Today.Date.ToShortDateString().Replace("/", "")
                            + file.AttachmentId;
 
