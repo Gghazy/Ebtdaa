@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ebtdaa.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,7 @@ namespace Ebtdaa.Application.Factories.Dtos
         public string CityNameAr { get; set; }
         public string CityNameEn { get; set; }
         public DateTime LicenseExpirDate { get; set; }
-        public int Status { get; set; }
+        public FactoryStatusEnum? Status { get; set; }
         public int FactoryId {  get; set; }
         public int PeriodId {  get; set; }
         public string DataEntry { get; set; }

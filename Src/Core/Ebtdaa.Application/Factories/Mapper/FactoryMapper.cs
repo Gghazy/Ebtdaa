@@ -18,9 +18,9 @@ namespace Ebtdaa.Application.Factories.Mapper
             CreateMap<Factory, FactoryResualtDto>()
                 .ForMember(d => d.CityNameAr, opt => opt.MapFrom(src => src.FactoryLocations.Any()? src.FactoryLocations.FirstOrDefault().City.NameAr:""))
                 .ForMember(d => d.CityNameEn, opt => opt.MapFrom(src => src.FactoryLocations.Any() ? src.FactoryLocations.FirstOrDefault().City.NameEn:""))
-                .ForMember(d => d.DataApprover, opt => opt.MapFrom(src => src.BaiscFactoryInfos.Any() ? src.BaiscFactoryInfos.FirstOrDefault().DataApprover:""))
+                .ForMember(d => d.DataApprover, opt => opt.MapFrom(src => src.BaiscFactoryInfos.FirstOrDefault().DataApprover))
                 .ForMember(d => d.DataEntry, opt => opt.MapFrom(src => src.BaiscFactoryInfos.Any() ? src.BaiscFactoryInfos.FirstOrDefault().DataEntry:""))
-                .ForMember(d => d.DataReviewer, opt => opt.MapFrom(src => src.BaiscFactoryInfos.Any() ? src.BaiscFactoryInfos.FirstOrDefault().DataReviewer:""))
+                .ForMember(d => d.DataReviewer, opt => opt.MapFrom(src => src.BaiscFactoryInfos.Any() ? src.BaiscFactoryInfos.FirstOrDefault().DataReviewer : ""))
                 ;
 
             CreateMap<FactoryRequestDto, Factory>();
@@ -31,6 +31,7 @@ namespace Ebtdaa.Application.Factories.Mapper
                        .ForMember(d => d.Extension, opt => opt.MapFrom(src => src.Attachment.Extension));
 
             CreateMap<FactoryFileRequestDto, FactoryFile>();
+           
 
         }
     }

@@ -70,21 +70,36 @@ namespace Ebtdaa.Application.Factories.Handlers
             var resualt = await _dbContext.Factories
                                 .Include(x => x.BaiscFactoryInfos)
                                 .FirstOrDefaultAsync(x => x.Id == id);
+            FactoryResualtDto responseDto = null;
             if (resualt.BaiscFactoryInfos != null)
             {
 
-                var basicinfo = resualt.BaiscFactoryInfos.FirstOrDefault(x => x.PeriodId == periodId);
+                var basicinfo = resualt.BaiscFactoryInfos
+                    .FirstOrDefault(x => x.PeriodId == periodId);
+
                 if (basicinfo!=null)
                 {
                     resualt.Status = basicinfo.FactoryStatusId;
-                }
-                
-            }
 
-            return new BaseResponse<FactoryResualtDto>
-            {
-                Data = _mapper.Map<FactoryResualtDto>(resualt)
-            };
+                    responseDto = new FactoryResualtDto
+                    {
+                        DataApprover = basicinfo.DataApprover,
+                        DataReviewer = basicinfo.DataReviewer,
+                        DataEntry = basicinfo.DataEntry
+                    };
+
+                }
+
+                responseDto = _mapper.Map<FactoryResualtDto>(resualt);
+
+            }
+           
+                return new BaseResponse<FactoryResualtDto>
+                {
+                    Data = responseDto
+                };
+           
+           
 
         }
 
