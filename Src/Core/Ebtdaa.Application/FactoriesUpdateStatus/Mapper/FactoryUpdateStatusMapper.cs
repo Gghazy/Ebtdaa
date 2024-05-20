@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.FactoriesUpdateStatus.Dtos;
 using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.Periods;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Mapper
         public FactoryUpdateStatusMapper() 
         {
             CreateMap<FactoryUpdateStatus, FactUpdateStatusResultDto>();
+            CreateMap<Period, FactUpdateStatusResultDto>();
             CreateMap<FactUpdateStatusRequestDto, FactoryUpdateStatus>();
         }
     }

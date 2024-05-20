@@ -9,5 +9,6 @@ namespace Ebtdaa.Application.Periods.Dtos
 {
     public class PeriodSearch:SearchCriteria
     {
+        public int FactoryId { get; set; }
     }
 }

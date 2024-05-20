@@ -1,4 +1,5 @@
-﻿using Ebtdaa.Domain.Factories.Entity;
+﻿using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.Factories.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Ebtdaa.Application.Periods.Dtos
         public string PeriodName { get; set; }
         public string PeriodStartDate { get; set; }
         public string PeriodEndDate { get; set; }
-        public bool Status { get; set; }
+        public DataStatus Status { get; set; }
         public bool InspectorStatus { get; set; }
         public int Year { get; set; }
         public int Month { get; set; }

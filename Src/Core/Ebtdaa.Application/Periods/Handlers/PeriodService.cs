@@ -5,6 +5,7 @@ using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.Periods.Dtos;
 using Ebtdaa.Application.Periods.Interfaces;
 using Ebtdaa.Common.Dtos;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Common.Extentions;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,8 +37,8 @@ namespace Ebtdaa.Application.Periods.Handlers
             foreach (var item in resualt.Items)
             {
                    response.Items.FirstOrDefault(x => x.Id == item.Id).Status =
-                   item.FactoryUpdateStatuses.FirstOrDefault()!=null?
-                   item.FactoryUpdateStatuses.FirstOrDefault().UpdateStatus:false;
+                   item.FactoryUpdateStatuses.FirstOrDefault(x=>x.FactoryId== search.FactoryId) !=null?
+                   item.FactoryUpdateStatuses.FirstOrDefault(x => x.FactoryId == search.FactoryId).DataStatus:DataStatus.New;
             
             }
 
