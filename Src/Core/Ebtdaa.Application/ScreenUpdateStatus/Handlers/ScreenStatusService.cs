@@ -206,7 +206,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId)
                 .ToList();
 
-            return attachments.Any(x => x.Type == ActualProductionFileType.AuditedFinancialStatements);
+            return true;
         }
 
         private bool IsNonProductiveScreenValid(List<int> differenceList, List<ActualProductionAndCapacity> result)
