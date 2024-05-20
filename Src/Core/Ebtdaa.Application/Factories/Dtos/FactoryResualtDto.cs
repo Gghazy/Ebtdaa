@@ -26,5 +26,8 @@ namespace Ebtdaa.Application.Factories.Dtos
         public int Status { get; set; }
         public int FactoryId {  get; set; }
         public int PeriodId {  get; set; }
+        public string DataEntry { get; set; }
+        public string DataReviewer { get; set; }
+        public string DataApprover { get; set; }
     }
 }

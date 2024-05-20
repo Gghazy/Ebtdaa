@@ -163,7 +163,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private async Task<bool> CheckActualProductionScreenStatus(int? factoryId, int periodId, FactoryStatusEnum? status)
         {
-            bool screenStatus = false;
+           
 
             var activeProducts = await _dbContext.ProductPeriodActives
                 .Include(x => x.FactoryProduct)
@@ -177,7 +177,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .ToListAsync();
 
             var differenceList = activeProducts.Except(result.Select(x => x.FactoryProductId)).ToList();
-
+            bool screenStatus = false;
             if (status == FactoryStatusEnum.Productive)
             {
                 screenStatus = IsProductiveScreenValid(differenceList, result);
@@ -206,9 +206,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId)
                 .ToList();
 
-            return attachments.Any(x => x.Type == ActualProductionFileType.SalesQuantity) &&
-                   attachments.Any(x => x.Type == ActualProductionFileType.AuditedFinancialStatements) &&
-                   attachments.Any(x => x.Type == ActualProductionFileType.ProductionRecord);
+            return attachments.Any(x => x.Type == ActualProductionFileType.AuditedFinancialStatements);
         }
 
         private bool IsNonProductiveScreenValid(List<int> differenceList, List<ActualProductionAndCapacity> result)

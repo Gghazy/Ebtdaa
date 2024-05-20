@@ -157,9 +157,11 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         {
             var result = await _dbContext
                                 .FactoryProducts
+                                
                                 .Include(x=>x.Product)
                                 .ThenInclude(x=>x.Unit)
-                                .FirstOrDefaultAsync(x => x.Id == Id);
+                                .FirstOrDefaultAsync(x => x.Id == Id)
+                                ;
 
                       var response = _mapper.Map<ProductResultDto>(result);
 
