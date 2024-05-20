@@ -13,6 +13,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Dtos
         public string Name { get; set; }
         public FactoryFinancialFileType Type { get; set; }
         public int AttachmentId { get; set; }
+        public int FactoryId { get; set; }
         public int FactoryFinancialId { get; set; }
     }
 }

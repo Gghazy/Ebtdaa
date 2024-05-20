@@ -45,7 +45,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         public async Task<BaseResponse<FactoryFinancialAttachmentResultDto>> AddAsync(FactoryFinancialAttachmentRequestDto req)
         {
             var file = _mapper.Map<FactoryFinancialAttachment>(req);
-            file.Name = file.FactoryFinancial.FactoryId
+            file.Name = req.FactoryId
                            + DateTime.Today.Date.ToShortDateString().Replace("/", "")
                            + file.AttachmentId;
 
