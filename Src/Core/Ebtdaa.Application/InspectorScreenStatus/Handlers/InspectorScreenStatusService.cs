@@ -99,12 +99,8 @@ namespace Ebtdaa.Application.InspectorScreenStatus.Handlers
             var result = await _dbContext.InspectActualProductions
                 .AnyAsync(x => x.PeriodId == periodId && x.FactoryId == factoryId);
 
-            var attachment = await _dbContext.InspectActualProductionAttachments
-                .Include(x => x.Attachment)
-                .AnyAsync(x => x.AttachmentId == x.Attachment.Id);
 
-
-            screenStatus = result && attachment ? true : false;
+            screenStatus = result  ? true : false;
 
             return screenStatus;
 
