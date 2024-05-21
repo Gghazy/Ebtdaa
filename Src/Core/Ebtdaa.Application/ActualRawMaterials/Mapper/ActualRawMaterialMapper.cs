@@ -21,7 +21,9 @@ namespace Ebtdaa.Application.ActualRawMaterials.Mapper
 
 
             CreateMap<ActualRawMaterialFile, ActualRawFileResultDto>()
-                .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path));
+                .ForMember(d => d.Path, opt => opt.MapFrom(src => src.Attachment.Path))
+             .ForMember(d => d.Extension, opt => opt.MapFrom(src => src.Attachment.Extension));
+
             CreateMap<ActualRawFileRequestDto, ActualRawMaterialFile>();
         }
     }
