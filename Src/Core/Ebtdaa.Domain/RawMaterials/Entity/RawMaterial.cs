@@ -17,8 +17,8 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public Unit Unit { get; set; }
         public int AverageWeightKG { get; set; }
         public string? Description { get; set; }
-        public int PhotoId { get; set; }
-        public int PaperId { get; set; }
+        public int? PhotoId { get; set; }
+        public int? PaperId { get; set; }
         public virtual ICollection<ProductRawMaterial> ProductRawMaterials { get; set; }
   }
    

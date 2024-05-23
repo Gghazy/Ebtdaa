@@ -17,7 +17,7 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public int? UnitId { get; set; }
         public int FactoryId { get; set; }
         public double? Kilograms_Per_Unit { get; set; }
-        public int PhototId { get; set; }
-        public int PeperId { get; set; }
+        public int? PhototId { get; set; }
+        public int? PeperId { get; set; }
     }
 }

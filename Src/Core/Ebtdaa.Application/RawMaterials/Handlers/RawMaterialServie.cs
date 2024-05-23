@@ -44,7 +44,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
 
                     ProductRawMaterial x = new ProductRawMaterial();
-                    x.FactoryProductId = item;
+                            x.FactoryProductId = item;
                     x.rawMaterialId = rawMaterial.Id;
                     await _dbContext.ProductRawMaterials.AddAsync(x);
 

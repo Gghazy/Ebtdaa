@@ -14,7 +14,6 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public int? PhototId { get; set; }
         public string? CommericalName { get; set; }
 
-
         public virtual Product Product { get; set; }
         public virtual Factory Factory { get; set; }
         public virtual Attachment Peper { get; set; }
