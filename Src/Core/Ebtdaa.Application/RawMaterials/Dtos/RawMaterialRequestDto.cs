@@ -13,9 +13,9 @@ namespace Ebtdaa.Application.RawMaterials.Dtos
         // public int ProductId { get; set; }
         public int UnitId { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
         public int FactoryId { get; set; }
-        public int PhotoId { get; set; }
-        public int PaperId { get; set; }
+        public int? PhotoId { get; set; }
+        public int? PaperId { get; set; }
     }
 }

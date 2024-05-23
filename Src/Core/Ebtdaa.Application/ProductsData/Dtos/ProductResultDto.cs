@@ -12,6 +12,7 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public int Id { get; set; }
         public int ProductId { get; set; }
         public string ProductName { get; set; }
+        public string ProductName10 { get; set; }
         public string? CommericalName { get; set; }
         public int? UnitId { get; set; }
         public string? ItemNumber { get; set; }

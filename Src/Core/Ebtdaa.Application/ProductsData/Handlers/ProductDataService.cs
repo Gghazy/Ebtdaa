@@ -49,15 +49,16 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 .Include(x=>x.Product)
                 .ThenInclude(x=>x.Unit)
                 .Include(x=>x.ProductPeriodActives)
-                .Where(x => x.FactoryId == search.FactoryId)
-                .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
+                .Where(x => x.FactoryId == search.FactoryId )
+              //  .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
                 .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto {
                     Hs12NameEn= b.Hs12NameEn,
                     Hs12NameAr = b.Hs12NameAr,
                     Hs12Code = b.Hs12Code,
                     Id = a.Id,
-                    ProductName = a.Product.ProductName,
+                    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                    ProductName10 = $"{a.Product.ProductName} ({a.Product.ItemNumber})",
                     ProductId=a.ProductId,
                     CommericalName = a.CommericalName,
                     UnitId = a.Product.UnitId,
@@ -97,7 +98,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     Hs12Code = b.Hs12Code,
                     Id = a.Id,
                     ProductId = a.ProductId,
-                    ProductName = a.Product.ProductName,
+                    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
                     CommericalName = a.CommericalName,
                     UnitId = a.Product.UnitId,
                     ItemNumber = a.Product.ItemNumber,
@@ -131,7 +132,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     Hs12Code = b.Hs12Code,
                     Id = a.Id,
                     ProductId = a.ProductId,
-                    ProductName = a.Product.ProductName,
+                    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
                     CommericalName = a.CommericalName,
                     UnitId = a.Product.UnitId,
                     ItemNumber = a.Product.ItemNumber,
@@ -167,7 +168,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                                    Hs12Code = b.Hs12Code,
                                    Id = a.Id,
                                    ProductId = a.ProductId,
-                                   ProductName = a.Product.ProductName,
+                                   ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
                                    CommericalName = a.CommericalName,
                                    UnitId = a.Product.UnitId,
                                    ItemNumber = a.Product.ItemNumber,
@@ -193,6 +194,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         public async Task<BaseResponse<bool>> AddAsync (ProductRequestDto request)
         {
+            
             var factoryProduct = new FactoryProduct() ;
             factoryProduct.CommericalName = request.CommericalName;
             factoryProduct.PhototId = request.PhototId;
@@ -210,7 +212,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             {
                 Data =true
             };
-
+         
         }
 
         public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
@@ -256,6 +258,27 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                       .Include(x => x.ProductPeriodActives)
                       .Where(x => x.FactoryId != search.FactoryId)
                       .WhereIf(!string.IsNullOrEmpty(search.TxtSearch),x=>x.Product.ProductName.Contains(search.TxtSearch))
+                       .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
+                new ProductResultDto
+                {
+                    Hs12NameEn = b.Hs12NameEn,
+                    Hs12NameAr = b.Hs12NameAr,
+                    Hs12Code = b.Hs12Code,
+                    Id = a.Id,
+                    ProductId = a.ProductId,
+                    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                    CommericalName = a.CommericalName,
+                    UnitId = a.Product.UnitId,
+                    ItemNumber = a.Product.ItemNumber,
+                    CR = a.Product.CR,
+                    Status = a.Product.Status,
+                    FactoryId = a.FactoryId,
+                    Review = a.Product.Review,
+                    Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+                    UnitName = a.Product.Unit.Name,
+                    PeperId = a.PeperId,
+                    PhototId = a.PhototId,
+                })
                       .ToQueryResult(search.PageNumber, search.PageSize);
 
 
