@@ -14,6 +14,8 @@ using Ebtdaa.Domain.ProductData.Entity;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Ebtdaa.Application.RawMaterials.Handlers
 {
@@ -45,17 +47,19 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 await _dbContext.RawMaterials.AddAsync(rawMaterial);
                 await _dbContext.SaveChangesAsync();
 
+
                 foreach (var item in req.FactoryProductId)
                 {
-
                     ProductRawMaterial x = new ProductRawMaterial();
                             x.ProductId = item;
                     x.rawMaterialId = rawMaterial.Id;
+                    
 
-
-
+                    var products = _mapper.Map<ProductRawMaterial>(x);
+                    await _dbContext.ProductRawMaterials.AddAsync(x);
+                    await _dbContext.SaveChangesAsync();
                 }
-                await _dbContext.SaveChangesAsync();
+                //await _dbContext.SaveChangesAsync();
 
 
 
