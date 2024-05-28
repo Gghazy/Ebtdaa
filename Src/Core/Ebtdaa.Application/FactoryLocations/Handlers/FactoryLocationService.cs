@@ -47,8 +47,8 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
             var factoryLocation = _mapper.Map<FactoryLocation>(req);
 
             // Validation
-            var result = await _validator.ValidateAsync(factoryLocation);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
+            //var result = await _validator.ValidateAsync(factoryLocation);
+            //if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.FactoryLocations.AddAsync(factoryLocation);
 

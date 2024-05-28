@@ -50,7 +50,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 .ThenInclude(x=>x.Unit)
                 .Include(x=>x.ProductPeriodActives)
                 .Where(x => x.FactoryId == search.FactoryId )
-              //  .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
+                .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
                 .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto {
                     Hs12NameEn= b.Hs12NameEn,
