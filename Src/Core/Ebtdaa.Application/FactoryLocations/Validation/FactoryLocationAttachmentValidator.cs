@@ -17,10 +17,7 @@ namespace Ebtdaa.Application.FactoryLocations.Validation
               .NotEmpty()
               .WithMessage("Attachment-IsRequired-Field");
 
-            RuleFor(d => d.FactoryLocationId)
-                .NotEmpty()
-                .WithMessage("Factory Location-IsRequired-Field");
-
+          
 
 
         }

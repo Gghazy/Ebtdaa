@@ -44,7 +44,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
 
                     ProductRawMaterial x = new ProductRawMaterial();
-                            x.FactoryProductId = item;
+                            x.ProductId = item;
                     x.rawMaterialId = rawMaterial.Id;
                     await _dbContext.ProductRawMaterials.AddAsync(x);
 
@@ -71,7 +71,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         {
             var result = await _dbContext.RawMaterials
                      .Include(s=>s.ProductRawMaterials)
-                     .ThenInclude(x=>x.FactoryProduct)
+                     .ThenInclude(x=>x.Product)
                      .FirstOrDefaultAsync(x => x.Id == id);
             try
             {
@@ -81,7 +81,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 if (result.ProductRawMaterials != null && result.ProductRawMaterials.Any())
                 {
                    x.FactoryProductId = result.ProductRawMaterials
-                        .Select(prm => prm.FactoryProductId)
+                        .Select(prm => prm.ProductId)
                         .ToList();
                 }
                 else
@@ -110,7 +110,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
            
             var rawMaterial = await _dbContext.RawMaterials
                                         .Include(s => s.ProductRawMaterials)
-                                        .ThenInclude(x => x.FactoryProduct)
+                                        .ThenInclude(x => x.Product)
                                         .FirstOrDefaultAsync(x => x.Id == req.Id);
             var rawMaterialUpdated = _mapper.Map(req, rawMaterial);
          //   var rawMaterialproductUpdated = _mapper.Map(req.ProductIds, rawMaterial.ProductRawMaterials);
@@ -127,7 +127,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
 
                     ProductRawMaterial x = new ProductRawMaterial();
-                    x.FactoryProductId = item;
+                    x.ProductId = item;
                     x.rawMaterialId = rawMaterial.Id;
                     await _dbContext.ProductRawMaterials.AddAsync(x);
 
@@ -150,7 +150,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         {
             var data = await _dbContext.RawMaterials
                 .Include(x => x.ProductRawMaterials)
-                .ThenInclude(x => x.FactoryProduct)
+                .ThenInclude(x => x.Product)
                 .ToListAsync();
             var response = _mapper.Map<List<RawMaterialResultDto>>(data);
             return new BaseResponse<List<RawMaterialResultDto>>
@@ -167,7 +167,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             
             var respose =await _dbContext.RawMaterials
                             .Include(x=>x.ProductRawMaterials)
-                            .ThenInclude(x=>x.FactoryProduct)
+                            .ThenInclude(x=>x.Product)
                              .Where(x => x.FactoryId == id).
                              ToListAsync();
 
@@ -175,7 +175,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
                     var dto = _mapper.Map<RawMaterialResultDto>(rawMaterial);
                     dto.FactoryProductId = rawMaterial.ProductRawMaterials
-                        .Select(prm => prm.FactoryProductId)
+                        .Select(prm => prm.ProductId)
                         .ToList();
                     return dto;
                 }).ToList();

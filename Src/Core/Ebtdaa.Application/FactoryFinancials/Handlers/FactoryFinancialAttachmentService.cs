@@ -30,10 +30,12 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         }
 
 
-        public async Task<BaseResponse<List<FactoryFinancialAttachmentResultDto>>> GetAll(int id)
+        public async Task<BaseResponse<List<FactoryFinancialAttachmentResultDto>>> GetAll(int Factoryid, int PeriodId)
         {
             var respose = _mapper.Map<List<FactoryFinancialAttachmentResultDto>>(
-                await _dbContext.FactoryFinancialAttachments.Where(x=>x.FactoryFinancial.FactoryId==id).Include(x=>x.Attachment).ToListAsync()
+                await _dbContext.FactoryFinancialAttachments
+                .Where(x=>x.FactoryId==Factoryid && x.PeriodId == PeriodId)
+                .Include(x=>x.Attachment).ToListAsync()
                 
                 );
 
@@ -44,11 +46,14 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         }
         public async Task<BaseResponse<FactoryFinancialAttachmentResultDto>> AddAsync(FactoryFinancialAttachmentRequestDto req)
         {
+            try
+            {
+
             var file = _mapper.Map<FactoryFinancialAttachment>(req);
             file.Name = req.FactoryId
                            + DateTime.Today.Date.ToShortDateString().Replace("/", "")
                            + file.AttachmentId;
-
+                file.FactoryFinancialId =null;
             var result = await _validator.ValidateAsync(file);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
@@ -61,6 +66,13 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             {
                 Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file)
             };
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task<BaseResponse<FactoryFinancialAttachmentResultDto>> DeleteAsync(int id)
@@ -79,6 +91,20 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
             };
         }
 
-      
+        public async Task<BaseResponse<FactoryFinancialAttachmentResultDto>> UpdateAsync(FactoryFinancialAttachmentRequestDto req)
+        {
+            var file = await _dbContext.FactoryFinancialAttachments
+               .Include(x => x.FactoryFinancial)
+               .FirstOrDefaultAsync(x => x.Id == req.Id);
+
+            file.FactoryFinancialId =req.FactoryFinancialId??0 ;
+
+            await _dbContext.SaveChangesAsync();
+
+            return new BaseResponse<FactoryFinancialAttachmentResultDto>
+            {
+                Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file)
+            };
+        }
     }
 }

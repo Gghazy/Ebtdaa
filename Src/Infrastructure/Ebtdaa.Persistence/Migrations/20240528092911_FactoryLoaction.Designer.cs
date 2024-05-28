@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240528092911_FactoryLoaction")]
+    partial class FactoryLoaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -366,12 +368,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("Activity")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("CommercialRegister")
                         .HasColumnType("nvarchar(max)");
 
@@ -674,7 +670,7 @@ namespace Ebtdaa.Persistence.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int?>("CityId")
+                    b.Property<int>("CityId")
                         .HasColumnType("int");
 
                     b.Property<string>("CreatedBy")
@@ -683,13 +679,13 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int?>("FactoryEntityId")
+                    b.Property<int>("FactoryEntityId")
                         .HasColumnType("int");
 
                     b.Property<int>("FactoryId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("IndustrialAreaId")
+                    b.Property<int>("IndustrialAreaId")
                         .HasColumnType("int");
 
                     b.Property<int>("PeriodId")
@@ -702,6 +698,7 @@ namespace Ebtdaa.Persistence.Migrations
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("WebSite")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -2451,12 +2448,14 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasOne("Ebtdaa.Domain.General.City", "City")
                         .WithMany("FactoryLocations")
                         .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.FactoryEntity", "FactoryEntity")
                         .WithMany("FactoryLocations")
                         .HasForeignKey("FactoryEntityId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.Factory", "Factory")
                         .WithMany("FactoryLocations")
@@ -2467,7 +2466,8 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasOne("Ebtdaa.Domain.Factories.Entity.IndustrialArea", "IndustrialArea")
                         .WithMany("FactoryLocations")
                         .HasForeignKey("IndustrialAreaId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
                         .WithMany()

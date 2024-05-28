@@ -20,7 +20,7 @@ namespace Ebtdaa.Domain.ProductData.Entity
 
         public double? Kilograms_Per_Unit { get; set; }
         public virtual Unit Unit { get; set; }  
-       public virtual ICollection<FactoryProduct> FactoryProducts { get; set; }
+       public virtual ICollection<FactoryProduct> ProductRawMaterials { get; set; }
 
 
 
