@@ -14,5 +14,9 @@ namespace Ebtdaa.Application.Inspectors.Dtos
         public string FactoryName { get; set; }
         public string? CommerialNumber { get; set; }
         public string? CityName { get; set; }
+        public string? Email { get; set; }
+        public string? Address { get; set; }
+        public string? MobileNumber { get; set; }
+        public string? FactoryNumber { get; set; }
     }
 }

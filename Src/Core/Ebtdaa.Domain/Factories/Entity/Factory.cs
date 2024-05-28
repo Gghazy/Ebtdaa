@@ -26,6 +26,8 @@ namespace Ebtdaa.Domain.Factories.Entity
         public string? FactoryNumber { get; set; }
         public string? LicenseNumber { get; set; }
         public DateTime? LicenseExpirDate { get; set; }
+        public string? City { get; set; }
+        public string? Address { get; set; }
         public FactoryStatusEnum? Status  { get; set; }
 
         public virtual ICollection<FactoryFinancial> FactoryFinancials { get; set; }

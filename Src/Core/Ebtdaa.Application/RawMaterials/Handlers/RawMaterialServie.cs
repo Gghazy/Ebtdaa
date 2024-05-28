@@ -64,7 +64,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 Data = _mapper.Map<RawMaterialResultDto>(rawMaterial)
             };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
                 throw;
@@ -219,9 +219,9 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
                 var mappedResult = new QueryResult<RawMaterialResultDto>(
                    resultDto,          // Pass the list of items
-    resultDto.Count,    // Set total count to the number of items in the list
-    search.PageSize,    // Set page size
-    search.PageNumber   
+                   resultDto.Count,    // Set total count to the number of items in the list
+                   search.PageSize,    // Set page size
+                   search.PageNumber   
                     );
 
                 return new BaseResponse<QueryResult<RawMaterialResultDto>>

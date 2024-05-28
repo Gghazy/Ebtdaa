@@ -8,6 +8,7 @@ namespace Ebtdaa.Application.InspectorScreenStatus.Dtos
 {
     public class InspectorScreenStatusResultDto
     {
+        public int Id { get; set; }
         public bool? InspectorBasicFactoryInfo { get; set; }
         public bool? InspectorFactoryLocation { get; set; }
         public bool? InspectorFactoryContact { get; set; }

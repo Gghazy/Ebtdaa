@@ -55,11 +55,13 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
                         IsIncreaseReasonCorrect=true,
                         IncreaseReasonCorrect=0,
                         IncreaseReasonId=0,
-                        ActualProductionWeight= x.ActualProductionWeight ?? 0,
+                        ActualProductionWeight= x.FactoryProduct.Product.Kilograms_Per_Unit??0,
                         IncreaseReason="",
-                        Comments=""
+                        Comments="",
                     })
                     .ToListAsync();
+
+
                 var response = _mapper.Map< List<InspectActualProductionResultDto>>(result);
 
                 return new BaseResponse<List<InspectActualProductionResultDto>>

@@ -158,7 +158,11 @@ namespace Ebtdaa.Application.Inspectors.Handlers
                      FactoryId = x.FactoryId,
                      FactoryName = x.Factories.NameAr,
                      CommerialNumber = x.Factories.CommercialRegister,
-                     CityName = x.Factories.FactoryLocations.Select(x=>x.City.NameAr).First(),
+                     CityName = x.Factories.City,
+                     Email = x.Factories.Email,
+                     Address= x.Factories.Address,
+                     MobileNumber=x.Factories.MobileNumber,
+                     FactoryNumber=x.Factories.FactoryNumber
                  })
                  .ToListAsync();
 
