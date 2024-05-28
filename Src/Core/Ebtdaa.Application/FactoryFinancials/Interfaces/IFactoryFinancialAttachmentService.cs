@@ -11,8 +11,9 @@ namespace Ebtdaa.Application.FactoryFinancials.Interfaces
 {
     public interface IFactoryFinancialAttachmentService
     {
-        Task<BaseResponse<List<FactoryFinancialAttachmentResultDto>>> GetAll(int id);
+        Task<BaseResponse<List<FactoryFinancialAttachmentResultDto>>> GetAll(int Factoryid, int PeriodId);
         Task<BaseResponse<FactoryFinancialAttachmentResultDto>> AddAsync(FactoryFinancialAttachmentRequestDto req);
         Task<BaseResponse<FactoryFinancialAttachmentResultDto>> DeleteAsync(int id);
+        Task<BaseResponse<FactoryFinancialAttachmentResultDto>> UpdateAsync(FactoryFinancialAttachmentRequestDto req);
     }
 }

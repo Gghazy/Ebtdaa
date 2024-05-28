@@ -48,9 +48,9 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 await _dbContext.FactoryProducts
                 .Include(x=>x.Product)
                 .ThenInclude(x=>x.Unit)
-                .Include(x=>x.ProductPeriodActives)
+              //  .Include(x=>x.ProductPeriodActives)
                 .Where(x => x.FactoryId == search.FactoryId )
-              //  .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
+                .WhereIf(search.IsActive,x=> productActive.Contains(x.Id) )
                 .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto {
                     Hs12NameEn= b.Hs12NameEn,
@@ -285,6 +285,42 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             return new BaseResponse<QueryResult<ProductResultDto>>
             {
                 Data = _mapper.Map<QueryResult<ProductResultDto>>(resualt)
+            };
+        }
+
+        public async Task<BaseResponse<List<ProductResultDto>>> GetAddedAll(int factoryId)
+        {
+            var resualt =
+               await _dbContext.FactoryProducts
+               .Include(x => x.Product)
+               .ThenInclude(x => x.Unit)
+               .Where(x => x.FactoryId == factoryId)
+               .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
+               new ProductResultDto
+               {
+                   Hs12NameEn = b.Hs12NameEn,
+                   Hs12NameAr = b.Hs12NameAr,
+                   Hs12Code = b.Hs12Code,
+                   Id = a.Id,
+                   ProductId = a.ProductId,
+                   ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                   CommericalName = a.CommericalName,
+                   UnitId = a.Product.UnitId,
+                   ItemNumber = a.Product.ItemNumber,
+                   CR = a.Product.CR,
+                   Status = a.Product.Status,
+                   FactoryId = a.FactoryId,
+                   Review = a.Product.Review,
+                   Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+                   UnitName = a.Product.Unit.Name,
+                   PeperId = a.PeperId,
+                   PhototId = a.PhototId,
+               }).ToListAsync();
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = resualt
             };
         }
     }
