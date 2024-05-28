@@ -9,7 +9,7 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
     public class ProductCapacityResultDto
     {
         public int Id { get; set; }
-        public string ProductName { get; set; }
+        public string ProductId { get; set; }
         public int ActualProductionAndCapacityId { get; set; }
         public int? DesignedCapacity { get; set; }
         public int? ActualProduction { get; set; }

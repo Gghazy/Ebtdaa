@@ -18,7 +18,7 @@ namespace Ebtdaa.Application.ActualProduction.Mapper
                                                  .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.FactoryProduct.Product.ProductName));
 
             CreateMap<FactoryProduct, ProductCapacityResultDto>()
-                                 .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
+                                 .ForMember(d => d.ProductId, opt => opt.MapFrom(src => src.Product.Id))
                                  .ForMember(d => d.ActualProductionAndCapacityId, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().Id : 0))
                                  .ForMember(d => d.DesignedCapacityUnitName, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacityUnit.Name : ""))
                                  .ForMember(d => d.ActualProductionUintName, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProductionUint.Name : ""))
