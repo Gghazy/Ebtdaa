@@ -13,6 +13,8 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public int MaximumMonthlyConsumption { get; set; }
         public int FactoryId { get; set; }
         public Factory Factory { get; set; }
+        public int PeriodId { get; set; }
+        public Period Period { get; set; }
         public int UnitId { get; set; }
         public Unit Unit { get; set; }
         public int AverageWeightKG { get; set; }

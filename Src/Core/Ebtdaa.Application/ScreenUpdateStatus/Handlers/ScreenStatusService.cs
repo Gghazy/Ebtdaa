@@ -42,8 +42,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
             result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
             result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
-            result.RawMaterial = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.RawMaterial)?.UpdateStatus;
-            result.ActualRawMaterila = response.FirstOrDefault(x => x.ScreenStatusId == ScreenStatusEnums.ActualRawMaterila)?.UpdateStatus;
+            result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId,periodId);
+            result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(periodId);
 
 
 
@@ -107,11 +107,11 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
         {
             var result = await _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-            var attachment = await _dbContext.FactoryLocationAttachments.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+           // var attachment = await _dbContext.FactoryLocationAttachments.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             bool screenStatus = false;
 
-            screenStatus = result && attachment ? true : false;
+            screenStatus = result  ? true : false;
 
             return screenStatus;
         }
@@ -234,6 +234,30 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 Data = _mapper.Map<FactoryResualtDto>(resualt)
             };
 
+        }
+        private async Task<bool> CheckRawMaterialScreenStatus(int factoryId, int periodId)
+        {
+            var result = await _dbContext.RawMaterials.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+
+
+            bool screenStatus = false;
+
+            screenStatus = result ? true : false;
+
+
+            return screenStatus;
+        }
+        private async Task<bool> CheckActualRawMaterialScreenStatus( int periodId)
+        {
+            var result = await _dbContext.ActualRawMaterials.AnyAsync(x => x.PeriodId == periodId);
+
+
+            bool screenStatus = false;
+
+            screenStatus = result ? true : false;
+
+
+            return screenStatus;
         }
 
     }

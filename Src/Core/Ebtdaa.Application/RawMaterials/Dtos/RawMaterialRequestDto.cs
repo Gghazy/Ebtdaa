@@ -12,7 +12,7 @@ namespace Ebtdaa.Application.RawMaterials.Dtos
         public List<int> FactoryProductId { get; set; }
         // public int ProductId { get; set; }
         public int UnitId { get; set; }
-
+        public int PeriodId { get; set; }
         public string? Description { get; set; }
         public int FactoryId { get; set; }
         public int? PhotoId { get; set; }

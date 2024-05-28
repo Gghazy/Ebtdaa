@@ -50,5 +50,13 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _RawMaterialService.UpdateAsync(req));
 
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync(int id)
+        {
+
+            return Ok(await _RawMaterialService.DeleteAsync(id));
+
+        }
     }
 }
