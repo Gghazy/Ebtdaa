@@ -56,38 +56,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                         .ThenInclude(x => x.ActualProductionUint)
                         .ToQueryResult(search.PageNumber, search.PageSize));
 
-
-        //    var result = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
-        //                 await _dbContext.FactoryProducts
-        //                .Include(x => x.Product)
-        //                .Where(x => x.FactoryId == search.FactoryId)
-        //                .Include(x => x.ActualProductionAndCapacities.Where(apc => apc.PeriodId == search.PeriodId))
-        //                .ThenInclude(apc => apc.DesignedCapacityUnit)
-        //.Include(x => x.ActualProductionAndCapacities)
-        //    .ThenInclude(apc => apc.ActualProductionUint)
-        //.Join(_dbContext.MappingProducts,
-        //      fp => fp.Product.ItemNumber,
-        //      mp => mp.Hs10Code,
-        //      (fp, mp) => new
-        //      {
-        //          FactoryProduct = fp,
-        //          MappedProduct = mp
-        //      })
-        //.Select(joined => new ProductCapacityResultDto
-        //{
-
-        //    ProductName = $"{joined.MappedProduct.Hs12NameAr} ({joined.MappedProduct.Hs12Code})",
-        //    //ActualProductionAndCapacityId = joined.FactoryProduct.ActualProductionAndCapacities.FirstOrDefault().Id,
-        //    DesignedCapacity = joined.FactoryProduct.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacity ?? 0,
-        //    ActualProduction = joined.FactoryProduct.ActualProductionAndCapacities.FirstOrDefault().ActualProduction ?? 0,
-        //    ActualProductionWeight = joined.FactoryProduct.ActualProductionAndCapacities.FirstOrDefault().ActualProductionWeight ?? 0,
-        //    //ReasoneForIncreaseCapacity = 0,
-        //    DesignedCapacityUnitName = joined.FactoryProduct.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacityUnit.Name,
-        //    ActualProductionUintName = joined.FactoryProduct.ActualProductionAndCapacities.FirstOrDefault().ActualProductionUint.Name,
-        //    Kilograms_Per_Unit = joined.FactoryProduct.Product.Kilograms_Per_Unit ?? 0
-        //})
-        //.ToQueryResult(search.PageNumber, search.PageSize));
-
+    
 
             return new BaseResponse<QueryResult<ProductCapacityResultDto>>
             {

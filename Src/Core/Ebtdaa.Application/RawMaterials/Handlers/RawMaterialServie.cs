@@ -50,18 +50,17 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
                 foreach (var item in req.FactoryProductId)
                 {
-                    ProductRawMaterial x = new ProductRawMaterial();
+                    var x = new ProductRawMaterial();
                             x.ProductId = item;
                     x.rawMaterialId = rawMaterial.Id;
                     
 
-                    var products = _mapper.Map<ProductRawMaterial>(x);
-                    await _dbContext.ProductRawMaterials.AddAsync(x);
-                    await _dbContext.SaveChangesAsync();
+                   var products = _mapper.Map<ProductRawMaterial>(x);
+                      await _dbContext.ProductRawMaterials.AddAsync(x);
                 }
-                //await _dbContext.SaveChangesAsync();
+               await _dbContext.SaveChangesAsync();
 
-
+                
 
                 return new BaseResponse<RawMaterialResultDto>
             {
@@ -144,7 +143,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                        var productRawMateriall = new ProductRawMaterial
                         {
                             ProductId = item,
-                            rawMaterialId =rawMaterial.Id
+                            rawMaterialId =rawMaterialUpdated.Id
                         };
 
 
@@ -222,9 +221,9 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 }).ToList();
 
                 var mappedResult = new QueryResult<RawMaterialResultDto>(
-                   resultDto,          // Pass the list of items
-                   resultDto.Count,    // Set total count to the number of items in the list
-                   search.PageSize,    // Set page size
+                   resultDto,          
+                   resultDto.Count,    
+                   search.PageSize,    
                    search.PageNumber   
                     );
 

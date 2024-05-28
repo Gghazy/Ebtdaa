@@ -12,7 +12,7 @@ namespace Ebtdaa.Application.RawMaterials.Dtos
     {
       //  public int Id { get; set; }
         public int rawMaterialId { get; set; }
-        public int FactoryProductId { get; set; }
+        public int ProductId { get; set; }
       //  public string ProductName { get; set; }
     }
 }
