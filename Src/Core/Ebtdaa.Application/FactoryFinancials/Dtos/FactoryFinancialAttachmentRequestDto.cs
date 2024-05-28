@@ -14,6 +14,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Dtos
         public FactoryFinancialFileType Type { get; set; }
         public int AttachmentId { get; set; }
         public int FactoryId { get; set; }
-        public int FactoryFinancialId { get; set; }
+        public int PeriodId { get; set; }
+        public int? FactoryFinancialId { get; set; }
     }
 }

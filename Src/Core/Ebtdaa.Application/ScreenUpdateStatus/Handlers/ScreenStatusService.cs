@@ -35,7 +35,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             var result = new ScreenStatusResultDto();
 
             result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
-            result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId);
+            result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId,periodId);
             result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
             result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId , periodId);
             result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
@@ -65,13 +65,13 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             return screenStatus;
         }
 
-        private async Task<bool> CheckFactoryFinanicailScreenStatus(int factoryId)
+        private async Task<bool> CheckFactoryFinanicailScreenStatus(int factoryId, int periodId)
         {
             var result = await _dbContext.FactoryFinancials.AnyAsync(x => x.FactoryId == factoryId);
 
             var attachment = await _dbContext.FactoryFinancialAttachments
                 .Include(x => x.FactoryFinancial)
-                .Where(x => x.FactoryFinancial.FactoryId == factoryId).ToListAsync();
+                .Where(x => x.FactoryId == factoryId && x. PeriodId== periodId).ToListAsync();
 
 
             bool screenStatus = false;
@@ -107,7 +107,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
         {
             var result = await _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-            var attachment = await _dbContext.FactoryLocationAttachments.Include(x => x.FactoryLocation).AnyAsync(x => x.FactoryLocation.FactoryId == factoryId);
+            var attachment = await _dbContext.FactoryLocationAttachments.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             bool screenStatus = false;
 

@@ -27,10 +27,11 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         }
 
 
-        public async Task<BaseResponse<List<FactoryLocationAttachmentResultDto>>> GetAll(int id)
+        public async Task<BaseResponse<List<FactoryLocationAttachmentResultDto>>> GetAll(int id,int periodId)
         {
             var respose = _mapper.Map<List<FactoryLocationAttachmentResultDto>>(
-                await _dbContext.FactoryLocationAttachments.Where(x=>x.FactoryLocation.FactoryId==id).Include(x=>x.Attachment).ToListAsync());
+                await _dbContext.FactoryLocationAttachments
+                .Where(x=>x.FactoryId==id && x.PeriodId==periodId).Include(x=>x.Attachment).ToListAsync());
 
             return new BaseResponse<List<FactoryLocationAttachmentResultDto>>
             {
@@ -62,7 +63,7 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
 
         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int id)
         {
-            var file = await _dbContext.FactoryLocationAttachments.Include(x=>x.FactoryLocation).FirstOrDefaultAsync(x=>x.Id== id);
+            var file = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x=>x.Id== id);
 
             _dbContext.FactoryLocationAttachments.Remove(file);
 
@@ -76,6 +77,5 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
             };
         }
 
-       
     }
 }

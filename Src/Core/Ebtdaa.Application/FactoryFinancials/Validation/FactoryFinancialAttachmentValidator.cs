@@ -12,9 +12,9 @@ namespace Ebtdaa.Application.FactoryFinancials.Validation
               .NotEmpty()
               .WithMessage("Attachment-IsRequired-Field");
 
-            RuleFor(d => d.FactoryFinancialId)
-                .NotEmpty()
-                .WithMessage("Factory Financial-IsRequired-Field");
+            //RuleFor(d => d.FactoryFinancialId)
+            //    .NotEmpty()
+            //    .WithMessage("Factory Financial-IsRequired-Field");
 
 
 
