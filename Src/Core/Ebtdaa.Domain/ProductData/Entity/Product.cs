@@ -16,6 +16,7 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public string? Status { get; set; }
         public bool? Review { get; set; }
         public string? Level12Number { get; set; }
+        public string? Level12ItemName { get; set; }
 
 
         public double? Kilograms_Per_Unit { get; set; }
