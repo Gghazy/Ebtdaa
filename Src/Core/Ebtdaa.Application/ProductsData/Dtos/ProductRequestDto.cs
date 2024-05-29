@@ -19,5 +19,7 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public double? Kilograms_Per_Unit { get; set; }
         public int? PhototId { get; set; }
         public int? PeperId { get; set; }
+        public string? Level12ItemName { get; set; }
+
     }
 }
