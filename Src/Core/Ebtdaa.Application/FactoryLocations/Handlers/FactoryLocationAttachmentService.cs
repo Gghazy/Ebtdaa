@@ -31,7 +31,7 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         {
             var respose = _mapper.Map<List<FactoryLocationAttachmentResultDto>>(
                 await _dbContext.FactoryLocationAttachments
-               // .Where(x=>x.FactoryId==id && x.PeriodId==periodId)
+                //.Where(x => x.FactoryLocation.FactoryId == id)
                 .Include(x=>x.Attachment).ToListAsync());
 
             return new BaseResponse<List<FactoryLocationAttachmentResultDto>>
