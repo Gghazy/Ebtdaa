@@ -24,14 +24,16 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryLocationValidator _validator;
+        private readonly FactoryLocationAttachmentValidator _validatorAttachment;
         private readonly IScreenStatusService _screenStatusService;
 
-        public FactoryLocationService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryLocationValidator validator, IScreenStatusService screenStatusService)
+        public FactoryLocationService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryLocationValidator validator, IScreenStatusService screenStatusService, FactoryLocationAttachmentValidator validatorAttachment)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
             _screenStatusService = screenStatusService;
+            _validatorAttachment = validatorAttachment;
         }
         public async Task<BaseResponse<FactoryLocationResultDto>> GetOne(int factoryId , int periodId)
         {
@@ -44,22 +46,40 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         }
         public async Task<BaseResponse<FactoryLocationResultDto>> AddAsync(FactoryLocationRequestDto req)
         {
-            var factoryLocation = _mapper.Map<FactoryLocation>(req);
-
-            // Validation
-            var result = await _validator.ValidateAsync(factoryLocation);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.FactoryLocations.AddAsync(factoryLocation);
-
-            await _dbContext.SaveChangesAsync();
-
-
-
-            return new BaseResponse<FactoryLocationResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryLocationResultDto>(factoryLocation)
-            };
+                var factoryLocation = _mapper.Map<FactoryLocation>(req);
+
+                // Validation
+                var result = await _validator.ValidateAsync(factoryLocation);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.FactoryLocations.AddAsync(factoryLocation);
+                await _dbContext.SaveChangesAsync();
+
+                foreach (var item in req.factoryLocationAttachments)
+                {
+                    var file = _mapper.Map<FactoryLocationAttachment>(item);
+                    file.Name = req.FactoryId
+                                   + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                                   + file.AttachmentId;
+                    var attachResult = await _validatorAttachment.ValidateAsync(file);
+                    if (attachResult.IsValid == false) throw new ValidationException(result.Errors);
+                    await _dbContext.FactoryLocationAttachments.AddAsync(file);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                //var FactoryLocation = await _dbContext.FactoryLocations.FirstOrDefaultAsync(x => x.Id == req.FactoryLocationId);
+
+                return new BaseResponse<FactoryLocationResultDto>
+                {
+                    Data = _mapper.Map<FactoryLocationResultDto>(factoryLocation)
+                };
+            }
+            catch(Exception ex) 
+            {
+                throw;
+            }
         }
         public async Task<BaseResponse<FactoryLocationResultDto>> UpdateAsync(FactoryLocationRequestDto req)
         {

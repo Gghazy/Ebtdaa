@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ebtdaa.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,8 @@ namespace Ebtdaa.Application.FactoryLocations.Dtos
         public string WebSite { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId {  get; set; }
+
+        public List<FactoryLocationAttachmentRequestDto> factoryLocationAttachments { get; set; }
+       
     }
 }
