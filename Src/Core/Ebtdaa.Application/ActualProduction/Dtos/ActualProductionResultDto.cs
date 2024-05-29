@@ -20,6 +20,8 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
         public string DesignedCapacityUnitName { get; set; }
         public string ActualProductionUintName { get; set; }
         public string ProductName { get; set; }
+        public string Level12Number { get; set; }
+        public string Level12ItemName { get; set; }
 
     }
 }
