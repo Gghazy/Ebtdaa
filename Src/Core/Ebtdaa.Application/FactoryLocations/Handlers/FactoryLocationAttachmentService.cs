@@ -44,7 +44,7 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
             try
             {
                 var file = _mapper.Map<FactoryLocationAttachment>(req);
-                file.Name = req.FactoryId
+                file.Name = req.FactoryLocationId
                                + DateTime.Today.Date.ToShortDateString().Replace("/", "")
                                + file.AttachmentId;
                 var result = await _validator.ValidateAsync(file);

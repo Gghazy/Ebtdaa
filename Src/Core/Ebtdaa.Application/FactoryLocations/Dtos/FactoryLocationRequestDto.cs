@@ -14,10 +14,9 @@ namespace Ebtdaa.Application.FactoryLocations.Dtos
         public int CityId { get; set; }
         public int IndustrialAreaId { get; set; }
         public string WebSite { get; set; }
-        public int FactoryId { get; set; }
-        public int PeriodId {  get; set; }
+        public int FactoryLocationId { get; set; }
+       
 
-        public List<FactoryLocationAttachmentRequestDto> factoryLocationAttachments { get; set; }
        
     }
 }

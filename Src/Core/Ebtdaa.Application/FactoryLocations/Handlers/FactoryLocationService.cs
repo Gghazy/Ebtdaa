@@ -57,20 +57,6 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
                 await _dbContext.FactoryLocations.AddAsync(factoryLocation);
                 await _dbContext.SaveChangesAsync();
 
-                foreach (var item in req.factoryLocationAttachments)
-                {
-                    var file = _mapper.Map<FactoryLocationAttachment>(item);
-                    file.Name = req.FactoryId
-                                   + DateTime.Today.Date.ToShortDateString().Replace("/", "")
-                                   + file.AttachmentId;
-                    var attachResult = await _validatorAttachment.ValidateAsync(file);
-                    if (attachResult.IsValid == false) throw new ValidationException(result.Errors);
-                    await _dbContext.FactoryLocationAttachments.AddAsync(file);
-                    await _dbContext.SaveChangesAsync();
-                }
-
-                //var FactoryLocation = await _dbContext.FactoryLocations.FirstOrDefaultAsync(x => x.Id == req.FactoryLocationId);
-
                 return new BaseResponse<FactoryLocationResultDto>
                 {
                     Data = _mapper.Map<FactoryLocationResultDto>(factoryLocation)
