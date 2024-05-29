@@ -15,10 +15,14 @@ namespace Ebtdaa.Application.ActualProduction.Mapper
 
             CreateMap<ActualProductionRequestDto, ActualProductionAndCapacity>();
             CreateMap<ActualProductionAndCapacity, ActualProductionResultDto>()
-                                                 .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.FactoryProduct.Product.ProductName));
+                                                 .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.FactoryProduct.Product.ProductName))
+                                                 .ForMember(d => d.Level12ItemName, opt => opt.MapFrom(src => src.FactoryProduct.Product.Level12ItemName))
+                                                 .ForMember(d => d.Level12Number, opt => opt.MapFrom(src => src.FactoryProduct.Product.Level12Number));
 
             CreateMap<FactoryProduct, ProductCapacityResultDto>()
                                  .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
+                                 .ForMember(d => d.Level12ItemName, opt => opt.MapFrom(src => src.Product.Level12ItemName))
+                                 .ForMember(d => d.Level12Number, opt => opt.MapFrom(src => src.Product.Level12Number))
                                  .ForMember(d => d.ActualProductionAndCapacityId, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().Id : 0))
                                  .ForMember(d => d.DesignedCapacityUnitName, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacityUnit.Name : ""))
                                  .ForMember(d => d.ActualProductionUintName, opt => opt.MapFrom(src => src.ActualProductionAndCapacities.Count > 0 ? src.ActualProductionAndCapacities.FirstOrDefault().ActualProductionUint.Name : ""))

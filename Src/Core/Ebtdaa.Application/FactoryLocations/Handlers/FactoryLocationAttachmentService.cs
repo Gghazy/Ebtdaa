@@ -41,25 +41,27 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         }
         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> AddAsync(FactoryLocationAttachmentRequestDto req)
         {
-            var file = _mapper.Map<FactoryLocationAttachment>(req);
-            file.Name = req.FactoryId
-                           + DateTime.Today.Date.ToShortDateString().Replace("/", "")
-                           + file.AttachmentId;
-
-            var result = await _validator.ValidateAsync(file);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.FactoryLocationAttachments.AddAsync(file);
-
-            await _dbContext.SaveChangesAsync();
-
-            var FactoryLocation= await _dbContext.FactoryLocations.FirstOrDefaultAsync(x=>x.Id==req.FactoryLocationId);
-
-
-            return new BaseResponse<FactoryLocationAttachmentResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
-            };
+                var file = _mapper.Map<FactoryLocationAttachment>(req);
+                file.Name = req.FactoryId
+                               + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                               + file.AttachmentId;
+                var result = await _validator.ValidateAsync(file);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+                await _dbContext.FactoryLocationAttachments.AddAsync(file);
+                await _dbContext.SaveChangesAsync();
+                var FactoryLocation= await _dbContext.FactoryLocations.FirstOrDefaultAsync(x=>x.Id==req.FactoryLocationId);
+                return new BaseResponse<FactoryLocationAttachmentResultDto>
+                {
+                    Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
+                };
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+           
         }
 
         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int id)
