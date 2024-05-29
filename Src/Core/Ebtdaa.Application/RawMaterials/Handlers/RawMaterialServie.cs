@@ -227,6 +227,12 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                    search.PageNumber   
                     );
 
+                if (resultDto == null)
+                {
+                    return null;  
+                }
+
+
                 return new BaseResponse<QueryResult<RawMaterialResultDto>>
                 {
                     Data = mappedResult

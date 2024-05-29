@@ -8,33 +8,27 @@ namespace Ebtdaa.Persistence.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_FactoryLocationAttachments_Factories_FactoryId",
-                table: "FactoryLocationAttachments");
-
+           
             migrationBuilder.DropForeignKey(
                 name: "FK_FactoryLocationAttachments_FactoryLocations_FactoryLocationId",
                 table: "FactoryLocationAttachments");
 
-            migrationBuilder.DropForeignKey(
-                name: "FK_FactoryLocationAttachments_Periods_PeriodId",
-                table: "FactoryLocationAttachments");
+            //migrationBuilder.DropForeignKey(
+            //    name: "FK_FactoryLocationAttachments_Periods_PeriodId",
+            //    table: "FactoryLocationAttachments");
 
-            migrationBuilder.DropIndex(
-                name: "IX_FactoryLocationAttachments_FactoryId",
-                table: "FactoryLocationAttachments");
+          
+            //migrationBuilder.DropIndex(
+            //    name: "IX_FactoryLocationAttachments_PeriodId",
+            //    table: "FactoryLocationAttachments");
 
-            migrationBuilder.DropIndex(
-                name: "IX_FactoryLocationAttachments_PeriodId",
-                table: "FactoryLocationAttachments");
+            //migrationBuilder.DropColumn(
+            //    name: "FactoryId",
+            //    table: "FactoryLocationAttachments");
 
-            migrationBuilder.DropColumn(
-                name: "FactoryId",
-                table: "FactoryLocationAttachments");
-
-            migrationBuilder.DropColumn(
-                name: "PeriodId",
-                table: "FactoryLocationAttachments");
+            //migrationBuilder.DropColumn(
+            //    name: "PeriodId",
+            //    table: "FactoryLocationAttachments");
 
             migrationBuilder.AlterColumn<int>(
                 name: "FactoryLocationId",

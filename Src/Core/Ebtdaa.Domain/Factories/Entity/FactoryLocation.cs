@@ -26,5 +26,6 @@ namespace Ebtdaa.Domain.Factories.Entity
         public virtual ICollection<FactoryLocationAttachment> FactoryLocationAttachments { get; set; }
 
 
+
     }
 }

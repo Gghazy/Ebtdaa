@@ -15,12 +15,9 @@ namespace Ebtdaa.Domain.Factories.Entity
         public FactoryLocationAttachmentType Type { get; set; }
         public string Name { get; set; }
         public int AttachmentId { get; set; }
-        public int FactoryId { get; set; }
-        public int PeriodId { get; set; }
-
-
+        public int FactoryLocationId { get; set; }
         public virtual Attachment Attachment { get; set; }
-        public virtual Factory Factory { get; set; }
-        public virtual Period Period { get; set; }
+        public virtual FactoryLocation FactoryLocation { get; set; }
+
     }
 }
