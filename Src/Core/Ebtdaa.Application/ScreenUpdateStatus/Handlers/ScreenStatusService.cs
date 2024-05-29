@@ -43,7 +43,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
             result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
             result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId,periodId);
-            result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(periodId);
+            result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(factoryId, periodId);
 
 
 
@@ -107,7 +107,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
         {
             var result = await _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-           // var attachment = await _dbContext.FactoryLocationAttachments.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+         //   var attachment = await _dbContext.FactoryLocationAttachments.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             bool screenStatus = false;
 
@@ -247,9 +247,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             return screenStatus;
         }
-        private async Task<bool> CheckActualRawMaterialScreenStatus( int periodId)
+        private async Task<bool> CheckActualRawMaterialScreenStatus(int factoryId ,int periodId)
         {
-            var result = await _dbContext.ActualRawMaterials.AnyAsync(x => x.PeriodId == periodId);
+            var result = await _dbContext.ActualRawMaterials.AnyAsync(x => x.RawMaterial.FactoryId==factoryId&& x.PeriodId == periodId);
 
 
             bool screenStatus = false;
