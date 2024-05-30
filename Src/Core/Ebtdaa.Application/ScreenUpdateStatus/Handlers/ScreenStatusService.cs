@@ -138,7 +138,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .ToListAsync();
 
             var result = await _dbContext.FactoryProducts
-                .AnyAsync(x => activeProduct.Contains(x.Id) && x.PeperId != null);
+                .AnyAsync(x => activeProduct.Contains(x.Id));
             bool screenStatus = false;
 
 
