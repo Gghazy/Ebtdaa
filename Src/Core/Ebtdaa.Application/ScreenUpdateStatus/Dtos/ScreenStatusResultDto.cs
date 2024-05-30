@@ -16,6 +16,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Dtos
         public bool? ActualProduction { get; set; }
         public bool? RawMaterial { get; set; }
         public bool? ActualRawMaterila { get; set; }
+        //public FactoryStatusEnum FactoryStatusId { get; set; }
+
 
     }
 }

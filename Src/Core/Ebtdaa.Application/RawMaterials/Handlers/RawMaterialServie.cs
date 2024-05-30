@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.FactoryLocations.Dtos;
-using Ebtdaa.Application.ProductsData.Dtos;
-using Ebtdaa.Application.ProductsData.Handlers;
-using Ebtdaa.Application.ProductsData.Interfaces;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
 using Ebtdaa.Application.RawMaterials.Validation;
 using Ebtdaa.Common.Dtos;
-using Ebtdaa.Common.Extentions;
-using Ebtdaa.Domain.ProductData.Entity;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -22,14 +16,16 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
     public class RawMaterialServie : IRawMaterialService
     {
         private readonly IEbtdaaDbContext _dbContext;
+        private readonly IItemAttachmentService _itemAttachmentService;
         public readonly IMapper _mapper;
         private readonly RawMaterialValidtor _rawMaterialValidtor;
 
-        public RawMaterialServie(IEbtdaaDbContext dbContext, IMapper mapper, RawMaterialValidtor rawMaterialValidtor)
+        public RawMaterialServie(IEbtdaaDbContext dbContext, IMapper mapper, RawMaterialValidtor rawMaterialValidtor , IItemAttachmentService itemAttachmentService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _rawMaterialValidtor = rawMaterialValidtor;
+            _itemAttachmentService = itemAttachmentService;
         }
         public async Task<BaseResponse<RawMaterialResultDto>> AddAsync(RawMaterialRequestDto req)
         {
@@ -117,8 +113,6 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             
                 try
                 {
-
-
                     var rawMaterial = await _dbContext.RawMaterials
                                                 .Include(s => s.ProductRawMaterials)
                                                 .ThenInclude(x => x.Product)
@@ -126,27 +120,18 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                                                 .FirstOrDefaultAsync(x => x.Id == req.Id);
                     var rawMaterialUpdated = _mapper.Map(req, rawMaterial);
                     //   var rawMaterialproductUpdated = _mapper.Map(req.ProductIds, rawMaterial.ProductRawMaterials);
-
-
                     var result = await _rawMaterialValidtor.ValidateAsync(rawMaterialUpdated);
                     if (result.IsValid == false) throw new ValidationException(result.Errors);
 
                     await _dbContext.SaveChangesAsync();
-
-
                     _dbContext.ProductRawMaterials.RemoveRange(rawMaterial.ProductRawMaterials);
-
-
                     foreach (var item in req.FactoryProductId)
                     {
-
                        var productRawMateriall = new ProductRawMaterial
                         {
                             ProductId = item,
                             rawMaterialId =rawMaterialUpdated.Id
                         };
-
-
 
                         await _dbContext.ProductRawMaterials.AddAsync(productRawMateriall);
 
@@ -192,8 +177,6 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
             await _dbContext.SaveChangesAsync();
 
-
-
             return new BaseResponse<RawMaterialResultDto>
             {
                 Data = _mapper.Map<RawMaterialResultDto>(material)
@@ -203,8 +186,6 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         {
             try
             {
-
-            
             var respose =await _dbContext.RawMaterials
                             .Include(x=>x.ProductRawMaterials)
                             .ThenInclude(x=>x.Product)
@@ -231,8 +212,6 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
                     return null;  
                 }
-
-
                 return new BaseResponse<QueryResult<RawMaterialResultDto>>
                 {
                     Data = mappedResult
@@ -243,9 +222,19 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
                 throw;
             }
+        }
+        public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
+        {
+            var result = await _dbContext.RawMaterials
+                                     .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                                     .ToListAsync();
 
+            _dbContext.RawMaterials.RemoveRange(result);
 
-
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
         }
     } 
 }

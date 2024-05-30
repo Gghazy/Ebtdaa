@@ -11,5 +11,7 @@ namespace Ebtdaa.Application.ProductsData.Interfaces
     public interface IProductPeriodActiveService
     {
         Task<BaseResponse<List<ProductPeriodActiveResultDto>>> AddAsync(List<ProductPeriodActiveRequestDto> req);
+        Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId);
+
     }
 }

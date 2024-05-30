@@ -7,7 +7,13 @@ using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.Factories.Validation;
 using Ebtdaa.Application.FactoryContacts.Dtos;
+using Ebtdaa.Application.FactoryContacts.Interfaces;
+using Ebtdaa.Application.FactoryLocations.Interfaces;
+using Ebtdaa.Application.FactoryMonthlyFinancials.Interfaces;
 using Ebtdaa.Application.LogIn.Interfaces;
+using Ebtdaa.Application.ProductsData.Handlers;
+using Ebtdaa.Application.ProductsData.Interfaces;
+using Ebtdaa.Application.RawMaterials.Interfaces;
 using Ebtdaa.Application.ScreenUpdateStatus.Dtos;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Common.Dtos;
@@ -34,19 +40,26 @@ namespace Ebtdaa.Application.Factories.Handlers
         private readonly FactoryValidator _factoryValidator;
         private readonly IActualProductionService _actualProductionService;
         private readonly IActualRawMaterialService _actualRawMaterialService;
+        private readonly IProductPeriodActiveService _productPeriodService;
+        private readonly IRawMaterialService _rawMaterialService;
+        private readonly IFactoryMonthlyFinancialService _factoryMonthlyFinancial;
+        private readonly IFactoryLocationService _factoryLocation;
+        private readonly IFactoryContactService _factoryContactService;
+
 
         public FactoryService(
-            IEbtdaaDbContext dbContext,
-            IMapper mapper,
-            FactoryValidator factoryValidator,
-            IActualProductionService actualProductionService,
-            IActualRawMaterialService actualRawMaterialService)
+            IEbtdaaDbContext dbContext,IMapper mapper,FactoryValidator factoryValidator,IActualProductionService actualProductionService,IActualRawMaterialService actualRawMaterialService, IProductPeriodActiveService productPeriodService, IRawMaterialService rawMaterialService , IFactoryMonthlyFinancialService factoryMonthlyFinancial, IFactoryLocationService factoryLocation, IFactoryContactService factoryContactService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _factoryValidator = factoryValidator;
             _actualProductionService = actualProductionService;
             _actualRawMaterialService = actualRawMaterialService;
+            _productPeriodService = productPeriodService;
+            _rawMaterialService = rawMaterialService;
+            _factoryMonthlyFinancial = factoryMonthlyFinancial;
+            _factoryLocation = factoryLocation;
+            _factoryContactService = factoryContactService;
         }
         public async Task<BaseResponse<QueryResult<FactoryResualtDto>>> GetAll(FactorySearch search)
         {
@@ -98,9 +111,6 @@ namespace Ebtdaa.Application.Factories.Handlers
                 {
                     Data = responseDto
                 };
-           
-           
-
         }
 
         public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
@@ -131,22 +141,30 @@ namespace Ebtdaa.Application.Factories.Handlers
                 await _dbContext.BasicFactoryInfos.AddAsync(factory);
             }
 
-
-            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction || factory.FactoryStatusId == FactoryStatusEnum.Under_Construction)
+            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction /*|| factory.FactoryStatusId == FactoryStatusEnum.Under_Construction*/)
             {
-              await  _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+              await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
               await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+              await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+              await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId , req.PeriodId);
             }
             if (factory.FactoryStatusId == FactoryStatusEnum.Under_Production)
             {
                 await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
                 await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
             }
-
+            if(factory.FactoryStatusId == FactoryStatusEnum.Canceled)
+            {
+                await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                //await _factoryMonthlyFinancial.DeleteByFactoryIdAndPeriodId(req.FactoryId , req.PeriodId);
+                await _factoryLocation.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                await _factoryContactService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+            }
             await _dbContext.SaveChangesAsync();
            
-
-
             return new BaseResponse<bool>
             {
                 Data =true

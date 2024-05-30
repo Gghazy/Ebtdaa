@@ -33,19 +33,57 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .Where(x => (x.PeriodId == periodId || x.PeriodId == null) && x.FactoryId == factoryId).ToListAsync();
 
             var result = new ScreenStatusResultDto();
-
-            result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
-            result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId,periodId);
-            result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
-            result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId , periodId);
-            result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
-            result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
-            result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
-            result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
-            result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId,periodId);
-            result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(factoryId, periodId);
-
-
+            if(factory.Data.Status == FactoryStatusEnum.Under_Construction)
+            {
+                result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId, periodId);
+                result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
+            }
+            if(factory.Data.Status == FactoryStatusEnum.Under_Production)
+            {
+                result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId, periodId);
+                result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
+                //result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
+                result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
+                result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
+                result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
+                result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId, periodId);
+                //result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(factoryId, periodId);
+            }
+            if(factory.Data.Status == FactoryStatusEnum.Productive)
+            {
+                result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId, periodId);
+                result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
+                result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
+                result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
+                result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
+                result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
+                result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId, periodId);
+                result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(factoryId, periodId);
+            }
+            if (factory.Data.Status == FactoryStatusEnum.Stop)
+            {
+                result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId, periodId);
+                result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
+                result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
+                result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
+                result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
+                result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
+                result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId, periodId);
+                result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(factoryId, periodId);
+            }
+            if (factory.Data.Status == FactoryStatusEnum.Canceled)
+            {
+                result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
+            }
 
             return new BaseResponse<ScreenStatusResultDto>
             {

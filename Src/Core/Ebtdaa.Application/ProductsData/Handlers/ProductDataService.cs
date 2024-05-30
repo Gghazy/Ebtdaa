@@ -336,5 +336,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = resualt
             };
         }
+       
     }
 }

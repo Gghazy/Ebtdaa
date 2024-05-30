@@ -17,7 +17,8 @@ namespace Ebtdaa.Application.ActualProduction.Mapper
             CreateMap<ActualProductionAndCapacity, ActualProductionResultDto>()
                                                  .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.FactoryProduct.Product.ProductName))
                                                  .ForMember(d => d.Level12ItemName, opt => opt.MapFrom(src => src.FactoryProduct.Product.Level12ItemName))
-                                                 .ForMember(d => d.Level12Number, opt => opt.MapFrom(src => src.FactoryProduct.Product.Level12Number));
+                                                 .ForMember(d => d.Level12Number, opt => opt.MapFrom(src => src.FactoryProduct.Product.Level12Number))
+                                                 .ForMember(d => d.DesignedCapacityUnitId, opt => opt.MapFrom(src => src.FactoryProduct.Product.UnitId));
 
             CreateMap<FactoryProduct, ProductCapacityResultDto>()
                                  .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))

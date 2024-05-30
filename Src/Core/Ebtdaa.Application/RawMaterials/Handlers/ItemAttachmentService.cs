@@ -77,5 +77,17 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 Data = _mapper.Map<ItemAttachmentsResultDto>(itemUpdated)
             };
         }
+
+        public async Task<BaseResponse<bool>> Delete(int id)
+        {
+            var result = await _dbContext.RawMaterialAttachments.Where(x => x.Id == id).ToListAsync();
+
+            _dbContext.RawMaterialAttachments.RemoveRange(result);
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
     }
 }

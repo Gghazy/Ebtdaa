@@ -71,15 +71,23 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();
-
-
-
             return new BaseResponse<FactoryContactResultDto>
             {
                 Data = _mapper.Map<FactoryContactResultDto>(factoryContactUpdated)
             };
         }
 
+        public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
+        {
+            var result = await _dbContext.FactoryContacts
+                                     .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                                     .ToListAsync();
+            _dbContext.FactoryContacts.RemoveRange(result);
 
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
     }
 }

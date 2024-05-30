@@ -13,6 +13,6 @@ namespace Ebtdaa.Application.FactoryLocations.Interfaces
     {
         Task<BaseResponse<List<FactoryLocationAttachmentResultDto>>> GetAll(int id,int periodId);
         Task<BaseResponse<FactoryLocationAttachmentResultDto>> AddAsync(FactoryLocationAttachmentRequestDto req);
-        Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int id);
+        Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int factoryId , int periodId);
     }
 }

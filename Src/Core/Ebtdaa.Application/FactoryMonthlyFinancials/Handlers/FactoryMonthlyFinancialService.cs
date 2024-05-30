@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.FactoryFinancials.Dtos;
-using Ebtdaa.Application.FactoryFinancials.Validation;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Dtos;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Interfaces;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Validation;
@@ -75,6 +73,19 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Handlers
             return new BaseResponse<FactoryMonthlyFinancialResultDto>
             {
                 Data = _mapper.Map<FactoryMonthlyFinancialResultDto>(factoryFinancialUpdated)
+            };
+        }
+        public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
+        {
+            var result = await _dbContext.FactoryMonthlyFinancials
+                                     .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                                     .ToListAsync();
+
+            _dbContext.FactoryMonthlyFinancials.RemoveRange(result);
+
+            return new BaseResponse<bool>
+            {
+                Data = true
             };
         }
     }

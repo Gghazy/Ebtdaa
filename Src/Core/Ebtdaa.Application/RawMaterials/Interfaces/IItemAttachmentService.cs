@@ -9,6 +9,7 @@ namespace Ebtdaa.Application.RawMaterials.Interfaces
         Task<BaseResponse<ItemAttachmentsResultDto>> GetOne(int id);
         Task<BaseResponse<ItemAttachmentsResultDto>> AddAsync(ItemAttachmentsRequestDto req);
         Task<BaseResponse<ItemAttachmentsResultDto>> UpdateAsync(ItemAttachmentsRequestDto req);
+        Task<BaseResponse<bool>> Delete(int id);
 
     }
 }
