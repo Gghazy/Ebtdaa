@@ -36,6 +36,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             if(factory.Data.Status == FactoryStatusEnum.Under_Construction)
             {
                 result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
                 result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
                 result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId, periodId);
                 result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
