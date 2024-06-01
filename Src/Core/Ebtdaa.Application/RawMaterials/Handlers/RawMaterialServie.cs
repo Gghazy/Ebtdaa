@@ -77,7 +77,6 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             var result = await _dbContext.RawMaterials
                      .Include(s=>s.ProductRawMaterials)
                      .ThenInclude(x=>x.Product)
-                      .AsNoTracking()
                      .FirstOrDefaultAsync(x => x.Id == id);
             try
             {
@@ -116,7 +115,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                     var rawMaterial = await _dbContext.RawMaterials
                                                 .Include(s => s.ProductRawMaterials)
                                                 .ThenInclude(x => x.Product)
-                                                 .AsNoTracking()
+                                                
                                                 .FirstOrDefaultAsync(x => x.Id == req.Id);
                     var rawMaterialUpdated = _mapper.Map(req, rawMaterial);
                     //   var rawMaterialproductUpdated = _mapper.Map(req.ProductIds, rawMaterial.ProductRawMaterials);
@@ -156,7 +155,6 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             var data = await _dbContext.RawMaterials
                 .Include(x => x.ProductRawMaterials)
                 .ThenInclude(x => x.Product)
-                 .AsNoTracking()
                 .ToListAsync();
            
             var response = _mapper.Map<List<RawMaterialResultDto>>(data);
@@ -187,26 +185,43 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             try
             {
             var respose =await _dbContext.RawMaterials
-                            .Include(x=>x.ProductRawMaterials)
-                            .ThenInclude(x=>x.Product)
-                             .Where(x => x.FactoryId == id && x.PeriodId == search.PeriodId)
-                             .ToListAsync();
+                               .Include(x=>x.ProductRawMaterials)
+                               .ThenInclude(x=>x.Product)
+                               .Where(x => x.FactoryId == id && x.PeriodId == search.PeriodId)
+                               .Select(x=>new RawMaterialResultDto
+                               {
+                                  Id=x.Id,
+        CustomItemName=x.CustomItemName,
+       ProductName=x.ProductRawMaterials.Select(y=>y.Product.Level12ItemName).FirstOrDefault()
+     + '('+ x.ProductRawMaterials.Select(y => y.Product.Level12Number).FirstOrDefault() + ')',
+       
+                             Name=x.Name,
+       FactoryProductId=x.ProductRawMaterials.Select(x=>x.ProductId).ToList(),
+       MaximumMonthlyConsumption=x.MaximumMonthlyConsumption,
+       AverageWeightKG=x.AverageWeightKG,
+       UnitId=x.UnitId,
+       Description=x.Description,
+       FactoryId=x.FactoryId,
+       PeriodId=x.PeriodId,
+       PhotoId=x.PhotoId??0,
+       PaperId=x.PaperId??0
+    })
+                               .ToListAsync();
 
                 var resultDto = respose.Select(rawMaterial =>
                 {
                     var dto = _mapper.Map<RawMaterialResultDto>(rawMaterial);
-                    dto.FactoryProductId = rawMaterial.ProductRawMaterials
-                        .Select(prm => prm.ProductId)
+                    dto.FactoryProductId = rawMaterial.FactoryProductId
+                      //  .Select(prm => prm)
                         .ToList();
-                    return dto;
+                        return dto;
                 }).ToList();
 
                 var mappedResult = new QueryResult<RawMaterialResultDto>(
-                   resultDto,          
-                   resultDto.Count,    
-                   search.PageSize,    
-                   search.PageNumber   
-                    );
+                   resultDto,
+                   resultDto.Count,
+                   search.PageSize,
+                   search.PageNumber);
 
                 if (resultDto == null)
                 {

@@ -82,13 +82,14 @@ namespace Ebtdaa.Application.Factories.Handlers
         {
             var resualt = await _dbContext.Factories
                                 .Include(x => x.BaiscFactoryInfos)
-                                .FirstOrDefaultAsync(x => x.Id == id);
+                                .FirstOrDefaultAsync(x => x.Id == id );
             FactoryResualtDto responseDto = null;
+            
             if (resualt.BaiscFactoryInfos != null)
             {
 
                 var basicinfo = resualt.BaiscFactoryInfos
-                    .FirstOrDefault(x => x.PeriodId == periodId);
+                    .Where(x => x.PeriodId == periodId).FirstOrDefault();
 
                 if (basicinfo!=null)
                 {
@@ -96,9 +97,9 @@ namespace Ebtdaa.Application.Factories.Handlers
 
                     responseDto = new FactoryResualtDto
                     {
-                        DataApprover = basicinfo.DataApprover,
-                        DataReviewer = basicinfo.DataReviewer,
-                        DataEntry = basicinfo.DataEntry
+                    DataApprover = basicinfo.DataApprover,
+                    DataReviewer = basicinfo.DataReviewer,
+                    DataEntry = basicinfo.DataEntry
                     };
 
                 }
