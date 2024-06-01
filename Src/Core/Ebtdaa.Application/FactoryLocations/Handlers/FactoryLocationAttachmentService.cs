@@ -67,8 +67,11 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int factoryId , int periodId)
         {
             var file = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x=>x.FactoryId== factoryId && x.PeriodId == periodId);
+            if(file != null)
+            {
+                _dbContext.FactoryLocationAttachments.Remove(file);
 
-            _dbContext.FactoryLocationAttachments.Remove(file);
+            }
 
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<FactoryLocationAttachmentResultDto>

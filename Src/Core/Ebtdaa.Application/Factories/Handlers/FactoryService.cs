@@ -102,22 +102,26 @@ namespace Ebtdaa.Application.Factories.Handlers
                     };
 
                 }
-
-                responseDto = _mapper.Map<FactoryResualtDto>(resualt);
+                //var getAttachment = await _dbContext.BasicFactoryInfos.Include(x =>x.)
 
             }
-           
-                return new BaseResponse<FactoryResualtDto>
+            var response = _mapper.Map<FactoryResualtDto>(responseDto);
+
+            return new BaseResponse<FactoryResualtDto>
                 {
-                    Data = responseDto
+                    Data = response
                 };
         }
 
         public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
         {
+            var isCheckExist = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == req.FactoryId);
+            var isFactoryExist = _mapper.Map(req, isCheckExist);
+          
+            await _dbContext.SaveChangesAsync();
+
             var factory = await _dbContext.BasicFactoryInfos
                             .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId&&x.PeriodId==req.PeriodId);
-
 
             if (factory != null)
             {
@@ -141,7 +145,7 @@ namespace Ebtdaa.Application.Factories.Handlers
                 await _dbContext.BasicFactoryInfos.AddAsync(factory);
             }
 
-            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction /*|| factory.FactoryStatusId == FactoryStatusEnum.Under_Construction*/)
+            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
             {
               await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
               await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
