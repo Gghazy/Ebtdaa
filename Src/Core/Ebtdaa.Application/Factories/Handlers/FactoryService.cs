@@ -27,6 +27,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,19 +103,38 @@ namespace Ebtdaa.Application.Factories.Handlers
                         CommercialRegister = resualt.CommercialRegister,
                         NameAr = resualt.NameAr,
                         Activity = resualt.Activity,
-                        Status= basicinfo.FactoryStatusId
+                        Status= basicinfo.FactoryStatusId,
+                        PeriodId = periodId,
+                        FactoryId = id
                     };
+                    var response = _mapper.Map<FactoryResualtDto>(responseDto);
 
+                    return new BaseResponse<FactoryResualtDto>
+                    {
+                        Data = response
+                    };
                 }
                 //var getAttachment = await _dbContext.BasicFactoryInfos.Include(x =>x.)
+               
+                 else
+                 {
+                    var response = _mapper.Map<FactoryResualtDto>(resualt);
 
+                    return new BaseResponse<FactoryResualtDto>
+                    {
+                        Data = response
+                    };
+                 }
             }
-            var response = _mapper.Map<FactoryResualtDto>(responseDto);
+           
+            else{
+                var response = _mapper.Map<FactoryResualtDto>(resualt);
 
-            return new BaseResponse<FactoryResualtDto>
+                return new BaseResponse<FactoryResualtDto>
                 {
                     Data = response
                 };
+            }
         }
 
         public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
