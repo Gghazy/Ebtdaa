@@ -114,11 +114,20 @@ namespace Ebtdaa.Application.Factories.Handlers
                         Data = response
                     };
                 }
-                //var getAttachment = await _dbContext.BasicFactoryInfos.Include(x =>x.)
                
                  else
                  {
-                    var response = _mapper.Map<FactoryResualtDto>(resualt);
+                    responseDto = new FactoryResualtDto
+                    {
+                        
+                        CommercialRegister = resualt.CommercialRegister,
+                        NameAr = resualt.NameAr,
+                        Activity = resualt.Activity,
+                        Status = resualt.Status,
+                        PeriodId = periodId,
+                        FactoryId = id
+                    };
+                    var response = _mapper.Map<FactoryResualtDto>(responseDto);
 
                     return new BaseResponse<FactoryResualtDto>
                     {
