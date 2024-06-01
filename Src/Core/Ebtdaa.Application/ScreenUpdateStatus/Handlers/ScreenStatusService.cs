@@ -84,6 +84,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             {
                 result.FinancialData = await CheckFactoryFinanicailScreenStatus(factoryId, periodId);
                 result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
+                result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
+
             }
 
             return new BaseResponse<ScreenStatusResultDto>
