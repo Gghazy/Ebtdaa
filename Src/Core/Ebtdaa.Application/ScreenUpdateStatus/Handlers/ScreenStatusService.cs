@@ -47,7 +47,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 result.MonthlyFinancialData = await CheckMonthlyFactoryFinanicailScreenStatus(factoryId, periodId);
                 result.FactoryLocation = await CheckFactoryLocationScreenStatus(factoryId, periodId);
                 result.FactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);
-                //result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
+                result.BasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
                 result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
                 result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
                 result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
@@ -96,7 +96,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private async Task<bool> CheckBasicInfoScreenStatus(int periodId, int factoryId)
         {
-            var result = await _dbContext.FactoryFiles.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+            var result = await _dbContext.BasicFactoryInfos.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
 
             bool screenStatus = false;

@@ -56,8 +56,6 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                         .ThenInclude(x => x.ActualProductionUint)
                         .ToQueryResult(search.PageNumber, search.PageSize));
 
-    
-
             return new BaseResponse<QueryResult<ProductCapacityResultDto>>
             {
                 Data = resualt
