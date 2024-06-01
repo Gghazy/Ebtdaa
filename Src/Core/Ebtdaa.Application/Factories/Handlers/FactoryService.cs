@@ -98,7 +98,11 @@ namespace Ebtdaa.Application.Factories.Handlers
                     {
                         DataApprover = basicinfo.DataApprover,
                         DataReviewer = basicinfo.DataReviewer,
-                        DataEntry = basicinfo.DataEntry
+                        DataEntry = basicinfo.DataEntry,
+                        CommercialRegister = resualt.CommercialRegister,
+                        NameAr = resualt.NameAr,
+                        Activity = resualt.Activity,
+                        Status= basicinfo.FactoryStatusId
                     };
 
                 }
