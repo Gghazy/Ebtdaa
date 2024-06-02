@@ -72,7 +72,6 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
                 _dbContext.FactoryLocationAttachments.Remove(file);
 
             }
-
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<FactoryLocationAttachmentResultDto>
             {
