@@ -10,7 +10,7 @@ using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.ScreenStatus.Entity;
 using Microsoft.EntityFrameworkCore;
-
+using System.Diagnostics.Eventing.Reader;
 
 namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 {
@@ -278,26 +278,33 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
         }
         private async Task<bool> CheckRawMaterialScreenStatus(int factoryId, int periodId)
         {
-            var result = await _dbContext.RawMaterials.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-
+            var result = await _dbContext.RawMaterials
+                .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+                
             bool screenStatus = false;
 
-            screenStatus = result ? true : false;
-
-
+            if (result.Count > 0)
+            {
+                var data = !result.Any(x => x.AverageWeightKG == 0 || x.MaximumMonthlyConsumption == 0);
+                screenStatus = data ? true : false;
+            }
+           
             return screenStatus;
         }
         private async Task<bool> CheckActualRawMaterialScreenStatus(int factoryId ,int periodId)
         {
-            var result = await _dbContext.ActualRawMaterials.AnyAsync(x => x.RawMaterial.FactoryId==factoryId&& x.PeriodId == periodId);
-
+            var result = await _dbContext.ActualRawMaterials
+                 .Where(x => x.RawMaterial.FactoryId == factoryId && x.PeriodId == periodId)
+               .ToListAsync();
 
             bool screenStatus = false;
-
-            screenStatus = result ? true : false;
-
-
+            if (result.Count > 0)
+            {
+                var data = !result.Any(x => x.UsedQuantity == 0 || x.CurrentStockQuantity == 0);
+                screenStatus = data ? true : false;
+            }
+           
             return screenStatus;
         }
 
