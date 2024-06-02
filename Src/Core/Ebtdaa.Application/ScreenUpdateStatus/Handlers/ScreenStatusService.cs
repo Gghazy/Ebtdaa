@@ -147,8 +147,6 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
         {
             var result = await _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-         //   var attachment = await _dbContext.FactoryLocationAttachments.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
-
             bool screenStatus = false;
 
             screenStatus = result  ? true : false;
