@@ -78,43 +78,54 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         public async Task<BaseResponse<FactoryIdentitesResultDto>> CheckFactoryStatus(int factoryId, int periodId,string userId)
         {
             var result = await _dbContext.BasicFactoryInfos
-                .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+    .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+
             var statusResult = new FactoryIdentitesResultDto();
-            if(result.DataEntry == userId)
-            {
-                statusResult.DataStatus = DataStatus.Added;
-                statusResult.CurrentDataStatus = DataStatus.NotApproved;
-                statusResult.StatusButton ="إدخال";
 
-            }
-            if (result.DataReviewer == userId)
+            if (result == null)
             {
-                statusResult.DataStatus = DataStatus.Reviwed;
-                statusResult.CurrentDataStatus = DataStatus.Added;
-                statusResult.StatusButton = "مراجعة";
-            }
-            if (result.DataApprover == userId)
-            {
-                statusResult.DataStatus = DataStatus.Approved;
-                statusResult.CurrentDataStatus = DataStatus.Reviwed;
-                statusResult.StatusButton = "إعتماد المسح";
-            }
-            
-            if (result.DataEntry == userId && result.DataReviewer == userId && result.DataApprover == userId)
-            {
-                statusResult.DataStatus = DataStatus.Approved;
-                statusResult.CurrentDataStatus = DataStatus.NotApproved;
-                statusResult.StatusButton = "إعتماد المسح";
+                
+               // return statusResult;
             }
 
-            if (result.DataEntry == userId && result.DataApprover == userId && result.DataReviewer != userId)
+            bool isDataEntry = result.DataEntry == userId;
+            bool isDataReviewer = result.DataReviewer == userId;
+            bool isDataApprover = result.DataApprover == userId;
+
+            if (isDataEntry && isDataReviewer && isDataApprover)
             {
-                statusResult.DataStatus = DataStatus.Added;
-                statusResult.CurrentDataStatus = DataStatus.NotApproved;
-                statusResult.StatusButton = "إدخال";
+                SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح",false);
             }
-            
-           
+            else if (isDataEntry && isDataApprover)
+            {
+                SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال",false);
+            }
+            else if (isDataApprover)
+            {
+                SetStatus(statusResult, DataStatus.Approved, DataStatus.Reviwed, "إعتماد المسح", true);
+            }
+            else if (isDataReviewer)
+            {
+                SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", true);
+            }
+            else if (isDataEntry)
+            {
+                SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال",false );
+            }
+
+            void SetStatus(FactoryIdentitesResultDto statusResult, DataStatus dataStatus,
+                DataStatus currentDataStatus, string statusButton,
+                Boolean isDisable
+                )
+            {
+                statusResult.DataStatus = dataStatus;
+                statusResult.CurrentDataStatus = currentDataStatus;
+                statusResult.StatusButton = statusButton;
+                statusResult.isDisable = isDisable;
+
+            }
+
+
             return new BaseResponse<FactoryIdentitesResultDto>
             {
                 Data = statusResult
