@@ -149,10 +149,7 @@ namespace Ebtdaa.Application.Factories.Handlers
         public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
         {
             var isCheckExist = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == req.FactoryId);
-            //var isFactoryExist = _mapper.Map(req, isCheckExist);
-          
-           // await _dbContext.SaveChangesAsync();
-
+           
             var factory = await _dbContext.BasicFactoryInfos
                             .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId&&x.PeriodId==req.PeriodId);
 
@@ -175,8 +172,8 @@ namespace Ebtdaa.Application.Factories.Handlers
                     DataReviewer = req.DataReviewer
                 };
 
-                await _dbContext.BasicFactoryInfos.AddAsync(factory);
             }
+            await _dbContext.BasicFactoryInfos.AddAsync(factory);
 
             if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
             {

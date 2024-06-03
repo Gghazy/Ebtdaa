@@ -12,7 +12,7 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public string ProductName { get; set; }
         public int? UnitId { get; set; }
         public string? ItemNumber { get; set; }
-        public string? CR  { get; set; }
+        public string CR  { get; set; }
         public string? Status { get; set; }
         public bool? Review { get; set; }
         public string? Level12Number { get; set; }

@@ -14,7 +14,7 @@ namespace Ebtdaa.Application.Factories.Validation
         {
             RuleFor(d => d.AttachmentId)
               .NotEmpty()
-              .WithMessage("Attachment-IsRequired-Field");
+              .WithMessage("صورة واجهة المصنع , هذا الحقل مطلوب");
 
             RuleFor(d => d.FactoryId)
                 .NotEmpty()
@@ -22,7 +22,7 @@ namespace Ebtdaa.Application.Factories.Validation
 
             RuleFor(d => d.Name)
                .NotEmpty()
-               .WithMessage("Name-IsRequired-Field");
+               .WithMessage("نوع المستند , هذا الحقل مطلوب");
 
 
 
