@@ -103,21 +103,22 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             bool screenStatus = false;
             //screenStatus = resultFact ? true : false;
+
             if (resultFact != null && resultFactAttach != null)
             {
+                screenStatus = true;
+                //bool anyBasicInfoIsNull = HasNullProperties(resultFact.FactoryStatusId);
 
-                bool anyBasicInfoIsNull = HasNullProperties(resultFact.FactoryStatusId);
+                //bool anyFactFileIsNull = HasNullProperties(resultFactAttach.Type);
 
-                bool anyFactFileIsNull = HasNullProperties(resultFactAttach.Type);
-
-                if (anyBasicInfoIsNull == true && anyFactFileIsNull == true)
-                {
-                    screenStatus = true;
-                }
-                else
-                {
-                    screenStatus = false;
-                }
+                //if (anyBasicInfoIsNull == true && anyFactFileIsNull == true)
+                //{
+                //    screenStatus = true;
+                //}
+                //else
+                //{
+                //    screenStatus = false;
+                //}
             }
             else
             {
@@ -173,21 +174,10 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             //screenStatus = resultFactoryLocation ? true : false;
             var resultFLA = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-            if (resultFactoryLocation != null && resultFLA != null)
+            if (resultFactoryLocation != null && resultFLA.Type != null)
             {
-                bool anyFactLIsNull = HasNullProperties(resultFactoryLocation.WebSite);
-
-                bool anyFactLFileIsNull = HasNullProperties(resultFLA);
-
-                if (anyFactLIsNull == true && anyFactLFileIsNull == true)
-                {
-                    screenStatus = true;
-                }
-                else
-                {
-                    screenStatus = false;
-                }
-
+                screenStatus = true;
+               
             }
             else
             {
@@ -222,15 +212,6 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             var result = await _dbContext.FactoryProducts
                 .AnyAsync(x => activeProduct.Contains(x.Id));
 
-            //bool anyProductIsNull = HasNullProperties(result);
-            //if(anyProductIsNull == true)
-            //{
-            //    screenStatus = true;
-            //}
-            //else
-            //{
-            //    screenStatus = false;
-            //}
             screenStatus = result ? true : false;
 
             return screenStatus;
@@ -357,22 +338,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
            
             return screenStatus;
         }
-        public static bool HasNullProperties(object obj)
-        {
-            Type objectType = obj.GetType();
-            PropertyInfo[] properties = objectType.GetProperties();
-
-            foreach (PropertyInfo property in properties)
-            {
-                object value = property.GetValue(obj);
-                if (value == null)
-                {
-                    return false; // At least one property is null
-                }
-            }
-
-            return true; // No null properties found
-        }
+        
 
     }
 }
