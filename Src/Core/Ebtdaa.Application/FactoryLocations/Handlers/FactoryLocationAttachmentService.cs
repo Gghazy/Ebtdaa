@@ -51,7 +51,6 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
                 if (result.IsValid == false) throw new ValidationException(result.Errors);
                 await _dbContext.FactoryLocationAttachments.AddAsync(file);
                 await _dbContext.SaveChangesAsync();
-                var FactoryLocation= await _dbContext.FactoryLocations.FirstOrDefaultAsync(x=>x.Id==req.FactoryLocationId);
                 return new BaseResponse<FactoryLocationAttachmentResultDto>
                 {
                     Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
