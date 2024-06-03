@@ -211,7 +211,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             var result = await _dbContext.FactoryProducts
                 .AnyAsync(x => activeProduct.Contains(x.Id));
-
+            
             screenStatus = result ? true : false;
 
             return screenStatus;

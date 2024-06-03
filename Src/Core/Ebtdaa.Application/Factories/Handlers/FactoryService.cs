@@ -148,61 +148,72 @@ namespace Ebtdaa.Application.Factories.Handlers
 
         public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
         {
-            var isCheckExist = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == req.FactoryId);
-           
-            var factory = await _dbContext.BasicFactoryInfos
-                            .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId&&x.PeriodId==req.PeriodId);
+            try
+            {
+                var isCheckExist = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == req.FactoryId);
 
-            if (factory != null)
-            {
-                factory.FactoryStatusId = req.Status;
-                factory.DataApprover = req.DataApprover;
-                factory.DataEntry = req.DataEntry;
-                factory.DataReviewer = req.DataReviewer;
-            }
-            else
-            {
-                factory = new BaiscFactoryInfo()
+                var factory = await _dbContext.BasicFactoryInfos
+                                .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId && x.PeriodId == req.PeriodId);
+
+                if (factory != null)
                 {
-                    FactoryId = req.FactoryId,
-                    PeriodId = req.PeriodId,
-                    FactoryStatusId = req.Status,
-                    DataApprover = req.DataApprover,
-                    DataEntry =req.DataEntry,
-                    DataReviewer = req.DataReviewer
+                    factory.FactoryStatusId = req.Status;
+                    factory.DataApprover = req.DataApprover;
+                    factory.DataEntry = req.DataEntry;
+                    factory.DataReviewer = req.DataReviewer;
+                }
+                else
+                {
+                    factory = new BaiscFactoryInfo()
+                    {
+                        FactoryId = req.FactoryId,
+                        PeriodId = req.PeriodId,
+                        FactoryStatusId = req.Status,
+                        DataApprover = req.DataApprover,
+                        DataEntry = req.DataEntry,
+                        DataReviewer = req.DataReviewer
+                    };
+
+                }
+                await _dbContext.BasicFactoryInfos.AddAsync(factory);
+
+                if (factory.FactoryStatusId == FactoryStatusEnum.Under_Construction)
+                {
+                    await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                }
+                if (factory.FactoryStatusId == FactoryStatusEnum.Under_Production)
+                {
+                    await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                }
+                if (factory.FactoryStatusId == FactoryStatusEnum.Canceled)
+                {
+                    await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    //await _factoryMonthlyFinancial.DeleteByFactoryIdAndPeriodId(req.FactoryId , req.PeriodId);
+                    await _factoryLocation.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _factoryContactService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                }
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<bool>
+                {
+                    Data = true
                 };
-
             }
-            await _dbContext.BasicFactoryInfos.AddAsync(factory);
-
-            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
+            catch(Exception ex)
             {
-              await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-              await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-              await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-              await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId , req.PeriodId);
+                return new BaseResponse<bool>
+                {
+                    Data = false
+                };
             }
-            if (factory.FactoryStatusId == FactoryStatusEnum.Under_Production)
-            {
-                await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-            }
-            if(factory.FactoryStatusId == FactoryStatusEnum.Canceled)
-            {
-                await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                //await _factoryMonthlyFinancial.DeleteByFactoryIdAndPeriodId(req.FactoryId , req.PeriodId);
-                await _factoryLocation.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                await _factoryContactService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-            }
-            await _dbContext.SaveChangesAsync();
            
-            return new BaseResponse<bool>
-            {
-                Data =true
-            };
         }
 
         public async Task<BaseResponse<List<FactoryResualtDto>>> GetFactoryByEntity(int factoryEntityId)
