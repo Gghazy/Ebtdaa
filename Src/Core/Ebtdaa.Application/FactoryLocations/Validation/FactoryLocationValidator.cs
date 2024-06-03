@@ -26,7 +26,7 @@ namespace Ebtdaa.Application.FactoryLocations.Validation
 
             RuleFor(d => d.WebSite)
               .NotEmpty()
-              .WithMessage("WebSite-IsRequired-Field");
+              .WithMessage("رابط موقع المصنع , هذا الحقل مطلوب");
 
             RuleFor(d => d.FactoryId)
               .NotEmpty()

@@ -15,7 +15,10 @@ namespace Ebtdaa.Application.FactoryLocations.Validation
         {
             RuleFor(d => d.AttachmentId)
               .NotEmpty()
-              .WithMessage("Attachment-IsRequired-Field");
+              .WithMessage("صورة واجهة المصنع (الزامي)");
+            RuleFor(d => d.Type)
+              .NotEmpty()
+              .WithMessage("نوع المستند , هذا الحقل مطلوب");
 
           
 

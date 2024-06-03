@@ -11,6 +11,7 @@ using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.ScreenStatus.Entity;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.Eventing.Reader;
+using System.Reflection;
 
 namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 {
@@ -96,13 +97,31 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private async Task<bool> CheckBasicInfoScreenStatus(int periodId, int factoryId)
         {
-            var result = await _dbContext.BasicFactoryInfos.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+            var resultFact = await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
+            var resultFactAttach = await _dbContext.FactoryFiles.FirstOrDefaultAsync(fa => fa.FactoryId == factoryId && fa.PeriodId == periodId);
 
             bool screenStatus = false;
+            if(resultFact != null && resultFactAttach != null)
+            {
+                
+                bool anyBasicInfoIsNull = HasNullProperties(resultFact.FactoryStatusId);
 
-            screenStatus = result ? true : false;
+                bool anyFactFileIsNull = HasNullProperties(resultFactAttach.Type);
 
+                if (anyBasicInfoIsNull == true && anyFactFileIsNull == true)
+                {
+                    screenStatus = true;
+                }
+                else
+                {
+                    screenStatus = false;
+                }
+            }
+            else
+            {
+                screenStatus = false;
+            }
             return screenStatus;
         }
 
@@ -146,13 +165,34 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private async Task<bool> CheckFactoryLocationScreenStatus(int factoryId , int periodId)
         {
-            var result = await _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
-
             bool screenStatus = false;
 
-            screenStatus = result  ? true : false;
+            var resultFactoryLocation =await  _dbContext.FactoryLocations.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
+            var resultFLA = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+
+            if(resultFactoryLocation != null && resultFLA != null)
+            {
+                bool anyFactLIsNull = HasNullProperties(resultFactoryLocation.WebSite);
+
+                bool anyFactLFileIsNull = HasNullProperties(resultFLA);
+
+                if (anyFactLIsNull == true && anyFactLFileIsNull == true)
+                {
+                    screenStatus = true;
+                }
+                else
+                {
+                    screenStatus = false;
+                }
+
+            }
+            else
+            {
+                screenStatus = false;
+            }
             return screenStatus;
+
         }
 
         private async Task<bool> CheckFactoryContactScreenStatus(int factoryId , int periodId)
@@ -168,7 +208,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private async Task<bool> CheckFactoryProductScreenStatus(int factoryId, int periodId)
         {
-           
+
+            bool screenStatus = false;
 
             var activeProduct = await _dbContext.ProductPeriodActives
                 .Include(x => x.FactoryProduct)
@@ -178,10 +219,17 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             var result = await _dbContext.FactoryProducts
                 .AnyAsync(x => activeProduct.Contains(x.Id));
-            bool screenStatus = false;
 
-
-            screenStatus = result ? true : false;
+            bool anyProductIsNull = HasNullProperties(result);
+            if(anyProductIsNull == true)
+            {
+                screenStatus = true;
+            }
+            else
+            {
+                screenStatus = false;
+            }
+            //screenStatus = result ? true : false;
 
             return screenStatus;
         }
@@ -306,6 +354,22 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             }
            
             return screenStatus;
+        }
+        public static bool HasNullProperties(object obj)
+        {
+            Type objectType = obj.GetType();
+            PropertyInfo[] properties = objectType.GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                object value = property.GetValue(obj);
+                if (value == null)
+                {
+                    return false; // At least one property is null
+                }
+            }
+
+            return true; // No null properties found
         }
 
     }
