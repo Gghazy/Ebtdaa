@@ -220,16 +220,16 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             var result = await _dbContext.FactoryProducts
                 .AnyAsync(x => activeProduct.Contains(x.Id));
 
-            bool anyProductIsNull = HasNullProperties(result);
-            if(anyProductIsNull == true)
-            {
-                screenStatus = true;
-            }
-            else
-            {
-                screenStatus = false;
-            }
-            //screenStatus = result ? true : false;
+            //bool anyProductIsNull = HasNullProperties(result);
+            //if(anyProductIsNull == true)
+            //{
+            //    screenStatus = true;
+            //}
+            //else
+            //{
+            //    screenStatus = false;
+            //}
+            screenStatus = result ? true : false;
 
             return screenStatus;
         }
