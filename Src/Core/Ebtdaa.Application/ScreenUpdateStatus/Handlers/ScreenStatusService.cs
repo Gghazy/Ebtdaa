@@ -97,31 +97,32 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private async Task<bool> CheckBasicInfoScreenStatus(int periodId, int factoryId)
         {
-            var resultFact = await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+            var resultFact = await _dbContext.BasicFactoryInfos.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-            var resultFactAttach = await _dbContext.FactoryFiles.FirstOrDefaultAsync(fa => fa.FactoryId == factoryId && fa.PeriodId == periodId);
+           // var resultFactAttach = await _dbContext.FactoryFiles.FirstOrDefaultAsync(fa => fa.FactoryId == factoryId && fa.PeriodId == periodId);
 
             bool screenStatus = false;
-            if(resultFact != null && resultFactAttach != null)
-            {
-                
-                bool anyBasicInfoIsNull = HasNullProperties(resultFact.FactoryStatusId);
+            screenStatus = resultFact ? true : false;
+            //if(resultFact != null && resultFactAttach != null)
+            //{
 
-                bool anyFactFileIsNull = HasNullProperties(resultFactAttach.Type);
+            //    bool anyBasicInfoIsNull = HasNullProperties(resultFact.FactoryStatusId);
 
-                if (anyBasicInfoIsNull == true && anyFactFileIsNull == true)
-                {
-                    screenStatus = true;
-                }
-                else
-                {
-                    screenStatus = false;
-                }
-            }
-            else
-            {
-                screenStatus = false;
-            }
+            //    bool anyFactFileIsNull = HasNullProperties(resultFactAttach.Type);
+
+            //    if (anyBasicInfoIsNull == true && anyFactFileIsNull == true)
+            //    {
+            //        screenStatus = true;
+            //    }
+            //    else
+            //    {
+            //        screenStatus = false;
+            //    }
+            //}
+            //else
+            //{
+            //    screenStatus = false;
+            //}
             return screenStatus;
         }
 
@@ -167,30 +168,31 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
         {
             bool screenStatus = false;
 
-            var resultFactoryLocation =await  _dbContext.FactoryLocations.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+            var resultFactoryLocation =await  _dbContext.FactoryLocations.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-            var resultFLA = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+            screenStatus = resultFactoryLocation ? true : false;
+            //var resultFLA = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-            if(resultFactoryLocation != null && resultFLA != null)
-            {
-                bool anyFactLIsNull = HasNullProperties(resultFactoryLocation.WebSite);
+            //if(resultFactoryLocation != null && resultFLA != null)
+            //{
+            //    bool anyFactLIsNull = HasNullProperties(resultFactoryLocation.WebSite);
 
-                bool anyFactLFileIsNull = HasNullProperties(resultFLA);
+            //    bool anyFactLFileIsNull = HasNullProperties(resultFLA);
 
-                if (anyFactLIsNull == true && anyFactLFileIsNull == true)
-                {
-                    screenStatus = true;
-                }
-                else
-                {
-                    screenStatus = false;
-                }
+            //    if (anyFactLIsNull == true && anyFactLFileIsNull == true)
+            //    {
+            //        screenStatus = true;
+            //    }
+            //    else
+            //    {
+            //        screenStatus = false;
+            //    }
 
-            }
-            else
-            {
-                screenStatus = false;
-            }
+            //}
+            //else
+            //{
+            //    screenStatus = false;
+            //}
             return screenStatus;
 
         }
@@ -355,22 +357,22 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
            
             return screenStatus;
         }
-        public static bool HasNullProperties(object obj)
-        {
-            Type objectType = obj.GetType();
-            PropertyInfo[] properties = objectType.GetProperties();
+        //public static bool HasNullProperties(object obj)
+        //{
+        //    Type objectType = obj.GetType();
+        //    PropertyInfo[] properties = objectType.GetProperties();
 
-            foreach (PropertyInfo property in properties)
-            {
-                object value = property.GetValue(obj);
-                if (value == null)
-                {
-                    return false; // At least one property is null
-                }
-            }
+        //    foreach (PropertyInfo property in properties)
+        //    {
+        //        object value = property.GetValue(obj);
+        //        if (value == null)
+        //        {
+        //            return false; // At least one property is null
+        //        }
+        //    }
 
-            return true; // No null properties found
-        }
+        //    return true; // No null properties found
+        //}
 
     }
 }
