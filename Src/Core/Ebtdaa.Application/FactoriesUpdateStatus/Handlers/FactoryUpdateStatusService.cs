@@ -4,6 +4,7 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.FactoriesUpdateStatus.Dtos;
 using Ebtdaa.Application.FactoriesUpdateStatus.Interfaces;
 using Ebtdaa.Application.FactoryFinancials.Dtos;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.Factories.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
@@ -28,8 +29,6 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         public async Task<BaseResponse<FactUpdateStatusResultDto>> AddAsync(FactUpdateStatusRequestDto req)
         {
             var factoryUpdateStatus = _mapper.Map<FactoryUpdateStatus>(req);
-           
-            factoryUpdateStatus.DataStatus = Ebtdaa.Common.Enums.DataStatus.Added;
             factoryUpdateStatus.EnteredAt = DateTime.Now;
             await _dbContext.FactoryUpdateStatuses.AddAsync(factoryUpdateStatus);
 
@@ -74,6 +73,53 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
             {
                 Data = resualt != null ? _mapper.Map<FactUpdateStatusResultDto>(resualt) : new FactUpdateStatusResultDto()
             };
+        }
+
+        public async Task<BaseResponse<FactoryIdentitesResultDto>> CheckFactoryStatus(int factoryId, int periodId,string userId)
+        {
+            var result = await _dbContext.BasicFactoryInfos
+                .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+            var statusResult = new FactoryIdentitesResultDto();
+            if(result.DataEntry == userId)
+            {
+                statusResult.DataStatus = DataStatus.Added;
+                statusResult.CurrentDataStatus = DataStatus.NotApproved;
+                statusResult.StatusButton ="إدخال";
+
+            }
+            if (result.DataReviewer == userId)
+            {
+                statusResult.DataStatus = DataStatus.Reviwed;
+                statusResult.CurrentDataStatus = DataStatus.Added;
+                statusResult.StatusButton = "مراجعة";
+            }
+            if (result.DataApprover == userId)
+            {
+                statusResult.DataStatus = DataStatus.Approved;
+                statusResult.CurrentDataStatus = DataStatus.Reviwed;
+                statusResult.StatusButton = "إعتماد المسح";
+            }
+            
+            if (result.DataEntry == userId && result.DataReviewer == userId && result.DataApprover == userId)
+            {
+                statusResult.DataStatus = DataStatus.Approved;
+                statusResult.CurrentDataStatus = DataStatus.NotApproved;
+                statusResult.StatusButton = "إعتماد المسح";
+            }
+
+            if (result.DataEntry == userId && result.DataApprover == userId && result.DataReviewer != userId)
+            {
+                statusResult.DataStatus = DataStatus.Added;
+                statusResult.CurrentDataStatus = DataStatus.NotApproved;
+                statusResult.StatusButton = "إدخال";
+            }
+            
+           
+            return new BaseResponse<FactoryIdentitesResultDto>
+            {
+                Data = statusResult
+            };
+
         }
     }
 }

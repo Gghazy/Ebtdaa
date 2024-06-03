@@ -11,6 +11,7 @@ namespace Ebtdaa.Common.Enums
         New = 0,
         Added = 1,
         Reviwed = 2,
-        Approved = 3
+        Approved = 3,
+        NotApproved=4
     }
 }

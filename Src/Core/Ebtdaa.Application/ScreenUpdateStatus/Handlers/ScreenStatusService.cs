@@ -284,7 +284,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             if (result.Count > 0)
             {
-                var data = !result.Any(x => x.AverageWeightKG == 0 || x.MaximumMonthlyConsumption == 0);
+                var data = !result.Any(x => x.AverageWeightKG == 0 || 
+                x.MaximumMonthlyConsumption == 0||
+                x.CustomItemName == null);
                 screenStatus = data ? true : false;
             }
            
