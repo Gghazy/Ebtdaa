@@ -15,7 +15,6 @@ namespace Ebtdaa.Application.FactoryLocations.Dtos
         public string Path { get; set; }
         public string Extension { get; set; }
         public int AttachmentId { get; set; }
-        public int FactoryLocationId { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
     }
