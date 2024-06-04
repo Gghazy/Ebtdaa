@@ -211,7 +211,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             var result = await _dbContext.FactoryProducts
                 .AnyAsync(x => activeProduct.Contains(x.Id));
-
+            
             screenStatus = result ? true : false;
 
             return screenStatus;
@@ -267,7 +267,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private bool IsProductiveScreenValid(List<int> differenceList, List<ActualProductionAndCapacity> result)
         {
-            return !(differenceList.Any() || result.Any(x => x.ActualProduction == null) || result.Count == 0);
+            return !(differenceList.Any() || result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
         }
 
         private bool AreAttachmentsComplete(int? factoryId, int periodId)

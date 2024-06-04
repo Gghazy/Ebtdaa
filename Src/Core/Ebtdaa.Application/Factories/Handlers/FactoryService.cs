@@ -150,11 +150,10 @@ namespace Ebtdaa.Application.Factories.Handlers
         {
             try
             {
+                var isCheckExist = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == req.FactoryId);
 
-            var isCheckExist = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == req.FactoryId);
-           
-            var factory = await _dbContext.BasicFactoryInfos
-                            .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId&&x.PeriodId==req.PeriodId);
+                var factory = await _dbContext.BasicFactoryInfos
+                                .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId && x.PeriodId == req.PeriodId);
 
             if (factory != null)
             {
