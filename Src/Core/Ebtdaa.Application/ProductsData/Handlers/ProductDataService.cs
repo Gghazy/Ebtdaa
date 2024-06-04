@@ -209,9 +209,9 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             product.Kilograms_Per_Unit = request.Kilograms_Per_Unit;
 
             // Validation
-            var result = await _validator.ValidateAsync(factoryProduct);
+            //var result = await _validator.ValidateAsync(factoryProduct);
 
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
+            //if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.FactoryProducts.AddAsync(factoryProduct);
             await _dbContext.SaveChangesAsync();

@@ -78,41 +78,55 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         public async Task<BaseResponse<FactoryIdentitesResultDto>> CheckFactoryStatus(int factoryId, int periodId,string userId)
         {
             var result = await _dbContext.BasicFactoryInfos
-    .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+                               .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+            var resultStatus = await _dbContext.FactoryUpdateStatuses
+                               .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             var statusResult = new FactoryIdentitesResultDto();
 
+
             if (result == null)
             {
-                
-               // return statusResult;
-            }
 
-            bool isDataEntry = result.DataEntry == userId;
-            bool isDataReviewer = result.DataReviewer == userId;
-            bool isDataApprover = result.DataApprover == userId;
+                SetStatus(statusResult, DataStatus.New, DataStatus.NotApproved, "إدخال", false);
+            }
+            else
+            {
 
-            if (isDataEntry && isDataReviewer && isDataApprover)
-            {
-                SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح",false);
-            }
-            else if (isDataEntry && isDataApprover)
-            {
-                SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال",false);
-            }
-            else if (isDataApprover)
-            {
-                SetStatus(statusResult, DataStatus.Approved, DataStatus.Reviwed, "إعتماد المسح", true);
-            }
-            else if (isDataReviewer)
-            {
-                SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", true);
-            }
-            else if (isDataEntry)
-            {
-                SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال",false );
-            }
+                bool isDataEntry = result.DataEntry == userId;
+                bool isDataReviewer = result.DataReviewer == userId;
+                bool isDataApprover = result.DataApprover == userId;
 
+
+                if (isDataEntry && isDataReviewer && isDataApprover)
+                {
+                    SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
+                }
+                else if (isDataEntry && isDataApprover )
+                {
+                    if (resultStatus.DataStatus == null)
+                    {
+                        SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال", false);
+                    }
+                    else
+                    {
+                        SetStatus(statusResult, DataStatus.Reviwed, DataStatus.NotApproved, "إعتماد المسح", false);
+                    }
+                   
+                }
+                else if (isDataApprover)
+                {
+                    SetStatus(statusResult, DataStatus.Approved, DataStatus.Reviwed, "إعتماد المسح", true);
+                }
+                else if (isDataReviewer)
+                {
+                    SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", true);
+                }
+                else if (isDataEntry)
+                {
+                    SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال", false);
+                }
+            }
             void SetStatus(FactoryIdentitesResultDto statusResult, DataStatus dataStatus,
                 DataStatus currentDataStatus, string statusButton,
                 Boolean isDisable
@@ -124,6 +138,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 statusResult.isDisable = isDisable;
 
             }
+            
 
 
             return new BaseResponse<FactoryIdentitesResultDto>

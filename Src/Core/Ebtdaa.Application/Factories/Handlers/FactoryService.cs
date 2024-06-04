@@ -148,6 +148,9 @@ namespace Ebtdaa.Application.Factories.Handlers
 
         public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
         {
+            try
+            {
+
             var isCheckExist = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == req.FactoryId);
            
             var factory = await _dbContext.BasicFactoryInfos
@@ -159,7 +162,8 @@ namespace Ebtdaa.Application.Factories.Handlers
                 factory.DataApprover = req.DataApprover;
                 factory.DataEntry = req.DataEntry;
                 factory.DataReviewer = req.DataReviewer;
-            }
+                   
+                }
             else
             {
                 factory = new BaiscFactoryInfo()
@@ -171,11 +175,11 @@ namespace Ebtdaa.Application.Factories.Handlers
                     DataEntry =req.DataEntry,
                     DataReviewer = req.DataReviewer
                 };
-
-            }
-            await _dbContext.BasicFactoryInfos.AddAsync(factory);
-
-            if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
+                    await _dbContext.BasicFactoryInfos.AddAsync(factory);
+                }
+          
+                await _dbContext.SaveChangesAsync();
+                if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
             {
               await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
               await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
@@ -184,9 +188,9 @@ namespace Ebtdaa.Application.Factories.Handlers
             }
             if (factory.FactoryStatusId == FactoryStatusEnum.Under_Production)
             {
-                await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-            }
+                    await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                }
             if(factory.FactoryStatusId == FactoryStatusEnum.Canceled)
             {
                 await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
@@ -203,6 +207,13 @@ namespace Ebtdaa.Application.Factories.Handlers
             {
                 Data =true
             };
+
+            }
+            catch (Exception ex)
+            {
+
+                throw ex;
+            }
         }
 
         public async Task<BaseResponse<List<FactoryResualtDto>>> GetFactoryByEntity(int factoryEntityId)
