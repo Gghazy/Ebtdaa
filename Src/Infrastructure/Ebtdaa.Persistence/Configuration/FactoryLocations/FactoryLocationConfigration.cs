@@ -17,17 +17,20 @@ namespace Ebtdaa.Persistence.Configuration.FactoryLocations
             builder.HasOne<FactoryEntity>(s => s.FactoryEntity)
                 .WithMany(g => g.FactoryLocations)
                 .HasForeignKey(s => s.FactoryEntityId)
+                .IsRequired(false)
               .OnDelete(DeleteBehavior.Restrict);
 
 
             builder.HasOne<IndustrialArea>(s => s.IndustrialArea)
                 .WithMany(g => g.FactoryLocations)
                 .HasForeignKey(s => s.IndustrialAreaId)
+                .IsRequired(false)
               .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne<City>(s => s.City)
                .WithMany(g => g.FactoryLocations)
                .HasForeignKey(s => s.CityId)
+               .IsRequired(false)
              .OnDelete(DeleteBehavior.Restrict);
 
         }
