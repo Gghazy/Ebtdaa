@@ -210,8 +210,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .ToListAsync();
 
             var result = await _dbContext.FactoryProducts
-                .AnyAsync(x => activeProduct.Contains(x.Id));
-            
+                .AnyAsync(x => activeProduct.Contains(x.Id) && x.CommericalName == null);
+
             screenStatus = result ? true : false;
 
             return screenStatus;
@@ -338,7 +338,22 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
            
             return screenStatus;
         }
-        
 
+        public static bool HasNullProperties(object obj)
+        {
+            Type objectType = obj.GetType();
+            PropertyInfo[] properties = objectType.GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                object value = property.GetValue(obj);
+                if (value == null)
+                {
+                    return true; // At least one property is null
+                }
+            }
+
+            return false; // No null properties found
+        }
     }
 }
