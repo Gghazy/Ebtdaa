@@ -4,6 +4,7 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.FactoriesUpdateStatus.Dtos;
 using Ebtdaa.Application.FactoriesUpdateStatus.Interfaces;
 using Ebtdaa.Application.FactoryFinancials.Dtos;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.Factories.Entity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualBasic;
@@ -28,8 +29,6 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         public async Task<BaseResponse<FactUpdateStatusResultDto>> AddAsync(FactUpdateStatusRequestDto req)
         {
             var factoryUpdateStatus = _mapper.Map<FactoryUpdateStatus>(req);
-           
-            factoryUpdateStatus.DataStatus = Ebtdaa.Common.Enums.DataStatus.Added;
             factoryUpdateStatus.EnteredAt = DateTime.Now;
             await _dbContext.FactoryUpdateStatuses.AddAsync(factoryUpdateStatus);
 
@@ -74,6 +73,64 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
             {
                 Data = resualt != null ? _mapper.Map<FactUpdateStatusResultDto>(resualt) : new FactUpdateStatusResultDto()
             };
+        }
+
+        public async Task<BaseResponse<FactoryIdentitesResultDto>> CheckFactoryStatus(int factoryId, int periodId,string userId)
+        {
+            var result = await _dbContext.BasicFactoryInfos
+    .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+
+            var statusResult = new FactoryIdentitesResultDto();
+
+            if (result == null)
+            {
+                
+               // return statusResult;
+            }
+
+            bool isDataEntry = result.DataEntry == userId;
+            bool isDataReviewer = result.DataReviewer == userId;
+            bool isDataApprover = result.DataApprover == userId;
+
+            if (isDataEntry && isDataReviewer && isDataApprover)
+            {
+                SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح",false);
+            }
+            else if (isDataEntry && isDataApprover)
+            {
+                SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال",false);
+            }
+            else if (isDataApprover)
+            {
+                SetStatus(statusResult, DataStatus.Approved, DataStatus.Reviwed, "إعتماد المسح", true);
+            }
+            else if (isDataReviewer)
+            {
+                SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", true);
+            }
+            else if (isDataEntry)
+            {
+                SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال",false );
+            }
+
+            void SetStatus(FactoryIdentitesResultDto statusResult, DataStatus dataStatus,
+                DataStatus currentDataStatus, string statusButton,
+                Boolean isDisable
+                )
+            {
+                statusResult.DataStatus = dataStatus;
+                statusResult.CurrentDataStatus = currentDataStatus;
+                statusResult.StatusButton = statusButton;
+                statusResult.isDisable = isDisable;
+
+            }
+
+
+            return new BaseResponse<FactoryIdentitesResultDto>
+            {
+                Data = statusResult
+            };
+
         }
     }
 }

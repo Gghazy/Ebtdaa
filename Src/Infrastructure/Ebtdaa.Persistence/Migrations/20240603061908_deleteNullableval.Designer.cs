@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    [Migration("20240529143332_FactoryWebsite")]
-    partial class FactoryWebsite
+    [Migration("20240603061908_deleteNullableval")]
+    partial class deleteNullableval
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1967,6 +1967,7 @@ namespace Ebtdaa.Persistence.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("CR")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CreatedBy")

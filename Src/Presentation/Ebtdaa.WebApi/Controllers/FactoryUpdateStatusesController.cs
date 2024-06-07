@@ -34,6 +34,12 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _FactoryUpdateStatus.GetOne(factoryId, periodId));
 
         }
+        [HttpGet("StatusByIdentity")]
+        public async Task<IActionResult> CheckFactoryStatus(int factoryId, int periodId, string userId)
+        {
+            return Ok(await _FactoryUpdateStatus.CheckFactoryStatus(factoryId, periodId, userId));
+
+        }
     }
 }
 

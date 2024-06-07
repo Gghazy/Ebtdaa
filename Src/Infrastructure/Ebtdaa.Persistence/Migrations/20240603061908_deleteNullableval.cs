@@ -4,13 +4,13 @@
 
 namespace Ebtdaa.Persistence.Migrations
 {
-    public partial class FactoryWebsite : Migration
+    public partial class deleteNullableval : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "WebSite",
-                table: "FactoryLocations",
+                name: "CR",
+                table: "Products",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "",
@@ -22,8 +22,8 @@ namespace Ebtdaa.Persistence.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "WebSite",
-                table: "FactoryLocations",
+                name: "CR",
+                table: "Products",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(string),

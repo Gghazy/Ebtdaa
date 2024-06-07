@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.FactoriesUpdateStatus.Dtos
 {
-    public class FactUpdateStatusRequestDto
+    public class FactoryIdentitesResultDto
     {
-        public int Id { get; set; }
-        public int FactoryId { get; set; }
-        public int PeriodId { get; set; }
-        public bool UpdateStatus { get; set; }
         public DataStatus DataStatus { get; set; }
+        public DataStatus CurrentDataStatus { get; set; }
+        public string StatusButton { get; set; }
+
+        public string UserId { get; set; }
+        public Boolean isDisable { get; set; }
     }
 }

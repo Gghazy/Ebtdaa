@@ -8,7 +8,17 @@ using System.Threading.Tasks;
 
 namespace Ebtdaa.Application.ProductsData.Validatiton
 {
-    public class ProductDataValidator : AbstractValidator<Product>
+    public class ProductDataValidator : AbstractValidator<FactoryProduct>
     {
+        public ProductDataValidator() 
+        {
+            RuleFor(d => d.CommericalName)
+             .NotEmpty()
+             .WithMessage("اسم المنتج التجاري , هذا الحقل مطلوب");
+            RuleFor(d => d.ProductId)
+             .NotEmpty()
+             .WithMessage("اسم المنتج (حسب البند الجمركي على مستوى 12) , هذا الحقل مطلوب");
+
+        }
     }
 }

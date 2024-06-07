@@ -10,8 +10,9 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
-        public int DesignedCapacity { get; set; }
-        public int DesignedCapacityUnitId { get; set; }
+        public int PeriodId { get; set; }
+        public int? DesignedCapacity { get; set; }
+        public int? DesignedCapacityUnitId { get; set; }
         public int ActualProduction { get; set; }
         public int ActualProductionUintId { get; set; }
         public int ActualProductionWeight { get; set; }
