@@ -36,14 +36,14 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             _screenStatusService = screenStatusService;
         }
 
-        public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAll(ActualProductionSearch search)
+        public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>>  GetAll(ActualProductionSearch search)
         {
 
             var ProductPeriodActives = await _dbContext.ProductPeriodActives
-                 .Include(x => x.FactoryProduct)
-                 .ThenInclude(x => x.Product)
-                 .Where(x => x.PeriodId == search.PeriodId && x.FactoryProduct.FactoryId == search.FactoryId)
-                 .Select(x => x.FactoryProductId).ToListAsync();
+                .Include(x => x.FactoryProduct)
+                .ThenInclude(x => x.Product)
+                .Where(x => x.PeriodId == search.PeriodId && x.FactoryProduct.FactoryId == search.FactoryId)
+                .Select(x => x.FactoryProductId).ToListAsync();
 
             var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
                         await _dbContext.FactoryProducts
@@ -54,8 +54,9 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                         .ThenInclude(x => x.DesignedCapacityUnit)
                         .Include(x => x.ActualProductionAndCapacities)
                         .ThenInclude(x => x.ActualProductionUint)
-                        .ToQueryResult(search.PageNumber, search.PageSize)
-                        );
+                        .ToQueryResult(search.PageNumber, search.PageSize));
+
+    
 
             return new BaseResponse<QueryResult<ProductCapacityResultDto>>
             {

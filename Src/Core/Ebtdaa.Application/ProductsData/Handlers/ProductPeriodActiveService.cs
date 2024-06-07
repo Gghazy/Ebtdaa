@@ -51,6 +51,18 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = _mapper.Map<List<ProductPeriodActiveResultDto>>(products)
             };
         }
+        public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
+        {
+            var result = await _dbContext.ProductPeriodActives
+                                     .Include(x => x.FactoryProduct)
+                                     .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
+                                     .ToListAsync();
+            _dbContext.ProductPeriodActives.RemoveRange(result);
 
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
     }
 }

@@ -8,11 +8,11 @@ namespace Ebtdaa.Persistence.Configuration.ProductRawMaterials
     {
         public void Configure(EntityTypeBuilder<ProductRawMaterial> builder)
         {
-            builder.HasKey(prm => new { prm.rawMaterialId });
+            builder.HasKey(prm => new { prm.ProductId, prm.rawMaterialId });
 
-            //builder.HasOne(prm => prm.Product)
-            //    .WithMany(p => p.ProductRawMaterials)
-            //    .HasForeignKey(prm => prm.pro);
+            builder.HasOne(prm => prm.Product)
+                .WithMany(p => p.ProductRawMaterials)
+                .HasForeignKey(prm => prm.ProductId);
 
             builder.HasOne(prm => prm.RawMaterial)
                 .WithMany(r => r.ProductRawMaterials)

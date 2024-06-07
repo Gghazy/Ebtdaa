@@ -14,5 +14,6 @@ namespace Ebtdaa.Application.FactoryLocations.Interfaces
         Task<BaseResponse<FactoryLocationResultDto>> GetOne(int factoryId, int periodId);
         Task<BaseResponse<FactoryLocationResultDto>> UpdateAsync(FactoryLocationRequestDto req);
         Task<BaseResponse<FactoryLocationResultDto>> AddAsync(FactoryLocationRequestDto req);
+        Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId);
     }
 }

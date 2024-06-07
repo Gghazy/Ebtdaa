@@ -58,7 +58,7 @@ namespace Ebtdaa.Application.ProductJobs.Handlers
                         removeProducts.Add(product);
                         continue;
                     }
-                    product.ProductRawMaterials = new List<FactoryProduct>
+                    product.FactoryProducts = new List<FactoryProduct>
                     {
                         new FactoryProduct{FactoryId = factory.Id }
                     };

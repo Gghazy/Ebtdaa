@@ -16,12 +16,13 @@ namespace Ebtdaa.Domain.ProductData.Entity
         public string? Status { get; set; }
         public bool? Review { get; set; }
         public string? Level12Number { get; set; }
+        public string? Level12ItemName { get; set; }
 
 
         public double? Kilograms_Per_Unit { get; set; }
         public virtual Unit Unit { get; set; }  
-       public virtual ICollection<FactoryProduct> ProductRawMaterials { get; set; }
-
+       public virtual ICollection<FactoryProduct> FactoryProducts { get; set; }
+        public virtual ICollection<ProductRawMaterial> ProductRawMaterials { get; set; }
 
 
     }

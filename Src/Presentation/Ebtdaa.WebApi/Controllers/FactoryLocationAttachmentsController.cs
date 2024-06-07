@@ -17,7 +17,7 @@ namespace Ebtdaa.WebApi.Controllers
             _service = service;
         }
 
-        [HttpGet("{id}")] 
+        [HttpGet] 
         public async Task<IActionResult> GetAll(int factoryid,int periodId)
         {
             return Ok(await _service.GetAll(factoryid,periodId));
@@ -30,10 +30,10 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _service.AddAsync(request));
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync(int factoryId , int periodId)
         {
-            return Ok(await _service.DeleteAsync(id));
+            return Ok(await _service.DeleteAsync(factoryId,periodId));
 
         }
     }

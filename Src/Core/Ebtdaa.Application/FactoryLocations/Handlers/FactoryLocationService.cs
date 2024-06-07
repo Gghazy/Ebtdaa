@@ -1,8 +1,6 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.FactoryFinancials.Dtos;
-using Ebtdaa.Application.FactoryFinancials.Validation;
 using Ebtdaa.Application.FactoryLocations.Dtos;
 using Ebtdaa.Application.FactoryLocations.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Validation;
@@ -24,14 +22,18 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         private readonly IEbtdaaDbContext _dbContext;
         public readonly IMapper _mapper;
         private readonly FactoryLocationValidator _validator;
+        private readonly FactoryLocationAttachmentValidator _validatorAttachment;
         private readonly IScreenStatusService _screenStatusService;
+        private readonly IFactoryLocationAttachmentService _factoryLocationAttachmentService;
 
-        public FactoryLocationService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryLocationValidator validator, IScreenStatusService screenStatusService)
+        public FactoryLocationService(IEbtdaaDbContext dbContext, IMapper mapper, FactoryLocationValidator validator, IScreenStatusService screenStatusService, FactoryLocationAttachmentValidator validatorAttachment, IFactoryLocationAttachmentService factoryLocationAttachmentService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
             _validator = validator;
             _screenStatusService = screenStatusService;
+            _validatorAttachment = validatorAttachment;
+            _factoryLocationAttachmentService = factoryLocationAttachmentService;
         }
         public async Task<BaseResponse<FactoryLocationResultDto>> GetOne(int factoryId , int periodId)
         {
@@ -44,22 +46,26 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         }
         public async Task<BaseResponse<FactoryLocationResultDto>> AddAsync(FactoryLocationRequestDto req)
         {
-            var factoryLocation = _mapper.Map<FactoryLocation>(req);
-
-            // Validation
-            //var result = await _validator.ValidateAsync(factoryLocation);
-            //if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.FactoryLocations.AddAsync(factoryLocation);
-
-            await _dbContext.SaveChangesAsync();
-
-
-
-            return new BaseResponse<FactoryLocationResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryLocationResultDto>(factoryLocation)
-            };
+                var factoryLocation = _mapper.Map<FactoryLocation>(req);
+
+                // Validation
+                var result = await _validator.ValidateAsync(factoryLocation);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.FactoryLocations.AddAsync(factoryLocation);
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<FactoryLocationResultDto>
+                {
+                    Data = _mapper.Map<FactoryLocationResultDto>(factoryLocation)
+                };
+            }
+            catch(Exception ex) 
+            {
+                throw;
+            }
         }
         public async Task<BaseResponse<FactoryLocationResultDto>> UpdateAsync(FactoryLocationRequestDto req)
         {
@@ -75,6 +81,19 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
             return new BaseResponse<FactoryLocationResultDto>
             {
                 Data = _mapper.Map<FactoryLocationResultDto>(factoryLocationUpdated)
+            };
+        }
+        public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
+        {
+            var result = await _dbContext.FactoryLocations
+                                     .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                                     .ToListAsync();
+            await _factoryLocationAttachmentService.DeleteAsync(periodId, factoryId);
+            _dbContext.FactoryLocations.RemoveRange(result);
+
+            return new BaseResponse<bool>
+            {
+                Data = true
             };
         }
     }

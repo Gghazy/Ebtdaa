@@ -15,6 +15,8 @@ using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
+using Ebtdaa.Domain.Periods;
+using System.Collections.Generic;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -208,6 +210,17 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
             await _dbContext.FactoryProducts.AddAsync(factoryProduct);
             await _dbContext.SaveChangesAsync();
+
+            var productPerActive = new ProductPeriodActiveRequestDto()
+            {
+                FactoryProductId = factoryProduct.Id,
+                PeriodId = request.PeriodId
+            };
+            
+            var products = _mapper.Map<ProductPeriodActive>(productPerActive);
+            await _dbContext.ProductPeriodActives.AddRangeAsync(products);
+            await _dbContext.SaveChangesAsync();
+
             return new BaseResponse<bool>
             {
                 Data =true
@@ -323,5 +336,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = resualt
             };
         }
+       
     }
 }

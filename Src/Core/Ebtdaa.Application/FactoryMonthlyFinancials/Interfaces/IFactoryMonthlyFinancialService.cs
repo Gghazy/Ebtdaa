@@ -9,5 +9,6 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Interfaces
         Task<BaseResponse<FactoryMonthlyFinancialResultDto>> GetOne(int id, int periodId);
         Task<BaseResponse<FactoryMonthlyFinancialResultDto>> UpdateAsync(FactoryMonthlyFinancialRequestDto req);
         Task<BaseResponse<FactoryMonthlyFinancialResultDto>> AddAsync(FactoryMonthlyFinancialRequestDto req);
+        Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId);
     }
 }

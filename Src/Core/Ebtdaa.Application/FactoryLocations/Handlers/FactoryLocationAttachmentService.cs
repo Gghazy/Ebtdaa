@@ -31,7 +31,8 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         {
             var respose = _mapper.Map<List<FactoryLocationAttachmentResultDto>>(
                 await _dbContext.FactoryLocationAttachments
-                .Where(x=>x.FactoryId==id && x.PeriodId==periodId).Include(x=>x.Attachment).ToListAsync());
+                .Where(x => x.FactoryId == id && x.PeriodId == periodId)
+                .Include(x=>x.Attachment).ToListAsync());
 
             return new BaseResponse<List<FactoryLocationAttachmentResultDto>>
             {
@@ -40,37 +41,36 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         }
         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> AddAsync(FactoryLocationAttachmentRequestDto req)
         {
-            var file = _mapper.Map<FactoryLocationAttachment>(req);
-            file.Name = req.FactoryId
-                           + DateTime.Today.Date.ToShortDateString().Replace("/", "")
-                           + file.AttachmentId;
-
-            var result = await _validator.ValidateAsync(file);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.FactoryLocationAttachments.AddAsync(file);
-
-            await _dbContext.SaveChangesAsync();
-
-            var FactoryLocation= await _dbContext.FactoryLocations.FirstOrDefaultAsync(x=>x.Id==req.FactoryLocationId);
-
-
-            return new BaseResponse<FactoryLocationAttachmentResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
-            };
+                var file = _mapper.Map<FactoryLocationAttachment>(req);
+                file.Name = req.FactoryId
+                               + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                               + file.AttachmentId;
+                var result = await _validator.ValidateAsync(file);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+                await _dbContext.FactoryLocationAttachments.AddAsync(file);
+                await _dbContext.SaveChangesAsync();
+                var FactoryLocation= await _dbContext.FactoryLocations.FirstOrDefaultAsync(x=>x.Id==req.FactoryLocationId);
+                return new BaseResponse<FactoryLocationAttachmentResultDto>
+                {
+                    Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
+                };
+            }
+            catch(Exception ex)
+            {
+                throw;
+            }
+           
         }
 
-        public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int id)
+        public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int factoryId , int periodId)
         {
-            var file = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x=>x.Id== id);
+            var file = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x=>x.FactoryId== factoryId && x.PeriodId == periodId);
 
             _dbContext.FactoryLocationAttachments.Remove(file);
 
             await _dbContext.SaveChangesAsync();
-
-
-
             return new BaseResponse<FactoryLocationAttachmentResultDto>
             {
                 Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
