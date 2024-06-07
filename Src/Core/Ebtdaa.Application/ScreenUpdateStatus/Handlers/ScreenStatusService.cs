@@ -216,8 +216,6 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
 
 
-            bool screenStatus = false;
-
 
             screenStatus = result.Count>0 ? false : true;
 
