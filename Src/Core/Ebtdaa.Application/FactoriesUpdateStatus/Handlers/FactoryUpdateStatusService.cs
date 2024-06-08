@@ -83,7 +83,8 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                                .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             var statusResult = new FactoryIdentitesResultDto();
-
+            
+            
 
             if (result == null)
             {
@@ -102,42 +103,33 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 {
                     SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
                 }
-                else if (isDataEntry && isDataApprover )
-                {
-                    if (resultStatus.DataStatus == null)
-                    {
-                        SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال", false);
-                    }
-                    else
-                    {
-                        SetStatus(statusResult, DataStatus.Reviwed, DataStatus.NotApproved, "إعتماد المسح", false);
-                    }
-                   
-                }
+             
                 else if (isDataApprover)
                 {
-                    SetStatus(statusResult, DataStatus.Approved, DataStatus.Reviwed, "إعتماد المسح", true);
+                    if (resultStatus.DataStatus == null && isDataEntry)
+                    {
+                        SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                    }
+                    else if (resultStatus.DataStatus == DataStatus.Reviwed )
+                    {
+                        SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Approved, "إعتماد المسح", true);
+                    }
                 }
                 else if (isDataReviewer)
                 {
-                    SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", true);
-                }
-                else if (isDataEntry)
-                {
-                    SetStatus(statusResult, DataStatus.Added, DataStatus.NotApproved, "إدخال", false);
-                }
-            }
-            void SetStatus(FactoryIdentitesResultDto statusResult, DataStatus dataStatus,
-                DataStatus currentDataStatus, string statusButton,
-                Boolean isDisable
-                )
-            {
-                statusResult.DataStatus = dataStatus;
-                statusResult.CurrentDataStatus = currentDataStatus;
-                statusResult.StatusButton = statusButton;
-                statusResult.isDisable = isDisable;
+                    if (resultStatus.DataStatus == DataStatus.Reviwed && isDataEntry)
+                    {
+                        SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                    }
+                    else if (resultStatus.DataStatus == DataStatus.Reviwed)
+                    {
 
+                        SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", true);
+                    }
+                }
+               
             }
+          
             
 
 
@@ -145,6 +137,18 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
             {
                 Data = statusResult
             };
+            
+             void SetStatus(FactoryIdentitesResultDto statusResult, DataStatus dataStatus,
+              DataStatus currentDataStatus, string statusButton,
+              Boolean isDisable
+              )
+            {
+                statusResult.DataStatus = dataStatus;
+                statusResult.CurrentDataStatus = currentDataStatus;
+                statusResult.StatusButton = statusButton;
+                statusResult.isDisable = isDisable;
+
+            }
 
         }
     }
