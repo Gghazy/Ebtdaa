@@ -210,9 +210,14 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .ToListAsync();
 
             var result = await _dbContext.FactoryProducts
-                .AnyAsync(x => activeProduct.Contains(x.Id));
-            
-            screenStatus = result ? true : false;
+                .Where(x => activeProduct.Contains(x.Id))
+                .Where(x => x.Product.Kilograms_Per_Unit == null || x.CommericalName == null).ToListAsync();
+
+
+
+
+
+            screenStatus = result.Count>0 ? false : true;
 
             return screenStatus;
         }
@@ -338,7 +343,22 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
            
             return screenStatus;
         }
-        
 
+        public static bool HasNullProperties(object obj)
+        {
+            Type objectType = obj.GetType();
+            PropertyInfo[] properties = objectType.GetProperties();
+
+            foreach (PropertyInfo property in properties)
+            {
+                object value = property.GetValue(obj);
+                if (value == null)
+                {
+                    return true; // At least one property is null
+                }
+            }
+
+            return false; // No null properties found
+        }
     }
 }
