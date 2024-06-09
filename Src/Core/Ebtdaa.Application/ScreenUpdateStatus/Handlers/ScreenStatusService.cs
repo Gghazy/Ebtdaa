@@ -204,9 +204,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             bool screenStatus = false;
 
             var activeProduct = await _dbContext.ProductPeriodActives
-                .Include(x => x.FactoryProduct)
-                .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
-                .Select(x => x.FactoryProductId)
+                .Include(x => x.Product)
+                .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                .Select(x => x.ProductId)
                 .ToListAsync();
 
             var result = await _dbContext.FactoryProducts
@@ -226,9 +226,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             bool screenStatus = false;
 
             var activeProduct = await _dbContext.ProductPeriodActives
-                .Include(x => x.FactoryProduct)
-                .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
-                .Select(x => x.FactoryProductId)
+                .Include(x => x.Product)
+                .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                .Select(x => x.ProductId)
                 .ToListAsync();
 
             screenStatus = activeProduct.Any() ? true : false;
@@ -241,9 +241,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
            
 
             var activeProducts = await _dbContext.ProductPeriodActives
-                .Include(x => x.FactoryProduct)
-                .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
-                .Select(x => x.FactoryProductId)
+                .Include(x => x.Product)
+                .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                .Select(x => x.ProductId)
                 .ToListAsync();
 
             var result = await _dbContext.ActualProductionAndCapacities

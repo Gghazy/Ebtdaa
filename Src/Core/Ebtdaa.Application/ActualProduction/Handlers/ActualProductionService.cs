@@ -40,10 +40,11 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         {
 
             var ProductPeriodActives = await _dbContext.ProductPeriodActives
-                .Include(x => x.FactoryProduct)
-                .ThenInclude(x => x.Product)
-                .Where(x => x.PeriodId == search.PeriodId && x.FactoryProduct.FactoryId == search.FactoryId)
-                .Select(x => x.FactoryProductId).ToListAsync();
+                //.Include(x => x.FactoryProduct)
+                //.ThenInclude(x => x.Product)
+                .Include(x => x.Product)
+                .Where(x => x.PeriodId == search.PeriodId && x.FactoryId == search.FactoryId)
+                .Select(x => x.ProductId).ToListAsync();
 
             var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
                         await _dbContext.FactoryProducts

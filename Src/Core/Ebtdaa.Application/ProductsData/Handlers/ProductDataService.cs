@@ -41,43 +41,72 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             if (search.IsActive)
             {
                  productActive =await _dbContext.ProductPeriodActives
-                    .Where(x => x.FactoryProduct.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
-                    .Select(x => x.FactoryProductId).ToListAsync();
+                    .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                    .Select(x => x.ProductId).ToListAsync();
             }
-
-
-            var resualt = 
-                await _dbContext.FactoryProducts
-                .Include(x=>x.Product)
-                .ThenInclude(x=>x.Unit)
-              //  .Include(x=>x.ProductPeriodActives)
-                .Where(x => x.FactoryId == search.FactoryId )
-                .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
-                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
-                new ProductResultDto {
-                    Hs12NameEn= b.Hs12NameEn,
+            var resualt =
+                await _dbContext.Products
+                .Include(x => x.Unit)
+                //.Where(x => x.FactoryId == search.FactoryId)
+                .WhereIf(search.IsActive, x => productActive.Contains(x.Id))
+                .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                new ProductResultDto
+                {
+                    Hs12NameEn = b.Hs12NameEn,
                     Hs12NameAr = b.Hs12NameAr,
                     Hs12Code = b.Hs12Code,
                     Id = a.Id,
                     ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
-                    ProductName10 = $"{a.Product.ProductName} ({a.Product.ItemNumber})",
-                    ProductId=a.ProductId,
-                    CommericalName = a.CommericalName,
-                    UnitId = a.Product.UnitId,
-                    ItemNumber = a.Product.ItemNumber,
-                    CR = a.Product.CR,
-                    Status = a.Product.Status,
-                    FactoryId = a.FactoryId,
-                    Review = a.Product.Review,
-                    Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
-                    UnitName = a.Product.Unit.Name,
-                    PeperId = a.PeperId,
-                    PhototId = a.PhototId,
-                    IsActive=a.ProductPeriodActives.Any(x=>x.PeriodId==search.PeriodId&&x.FactoryProductId== a.Id),
+                    ProductName10 = $"{a.ProductName} ({a.ItemNumber})",
+                    ProductId = a.Id,
+                    //CommericalName = a.CommericalName,
+                    UnitId = a.UnitId,
+                    ItemNumber = a.ItemNumber,
+                    CR = a.CR,
+                    Status = a.Status,
+                    //FactoryId = a.FactoryId,
+                    //Review = a.Review,
+                    //Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                    //UnitName = a.Product.Unit.Name,
+                    //PeperId = a.PeperId,
+                    //PhototId = a.PhototId,
+                    //IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.FactoryProductId == a.Id),
                 })
-                .ToQueryResult(search.PageNumber, search.PageSize,sort:"Id",descending:true);
+                .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
 
-           
+
+            //var resualt = 
+            //    await _dbContext.FactoryProducts
+            //    .Include(x=>x.Product)
+            //    .ThenInclude(x=>x.Unit)
+            //  //  .Include(x=>x.ProductPeriodActives)
+            //    .Where(x => x.FactoryId == search.FactoryId )
+            //    .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
+            //    .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
+            //    new ProductResultDto {
+            //        Hs12NameEn= b.Hs12NameEn,
+            //        Hs12NameAr = b.Hs12NameAr,
+            //        Hs12Code = b.Hs12Code,
+            //        Id = a.Id,
+            //        ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+            //        ProductName10 = $"{a.Product.ProductName} ({a.Product.ItemNumber})",
+            //        ProductId=a.ProductId,
+            //        CommericalName = a.CommericalName,
+            //        UnitId = a.Product.UnitId,
+            //        ItemNumber = a.Product.ItemNumber,
+            //        CR = a.Product.CR,
+            //        Status = a.Product.Status,
+            //        FactoryId = a.FactoryId,
+            //        Review = a.Product.Review,
+            //        Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+            //        UnitName = a.Product.Unit.Name,
+            //        PeperId = a.PeperId,
+            //        PhototId = a.PhototId,
+            //        IsActive=a.ProductPeriodActives.Any(x=>x.PeriodId==search.PeriodId&&x.FactoryProductId== a.Id),
+            //    })
+            //    .ToQueryResult(search.PageNumber, search.PageSize,sort:"Id",descending:true);
+
+
             return new BaseResponse<QueryResult<ProductResultDto>>
             {
                 Data = resualt
