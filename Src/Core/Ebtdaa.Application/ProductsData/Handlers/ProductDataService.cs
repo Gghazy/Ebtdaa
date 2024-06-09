@@ -266,7 +266,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
             var productPerActive = new ProductPeriodActiveRequestDto()
             {
-                FactoryProductId = factoryProduct.Id,
+                ProductId = factoryProduct.Id,
                 PeriodId = request.PeriodId
             };
             
