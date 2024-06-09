@@ -37,7 +37,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             var ProductPeriodActives = await _dbContext.ProductPeriodActives.Where(x => x.PeriodId == periodId).ToListAsync();
            
             
-            var removList = ProductPeriodActives.Select(x => x.FactoryProductId).Except(list.Select(x=>x.FactoryProductId)).ToList();
+            var removList = ProductPeriodActives.Select(x => x.ProductId).Except(list.Select(x=>x.ProductId)).ToList();
 
             _dbContext.ProductPeriodActives.RemoveRange(ProductPeriodActives);
 
@@ -54,8 +54,8 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
             var result = await _dbContext.ProductPeriodActives
-                                     .Include(x => x.FactoryProduct)
-                                     .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
+                                     .Include(x => x.Product)
+                                     .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
                                      .ToListAsync();
             _dbContext.ProductPeriodActives.RemoveRange(result);
 
