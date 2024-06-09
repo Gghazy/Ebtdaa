@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240609095017_baseEntity")]
+    partial class baseEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -2016,16 +2018,10 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
-                    b.Property<int>("FactoryId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("FactoryProductId")
+                    b.Property<int>("FactoryProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("PeriodId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<string>("UpdatedBy")
@@ -2039,8 +2035,6 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasIndex("FactoryProductId");
 
                     b.HasIndex("PeriodId");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("ProductPeriodActives");
                 });
@@ -2961,9 +2955,11 @@ namespace Ebtdaa.Persistence.Migrations
 
             modelBuilder.Entity("Ebtdaa.Domain.ProductData.Entity.ProductPeriodActive", b =>
                 {
-                    b.HasOne("Ebtdaa.Domain.ProductData.Entity.FactoryProduct", null)
+                    b.HasOne("Ebtdaa.Domain.ProductData.Entity.FactoryProduct", "FactoryProduct")
                         .WithMany("ProductPeriodActives")
-                        .HasForeignKey("FactoryProductId");
+                        .HasForeignKey("FactoryProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Ebtdaa.Domain.Periods.Period", "Period")
                         .WithMany("ProductPeriodActives")
@@ -2971,15 +2967,9 @@ namespace Ebtdaa.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Ebtdaa.Domain.ProductData.Entity.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("FactoryProduct");
 
                     b.Navigation("Period");
-
-                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.RawMaterials.Entity.ProductRawMaterial", b =>
