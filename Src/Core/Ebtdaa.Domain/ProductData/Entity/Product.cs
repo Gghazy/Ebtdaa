@@ -6,7 +6,7 @@ using Ebtdaa.Domain.RawMaterials.Entity;
 
 namespace Ebtdaa.Domain.ProductData.Entity
 {
-    public class Product : BaseEntity
+    public class Product 
     {
         public int Id { get; set; }
         public string? ProductName { get; set; }

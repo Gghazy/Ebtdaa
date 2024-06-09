@@ -4,6 +4,7 @@ using Ebtdaa.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    partial class EbtdaaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240609094631_nullableBaseEntity")]
+    partial class nullableBaseEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +44,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int?>("DesignedCapacity")
@@ -88,7 +90,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -173,7 +175,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<double>("CurrentStockQuantity")
@@ -232,7 +234,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -274,7 +276,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("CustomsItem10_Id")
@@ -316,7 +318,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("DataApprover")
@@ -378,7 +380,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("Email")
@@ -438,7 +440,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -559,7 +561,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<decimal>("CurrentLiabilities")
@@ -628,7 +630,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int?>("FactoryFinancialId")
@@ -680,7 +682,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int?>("FactoryEntityId")
@@ -733,7 +735,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -782,7 +784,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<decimal>("ElectricityExpenses")
@@ -841,7 +843,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("DataStatus")
@@ -918,7 +920,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("DialCode")
@@ -963,7 +965,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("Extension")
@@ -1113,7 +1115,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1189,7 +1191,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("DesignedCapacity")
@@ -1253,7 +1255,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1305,7 +1307,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1358,7 +1360,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1407,7 +1409,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryEntityId")
@@ -1486,7 +1488,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1531,7 +1533,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1584,7 +1586,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1651,7 +1653,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1738,7 +1740,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("Email")
@@ -1811,7 +1813,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("DataStatus")
@@ -1884,7 +1886,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
@@ -1966,6 +1968,12 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CR")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("smalldatetime");
+
                     b.Property<int?>("FactoryId")
                         .HasColumnType("int");
 
@@ -1993,6 +2001,12 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int?>("UnitId")
                         .HasColumnType("int");
 
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("smalldatetime");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FactoryId");
@@ -2013,7 +2027,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryProductId")
@@ -2066,7 +2080,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<string>("CustomItemName")
@@ -2129,7 +2143,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("RawMaterialId")
@@ -2161,7 +2175,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("smalldatetime");
 
                     b.Property<int>("FactoryId")
