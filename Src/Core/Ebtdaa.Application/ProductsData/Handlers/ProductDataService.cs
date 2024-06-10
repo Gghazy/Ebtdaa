@@ -158,7 +158,8 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     Hs12NameAr = b.Hs12NameAr,
                     Hs12Code = b.Hs12Code,
                     Id = a.Id,
-                    
+                    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                    ItemNumber = a.ItemNumber,
                     ProductId = a.Id,
                     UnitId = a.UnitId,
                     CR = a.CR,
