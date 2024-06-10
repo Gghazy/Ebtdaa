@@ -211,11 +211,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
             var result = await _dbContext.FactoryProducts
                 .Where(x => activeProduct.Contains(x.Id))
-                .Where(x => x.Product.Kilograms_Per_Unit == null || x.CommericalName == null).ToListAsync();
-
-
-
-
+                .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+                                //.Where(x => x.Product.Kilograms_Per_Unit == null || x.CommericalName == null).ToListAsync();
 
             screenStatus = result.Count>0 ? false : true;
 
@@ -238,8 +235,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private async Task<bool> CheckActualProductionScreenStatus(int? factoryId, int periodId, FactoryStatusEnum? status)
         {
-           
 
+            bool screenStatus = false;
             var activeProducts = await _dbContext.ProductPeriodActives
                 .Include(x => x.Product)
                 .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
@@ -252,15 +249,15 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .ToListAsync();
 
             var differenceList = activeProducts.Except(result.Select(x => x.FactoryProductId)).ToList();
-            bool screenStatus = false;
+            
             if (status == FactoryStatusEnum.Productive)
             {
                 screenStatus = IsProductiveScreenValid(differenceList, result);
 
-                if (screenStatus)
-                {
-                    screenStatus = AreAttachmentsComplete(factoryId, periodId);
-                }
+                //if (screenStatus)
+                //{
+                //    screenStatus = AreAttachmentsComplete(factoryId, periodId);
+                //}
             }
             else
             {
@@ -272,7 +269,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
         private bool IsProductiveScreenValid(List<int> differenceList, List<ActualProductionAndCapacity> result)
         {
-            return !(differenceList.Any() || result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
+            return (differenceList.Any() || result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
         }
 
         private bool AreAttachmentsComplete(int? factoryId, int periodId)

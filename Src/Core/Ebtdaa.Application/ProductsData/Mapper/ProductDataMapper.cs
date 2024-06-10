@@ -19,7 +19,7 @@ namespace Ebtdaa.Application.ProductsData.Mapper
                      .ForMember(d => d.ProductName, opt => opt.MapFrom(src => src.Product.ProductName))
                      .ForMember(d => d.UnitId, opt => opt.MapFrom(src => src.Product.Unit.Id))
                      .ForMember(d => d.ItemNumber, opt => opt.MapFrom(src => src.Product.ItemNumber))
-                     .ForMember(d => d.Level12Number, opt => opt.MapFrom(src => src.Product.Level12Number))
+                     //.ForMember(d => d.Level12Number, opt => opt.MapFrom(src => src.Product.Level12Number))
                      .ForMember(d => d.CR, opt => opt.MapFrom(src => src.Product.CR))
                      .ForMember(d => d.Status, opt => opt.MapFrom(src => src.Product.Status))
                      .ForMember(d => d.Review, opt => opt.MapFrom(src => src.Product.Review))

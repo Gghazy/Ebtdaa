@@ -44,9 +44,11 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
                     .Select(x => x.ProductId).ToListAsync();
             }
+            var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
             var resualt =
                 await _dbContext.Products
                 .Include(x => x.Unit)
+                .Where(f => f.CR == getCR.CommercialRegister)
                 .WhereIf(search.IsActive, x => productActive.Contains(x.Id))
                 .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto
@@ -225,6 +227,8 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                                    UnitName = a.Product.Unit.Name,
                                    PeperId = a.PeperId,
                                    PhototId = a.PhototId,
+                                   Level12Number = b.Hs12Code,
+                                   
                                }).FirstOrDefaultAsync(x => x.Id == Id);
 
                       var response = _mapper.Map<ProductResultDto>(result);
