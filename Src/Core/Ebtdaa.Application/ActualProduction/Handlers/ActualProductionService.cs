@@ -46,11 +46,12 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 .Where(x => x.PeriodId == search.PeriodId && x.FactoryId == search.FactoryId)
                 .Select(x => x.ProductId).ToListAsync();
 
+
             var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
                         await _dbContext.FactoryProducts
                         .Include(x => x.Product)
-                        .Where(x => ProductPeriodActives.Contains(x.Id))
-                        .Where(x => x.FactoryId == search.FactoryId)
+                        .Where(x => ProductPeriodActives.Contains(x.ProductId))
+                        .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
                         .Include(x => x.ActualProductionAndCapacities.Where(x => x.PeriodId == search.PeriodId))
                         .ThenInclude(x => x.DesignedCapacityUnit)
                         .Include(x => x.ActualProductionAndCapacities)

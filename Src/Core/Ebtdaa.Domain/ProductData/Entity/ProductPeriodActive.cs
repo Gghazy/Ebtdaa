@@ -12,13 +12,12 @@ namespace Ebtdaa.Domain.ProductData.Entity
     public class ProductPeriodActive:BaseEntity
     {
         public int Id { get; set; }
-        //public int FactoryProductId { get; set; }
         public int PeriodId { get; set; }
         public int FactoryId {  get; set; }
         public int ProductId {  get; set; }
 
         public virtual Product Product { get; set; }
         public virtual Period Period { get; set; }
-        //public virtual FactoryProduct FactoryProduct { get; set; }
+        public virtual Factory Factory { get; set; }
     }
 }

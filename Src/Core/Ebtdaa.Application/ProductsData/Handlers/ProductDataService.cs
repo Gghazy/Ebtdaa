@@ -47,7 +47,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             var resualt =
                 await _dbContext.Products
                 .Include(x => x.Unit)
-                //.Where(x => x.FactoryId == search.FactoryId)
                 .WhereIf(search.IsActive, x => productActive.Contains(x.Id))
                 .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto
@@ -59,18 +58,14 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
                     ProductName10 = $"{a.ProductName} ({a.ItemNumber})",
                     ProductId = a.Id,
-                    //CommericalName = a.CommericalName,
                     UnitId = a.UnitId,
                     ItemNumber = a.ItemNumber,
                     CR = a.CR,
                     Status = a.Status,
-                    //FactoryId = a.FactoryId,
-                    //Review = a.Review,
-                    //Kilograms_Per_Unit = a.Kilograms_Per_Unit,
-                    //UnitName = a.Product.Unit.Name,
-                    //PeperId = a.PeperId,
-                    //PhototId = a.PhototId,
-                    //IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.FactoryProductId == a.Id),
+                    FactoryId = search.FactoryId,
+                    Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                    UnitName = a.Unit.Name,
+                    IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.ProductId == a.Id),
                 })
                 .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
 
