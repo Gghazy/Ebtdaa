@@ -16,6 +16,7 @@ namespace Ebtdaa.Application.ProductsData.Interfaces
         Task<BaseResponse<bool>> AddAsync(ProductRequestDto request);
         Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto request);
         Task<BaseResponse<QueryResult<UnitResultDto>>> GetUnit(UnitSearch search);
+        Task<BaseResponse<QueryResult<ProductResultDto>>> GetFactoryProduct(ProductSearch search);
 
 
 

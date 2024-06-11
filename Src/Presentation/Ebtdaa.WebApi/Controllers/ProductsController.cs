@@ -22,6 +22,11 @@ namespace Ebtdaa.WebApi.Controllers
         public async Task<IActionResult> GetAll(ProductSearch search)
         {
             return Ok(await _productDataService.GetAll(search));
+        } 
+        [HttpPost("GetFactoryProduct")]
+        public async Task<IActionResult> GetFactoryProduct(ProductSearch search)
+        {
+            return Ok(await _productDataService.GetFactoryProduct(search));
         }
 
         [HttpGet("AllProducts")]
