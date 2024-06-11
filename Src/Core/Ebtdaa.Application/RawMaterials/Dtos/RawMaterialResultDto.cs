@@ -6,8 +6,8 @@
         public string CustomItemName { get; set; }
         public string ProductName { get; set; }
         public string Name { get; set; }
-        public int MaximumMonthlyConsumption { get; set; }
-        public int AverageWeightKG { get; set; }
+        public decimal MaximumMonthlyConsumption { get; set; }
+        public decimal AverageWeightKG { get; set; }
         public List<int> FactoryProductId { get; set; }
       //  public List<RawMaterialProductDto> RawMaterialProducts { get; set; }
         public int UnitId { get; set; }

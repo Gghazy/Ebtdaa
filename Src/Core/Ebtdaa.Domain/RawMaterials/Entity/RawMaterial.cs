@@ -10,14 +10,14 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public int Id { get; set; }
         public string CustomItemName { get; set; }
         public string Name { get; set; }
-        public int MaximumMonthlyConsumption { get; set; }
+        public decimal MaximumMonthlyConsumption { get; set; }
         public int FactoryId { get; set; }
         public Factory Factory { get; set; }
         public int PeriodId { get; set; }
         public Period Period { get; set; }
         public int UnitId { get; set; }
         public Unit Unit { get; set; }
-        public int AverageWeightKG { get; set; }
+        public decimal AverageWeightKG { get; set; }
         public string? Description { get; set; }
         public int? PhotoId { get; set; }
         public int? PaperId { get; set; }
