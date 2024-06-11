@@ -44,7 +44,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
                     .Select(x => x.ProductId).ToListAsync();
             }
-           
+            var checkFactProduct = await _dbContext.FactoryProducts.Where(f => f.FactoryId == search.FactoryId && f.PeriodId == search.PeriodId).ToListAsync();
                 var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
                 var resualt =
                     await _dbContext.Products
@@ -69,10 +69,11 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                         FactoryId = search.FactoryId,
                         Kilograms_Per_Unit = a.Kilograms_Per_Unit,
                         UnitName = a.Unit.Name,
+                        CommericalName = a.FactoryProducts.FirstOrDefault().CommericalName,
                         IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.ProductId == a.Id),
                     })
                     .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
-
+                    
              
                 //var resualt =
                 //await _dbContext.FactoryProducts
