@@ -10,28 +10,28 @@ namespace Ebtdaa.Application.FactoryContacts.Validation
         {
             RuleFor(d => d.OfficerPhone)
               .NotEmpty()
-              .WithMessage("Officer Phone-IsRequired-Field");
+              .WithMessage("حقل رقم جوال ضابط الاتصال مطلوب");
 
             RuleFor(d => d.OfficerEmail)
                 .NotEmpty()
-                .WithMessage("Officer Email-IsRequired-Field");
+                .WithMessage("حقل البريد الإلكتروني لضابط الاتصال مطلوب");
 
 
             RuleFor(d => d.ProductionManagerPhone)
               .NotEmpty()
-              .WithMessage("Production Manager Phone-IsRequired-Field");
+              .WithMessage("حقل رقم جوال مدير الإنتاج مطلوب");
 
             RuleFor(d => d.ProductionManagerEmail)
               .NotEmpty()
-              .WithMessage("Production Manager Email-IsRequired-Field");
+              .WithMessage("حقل البريد الإلكتروني لمدير الإنتاج مطلوب");
 
             RuleFor(d => d.FinanceManagerPhone)
               .NotEmpty()
-              .WithMessage("Finance Manager Phone-IsRequired-Field");
+              .WithMessage("حقل رقم جوال مدير المالية مطلوب");
 
             RuleFor(d => d.FinanceManagerEmail)
               .NotEmpty()
-              .WithMessage("Finance Manager Email-IsRequired-Field");
+              .WithMessage("حقل البريد الإلكتروني لمدير المالية مطلوب");
 
             RuleFor(d => d.FactoryId)
              .NotEmpty()

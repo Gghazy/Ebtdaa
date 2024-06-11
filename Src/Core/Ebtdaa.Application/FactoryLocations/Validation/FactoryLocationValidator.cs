@@ -14,23 +14,23 @@ namespace Ebtdaa.Application.FactoryLocations.Validation
         {
             RuleFor(d => d.FactoryEntityId)
               .NotEmpty()
-              .WithMessage("Factory Entity-IsRequired-Field");
+              .WithMessage("حقل الجهة التي يتبع لها  المصنع مطلوب");
 
             RuleFor(d => d.CityId)
               .NotEmpty()
-              .WithMessage("City-IsRequired-Field");
+              .WithMessage("حقل المدينة مطلوب");
             
             RuleFor(d => d.IndustrialAreaId)
               .NotEmpty()
-              .WithMessage("Industrial Area-IsRequired-Field");
+              .WithMessage("حقل المدينة الصناعية مطلوب");
 
             RuleFor(d => d.WebSite)
               .NotEmpty()
-              .WithMessage("رابط موقع المصنع , هذا الحقل مطلوب");
+              .WithMessage("حقل رابط موقع المصنع مطلوب");
 
-            RuleFor(d => d.FactoryId)
-              .NotEmpty()
-              .WithMessage("Factory-IsRequired-Field");
+            //RuleFor(d => d.FactoryId)
+            //  .NotEmpty()
+            //  .WithMessage("Factory-IsRequired-Field");
 
         }
     }

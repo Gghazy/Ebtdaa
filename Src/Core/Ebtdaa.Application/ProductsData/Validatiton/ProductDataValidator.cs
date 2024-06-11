@@ -14,10 +14,10 @@ namespace Ebtdaa.Application.ProductsData.Validatiton
         {
             RuleFor(d => d.CommericalName)
              .NotEmpty()
-             .WithMessage("اسم المنتج التجاري , هذا الحقل مطلوب");
-            RuleFor(d => d.ProductId)
-             .NotEmpty()
-             .WithMessage("اسم المنتج (حسب البند الجمركي على مستوى 12) , هذا الحقل مطلوب");
+             .WithMessage("حقل اسم المنتج التجاري  مطلوب ");
+            //RuleFor(d => d.ProductId)
+            // .NotEmpty()
+            // .WithMessage("اسم المنتج (حسب البند الجمركي على مستوى 12) , هذا الحقل مطلوب");
 
         }
     }

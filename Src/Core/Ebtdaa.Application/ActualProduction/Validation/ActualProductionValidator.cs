@@ -9,8 +9,7 @@ namespace Ebtdaa.Application.ActualProduction.Validation
         {
             RuleFor(d => d.FactoryProductId)
               .NotEmpty()
-              .WithMessage("Product-IsRequired-Field");
-
+              .WithMessage("Product -IsRequired-Field");
 
             RuleFor(d => d.ActualProductionUintId)
               .NotEmpty()
@@ -18,7 +17,7 @@ namespace Ebtdaa.Application.ActualProduction.Validation
 
             RuleFor(d => d.DesignedCapacity)
               .NotEmpty()
-              .WithMessage("DesignedCapacity DesignedCapacity-IsRequired-Field");
+              .WithMessage("حقل الطاقة التصميمة مطلوب");
 
             RuleFor(d => d.DesignedCapacityUnitId)
               .NotEmpty()
@@ -26,7 +25,7 @@ namespace Ebtdaa.Application.ActualProduction.Validation
 
             RuleFor(d => d.ActualProduction)
               .NotEmpty()
-              .WithMessage("ActualProduction ActualProduction-IsRequired-Field");
+              .WithMessage("حقل الإنتاج الفعلي مطلوب");
 
 
         }

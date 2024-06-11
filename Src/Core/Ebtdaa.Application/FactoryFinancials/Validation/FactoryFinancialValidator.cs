@@ -14,56 +14,55 @@ namespace Ebtdaa.Application.FactoryFinancials.Validation
         {
             RuleFor(d => d.Revenues)
               .NotEmpty()
-              .WithMessage("Revenues-IsRequired-Field");
+              .WithMessage("حقل الإيرادات مطلوب");
 
             RuleFor(d => d.WaterExpenses)
               .NotEmpty()
-              .WithMessage("Water Expenses-IsRequired-Field");
+              .WithMessage("حقل نفقات المياه مطلوب ");
 
             RuleFor(d => d.ElectricityExpenses)
               .NotEmpty()
-              .WithMessage("Electricity Expenses-IsRequired-Field");
+              .WithMessage("حقل نفقات الكهرباء مطلوب");
 
             RuleFor(d => d.FuelExpenses)
               .NotEmpty()
-              .WithMessage("Fuel Expenses-IsRequired-Field");
+              .WithMessage("حقل نفقات الوقود مطلوب");
 
             RuleFor(d => d.RawMterialExpenses)
               .NotEmpty()
-              .WithMessage("RawMterial Expenses-IsRequired-Field");
+              .WithMessage("حقل نفقات المواد الخام ");
 
             RuleFor(d => d.EmploymentExpenses)
               .NotEmpty()
-              .WithMessage("Employment Expenses-IsRequired-Field");
+              .WithMessage("حقل نفقات العمالة مطلوب");
 
-            RuleFor(d => d.OtherOperatingExpenses)
-              .NotEmpty()
-              .WithMessage("Other Operating Expenses-IsRequired-Field");
+            //RuleFor(d => d.OtherOperatingExpenses)
+            //  .NotEmpty()
+            //  .WithMessage("Other Operating Expenses-IsRequired-Field");
 
-            RuleFor(d => d.TotalExpenses)
-              .NotEmpty()
-              .WithMessage("Total Expenses-IsRequired-Field");
-
+            //RuleFor(d => d.TotalExpenses)
+            //  .NotEmpty()
+            //  .WithMessage("Total Expenses-IsRequired-Field");
 
             RuleFor(d => d.Assets)
               .NotEmpty()
-              .WithMessage("Assets-IsRequired-Field");
+              .WithMessage("حقل الأصول المتداولة مطلوب");
 
             RuleFor(d => d.NonCurrentAssets)
               .NotEmpty()
-              .WithMessage("NonCurrent Assets-IsRequired-Field");
+              .WithMessage("حقل الأصول الغير متداولة مطلوب");
 
             RuleFor(d => d.CurrentLiabilities)
               .NotEmpty()
-              .WithMessage("Current Liabilities-IsRequired-Field");
+              .WithMessage("حقل الخصوم المتداولة مطلوب");
 
             RuleFor(d => d.NonCurrentLiabilities)
               .NotEmpty()
-              .WithMessage("NonCurrent Liabilities-IsRequired-Field");
+              .WithMessage("حقل الخصوم الغير متداولة مطلوب");
 
-            RuleFor(d => d.FactoryId)
-              .NotEmpty()
-              .WithMessage("Factory-IsRequired-Field");
+            //RuleFor(d => d.FactoryId)
+            //  .NotEmpty()
+            //  .WithMessage("Factory-IsRequired-Field");
 
         }
          

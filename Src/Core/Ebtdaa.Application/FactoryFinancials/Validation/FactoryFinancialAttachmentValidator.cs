@@ -10,7 +10,7 @@ namespace Ebtdaa.Application.FactoryFinancials.Validation
         {
             RuleFor(d => d.AttachmentId)
               .NotEmpty()
-              .WithMessage("Attachment-IsRequired-Field");
+              .WithMessage("حقل المرفقات مطلوب");
 
             //RuleFor(d => d.FactoryFinancialId)
             //    .NotEmpty()
