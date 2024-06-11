@@ -174,10 +174,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             //screenStatus = resultFactoryLocation ? true : false;
             var resultFLA = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
-            if (resultFactoryLocation != null && resultFLA.Type != null)
+            if (resultFactoryLocation != null && resultFLA != null)
             {
                 screenStatus = true;
-               
             }
             else
             {

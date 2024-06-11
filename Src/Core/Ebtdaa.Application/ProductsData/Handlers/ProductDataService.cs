@@ -96,7 +96,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 await _dbContext.FactoryProducts
                 .Include(x => x.Product)
                 .ThenInclude(x => x.Unit)
-                .Include(x => x.ProductPeriodActives)
+                //.Include(x => x.ProductPeriodActives)
                 .Where(x => x.FactoryId == search.FactoryId)
                 .WhereIf(search.IsActive, x => productActive.Contains(x.Id))
                 .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>

@@ -20,9 +20,9 @@ namespace Ebtdaa.Application.Factories.Validation
             //    .NotEmpty()
             //    .WithMessage("Factory-IsRequired-Field");
 
-            RuleFor(d => d.Type)
-               .NotEmpty()
-               .WithMessage("نوع المستند , هذا الحقل مطلوب");
+            //RuleFor(d => d.Type)
+            //   .NotEmpty()
+            //   .WithMessage("نوع المستند , هذا الحقل مطلوب");
 
 
 
