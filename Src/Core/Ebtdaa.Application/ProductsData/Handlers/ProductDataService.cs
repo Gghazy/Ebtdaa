@@ -44,70 +44,74 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
                     .Select(x => x.ProductId).ToListAsync();
             }
-            var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
-            var resualt =
-                await _dbContext.Products
-                .Include(x => x.Unit)
-                .Where(f => f.CR == getCR.CommercialRegister)
-                .WhereIf(search.IsActive, x => productActive.Contains(x.Id))
-                .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
-                new ProductResultDto
+           
+                var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
+                var resualt =
+                    await _dbContext.Products
+                    .Include(x => x.FactoryProducts)
+                    .Include(x => x.Unit)
+                    .Where(f => f.CR == getCR.CommercialRegister)
+                    .WhereIf(search.IsActive, x => productActive.Contains(x.Id))
+                    .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                    new ProductResultDto
+                    {
+                        Hs12NameEn = b.Hs12NameEn,
+                        Hs12NameAr = b.Hs12NameAr,
+                        Hs12Code = b.Hs12Code,
+                        Id = a.Id,
+                        ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                        ProductName10 = $"{a.ProductName} ({a.ItemNumber})",
+                        ProductId = a.Id,
+                        UnitId = a.UnitId,
+                        ItemNumber = a.ItemNumber,
+                        CR = a.CR,
+                        Status = a.Status,
+                        FactoryId = search.FactoryId,
+                        Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                        UnitName = a.Unit.Name,
+                        IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.ProductId == a.Id),
+                    })
+                    .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
+
+             
+                //var resualt =
+                //await _dbContext.FactoryProducts
+                //.Include(x => x.Product)
+                //.ThenInclude(x => x.Unit)
+                ////  .Include(x=>x.ProductPeriodActives)
+                //.Where(x => x.FactoryId == search.FactoryId)
+                //.WhereIf(search.IsActive, x => productActive.Contains(x.Id))
+                //.Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
+                //new ProductResultDto
+                //{
+                //    Hs12NameEn = b.Hs12NameEn,
+                //    Hs12NameAr = b.Hs12NameAr,
+                //    Hs12Code = b.Hs12Code,
+                //    Id = a.Id,
+                //    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                //    ProductName10 = $"{a.Product.ProductName} ({a.Product.ItemNumber})",
+                //    ProductId = a.ProductId,
+                //    CommericalName = a.CommericalName,
+                //    UnitId = a.Product.UnitId,
+                //    ItemNumber = a.Product.ItemNumber,
+                //    CR = a.Product.CR,
+                //    Status = a.Product.Status,
+                //    FactoryId = a.FactoryId,
+                //    Review = a.Product.Review,
+                //    Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+                //    UnitName = a.Product.Unit.Name,
+                //    PeperId = a.PeperId,
+                //    PhototId = a.PhototId,
+                //    IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.ProductId == a.Id),
+                //})
+                //.ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
+
+                return new BaseResponse<QueryResult<ProductResultDto>>
                 {
-                    Hs12NameEn = b.Hs12NameEn,
-                    Hs12NameAr = b.Hs12NameAr,
-                    Hs12Code = b.Hs12Code,
-                    Id = a.Id,
-                    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
-                    ProductName10 = $"{a.ProductName} ({a.ItemNumber})",
-                    ProductId = a.Id,
-                    UnitId = a.UnitId,
-                    ItemNumber = a.ItemNumber,
-                    CR = a.CR,
-                    Status = a.Status,
-                    FactoryId = search.FactoryId,
-                    Kilograms_Per_Unit = a.Kilograms_Per_Unit,
-                    UnitName = a.Unit.Name,
-                    IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.ProductId == a.Id),
-                })
-                .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
-
-
-            //var resualt = 
-            //    await _dbContext.FactoryProducts
-            //    .Include(x=>x.Product)
-            //    .ThenInclude(x=>x.Unit)
-            //  //  .Include(x=>x.ProductPeriodActives)
-            //    .Where(x => x.FactoryId == search.FactoryId )
-            //    .WhereIf(search.IsActive,x=> productActive.Contains(x.Id))
-            //    .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
-            //    new ProductResultDto {
-            //        Hs12NameEn= b.Hs12NameEn,
-            //        Hs12NameAr = b.Hs12NameAr,
-            //        Hs12Code = b.Hs12Code,
-            //        Id = a.Id,
-            //        ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
-            //        ProductName10 = $"{a.Product.ProductName} ({a.Product.ItemNumber})",
-            //        ProductId=a.ProductId,
-            //        CommericalName = a.CommericalName,
-            //        UnitId = a.Product.UnitId,
-            //        ItemNumber = a.Product.ItemNumber,
-            //        CR = a.Product.CR,
-            //        Status = a.Product.Status,
-            //        FactoryId = a.FactoryId,
-            //        Review = a.Product.Review,
-            //        Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
-            //        UnitName = a.Product.Unit.Name,
-            //        PeperId = a.PeperId,
-            //        PhototId = a.PhototId,
-            //        IsActive=a.ProductPeriodActives.Any(x=>x.PeriodId==search.PeriodId&&x.FactoryProductId== a.Id),
-            //    })
-            //    .ToQueryResult(search.PageNumber, search.PageSize,sort:"Id",descending:true);
-
-
-            return new BaseResponse<QueryResult<ProductResultDto>>
-            {
-                Data = resualt
-            };
+                    Data = resualt
+                };
+            
+           
         }
 
         public async Task<BaseResponse<List<ProductResultDto>>> GetAll(int factoryId)
@@ -230,7 +234,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                                    PhototId = a.PhototId,
                                    Level12Number = b.Hs12Code,
                                    
-                               }).FirstOrDefaultAsync(x => x.Id == Id);
+                               }).FirstOrDefaultAsync(x => x.ProductId == Id);
 
                       var response = _mapper.Map<ProductResultDto>(result);
 
@@ -244,56 +248,57 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         public async Task<BaseResponse<bool>> AddAsync (ProductRequestDto request)
         {
-            
-            var factoryProduct = new FactoryProduct() ;
-            factoryProduct.CommericalName = request.CommericalName;
-            factoryProduct.PhototId = request.PhototId;
-            factoryProduct.PeperId = request.PeperId;
-            factoryProduct.FactoryId = request.FactoryId;
-            factoryProduct.ProductId = request.ProductId;
-
-            var product = await _dbContext.Products.FindAsync(request.ProductId);
-
-            product.Kilograms_Per_Unit = request.Kilograms_Per_Unit;
-
-            // Validation
-            //var result = await _validator.ValidateAsync(factoryProduct);
-
-            //if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.FactoryProducts.AddAsync(factoryProduct);
-            await _dbContext.SaveChangesAsync();
-
-            var productPerActive = new ProductPeriodActiveRequestDto()
+            try
             {
-                ProductId = factoryProduct.Id,
-                PeriodId = request.PeriodId
-            };
-            
-            var products = _mapper.Map<ProductPeriodActive>(productPerActive);
-            await _dbContext.ProductPeriodActives.AddRangeAsync(products);
-            await _dbContext.SaveChangesAsync();
+                var factoryProduct = new FactoryProduct();
+                factoryProduct.CommericalName = request.CommericalName;
+                factoryProduct.PhototId = request.PhototId;
+                factoryProduct.PeperId = request.PeperId;
+                factoryProduct.FactoryId = request.FactoryId;
+                factoryProduct.ProductId = request.ProductId;
+                factoryProduct.PeriodId = request.PeriodId;
 
-            return new BaseResponse<bool>
+                var product = await _dbContext.Products.FindAsync(request.ProductId);
+
+                product.Kilograms_Per_Unit = request.Kilograms_Per_Unit;
+
+                await _dbContext.FactoryProducts.AddAsync(factoryProduct);
+                await _dbContext.SaveChangesAsync();
+
+                var productPerActive = new ProductPeriodActiveRequestDto()
+                {
+                    ProductId = factoryProduct.ProductId,
+                    PeriodId = request.PeriodId,
+                    FactoryId = request.FactoryId,
+                };
+
+                var products = _mapper.Map<ProductPeriodActive>(productPerActive);
+                await _dbContext.ProductPeriodActives.AddRangeAsync(products);
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<bool>
+                {
+                    Data = true
+                };
+            }
+            catch (Exception ex) 
             {
-                Data =true
-            };
+                throw ex;
+            }
+           
          
         }
 
         public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
         {
             
-
             var factoryProduct = await _dbContext.FactoryProducts.Include(x=>x.Product).FirstAsync(x => x.Id == req.Id);
             factoryProduct.CommericalName = req.CommericalName;
             factoryProduct.PhototId = req.PhototId;
             factoryProduct.PeperId = req.PeperId;
             factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
-
+            
             await _dbContext.SaveChangesAsync();
-
-
 
             return new BaseResponse<bool>
             {
