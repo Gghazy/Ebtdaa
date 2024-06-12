@@ -241,12 +241,11 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         public async Task<BaseResponse<ProductResultDto>> GetOne(int Id)
         {
-            var result = await _dbContext
-                                .FactoryProducts
+            var result = await _dbContext.FactoryProducts
                                 .Include(x=>x.Product)
                                 .ThenInclude(x=>x.Unit)
                                 .Include(x=>x.ActualProductionAndCapacities)
-                                .ThenInclude(x=>x.ActualProductionUintId)
+                                //.ThenInclude(x=>x.ActualProductionUintId)
                                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
                                 new ProductResultDto
                                {
@@ -269,7 +268,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                                    PhototId = a.PhototId,
                                    Level12Number = b.Hs12Code,
                                    
-                               }).FirstOrDefaultAsync(x => x.Id == Id);
+                               }).FirstOrDefaultAsync(x => x.ProductId == Id);
 
                       var response = _mapper.Map<ProductResultDto>(result);
 
@@ -338,15 +337,29 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
         public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
         {
-            
-            var factoryProduct = await _dbContext.FactoryProducts.Include(x=>x.Product).FirstAsync(x => x.Id == req.Id);
-            factoryProduct.CommericalName = req.CommericalName;
-            factoryProduct.PhototId = req.PhototId;
-            factoryProduct.PeperId = req.PeperId;
-            factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
+            try
+            {
+                var factoryProduct = await _dbContext.FactoryProducts.Include(x => x.Product).FirstAsync(x => x.ProductId == req.ProductId && x.FactoryId == req.FactoryId && x.PeriodId == req.PeriodId);
 
-            //await _dbContext.FactoryProducts.AddRangeAsync(factoryProduct);
-            await _dbContext.SaveChangesAsync();
+                factoryProduct.CommericalName = req.CommericalName;
+                if(req.PhototId !=0)
+                {
+                    factoryProduct.PhototId = req.PhototId;
+                }
+                if(req.PeperId !=0)
+                {
+                    factoryProduct.PeperId = req.PeperId;
+                }
+                factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
+
+                //await _dbContext.FactoryProducts.AddRangeAsync(factoryProduct);
+                await _dbContext.SaveChangesAsync();
+            }
+            catch(Exception  ex) 
+            {
+                throw;
+            }
+            
 
             return new BaseResponse<bool>
             {
