@@ -56,7 +56,24 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                         .ThenInclude(x => x.DesignedCapacityUnit)
                         .Include(x => x.ActualProductionAndCapacities)
                         .ThenInclude(x => x.ActualProductionUint)
-                        .ToQueryResult(search.PageNumber, search.PageSize));
+                        .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) => 
+                        new ProductCapacityResultDto
+                        {
+                            Level12ItemName= b.Hs12NameAr,
+                            Level12Number = b.Hs12Code,
+                            Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+                            ActualProductionUintName = a.Product.Unit.Name,
+                            DesignedCapacityUnitName = a.Product.Unit.Name,
+                            Id= a.Id,
+                            ProductId = a.ProductId,
+                            ActualProductionUintId = a.Product.UnitId,
+                            DesignedCapacityUnitId = a.Product.UnitId,
+                            ActualProductionAndCapacityId = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().Id : 0,
+                            DesignedCapacity = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacity : 0,
+                            ActualProduction = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().ActualProduction : 0,
+                            ActualProductionWeight = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().ActualProduction * a.Product.Kilograms_Per_Unit : 0
+
+                        }).ToQueryResult(search.PageNumber, search.PageSize));
 
             return new BaseResponse<QueryResult<ProductCapacityResultDto>>
             {
@@ -67,9 +84,10 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
         {
             var result = await _dbContext.ActualProductionAndCapacities
-                                         .FirstOrDefaultAsync(x => x.Id == Id);
+                                         .FirstOrDefaultAsync(x => x.FactoryProduct.ProductId == Id);
             var response = _mapper.Map<ActualProductionResultDto>(result);
-
+            if (result.DesignedCapacityUnitId != null)
+                response.DesignedCapacityUnitId = result.DesignedCapacityUnitId;
             return new BaseResponse<ActualProductionResultDto>
             {
                 Data = result != null ? response : new ActualProductionResultDto()
