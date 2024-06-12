@@ -67,7 +67,11 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                             Id= a.Id,
                             ProductId = a.ProductId,
                             ActualProductionUintId = a.Product.UnitId,
-                            DesignedCapacityUnitId = a.Product.UnitId
+                            DesignedCapacityUnitId = a.Product.UnitId,
+                            ActualProductionAndCapacityId = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().Id : 0,
+                            DesignedCapacity = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacity : 0,
+                            ActualProduction = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().ActualProduction : 0,
+                            ActualProductionWeight = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().ActualProduction * a.Product.Kilograms_Per_Unit : 0
 
                         }).ToQueryResult(search.PageNumber, search.PageSize));
 
@@ -82,7 +86,8 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             var result = await _dbContext.ActualProductionAndCapacities
                                          .FirstOrDefaultAsync(x => x.FactoryProduct.ProductId == Id);
             var response = _mapper.Map<ActualProductionResultDto>(result);
-
+            if (result.DesignedCapacityUnitId != null)
+                response.DesignedCapacityUnitId = result.DesignedCapacityUnitId;
             return new BaseResponse<ActualProductionResultDto>
             {
                 Data = result != null ? response : new ActualProductionResultDto()

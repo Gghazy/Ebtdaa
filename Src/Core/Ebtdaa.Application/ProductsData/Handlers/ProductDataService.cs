@@ -105,7 +105,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     Hs12NameEn = b.Hs12NameEn,
                     Hs12NameAr = b.Hs12NameAr,
                     Hs12Code = b.Hs12Code,
-                    Id = a.Id,
+                    Id = a.ProductId,
                     ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
                     ProductName10 = $"{a.Product.ProductName} ({a.Product.ItemNumber})",
                     ProductId = a.ProductId,
@@ -313,7 +313,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             factoryProduct.PeperId = req.PeperId;
             factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
 
-            await _dbContext.FactoryProducts.AddRangeAsync(factoryProduct);
+            //await _dbContext.FactoryProducts.AddRangeAsync(factoryProduct);
             await _dbContext.SaveChangesAsync();
 
             return new BaseResponse<bool>
