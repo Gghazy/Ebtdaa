@@ -7,8 +7,8 @@ namespace Ebtdaa.Application.RawMaterials.Dtos
         public int Id { get; set; }
         public string CustomItemName { get; set; }
         public string Name { get; set; }
-        public int MaximumMonthlyConsumption { get; set; }
-        public int AverageWeightKG { get; set; }
+        public decimal MaximumMonthlyConsumption { get; set; }
+        public decimal AverageWeightKG { get; set; }
         public List<int> FactoryProductId { get; set; }
         // public int ProductId { get; set; }
         public int UnitId { get; set; }
