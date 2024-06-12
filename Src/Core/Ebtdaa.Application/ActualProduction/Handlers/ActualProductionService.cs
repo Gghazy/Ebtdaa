@@ -80,7 +80,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
         {
             var result = await _dbContext.ActualProductionAndCapacities
-                                         .FirstOrDefaultAsync(x => x.Id == Id);
+                                         .FirstOrDefaultAsync(x => x.FactoryProduct.ProductId == Id);
             var response = _mapper.Map<ActualProductionResultDto>(result);
 
             return new BaseResponse<ActualProductionResultDto>
