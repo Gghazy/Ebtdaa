@@ -56,7 +56,12 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                         .ThenInclude(x => x.DesignedCapacityUnit)
                         .Include(x => x.ActualProductionAndCapacities)
                         .ThenInclude(x => x.ActualProductionUint)
-                        .ToQueryResult(search.PageNumber, search.PageSize));
+                        .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) => 
+                        new ProductCapacityResultDto
+                        {
+                            Level12ItemName= b.Hs12NameAr,
+                            Level12Number = b.Hs12Code
+                        }).ToQueryResult(search.PageNumber, search.PageSize));
 
             return new BaseResponse<QueryResult<ProductCapacityResultDto>>
             {

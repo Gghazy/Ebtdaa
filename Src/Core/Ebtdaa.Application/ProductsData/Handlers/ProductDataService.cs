@@ -312,7 +312,8 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             factoryProduct.PhototId = req.PhototId;
             factoryProduct.PeperId = req.PeperId;
             factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
-            
+
+            await _dbContext.FactoryProducts.AddRangeAsync(factoryProduct);
             await _dbContext.SaveChangesAsync();
 
             return new BaseResponse<bool>
