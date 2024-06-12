@@ -97,9 +97,9 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 .Include(x => x.Product)
                 .ThenInclude(x => x.Unit)
                 //.Include(x => x.ProductPeriodActives)
-                .Where(x => x.FactoryId == search.FactoryId)
-                .WhereIf(search.IsActive, x => productActive.Contains(x.Id))
-                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
+                .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                .WhereIf(search.IsActive, x => productActive.Contains(x.ProductId))
+                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a,b) =>
                 new ProductResultDto
                 {
                     Hs12NameEn = b.Hs12NameEn,
@@ -120,7 +120,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     UnitName = a.Product.Unit.Name,
                     PeperId = a.PeperId,
                     PhototId = a.PhototId,
-                    IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.ProductId == a.Id),
+                    IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.ProductId == a.ProductId),
                 })
                 .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
 
