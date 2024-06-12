@@ -62,7 +62,11 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                             Level12ItemName= b.Hs12NameAr,
                             Level12Number = b.Hs12Code,
                             Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
+                            ActualProductionUintName = a.Product.Unit.Name,
+                            DesignedCapacityUnitName = a.Product.Unit.Name,
                             
+                            
+
                         }).ToQueryResult(search.PageNumber, search.PageSize));
 
             return new BaseResponse<QueryResult<ProductCapacityResultDto>>

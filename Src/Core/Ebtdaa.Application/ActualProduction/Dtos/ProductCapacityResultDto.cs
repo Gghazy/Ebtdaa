@@ -13,7 +13,7 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
         public string ProductName { get; set; }
         public string Level12Number { get; set; }
         public string Level12ItemName { get; set; }
-        public int ActualProductionAndCapacityId { get; set; }
+        public int? ActualProductionAndCapacityId { get; set; }
         public int? DesignedCapacity { get; set; }
         public int? ActualProduction { get; set; }
         public double? ActualProductionWeight { get; set; }
