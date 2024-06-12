@@ -5,6 +5,7 @@ using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
 using Ebtdaa.Application.RawMaterials.Validation;
 using Ebtdaa.Common.Dtos;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -184,28 +185,32 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         {
             try
             {
-            var respose =await _dbContext.RawMaterials
-                               .Include(x=>x.ProductRawMaterials)
-                               .ThenInclude(x=>x.Product)
-                               .Where(x => x.FactoryId == id && x.PeriodId == search.PeriodId)
-                               .Select(x=>new RawMaterialResultDto
+            var respose =await( from rawMaterial in _dbContext.RawMaterials
+                          join product in _dbContext.Products
+                              on Convert.ToInt32( rawMaterial.CustomItemName) equals product.Id
+                          join mappingProduct in _dbContext.MappingProducts
+                              on product.ItemNumber equals mappingProduct.Hs10Code
+                          where rawMaterial.FactoryId == id && rawMaterial.PeriodId == search.PeriodId
+                          select new RawMaterialResultDto
                                {
-                                  Id=x.Id,
-        CustomItemName=x.CustomItemName,
-       ProductName=x.ProductRawMaterials.Select(y=>y.Product.Level12ItemName).FirstOrDefault()
-     + '('+ x.ProductRawMaterials.Select(y => y.Product.Level12Number).FirstOrDefault() + ')',
-       
-                             Name=x.Name,
-       FactoryProductId=x.ProductRawMaterials.Select(x=>x.ProductId).ToList(),
-       MaximumMonthlyConsumption=x.MaximumMonthlyConsumption,
-       AverageWeightKG=x.AverageWeightKG,
-       UnitId=x.UnitId,
-       Description=x.Description,
-       FactoryId=x.FactoryId,
-       PeriodId=x.PeriodId,
-       PhotoId=x.PhotoId??0,
-       PaperId=x.PaperId??0
-    })
+                              Id = rawMaterial.Id,
+                              CustomItemName = rawMaterial.CustomItemName,
+                              ProductName = mappingProduct.Hs12NameAr + " (" + mappingProduct.Hs12Code + ")",
+                              Name = rawMaterial.Name,
+                              FactoryProductId = _dbContext.ProductRawMaterials
+                .Where(prm => prm.rawMaterialId == rawMaterial.Id)
+                .Select(prm => prm.ProductId)
+                .ToList(),
+                              MaximumMonthlyConsumption = rawMaterial.MaximumMonthlyConsumption,
+                              AverageWeightKG = rawMaterial.AverageWeightKG,
+                              UnitId = rawMaterial.UnitId,
+                              Description = rawMaterial.Description,
+                              FactoryId = rawMaterial.FactoryId,
+                              PeriodId = rawMaterial.PeriodId,
+                              PhotoId = rawMaterial.PhotoId ?? 0,
+                              PaperId = rawMaterial.PaperId ?? 0
+                               
+                                })
                                .ToListAsync();
 
                 var resultDto = respose.Select(rawMaterial =>
