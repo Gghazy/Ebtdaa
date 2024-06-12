@@ -65,7 +65,10 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                             ActualProductionUintName = a.Product.Unit.Name,
                             DesignedCapacityUnitName = a.Product.Unit.Name,
                             Id= a.Id,
-                            ProductId = a.ProductId
+                            ProductId = a.ProductId,
+                            ActualProductionUintId = a.Product.UnitId,
+                            DesignedCapacityUnitId = a.Product.UnitId
+
                         }).ToQueryResult(search.PageNumber, search.PageSize));
 
             return new BaseResponse<QueryResult<ProductCapacityResultDto>>

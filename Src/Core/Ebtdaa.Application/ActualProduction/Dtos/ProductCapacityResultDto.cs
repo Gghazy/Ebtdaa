@@ -19,7 +19,9 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
         public double? ActualProductionWeight { get; set; }
         public int ReasoneForIncreaseCapacity { get; set; }
         public string DesignedCapacityUnitName { get; set; }
+        public int? DesignedCapacityUnitId { get; set; }
         public string ActualProductionUintName { get; set; }
+        public int? ActualProductionUintId{ get; set; }
         public double? Kilograms_Per_Unit { get; set; }
 
     }
