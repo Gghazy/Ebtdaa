@@ -64,7 +64,8 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                             Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,
                             ActualProductionUintName = a.Product.Unit.Name,
                             DesignedCapacityUnitName = a.Product.Unit.Name,
-                            Id= a.ProductId,
+                            Id= a.Id,
+                            ProductId = a.ProductId
                         }).ToQueryResult(search.PageNumber, search.PageSize));
 
             return new BaseResponse<QueryResult<ProductCapacityResultDto>>
