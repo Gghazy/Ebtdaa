@@ -84,9 +84,9 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
         {
             var result = await _dbContext.ActualProductionAndCapacities
-                                         .FirstOrDefaultAsync(x => x.FactoryProduct.ProductId == Id);
+                                         .FirstOrDefaultAsync(x => x.Id == Id);
             var response = _mapper.Map<ActualProductionResultDto>(result);
-            if (result.DesignedCapacityUnitId != null)
+            if (result != null)
                 response.DesignedCapacityUnitId = result.DesignedCapacityUnitId;
             return new BaseResponse<ActualProductionResultDto>
             {
