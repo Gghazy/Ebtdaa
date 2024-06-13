@@ -208,12 +208,12 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .Select(x => x.ProductId)
                 .ToListAsync();
 
-            var result = await _dbContext.FactoryProducts
-                .Where(x => activeProduct.Contains(x.Id))
-                .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId)
-                .Where(x => x.Product.Kilograms_Per_Unit == null || x.CommericalName == null).ToListAsync();
+                var result = await _dbContext.FactoryProducts
+                .Where(x => activeProduct.Contains(x.ProductId))
+                .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+            //.Where(x => x.Product.Kilograms_Per_Unit == null || x.CommericalName == null).ToListAsync();
 
-            screenStatus = result.Count>0 ? false : true;
+            screenStatus = result.Count>0 ? true : false;
 
             return screenStatus;
         }
