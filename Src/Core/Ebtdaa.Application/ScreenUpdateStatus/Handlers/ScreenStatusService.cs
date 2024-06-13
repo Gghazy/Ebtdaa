@@ -213,7 +213,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId)
                 .Where(x => x.Product.Kilograms_Per_Unit == null || x.CommericalName == null).ToListAsync();
 
-            screenStatus = result.Count<=0 ? false : true;
+            screenStatus = result.Count>0 ? false : true;
 
             return screenStatus;
         }
@@ -251,7 +251,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             
             if (status == FactoryStatusEnum.Productive)
             {
-                screenStatus = IsProductiveScreenValid(differenceList, result);
+                screenStatus = IsProductiveScreenValid(/*differenceList,*/ result);
 
                 //if (screenStatus)
                 //{
@@ -266,9 +266,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             return screenStatus;
         }
 
-        private bool IsProductiveScreenValid(List<int> differenceList, List<ActualProductionAndCapacity> result)
+        private bool IsProductiveScreenValid(/*List<int> differenceList,*/ List<ActualProductionAndCapacity> result)
         {
-            return !(differenceList.Any() || result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
+            return !(/*differenceList.Any() ||*/ result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
         }
 
         private bool AreAttachmentsComplete(int? factoryId, int periodId)
