@@ -22,4 +22,10 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public string? Level12ItemName { get; set; }
 
     }
+    public class NewProductRequest
+    {
+        public int FactoryId { get; set; }
+        public int ProductId { get; set; }
+        public int PeriodId { get; set; }
+    }
 }
