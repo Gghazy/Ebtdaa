@@ -59,6 +59,17 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _productDataService.GetOne(id));
         }
+        [HttpGet("GetOneAddedProduct")]
+        public async Task<IActionResult> GetAddProduct(int id)
+        {
+            return Ok(await _productDataService.GetOneAddedProduct(id));
+        }
+
+        [HttpPost("GetOneNewProduct")]
+        public async Task<IActionResult> GetOneNewProduct(NewProductRequest item)
+        {
+            return Ok(await _productDataService.GetOneNewProduct(item));
+        }
 
         // POST api/<ProductsController>
         [HttpPost]
