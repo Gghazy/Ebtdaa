@@ -268,7 +268,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                                    PhototId = a.PhototId,
                                    Level12Number = b.Hs12Code,
                                    
-                               }).FirstOrDefaultAsync(x => x.ProductId == Id);
+                               }).FirstOrDefaultAsync(x => x.Id == Id);
 
                       var response = _mapper.Map<ProductResultDto>(result);
 
