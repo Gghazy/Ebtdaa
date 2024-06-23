@@ -210,10 +210,15 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
 
                 var result = await _dbContext.FactoryProducts
                 .Where(x => activeProduct.Contains(x.ProductId))
-                .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+                .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId)
+                .ToListAsync();
+
+            var results = result
+               .Where(x => x.CommericalName == "" || x.CommericalName == null).ToList();
+               
             //.Where(x => x.Product.Kilograms_Per_Unit == null || x.CommericalName == null).ToListAsync();
 
-            screenStatus = result.Count>0 ? true : false;
+            screenStatus = result.Count==0 || results.Count>0 ? false : true;
 
             return screenStatus;
         }
@@ -236,7 +241,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
         {
 
             bool screenStatus = false;
-            var activeProducts = await _dbContext.ProductPeriodActives
+            var activeProducts = await _dbContext.FactoryProducts
                 .Include(x => x.Product)
                 .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
                 .Select(x => x.ProductId)
@@ -251,7 +256,14 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             
             if (status == FactoryStatusEnum.Productive)
             {
-                screenStatus = IsProductiveScreenValid(/*differenceList,*/ result);
+               
+                if(activeProducts.Count!=result.Count || result.Count==0)
+                    screenStatus= false;
+                else
+                    screenStatus = true;
+                //  screenStatus = !( result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
+
+                //screenStatus = IsProductiveScreenValid(/*differenceList,*/ result);
 
                 //if (screenStatus)
                 //{
@@ -260,7 +272,9 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             }
             else
             {
-                screenStatus = IsNonProductiveScreenValid(differenceList, result);
+                return (!differenceList.Any() && result.Count > 0 && result.Any(x => x.DesignedCapacity != null));
+
+              //  screenStatus = IsNonProductiveScreenValid(differenceList, result);
             }
 
             return screenStatus;
