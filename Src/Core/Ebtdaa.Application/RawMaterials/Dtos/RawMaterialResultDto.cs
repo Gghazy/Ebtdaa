@@ -16,5 +16,7 @@
         public int PeriodId { get; set; }
         public int PhotoId { get; set; }
         public int PaperId { get; set; }
+        public string PhotoName { get; set; }
+        public string PaperName { get; set; }
     }
 }

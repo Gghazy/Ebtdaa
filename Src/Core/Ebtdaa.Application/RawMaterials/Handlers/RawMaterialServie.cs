@@ -1,16 +1,21 @@
 ﻿using AutoMapper;
+using Ebtdaa.Application.ActualRawMaterials.Dtos;
+using Ebtdaa.Application.ActualRawMaterials.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.RawMaterials.Interfaces;
 using Ebtdaa.Application.RawMaterials.Validation;
 using Ebtdaa.Common.Dtos;
+using Ebtdaa.Domain.ActualRawMaterials.Entity;
 using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.Periods;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Ebtdaa.Application.RawMaterials.Handlers
 {
@@ -55,9 +60,26 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                    var products = _mapper.Map<ProductRawMaterial>(x);
                       await _dbContext.ProductRawMaterials.AddAsync(x);
                 }
-               await _dbContext.SaveChangesAsync();
 
-                
+                ActualRawMaterial actualRawMaterial = new ActualRawMaterial
+                {
+                    RawMaterialId = rawMaterial.Id,
+                    PeriodId = rawMaterial.PeriodId,
+                    StockUnitId = rawMaterial.UnitId,
+                    UsageUnitId = rawMaterial.UnitId,
+                    CurrentStockQuantity_KG = 0,
+                    UsedQuantity_KG = 0,
+                    UsedQuantity = 0,
+                    CurrentStockQuantity = 0,
+                    
+
+
+                    // AverageWeightKG=rawMaterial.AverageWeightKG,
+                };
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.ActualRawMaterials.AddAsync(actualRawMaterial);
+               await _dbContext.SaveChangesAsync();
 
                 return new BaseResponse<RawMaterialResultDto>
             {
@@ -79,8 +101,18 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                      .Include(s=>s.ProductRawMaterials)
                      .ThenInclude(x=>x.Product)
                      .FirstOrDefaultAsync(x => x.Id == id);
-            try
+
+            string resultPhoto ="", resultfile = "";
+            if (result != null)
             {
+
+
+                resultPhoto = await _dbContext.Attachments.Where(x => x.Id == result.PhotoId).Select(r => r.Name).FirstOrDefaultAsync();
+                resultfile = await _dbContext.Attachments.Where(x => x.Id == result.PaperId).Select(r => r.Name).FirstOrDefaultAsync();
+
+            }
+                try
+                {
 
                 var x = _mapper.Map<RawMaterialResultDto>(result);
 
@@ -94,7 +126,9 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
                     x.FactoryProductId = new List<int>();
                 }
-                return new BaseResponse<RawMaterialResultDto>
+                    x.PhotoName = resultPhoto;
+                    x.PaperName = resultfile;
+                    return new BaseResponse<RawMaterialResultDto>
                 {
                     Data = x
                 };
@@ -171,9 +205,13 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
             public async Task<BaseResponse<RawMaterialResultDto>> DeleteAsync(int id)
         {
             var material = await _dbContext.RawMaterials.FirstOrDefaultAsync(x => x.Id == id);
+            var actualRawmaterial = await _dbContext.ActualRawMaterials.FirstOrDefaultAsync(x => x.RawMaterialId == id);
 
-            _dbContext.RawMaterials.Remove(material);
+            var ar = _dbContext.ActualRawMaterials.Remove(actualRawmaterial);
+            var r = _dbContext.RawMaterials.Remove(material);
 
+
+            //  _dbContext.RawMaterials.State = EntityState.Deleted;
             await _dbContext.SaveChangesAsync();
 
             return new BaseResponse<RawMaterialResultDto>

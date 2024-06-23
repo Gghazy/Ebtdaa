@@ -174,9 +174,10 @@ namespace Ebtdaa.Application.Factories.Handlers
                     DataEntry =req.DataEntry,
                     DataReviewer = req.DataReviewer
                 };
-            }
-                await _dbContext.BasicFactoryInfos.AddAsync(factory);
-                await _dbContext.SaveChangesAsync();
+                    await _dbContext.BasicFactoryInfos.AddAsync(factory);
+                  //  await _dbContext.SaveChangesAsync();
+                }
+                
 
                 if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
                 {
