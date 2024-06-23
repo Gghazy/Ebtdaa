@@ -11,6 +11,7 @@ using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Enums;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.ActualProduction.Entity;
+using Ebtdaa.Domain.ProductData.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -50,7 +51,8 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             var resualt = _mapper.Map<QueryResult<ProductCapacityResultDto>>(
                         await _dbContext.FactoryProducts
                         .Include(x => x.Product)
-                        .Where(x => ProductPeriodActives.Contains(x.ProductId))
+                        .ThenInclude(x => x.Unit)
+                        //.Where(x => ProductPeriodActives.Contains(x.ProductId))
                         .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
                         .Include(x => x.ActualProductionAndCapacities.Where(x => x.PeriodId == search.PeriodId))
                         .ThenInclude(x => x.DesignedCapacityUnit)
@@ -130,15 +132,25 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         }
         public async Task<BaseResponse<bool>> Delete(int factoryId, int periodId,List<int> factoryProducts)
         {
+
+            var resultFP = await _dbContext.FactoryProducts
+                                       .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                                       .Where(x => factoryProducts.Contains(x.ProductId))
+                                       .ToListAsync();
+
+
+
             var result = await _dbContext.ActualProductionAndCapacities
                                       .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId)
                                       .Where(x => factoryProducts.Contains(x.FactoryProductId))
                                       .ToListAsync();
 
 
+            _dbContext.FactoryProducts.RemoveRange(resultFP);
             _dbContext.ActualProductionAndCapacities.RemoveRange(result);
 
-            
+
+
 
 
             return new BaseResponse<bool>

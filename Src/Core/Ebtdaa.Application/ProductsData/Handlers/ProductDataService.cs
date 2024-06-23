@@ -38,20 +38,22 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         {
 
             var productActive = new List<int>();
-            if (search.IsActive)
-            {
+           // if (search.IsActive)
+            //{
                  productActive =await _dbContext.ProductPeriodActives
                     .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
                     .Select(x => x.ProductId).ToListAsync();
-            }
+            //}
          
                 var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
 
             var resualt =
                     await _dbContext.Products
                     .Include(x => x.Unit)
-                    .Where(f => f.CR == getCR.CommercialRegister)
-                    .WhereIf(search.IsActive, x => productActive.Contains(x.Id))
+                    .Include(x=>x.ProductPeriodActives)
+                    //.Include(x=>x.FactoryProducts)
+                   .Where(r => r.CR == getCR.CommercialRegister || productActive.Contains(r.Id))
+                    //.Where(x=>x.ProductPeriodActives.Any(r=>r.FactoryId==search.FactoryId&&r.PeriodId==r.PeriodId))
                     .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                     new ProductResultDto
                     {
@@ -69,7 +71,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                         FactoryId = search.FactoryId,
                         Kilograms_Per_Unit = a.Kilograms_Per_Unit,
                         UnitName = a.Unit.Name, 
-                        IsActive = a.ProductPeriodActives.Any(x => x.PeriodId == search.PeriodId && x.ProductId == a.Id),
+                        IsActive = productActive.Contains(a.Id),
                     })
                     .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
 
@@ -465,25 +467,27 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
                 var productPerActive = new ProductPeriodActiveRequestDto()
                 {
-                    ProductId = factoryProduct.ProductId,
+                    ProductId = request.ProductId,
                     PeriodId = request.PeriodId,
                     FactoryId = request.FactoryId,
+                    
                 };
 
                 var products = _mapper.Map<ProductPeriodActive>(productPerActive);
-                await _dbContext.ProductPeriodActives.AddRangeAsync(products);
+                await _dbContext.ProductPeriodActives.AddAsync(products);
                 //await _dbContext.SaveChangesAsync();
 
                 var getItemNumber12 = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == request.ProductId);
 
-                var newProduct = new Product();
+               /* var newProduct = new Product();
                 newProduct.CR = product.CR;
                 newProduct.ItemNumber = getItemNumber12.ItemNumber;
                 newProduct.Kilograms_Per_Unit = request.Kilograms_Per_Unit;
                 newProduct.UnitId = request.UnitId;
                 newProduct.ProductName = request.CommericalName;
 
-                await _dbContext.Products.AddAsync(newProduct);
+
+                await _dbContext.Products.AddAsync(newProduct);*/
                 await _dbContext.SaveChangesAsync();
 
                 return new BaseResponse<bool>
@@ -619,13 +623,13 @@ public async Task<BaseResponse<QueryResult<UnitResultDto>>> GetUnit(UnitSearch s
             };
         }
 
-        public async Task<BaseResponse<List<ProductResultDto>>> GetAddedAll(int factoryId)
+        public async Task<BaseResponse<List<ProductResultDto>>> GetAddedAll(ProductSearch search)
         {
             var resualt =
                await _dbContext.FactoryProducts
                .Include(x => x.Product)
                .ThenInclude(x => x.Unit)
-               .Where(x => x.FactoryId == factoryId)
+               .Where(x => x.FactoryId == search.FactoryId &&x.PeriodId==search.PeriodId)
                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
                new ProductResultDto
                {
@@ -647,6 +651,7 @@ public async Task<BaseResponse<QueryResult<UnitResultDto>>> GetUnit(UnitSearch s
                    PeperId = a.PeperId,
                    PhototId = a.PhototId,
                }).ToListAsync();
+
 
 
             return new BaseResponse<List<ProductResultDto>>

@@ -47,10 +47,10 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _productDataService.GetAll(factoryId));
         }
 
-        [HttpGet("GetAddedAll")]
-        public async Task<IActionResult> GetAddedAll(int factoryId)
+        [HttpPost("GetAddedAll")]
+        public async Task<IActionResult> GetAddedAll(ProductSearch search)
         {
-            return Ok(await _productDataService.GetAddedAll(factoryId));
+            return Ok(await _productDataService.GetAddedAll(search));
         }
 
         // GET: api/<ProductsController>/id
