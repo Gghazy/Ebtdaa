@@ -240,20 +240,28 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
             getPeriods.ForEach(p =>
             {
                 var isUpdatedData = _dbContext.FactoryUpdateStatuses.Where(f => f.FactoryId == factoryId && f.PeriodId == p.Id).ToList();
-
-                if (isUpdatedData.Any())
-                {
-                    status = true;
-                }
-                else
+                if(isUpdatedData == null)
                 {
                     status = false;
                 }
-                
+                else
+                { 
+                    if (isUpdatedData.Any())
+                    {
+                        status = true;
+                    }
+                    else
+                    {
+                        status = false;
+                    }
+                }
             });
             var getApproverDate = _dbContext.FactoryUpdateStatuses.OrderByDescending(d => d.Id).FirstOrDefault(d => d.FactoryId == factoryId);
-            FactUpdateData.UpdatedDate = getApproverDate.CreatedDate;
-            FactUpdateData.FactoryUpdateStatus = status;
+            if( getApproverDate != null ) 
+            {
+                FactUpdateData.UpdatedDate = getApproverDate.CreatedDate;
+                FactUpdateData.FactoryUpdateStatus = status;
+            }
             return new BaseResponse<FactUpdateStatusResultDto>
             { 
                 Data = FactUpdateData
