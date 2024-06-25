@@ -260,10 +260,10 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 if(activeProducts.Count!=result.Count || result.Count==0)
                     screenStatus= false;
                 else
-                    screenStatus = true;
-                //  screenStatus = !( result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
+                   // screenStatus = true;
+                screenStatus = !(result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
 
-                //screenStatus = IsProductiveScreenValid(/*differenceList,*/ result);
+                screenStatus = IsProductiveScreenValid(differenceList, result);
 
                 //if (screenStatus)
                 //{
@@ -272,17 +272,17 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
             }
             else
             {
-                return (!differenceList.Any() && result.Count > 0 && result.Any(x => x.DesignedCapacity != null));
-
-              //  screenStatus = IsNonProductiveScreenValid(differenceList, result);
+                //return (!differenceList.Any() && result.Count > 0 && result.Any(x => x.DesignedCapacity != null));
+                var resultStatus = (/*!differenceList.Any() &&*/ result.Count > 0 && result.Any(x => x.DesignedCapacity != null));
+                screenStatus = resultStatus;
             }
 
             return screenStatus;
         }
 
-        private bool IsProductiveScreenValid(/*List<int> differenceList,*/ List<ActualProductionAndCapacity> result)
+        private bool IsProductiveScreenValid(List<int> differenceList, List<ActualProductionAndCapacity> result)
         {
-            return !(/*differenceList.Any() ||*/ result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
+            return !(differenceList.Any() || result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
         }
 
         private bool AreAttachmentsComplete(int? factoryId, int periodId)
