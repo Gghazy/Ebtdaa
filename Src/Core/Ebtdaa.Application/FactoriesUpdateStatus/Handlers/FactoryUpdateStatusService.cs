@@ -30,6 +30,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         {
             var factoryUpdateStatus = _mapper.Map<FactoryUpdateStatus>(req);
             factoryUpdateStatus.EnteredAt = DateTime.Now;
+ 
             await _dbContext.FactoryUpdateStatuses.AddAsync(factoryUpdateStatus);
 
             await _dbContext.SaveChangesAsync();
@@ -43,15 +44,23 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         {
             var factoryStatus = await _dbContext.FactoryUpdateStatuses.FirstOrDefaultAsync(x => x.Id == req.Id);
             var factoryStatustUpdated = _mapper.Map(req, factoryStatus);
-            if (factoryStatus.DataStatus==Ebtdaa.Common.Enums.DataStatus.Added)
+            if(factoryStatus!=null)
+           if (req.DataStatus == DataStatus.Added)
             {
-                factoryStatus.DataStatus = Ebtdaa.Common.Enums.DataStatus.Reviwed;
+                factoryStatus.DataStatus = DataStatus.Added;
+                factoryStatus.EnteredAt = DateTime.Now;
+
+            }
+           else
+                if (req.DataStatus==DataStatus.Reviwed)
+            {
+                factoryStatus.DataStatus = DataStatus.Reviwed;
                 factoryStatus.ReviewedAt = DateTime.Now;
 
             }
-            else if (factoryStatus.DataStatus == Ebtdaa.Common.Enums.DataStatus.Reviwed)
+            else if (req.DataStatus == DataStatus.Approved)
             {
-                factoryStatus.DataStatus = Ebtdaa.Common.Enums.DataStatus.Approved;
+                factoryStatus.DataStatus = DataStatus.Approved;
                 factoryStatus.ApprovedAt = DateTime.Now;
 
             }
@@ -83,51 +92,122 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                                .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
             var statusResult = new FactoryIdentitesResultDto();
-            
-            
 
-            if (result == null)
+
+            if (resultStatus == null)
             {
 
-                SetStatus(statusResult, DataStatus.New, DataStatus.NotApproved, "إدخال", false);
+                SetStatus(statusResult, DataStatus.New, DataStatus.NotApproved, "إدخال", true);
+            }
+            if (result == null )
+            {
+
+                SetStatus(statusResult, DataStatus.New, DataStatus.NotApproved, "إدخال", true);
             }
             else
             {
 
-                bool isDataEntry = result.DataEntry == userId;
-                bool isDataReviewer = result.DataReviewer == userId;
-                bool isDataApprover = result.DataApprover == userId;
+                bool isDataEntry = (result.DataEntry!=null? result.DataEntry:"") == userId;
+                bool isDataReviewer =(result.DataReviewer != null ? result.DataReviewer : "") == userId;
+                bool isDataApprover = (result.DataApprover != null ? result.DataApprover : "") == userId;
 
 
                 if (isDataEntry && isDataReviewer && isDataApprover)
                 {
-                    SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
+
+                     if (resultStatus.DataStatus == DataStatus.Approved)
+                    {
+                        SetStatus(statusResult, DataStatus.Approved, DataStatus.Approved, "تم الإعتماد", true);
+                    }
+                    else
+                        SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
+
                 }
-             
+
                 else if (isDataApprover)
                 {
-                    if (resultStatus.DataStatus == null && isDataEntry)
+                    if (resultStatus != null)
                     {
-                        SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                        if (resultStatus.DataStatus == null && isDataEntry)
+                        {
+                            SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                        }
+                        else if (resultStatus.DataStatus == DataStatus.Reviwed)
+                        {
+                            SetStatus(statusResult, DataStatus.Approved, DataStatus.Reviwed, "إعتماد المسح", false);
+                        }
+                        else if (resultStatus.DataStatus == DataStatus.Approved)
+                        {
+                            SetStatus(statusResult, DataStatus.Approved, DataStatus.Approved, "تم الإعتماد", true);
+                        }
+                        else
+                            SetStatus(statusResult, DataStatus.Approved, DataStatus.Approved, "تم الإعتماد", true);
                     }
-                    else if (resultStatus.DataStatus == DataStatus.Reviwed )
+                    else
                     {
-                        SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Approved, "إعتماد المسح", true);
+                        if(isDataEntry)
+                            SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                        else
+                           if (isDataReviewer)
+                            SetStatus(statusResult, DataStatus.New, DataStatus.New, "لم يتم الإدخال ", true);
+                           else
+                            SetStatus(statusResult, DataStatus.New, DataStatus.New, "لم يتم الإدخال / المراجعة", true);
+
                     }
+
                 }
                 else if (isDataReviewer)
                 {
-                    if (resultStatus.DataStatus == DataStatus.Reviwed && isDataEntry)
+                    if (resultStatus != null)
                     {
-                        SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
-                    }
-                    else if (resultStatus.DataStatus == DataStatus.Reviwed)
-                    {
+                        if (resultStatus.DataStatus == DataStatus.Added && isDataEntry)
+                        {
+                            SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", false);
+                        }
+                        else
+                      if (resultStatus.DataStatus == DataStatus.New && isDataEntry)
+                        {
+                            SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                        }
+                        else if (resultStatus.DataStatus == DataStatus.Reviwed)
+                        {
 
-                        SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", true);
+                            SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Reviwed, "تمت المراجعة", true);
+                        }
+                        else
+                            SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Reviwed, "تمت المراجعة", true);
+                    }
+                    else
+                    {
+                        if (isDataEntry)
+                            SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                        else
+                            SetStatus(statusResult, DataStatus.New, DataStatus.New, "لم يتم الإدخال", true);
                     }
                 }
-               
+                else if (isDataEntry)
+                {
+                    if (resultStatus != null)
+                    {
+                        if (resultStatus.DataStatus == DataStatus.New || resultStatus.DataStatus == null)
+                        {
+                            SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                        }
+                        else
+                        {
+                            SetStatus(statusResult, DataStatus.Added, DataStatus.Added, "تم الإدخال", true);
+                        }
+
+                    }
+                    else
+                        SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+
+
+
+                }
+
+
+
             }
           
             
