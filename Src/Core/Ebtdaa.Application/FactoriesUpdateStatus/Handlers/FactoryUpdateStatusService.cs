@@ -263,6 +263,11 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 FactUpdateData.FactoryUpdateStatus = status;
                 FactUpdateData.FactoryId = factoryId;
             }
+            else
+            {
+                FactUpdateData.FactoryUpdateStatus = status;
+                FactUpdateData.FactoryId = factoryId;
+            }
             return new BaseResponse<FactUpdateStatusResultDto>
             { 
                 Data = FactUpdateData
