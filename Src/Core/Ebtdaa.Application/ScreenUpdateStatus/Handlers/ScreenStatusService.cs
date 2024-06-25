@@ -263,7 +263,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                    // screenStatus = true;
                 screenStatus = !(result.Any(x => x.ActualProduction == null || x.ActualProduction == 0) || result.Count == 0);
 
-                screenStatus = IsProductiveScreenValid(differenceList, result);
+                //screenStatus = IsProductiveScreenValid(differenceList, result);
 
                 //if (screenStatus)
                 //{
