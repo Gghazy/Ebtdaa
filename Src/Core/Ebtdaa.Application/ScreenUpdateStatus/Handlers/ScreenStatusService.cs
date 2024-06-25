@@ -52,7 +52,7 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
                 result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
                 result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
-                result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId, periodId);
+                //result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId, periodId);
                 //result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(factoryId, periodId);
             }
             if(factory.Data.Status == FactoryStatusEnum.Productive)
@@ -78,8 +78,8 @@ namespace Ebtdaa.Application.ScreenUpdateStatus.Handlers
                 result.CustomItemsUpdated = await CheckCustomItemsUpdatedScreenStatus(factoryId, periodId);
                 result.ActualProduction = await CheckActualProductionScreenStatus(factoryId, periodId, (FactoryStatusEnum)factory.Data.Status);
                 result.ProductData = await CheckFactoryProductScreenStatus(factoryId, periodId);
-                result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId, periodId);
-                result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(factoryId, periodId);
+                //result.RawMaterial = await CheckRawMaterialScreenStatus(factoryId, periodId);
+                //result.ActualRawMaterila = await CheckActualRawMaterialScreenStatus(factoryId, periodId);
             }
             if (factory.Data.Status == FactoryStatusEnum.Canceled)
             {

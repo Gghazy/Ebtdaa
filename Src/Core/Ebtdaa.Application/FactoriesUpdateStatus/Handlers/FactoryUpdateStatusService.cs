@@ -111,21 +111,28 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 bool isDataReviewer =(result.DataReviewer != null ? result.DataReviewer : "") == userId;
                 bool isDataApprover = (result.DataApprover != null ? result.DataApprover : "") == userId;
 
-               
-                //    if (isDataEntry && isDataReviewer && isDataApprover)
-                //    {
 
-                //        if (resultStatus.DataStatus == DataStatus.Approved)
-                //        {
-                //            SetStatus(statusResult, DataStatus.Approved, DataStatus.Approved, "تم الإعتماد", true);
-                //        }
-                //        else
-                //            SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
+                if (isDataEntry && isDataReviewer && isDataApprover)
+                {
+                    if (resultStatus !=null)
+                    {
+                        if (resultStatus.DataStatus == DataStatus.Approved)
+                        {
+                            SetStatus(statusResult, DataStatus.Approved, DataStatus.Approved, "تم الإعتماد", true);
+                        }
+                        else
+                            SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
+                    }
+                    else
+                    {
+                        SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
 
-                //    }
-                
-                //else
-                if (isDataApprover)
+                    }
+
+                }
+
+               else
+            if (isDataApprover)
                 {
                     if (resultStatus != null)
                     {
