@@ -210,17 +210,10 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                     else
                         SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
 
-
-
                 }
-
-
 
             }
           
-            
-
-
             return new BaseResponse<FactoryIdentitesResultDto>
             {
                 Data = statusResult
@@ -230,14 +223,32 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
               DataStatus currentDataStatus, string statusButton,
               Boolean isDisable
               )
-            {
+             {
                 statusResult.DataStatus = dataStatus;
                 statusResult.CurrentDataStatus = currentDataStatus;
                 statusResult.StatusButton = statusButton;
                 statusResult.isDisable = isDisable;
 
-            }
+             }
 
+        }
+        public async Task<bool> CheckFactoryUpdateStatus(int factoryId)
+        {
+            var status = false;
+            var getPeriods =  _dbContext.Periods.ToList();
+            getPeriods.ForEach(p =>
+            {
+                var isUpdatedData =  _dbContext.FactoryUpdateStatuses.Where(f => f.FactoryId == factoryId && f.PeriodId == p.Id).ToList();
+                if(isUpdatedData.Any())
+                {
+                    status = true;
+                }
+                else
+                {
+                    status = false;
+                }
+            });
+            return status;
         }
     }
 }

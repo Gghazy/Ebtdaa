@@ -40,6 +40,11 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _FactoryUpdateStatus.CheckFactoryStatus(factoryId, periodId, userId));
 
         }
+        [HttpGet("FactoryId")]
+        public async Task<IActionResult> CheckFactoryUpdateStatus (int factoryId)
+        {
+            return Ok( await _FactoryUpdateStatus.CheckFactoryUpdateStatus(factoryId));
+        }
     }
 }
 
