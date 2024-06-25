@@ -261,6 +261,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
             {
                 FactUpdateData.UpdatedDate = getApproverDate.CreatedDate;
                 FactUpdateData.FactoryUpdateStatus = status;
+                FactUpdateData.FactoryId = factoryId;
             }
             return new BaseResponse<FactUpdateStatusResultDto>
             { 
