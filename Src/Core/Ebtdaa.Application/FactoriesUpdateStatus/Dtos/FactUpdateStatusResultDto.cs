@@ -13,6 +13,8 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Dtos
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
         public bool UpdateStatus { get; set; }
+        public DateTime? UpdatedDate {  get; set; }
+        public bool FactoryUpdateStatus {  get; set; }
         public DataStatus DataStatus { get; set; }
     }
 }
