@@ -111,20 +111,21 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 bool isDataReviewer =(result.DataReviewer != null ? result.DataReviewer : "") == userId;
                 bool isDataApprover = (result.DataApprover != null ? result.DataApprover : "") == userId;
 
+               
+                //    if (isDataEntry && isDataReviewer && isDataApprover)
+                //    {
 
-                if (isDataEntry && isDataReviewer && isDataApprover)
-                {
+                //        if (resultStatus.DataStatus == DataStatus.Approved)
+                //        {
+                //            SetStatus(statusResult, DataStatus.Approved, DataStatus.Approved, "تم الإعتماد", true);
+                //        }
+                //        else
+                //            SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
 
-                     if (resultStatus.DataStatus == DataStatus.Approved)
-                    {
-                        SetStatus(statusResult, DataStatus.Approved, DataStatus.Approved, "تم الإعتماد", true);
-                    }
-                    else
-                        SetStatus(statusResult, DataStatus.Approved, DataStatus.NotApproved, "إعتماد المسح", false);
-
-                }
-
-                else if (isDataApprover)
+                //    }
+                
+                //else
+                if (isDataApprover)
                 {
                     if (resultStatus != null)
                     {
@@ -145,12 +146,12 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                     }
                     else
                     {
-                        if(isDataEntry)
+                        if (isDataEntry)
                             SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
                         else
                            if (isDataReviewer)
                             SetStatus(statusResult, DataStatus.New, DataStatus.New, "لم يتم الإدخال ", true);
-                           else
+                        else
                             SetStatus(statusResult, DataStatus.New, DataStatus.New, "لم يتم الإدخال / المراجعة", true);
 
                     }
