@@ -232,14 +232,14 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
              }
 
         }
-        public async Task<BaseResponse<FactUpdateStatusResultDto>> CheckFactoryUpdateStatus(int factoryId)
+        public async Task<BaseResponse<List<FactUpdateStatusResultDto>>> CheckFactoryUpdateStatus()
         {
             var status = false;
-            var FactUpdateData = new FactUpdateStatusResultDto();
+            var result = new List< FactUpdateStatusResultDto>();
             var getPeriods =  _dbContext.Periods.ToList();
             getPeriods.ForEach(p =>
             {
-                var isUpdatedData = _dbContext.FactoryUpdateStatuses.Where(f => f.FactoryId == factoryId && f.PeriodId == p.Id).ToList();
+                var isUpdatedData = _dbContext.FactoryUpdateStatuses.Where(f =>  f.PeriodId == p.Id).ToList();
                 if(isUpdatedData == null)
                 {
                     status = false;
@@ -256,32 +256,46 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                     }
                 }
             });
-            var getApproverDate = _dbContext.FactoryUpdateStatuses.OrderByDescending(d => d.Id).FirstOrDefault(d => d.FactoryId == factoryId);
-            var factoryData = _dbContext.Factories
+           var factoryData = _dbContext.Factories
                     .Include(x => x.FactoryLocations)
                     .ThenInclude(x => x.City)
-                    .FirstOrDefault(x => x.Id == factoryId);
-            if ( getApproverDate != null ) 
+                    .ToList();
+            foreach (var item in factoryData)
             {
-                FactUpdateData.UpdatedDate = getApproverDate.CreatedDate;
-                FactUpdateData.FactoryUpdateStatus = status;
-                FactUpdateData.FactoryId = factoryId;
-                FactUpdateData.CityNameAr = factoryData.FactoryLocations.Any() ? factoryData.FactoryLocations.FirstOrDefault().City.NameAr : "";
-                FactUpdateData.NameAr = factoryData.NameAr;
-                FactUpdateData.CommercialRegister = factoryData.CommercialRegister; 
-            }
-            else
-            {
-                FactUpdateData.FactoryUpdateStatus = status;
-                FactUpdateData.FactoryId = factoryId;
+                var getApproverDate = _dbContext.FactoryUpdateStatuses
+                    .OrderByDescending(d => d.Id).FirstOrDefault(d => d.FactoryId == item.Id);
 
-                FactUpdateData.CityNameAr = factoryData.FactoryLocations.Any() ? factoryData.FactoryLocations.FirstOrDefault().City.NameAr : "";
-                FactUpdateData.NameAr = factoryData.NameAr;
-                FactUpdateData.CommercialRegister = factoryData.CommercialRegister;
+                if (getApproverDate != null)
+                {
+                    var FactUpdateData = new FactUpdateStatusResultDto {
+                        UpdatedDate = getApproverDate.CreatedDate,
+                        FactoryUpdateStatus = status,
+                        FactoryId = item.Id,
+                        CityNameAr = item.FactoryLocations.Any() ? item.FactoryLocations.FirstOrDefault().City.NameAr : "",
+                        NameAr = item.NameAr,
+                        CommercialRegister = item.CommercialRegister
+                    };
+                    result.Add(FactUpdateData);
+
+                }
+                else
+                {
+                    var FactUpdateData = new FactUpdateStatusResultDto
+                    {
+                     FactoryUpdateStatus = status,
+                    FactoryId = item.Id,
+
+                    CityNameAr = item.FactoryLocations.Any() ? item.FactoryLocations.FirstOrDefault().City.NameAr : "",
+                    NameAr = item.NameAr,
+                    CommercialRegister = item.CommercialRegister,
+                };
+                    result.Add(FactUpdateData);
+                }
+
             }
-            return new BaseResponse<FactUpdateStatusResultDto>
+            return new BaseResponse<List<FactUpdateStatusResultDto>>
             { 
-                Data = FactUpdateData
+                Data = result
             }; 
         }
     }
