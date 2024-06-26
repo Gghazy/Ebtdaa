@@ -72,8 +72,6 @@ namespace Ebtdaa.Application.Factories.Handlers
                 .ThenInclude(x=>x.City)
                 .Where(f => f.OwnerIdentity == search.OwnerIdentity.ToString()).ToQueryResult(search.PageNumber,search.PageSize));
 
-
-
             return new BaseResponse<QueryResult<FactoryResualtDto>>
             {
                 Data = resualt
