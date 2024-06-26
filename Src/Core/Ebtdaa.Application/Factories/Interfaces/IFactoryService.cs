@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Factories.Dtos;
+using Ebtdaa.Application.FactoriesUpdateStatus.Dtos;
 using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Domain.Factories.Entity;
@@ -17,6 +18,7 @@ namespace Ebtdaa.Application.Factories.Interfaces
         Task<BaseResponse<FactoryResualtDto>> GetOne(int id,int periodId);
         Task<BaseResponse<List<FactoryResualtDto>>> GetFactoryByEntity(int factoryId);
         Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req);
+     
 
     }
 }

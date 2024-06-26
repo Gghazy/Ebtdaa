@@ -6,6 +6,7 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Application.Factories.Validation;
+using Ebtdaa.Application.FactoriesUpdateStatus.Dtos;
 using Ebtdaa.Application.FactoryContacts.Dtos;
 using Ebtdaa.Application.FactoryContacts.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Interfaces;
@@ -70,8 +71,6 @@ namespace Ebtdaa.Application.Factories.Handlers
                 .Include(x=>x.FactoryLocations)
                 .ThenInclude(x=>x.City)
                 .Where(f => f.OwnerIdentity == search.OwnerIdentity.ToString()).ToQueryResult(search.PageNumber,search.PageSize));
-
-
 
             return new BaseResponse<QueryResult<FactoryResualtDto>>
             {
@@ -231,5 +230,6 @@ namespace Ebtdaa.Application.Factories.Handlers
                 Data = resualt
             };
         }
+    
     }
 }

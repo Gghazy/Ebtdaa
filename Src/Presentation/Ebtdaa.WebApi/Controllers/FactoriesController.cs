@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.Factories.Interfaces;
+using Ebtdaa.Domain.Factories.Entity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,5 +43,6 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _factoryService.UpdateAsync(req));
 
         }
+       
     }
 }
