@@ -257,16 +257,27 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 }
             });
             var getApproverDate = _dbContext.FactoryUpdateStatuses.OrderByDescending(d => d.Id).FirstOrDefault(d => d.FactoryId == factoryId);
-            if( getApproverDate != null ) 
+            var factoryData = _dbContext.Factories
+                    .Include(x => x.FactoryLocations)
+                    .ThenInclude(x => x.City)
+                    .FirstOrDefault(x => x.Id == factoryId);
+            if ( getApproverDate != null ) 
             {
                 FactUpdateData.UpdatedDate = getApproverDate.CreatedDate;
                 FactUpdateData.FactoryUpdateStatus = status;
                 FactUpdateData.FactoryId = factoryId;
+                FactUpdateData.CityNameAr = factoryData.FactoryLocations.Any() ? factoryData.FactoryLocations.FirstOrDefault().City.NameAr : "";
+                FactUpdateData.NameAr = factoryData.NameAr;
+                FactUpdateData.CommercialRegister = factoryData.CommercialRegister; 
             }
             else
             {
                 FactUpdateData.FactoryUpdateStatus = status;
                 FactUpdateData.FactoryId = factoryId;
+
+                FactUpdateData.CityNameAr = factoryData.FactoryLocations.Any() ? factoryData.FactoryLocations.FirstOrDefault().City.NameAr : "";
+                FactUpdateData.NameAr = factoryData.NameAr;
+                FactUpdateData.CommercialRegister = factoryData.CommercialRegister;
             }
             return new BaseResponse<FactUpdateStatusResultDto>
             { 

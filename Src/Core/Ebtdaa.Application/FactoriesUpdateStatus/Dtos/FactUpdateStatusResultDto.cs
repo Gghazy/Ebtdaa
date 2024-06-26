@@ -16,5 +16,8 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Dtos
         public DateTime? UpdatedDate {  get; set; }
         public bool FactoryUpdateStatus {  get; set; }
         public DataStatus DataStatus { get; set; }
+        public string CityNameAr { get; set; }
+        public string NameAr { get; set; }
+        public string CommercialRegister { get; set; }
     }
 }
