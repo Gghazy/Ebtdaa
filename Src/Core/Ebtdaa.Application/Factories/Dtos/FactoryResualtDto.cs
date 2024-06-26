@@ -30,5 +30,7 @@ namespace Ebtdaa.Application.Factories.Dtos
         public string DataEntry { get; set; }
         public string DataReviewer { get; set; }
         public string DataApprover { get; set; }
+        public bool FactoryUpdateStatus {  get; set; }
+        public DateTime? FactoryUpdateDate {  get; set; }
     }
 }
