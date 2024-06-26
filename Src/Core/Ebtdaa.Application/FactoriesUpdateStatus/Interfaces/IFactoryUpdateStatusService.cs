@@ -14,6 +14,5 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Interfaces
         Task<BaseResponse<FactUpdateStatusResultDto>> GetOne(int factoryId, int periodId);
         Task<BaseResponse<FactUpdateStatusResultDto>> UpdateAsync(FactUpdateStatusRequestDto req);
         Task<BaseResponse<FactoryIdentitesResultDto>> CheckFactoryStatus(int factoryId, int periodId,string userId);
-        Task<BaseResponse<FactUpdateStatusResultDto>> CheckFactoryUpdateStatus(int factoryId);
     }
 }

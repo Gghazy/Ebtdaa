@@ -232,46 +232,6 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
              }
 
         }
-        public async Task<BaseResponse<FactUpdateStatusResultDto>> CheckFactoryUpdateStatus(int factoryId)
-        {
-            var status = false;
-            var FactUpdateData = new FactUpdateStatusResultDto();
-            var getPeriods =  _dbContext.Periods.ToList();
-            getPeriods.ForEach(p =>
-            {
-                var isUpdatedData = _dbContext.FactoryUpdateStatuses.Where(f => f.FactoryId == factoryId && f.PeriodId == p.Id).ToList();
-                if(isUpdatedData == null)
-                {
-                    status = false;
-                }
-                else
-                { 
-                    if (isUpdatedData.Any())
-                    {
-                        status = true;
-                    }
-                    else
-                    {
-                        status = false;
-                    }
-                }
-            });
-            var getApproverDate = _dbContext.FactoryUpdateStatuses.OrderByDescending(d => d.Id).FirstOrDefault(d => d.FactoryId == factoryId);
-            if( getApproverDate != null ) 
-            {
-                FactUpdateData.UpdatedDate = getApproverDate.CreatedDate;
-                FactUpdateData.FactoryUpdateStatus = status;
-                FactUpdateData.FactoryId = factoryId;
-            }
-            else
-            {
-                FactUpdateData.FactoryUpdateStatus = status;
-                FactUpdateData.FactoryId = factoryId;
-            }
-            return new BaseResponse<FactUpdateStatusResultDto>
-            { 
-                Data = FactUpdateData
-            }; 
-        }
+       
     }
 }
