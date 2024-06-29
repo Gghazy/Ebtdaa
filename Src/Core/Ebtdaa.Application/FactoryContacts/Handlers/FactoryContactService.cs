@@ -52,7 +52,46 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
             var result = await _validator.ValidateAsync(factoryContact);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
+
             await _dbContext.FactoryContacts.AddAsync(factoryContact);
+
+            ///
+            var allPeriods = await _dbContext.Periods
+                      .Include(x => x.FactoryUpdateStatuses)
+                      .Where(r => r.FactoryUpdateStatuses.
+                      All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
+                      .ToListAsync();
+
+
+            var AllPeriodsHasData = await _dbContext.FactoryContacts
+                            .Where(x => x.FactoryId == req.FactoryId &&
+                            x.CreatedDate.Year == DateTime.Now.Year &&
+                            allPeriods.Contains(x.PeriodId))
+                            .Select(x => x.PeriodId).ToListAsync();
+
+            AllPeriodsHasData.Add(req.PeriodId);
+
+            var emptyPeriods = allPeriods.Except(AllPeriodsHasData).ToList();
+            foreach (var item in emptyPeriods)
+            {
+                var newFactoryFile = new FactoryContact();
+                newFactoryFile.OfficerPhoneId = factoryContact.OfficerPhoneId;
+                newFactoryFile.OfficerEmail = factoryContact.OfficerEmail;
+                newFactoryFile.ProductionManagerPhoneId = factoryContact.ProductionManagerPhoneId;
+                newFactoryFile.ProductionManagerEmail = factoryContact.ProductionManagerEmail;
+                newFactoryFile.FinanceManagerPhoneId = factoryContact.FinanceManagerPhoneId;
+                newFactoryFile.FinanceManagerEmail = factoryContact.FinanceManagerEmail;
+                newFactoryFile.OfficerPhone = factoryContact.OfficerPhone;
+                newFactoryFile.FinanceManagerPhone = factoryContact.FinanceManagerPhone;
+                newFactoryFile.ProductionManagerPhone = factoryContact.ProductionManagerPhone;
+
+
+                newFactoryFile.FactoryId = factoryContact.FactoryId;
+                newFactoryFile.PeriodId = item;
+
+                await _dbContext.FactoryContacts.AddAsync(newFactoryFile);
+            }
+            ///
 
             await _dbContext.SaveChangesAsync();
 

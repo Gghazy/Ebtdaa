@@ -22,6 +22,7 @@ using Ebtdaa.Common.Enums;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
+using Ebtdaa.Domain.Periods;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -154,27 +155,68 @@ namespace Ebtdaa.Application.Factories.Handlers
                 var factory = await _dbContext.BasicFactoryInfos
                                 .FirstOrDefaultAsync(x => x.FactoryId == req.FactoryId && x.PeriodId == req.PeriodId);
 
-            if (factory != null)
-            {
-                factory.FactoryStatusId = req.Status;
-                factory.DataApprover = req.DataApprover;
-                factory.DataEntry = req.DataEntry;
-                factory.DataReviewer = req.DataReviewer;
-                   
-            }
-            else
-            {
-                factory = new BaiscFactoryInfo()
+
+
+                if (factory != null)
                 {
-                    FactoryId = req.FactoryId,
-                    PeriodId = req.PeriodId,
-                    FactoryStatusId = req.Status,
-                    DataApprover = req.DataApprover,
-                    DataEntry =req.DataEntry,
-                    DataReviewer = req.DataReviewer
-                };
+                    factory.FactoryStatusId = req.Status;
+                    factory.DataApprover = req.DataApprover;
+                    factory.DataEntry = req.DataEntry;
+                    factory.DataReviewer = req.DataReviewer;
+
+                }
+                else
+                {
+                    var allPeriods = await _dbContext.Periods
+                       .Include(x => x.FactoryUpdateStatuses)
+                       .Where(r => r.FactoryUpdateStatuses.
+                       All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
+                       .ToListAsync();
+
+
+                    var AllPeriodsHasData = await _dbContext.BasicFactoryInfos
+                                    .Where(x => x.FactoryId == req.FactoryId &&
+                                    x.CreatedDate.Year == DateTime.Now.Year &&
+                                    allPeriods.Contains(x.PeriodId))
+                                    .Select(x => x.PeriodId).ToListAsync();
+
+                    AllPeriodsHasData.Add(req.PeriodId);
+
+                    var emptyPeriods = allPeriods.Except(AllPeriodsHasData).ToList();
+                  
+
+                    factory = new BaiscFactoryInfo()
+
+                    {
+                        FactoryId = req.FactoryId,
+                        PeriodId = req.PeriodId,
+                        FactoryStatusId = req.Status,
+                        DataApprover = req.DataApprover,
+                        DataEntry = req.DataEntry,
+                        DataReviewer = req.DataReviewer
+                    };
                     await _dbContext.BasicFactoryInfos.AddAsync(factory);
-                  //  await _dbContext.SaveChangesAsync();
+
+                    List<BaiscFactoryInfo> newBaiscFactoryInfo = new List<BaiscFactoryInfo>();
+                    foreach (var item in emptyPeriods)
+                    {
+                        var newFactory = new BaiscFactoryInfo
+                        {
+                            FactoryId = req.FactoryId,
+                            PeriodId = item,
+                            FactoryStatusId = req.Status,
+                            DataApprover = req.DataApprover,
+                            DataEntry = req.DataEntry,
+                            DataReviewer = req.DataReviewer
+                        };
+                      //  newBaiscFactoryInfo.Add(newFactory);
+                        await _dbContext.BasicFactoryInfos.AddAsync(newFactory);
+
+                    }
+                    //if (newBaiscFactoryInfo.Count > 0)
+                      //  await _dbContext.BasicFactoryInfos.AddRangeAsync(newBaiscFactoryInfo);
+                
+                    //  await _dbContext.SaveChangesAsync();
                 }
                 
 

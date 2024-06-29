@@ -50,6 +50,42 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
                 var result = await _validator.ValidateAsync(file);
                 if (result.IsValid == false) throw new ValidationException(result.Errors);
                 await _dbContext.FactoryLocationAttachments.AddAsync(file);
+
+                ///
+                var allPeriods = await _dbContext.Periods
+                      .Include(x => x.FactoryUpdateStatuses)
+                      .Where(r => r.FactoryUpdateStatuses.
+                      All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
+                      .ToListAsync();
+
+
+                var AllPeriodsHasData = await _dbContext.FactoryLocationAttachments
+                                .Where(x => x.FactoryId == req.FactoryId &&
+                                x.CreatedDate.Year == DateTime.Now.Year &&
+                                allPeriods.Contains(x.PeriodId))
+                                .Select(x => x.PeriodId).ToListAsync();
+
+                AllPeriodsHasData.Add(req.PeriodId);
+
+                var emptyPeriods = allPeriods.Except(AllPeriodsHasData).ToList();
+
+
+
+                ///
+                foreach (var item in emptyPeriods)
+                {
+                    var newFactoryFile = new FactoryLocationAttachment();
+                    newFactoryFile.AttachmentId = file.AttachmentId;
+                    newFactoryFile.FactoryId = file.FactoryId;
+                    newFactoryFile.Name = file.Name;
+                    newFactoryFile.Type = file.Type;
+
+                    newFactoryFile.PeriodId = item;
+
+                    await _dbContext.FactoryLocationAttachments.AddAsync(newFactoryFile);
+                }
+
+
                 await _dbContext.SaveChangesAsync();
                 return new BaseResponse<FactoryLocationAttachmentResultDto>
                 {

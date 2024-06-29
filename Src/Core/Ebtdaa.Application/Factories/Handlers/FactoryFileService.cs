@@ -51,7 +51,42 @@ namespace Ebtdaa.Application.Factories.Handlers
             var result = await _factoryFileValidator.ValidateAsync(factoryFile);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
+            //
+
+            var allPeriods = await _dbContext.Periods
+               .Include(x => x.FactoryUpdateStatuses)
+               .Where(r => r.FactoryUpdateStatuses.
+               All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
+               .ToListAsync();
+
+
+            var AllPeriodsHasData = await _dbContext.FactoryFiles
+                            .Where(x => x.FactoryId == req.FactoryId &&
+                            allPeriods.Contains(x.PeriodId))
+                            .Select(x => x.PeriodId).ToListAsync();
+
+            AllPeriodsHasData.Add(req.PeriodId);
+
+            var emptyPeriods = allPeriods.Except(AllPeriodsHasData).ToList();
+
             await _dbContext.FactoryFiles.AddAsync(factoryFile);
+
+            ///
+            foreach (var item in emptyPeriods)
+            {
+                var newFactoryFile = new FactoryFile();
+                newFactoryFile.AttachmentId = factoryFile.AttachmentId;
+                newFactoryFile.FactoryId = factoryFile.FactoryId;
+                newFactoryFile.Name = factoryFile.Name;
+                newFactoryFile.Type = factoryFile.Type;
+
+                newFactoryFile.PeriodId = item;
+
+                await _dbContext.FactoryFiles.AddAsync(newFactoryFile);
+            }
+
+            ///
+
 
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<FactoryFileResultDto>
