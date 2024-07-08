@@ -82,6 +82,48 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 Data = resualt
             };
         }
+        public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAllAcutalProuct(ActualProductionSearch search)
+        {
+
+            var ProductPeriodActives = await _dbContext.FactoryProducts
+                //.Include(x => x.FactoryProduct)
+                //.ThenInclude(x => x.Product)
+                .Include(x => x.Product)
+                .Where(x => x.PeriodId == search.PeriodId && x.FactoryId == search.FactoryId)
+                .Select(x => x.Id).ToListAsync();
+
+
+            var resualt =
+                        await _dbContext.ActualProductionAndCapacities
+                        .Include(x => x.FactoryProduct)
+                        .Where(x => ProductPeriodActives.Contains(x.FactoryProductId))
+                        .Select(a=>
+                        new ProductCapacityResultDto
+                        {
+                            //Level12ItemName = x.Hs12NameAr,
+                            //Level12Number = b.Hs12Code,
+                            FactoryProductId=a.FactoryProductId,
+                            Kilograms_Per_Unit = a.AcuKilograms_Per_Unit,
+                            ActualProductionUintName = a.ActualProductionUint.Name,
+                            DesignedCapacityUnitName = a.DesignedCapacityUnit.Name,
+                            ProductName=a.AcuProductName,
+                            Id = a.Id,
+                            ProductId = a.FactoryProductId,
+                            ActualProductionUintId = a.ActualProductionUintId,
+                            DesignedCapacityUnitId = a.DesignedCapacityUnitId,
+                            ActualProductionAndCapacityId = a.Id,
+                            DesignedCapacity =a.DesignedCapacity ,
+                            ActualProduction = a.ActualProduction ,
+                            ActualProductionWeight = a.ActualProductionWeight,
+
+
+                        }).ToQueryResult(search.PageNumber, search.PageSize);
+
+            return new BaseResponse<QueryResult<ProductCapacityResultDto>>
+            {
+                Data = resualt
+            };
+        }
 
         public async Task<BaseResponse<ActualProductionResultDto>> GetOne(int Id)
         {
@@ -116,10 +158,13 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         public async Task<BaseResponse<ActualProductionResultDto>> UpdateAsync (ActualProductionRequestDto request)
         {
             var getActualproduction = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(a => a.Id == request.Id);
-            var actualproductionUpdated = _mapper.Map(request , getActualproduction);
-           
 
-            var result = await _actualProductionValidator.ValidateAsync(actualproductionUpdated);
+            var actualproductionUpdated = _mapper.Map(request , getActualproduction);
+
+             actualproductionUpdated.ActualProductionWeight=
+            (int?)(request.ActualProduction * (getActualproduction.AcuKilograms_Per_Unit != null? getActualproduction.AcuKilograms_Per_Unit : 0));
+
+             var result = await _actualProductionValidator.ValidateAsync(actualproductionUpdated);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
             await _dbContext.SaveChangesAsync();

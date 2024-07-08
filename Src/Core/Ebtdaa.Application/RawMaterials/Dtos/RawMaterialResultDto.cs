@@ -3,8 +3,9 @@
     public class RawMaterialResultDto
     {
         public int Id { get; set; }
+
         public string CustomItemName { get; set; }
-        public string ProductName { get; set; }
+        public string RawMaterialName { get; set; }
         public string Name { get; set; }
         public decimal MaximumMonthlyConsumption { get; set; }
         public decimal AverageWeightKG { get; set; }

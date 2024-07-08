@@ -19,7 +19,7 @@ namespace Ebtdaa.WebApi.Controllers
         [HttpPost("Pagination")]
         public async Task<IActionResult> GetAll(ActualProductionSearch search)
         {
-            return Ok(await _actualProductionService.GetAll(search));
+            return Ok(await _actualProductionService.GetAllAcutalProuct(search));
         }
         // GET api/<ActualProductionAndCapacitiesController>/5
         [HttpGet("{id}")]

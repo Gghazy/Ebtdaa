@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Domain.Periods;
 using System.Collections.Generic;
+using Ebtdaa.Domain.ActualProduction.Entity;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -349,6 +350,77 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = resualt
             };
         }
+        public async Task<BaseResponse<List<ProductResultDto>>> AllProductsListToRaw(ProductSearch search)
+        {
+
+            var ExsitsProductInRaw = await _dbContext.RawMaterials
+                .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                .Select(x =>Int64.Parse( x.CustomItemName)).ToListAsync();
+
+            var resualt =
+                  await _dbContext.Products
+                  .Include(x => x.Unit)
+                  .Where(x => !ExsitsProductInRaw.Contains(x.Id))
+                  .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                  new ProductResultDto
+                  {
+                      Hs12NameEn = b.Hs12NameEn,
+                      Hs12NameAr = b.Hs12NameAr,
+                      Hs12Code = b.Hs12Code,
+                      Id = a.Id,
+                      ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                      ItemNumber = a.ItemNumber,
+                      ProductId = a.Id,
+                      UnitId = a.UnitId,
+                      CR = a.CR,
+                      Status = a.Status,
+                      Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                      UnitName = a.Unit.Name,
+                  })
+                  .ToListAsync();
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = resualt
+            };
+        }
+
+        public async Task<BaseResponse<List<ProductResultDto>>> AllProductsList(ProductSearch search)
+        {
+
+            var ExsitsProduct = await _dbContext.FactoryProducts
+                .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                .Select(x => x.ProductId).ToListAsync();
+
+          var resualt =
+                await _dbContext.Products
+                .Include(x => x.Unit)
+                .Where(x=> !ExsitsProduct.Contains(x.Id))
+                .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                new ProductResultDto
+                {
+                    Hs12NameEn = b.Hs12NameEn,
+                    Hs12NameAr = b.Hs12NameAr,
+                    Hs12Code = b.Hs12Code,
+                    Id = a.Id,
+                    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                    ItemNumber = a.ItemNumber,
+                    ProductId = a.Id,
+                    UnitId = a.UnitId,
+                    CR = a.CR,
+                    Status = a.Status,
+                    Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                    UnitName = a.Unit.Name,
+                })
+                .ToListAsync();
+           
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = resualt
+            };
+        }
         public async Task<BaseResponse<List<ProductResultDto>>> GetAllProducts()
         {
             var resualt =
@@ -461,9 +533,8 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 var product = await _dbContext.Products.FindAsync(request.ProductId);
 
                 product.Kilograms_Per_Unit = request.Kilograms_Per_Unit;
-
-                await _dbContext.FactoryProducts.AddAsync(factoryProduct);
-                await _dbContext.SaveChangesAsync();
+                
+               await _dbContext.FactoryProducts.AddAsync(factoryProduct);
 
                 var productPerActive = new ProductPeriodActiveRequestDto()
                 {
@@ -471,24 +542,28 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     PeriodId = request.PeriodId,
                     FactoryId = request.FactoryId,
                     
+                    
                 };
 
                 var products = _mapper.Map<ProductPeriodActive>(productPerActive);
                 await _dbContext.ProductPeriodActives.AddAsync(products);
                 //await _dbContext.SaveChangesAsync();
+                await _dbContext.SaveChangesAsync();
 
                 var getItemNumber12 = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == request.ProductId);
+                
+              
+                /* var newProduct = new Product();
+                 newProduct.CR = product.CR;
+                 newProduct.ItemNumber = getItemNumber12.ItemNumber;
+                 newProduct.Kilograms_Per_Unit = request.Kilograms_Per_Unit;
+                 newProduct.UnitId = request.UnitId;
+                 newProduct.ProductName = request.CommericalName;
 
-               /* var newProduct = new Product();
-                newProduct.CR = product.CR;
-                newProduct.ItemNumber = getItemNumber12.ItemNumber;
-                newProduct.Kilograms_Per_Unit = request.Kilograms_Per_Unit;
-                newProduct.UnitId = request.UnitId;
-                newProduct.ProductName = request.CommericalName;
 
-
-                await _dbContext.Products.AddAsync(newProduct);*/
-                await _dbContext.SaveChangesAsync();
+                 await _dbContext.Products.AddAsync(newProduct);*/
+               // await _dbContext.SaveChangesAsync();
+               await addAcutalProductCapacity(factoryProduct.Id,(double)request.Kilograms_Per_Unit);
 
                 return new BaseResponse<bool>
                 {
@@ -502,7 +577,34 @@ namespace Ebtdaa.Application.ProductsData.Handlers
            
          
         }
-public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
+        public async Task addAcutalProductCapacity(int productId, double kilograms_Per_Unit)
+        {
+
+            var actualProduction =
+                        await _dbContext.FactoryProducts
+                        .Include(x => x.Product)
+                        .ThenInclude(x => x.Unit)
+                        .Where(x => x.Id== productId)
+                        .Include(x => x.ActualProductionAndCapacities)
+                        .ThenInclude(x => x.ActualProductionUint)
+                        .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) =>
+                        new ActualProductionAndCapacity
+                        {
+                            AcuProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                            AcuKilograms_Per_Unit = kilograms_Per_Unit,
+                            FactoryProductId = a.Id,
+                            PeriodId = a.PeriodId,
+                            ActualProductionUintId = a.Product.UnitId,
+                            DesignedCapacityUnitId = a.Product.UnitId,
+                            DesignedCapacity = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().DesignedCapacity : 0,
+                            ActualProduction = a.ActualProductionAndCapacities.Count > 0 ? a.ActualProductionAndCapacities.FirstOrDefault().ActualProduction : 0,
+
+                        }).FirstOrDefaultAsync();
+
+            await _dbContext.ActualProductionAndCapacities.AddAsync(actualProduction);
+            await _dbContext.SaveChangesAsync();
+        }
+        public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
 {
     try
     {
@@ -521,8 +623,15 @@ public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
                 if (req.PeperId > 0)
                     factoryProduct.PeperId = req.PeperId;
             }
-            factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
-            await _dbContext.SaveChangesAsync();
+           var ActualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == req.Id);
+           ActualProduct.AcuKilograms_Per_Unit = (double) req.Kilograms_Per_Unit;
+                    factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
+
+                    ActualProduct.ActualProductionWeight =
+                     (int?)(ActualProduct.ActualProduction * ActualProduct.AcuKilograms_Per_Unit);
+
+
+                    await _dbContext.SaveChangesAsync();
 
         }
         //await _dbContext.FactoryProducts.AddRangeAsync(factoryProduct);

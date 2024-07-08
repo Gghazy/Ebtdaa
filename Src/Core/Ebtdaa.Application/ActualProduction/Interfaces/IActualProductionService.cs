@@ -8,6 +8,9 @@ namespace Ebtdaa.Application.ActualProduction.Interfaces
     {
 
         Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAll(ActualProductionSearch search);
+        Task<BaseResponse<QueryResult<ProductCapacityResultDto>>> GetAllAcutalProuct(ActualProductionSearch search);
+
+        
         Task<BaseResponse<ActualProductionResultDto>> AddAsync(ActualProductionRequestDto result);
         Task<BaseResponse<ActualProductionResultDto>>UpdateAsync(ActualProductionRequestDto result);
         Task<BaseResponse<ActualProductionResultDto>> GetOne (int id);

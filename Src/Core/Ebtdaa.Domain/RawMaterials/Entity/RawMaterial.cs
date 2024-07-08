@@ -8,6 +8,7 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
     public class RawMaterial:BaseEntity
     {
         public int Id { get; set; }
+        public string RawMaterialName { get; set; }
         public string CustomItemName { get; set; }
         public string Name { get; set; }
         public decimal MaximumMonthlyConsumption { get; set; }

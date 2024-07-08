@@ -13,4 +13,9 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public int PeriodId { get; set; }
         public bool IsActive { get; set; }
     }
+    public class ProductSearchNew : SearchCriteria
+    {
+        public int FactoryId { get; set; }
+        public int PeriodId { get; set; }
+    }
 }

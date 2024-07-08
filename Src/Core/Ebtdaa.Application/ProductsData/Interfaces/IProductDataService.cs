@@ -12,6 +12,10 @@ namespace Ebtdaa.Application.ProductsData.Interfaces
         Task<BaseResponse<List<ProductResultDto>>> GetAll(int factoryId);
         Task<BaseResponse<List<ProductResultDto>>> GetAddedAll(ProductSearch search);
         Task<BaseResponse<List<ProductResultDto>>> GetAllProducts();
+        Task<BaseResponse<List<ProductResultDto>>> AllProductsList(ProductSearch search);
+        Task<BaseResponse<List<ProductResultDto>>> AllProductsListToRaw(ProductSearch search);
+
+
         Task<BaseResponse<ProductResultDto>> GetOne(int Id);
         Task<BaseResponse<ProductResultDto>> GetOneAddedProduct(int Id);
         Task<BaseResponse<ProductResultDto>> GetOneNewProduct(NewProductRequest Id);

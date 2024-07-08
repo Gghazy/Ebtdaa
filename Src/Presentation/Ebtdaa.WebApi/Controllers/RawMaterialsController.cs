@@ -26,7 +26,7 @@ namespace Ebtdaa.WebApi.Controllers
         [HttpPost("pagination")]
         public async Task<IActionResult> GetByFactory([FromBody] RawMaterialSearch search,int Factoryid)
         {
-            return Ok(await _RawMaterialService.GetByFactory(search,Factoryid));
+            return Ok(await _RawMaterialService.getAllRawMaterial(search,Factoryid));
 
         }
 

@@ -34,7 +34,16 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _productDataService.GetAllProducts());
         }
-
+        [HttpPost("AllProductsList")]
+        public async Task<IActionResult> GetAllProducts(ProductSearch search)
+        {
+            return Ok(await _productDataService.AllProductsList(search));
+        }
+        [HttpPost("AllProductsListToRaw")]
+        public async Task<IActionResult> AllProductsListToRaw(ProductSearch search)
+        {
+            return Ok(await _productDataService.AllProductsListToRaw(search));
+        }
         [HttpPost("getAllProductsNotInFactory")]
         public async Task<IActionResult> GetAll(ProductsNotInFactorySearch search)
         {

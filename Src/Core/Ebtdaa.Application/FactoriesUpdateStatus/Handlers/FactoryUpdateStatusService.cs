@@ -94,11 +94,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
             var statusResult = new FactoryIdentitesResultDto();
 
 
-            if (resultStatus == null)
-            {
-
-                SetStatus(statusResult, DataStatus.New, DataStatus.NotApproved, "إدخال", true);
-            }
+           
             if (result == null )
             {
 
@@ -168,14 +164,18 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 {
                     if (resultStatus != null)
                     {
-                        if (resultStatus.DataStatus == DataStatus.Added && isDataEntry)
+                        if (resultStatus.DataStatus == DataStatus.Added || resultStatus.DataStatus == DataStatus.New && isDataEntry)
                         {
                             SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", false);
                         }
                         else
-                      if (resultStatus.DataStatus == DataStatus.New && isDataEntry)
+                      if (resultStatus.DataStatus == DataStatus.Added)
                         {
-                            SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                            SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", false);
+                        }
+                        if (resultStatus.DataStatus == DataStatus.New)
+                        {
+                            SetStatus(statusResult, DataStatus.New, DataStatus.New, "لم يتم الإدخال", true);
                         }
                         else if (resultStatus.DataStatus == DataStatus.Reviwed)
                         {
@@ -188,7 +188,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                     else
                     {
                         if (isDataEntry)
-                            SetStatus(statusResult, DataStatus.Added, DataStatus.New, "إدخال", false);
+                            SetStatus(statusResult, DataStatus.Reviwed, DataStatus.New, "مراجعة", false);
                         else
                             SetStatus(statusResult, DataStatus.New, DataStatus.New, "لم يتم الإدخال", true);
                     }
@@ -293,6 +293,8 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 }
 
             }
+            result.OrderByDescending(d => d.FactoryId)
+                    .ToList();
             return new BaseResponse<List<FactUpdateStatusResultDto>>
             { 
                 Data = result
