@@ -350,15 +350,23 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 var productActive = await _dbContext.RawMaterials
                     .Include(x => x.ProductRawMaterials)
                    .Where(x => x.FactoryId == factoryId && x.CreatedDate.Year == DateTime.Now.Year )
-                    .ToListAsync();
+                   .OrderByDescending(e => e.PeriodId)
+                   .ToListAsync();
 
                 var productActiveId = productActive
                   .Select(x => Int32.Parse(x.CustomItemName)).ToList();
 
+                var productRawMaterials = productActive
+                  .Select(x => x.ProductRawMaterials).ToList();
+
                 var productActiveData = productActive
                 .Select(x => new { CustomItemId = x.CustomItemName, Name = x.Name, AverageWeightKG = x.AverageWeightKG }).ToList();
+                
                 string name = "";
                 decimal averageWeightKG = 0;
+
+             
+
                 rawMaterialsList =
                        await _dbContext.Products
                        .Include(x => x.Unit)
@@ -373,7 +381,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                            PeriodId = periodId,
                            FactoryId = factoryId,
                            UnitId = a.UnitId != null ? (int)a.UnitId : 0,
-                           AverageWeightKG =(int)(a.Kilograms_Per_Unit!=null? a.Kilograms_Per_Unit:0),
+                           AverageWeightKG =0,
 
 
                        })
@@ -389,10 +397,36 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                         rawMat.AverageWeightKG = productActiveData.FirstOrDefault(t => t.CustomItemId == rawMat.CustomItemName).AverageWeightKG;
 
                     }*/
+                    DateTime tt = DateTime.Now;
+
+                    var lastrawM = productActive
+                       .Where(t => t.PeriodId < periodId)
+                       .GroupBy(r => r.PeriodId)
+                       .FirstOrDefault();
 
                     List<RawMaterial> r = new List<RawMaterial>();
                     foreach (var item in rawMaterialsList)
                     {
+                        var itemPast = lastrawM.Where(t => t.CustomItemName == item.CustomItemName).FirstOrDefault();
+                        if(itemPast!=null)
+                        {
+                            r.Add(new RawMaterial
+                            {
+                                RawMaterialName = item.RawMaterialName,
+                                CustomItemName = item.CustomItemName,
+                                Name = itemPast.Name,
+                                PeriodId = item.PeriodId,
+                                FactoryId = item.FactoryId,
+                                UnitId = item.UnitId,
+                                AverageWeightKG = itemPast.AverageWeightKG,
+                                PaperId = itemPast.PaperId,
+                                PhotoId= itemPast.PhotoId,
+                                MaximumMonthlyConsumption=itemPast.MaximumMonthlyConsumption,
+     
+                            });
+                        
+                        }
+                        else
                         r.Add(new RawMaterial
                         {
                             RawMaterialName = item.RawMaterialName,
@@ -409,7 +443,30 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                     await _dbContext.RawMaterials.AddRangeAsync(r);
                    await _dbContext.SaveChangesAsync();
 
-                   rawMaterialsList=await addAcutalRawMaterial(periodId,factoryId);
+
+                    List<ProductRawMaterial> ProductRawMateriallist = new List<ProductRawMaterial>();
+                    foreach (var item in r)
+                    {
+                        var itemPast = lastrawM.Where(t => t.CustomItemName == item.CustomItemName).FirstOrDefault();
+                        if (itemPast != null)
+                        {
+                            foreach (var itemProductRawMaterial in itemPast.ProductRawMaterials)
+                            {
+                             ProductRawMateriallist.Add(
+                             new ProductRawMaterial
+                             {
+                                 ProductId = itemProductRawMaterial.ProductId,
+                                 rawMaterialId = item.Id,
+                             }
+                            );
+                            }
+                            
+                         }
+
+                    }
+                    await _dbContext.ProductRawMaterials.AddRangeAsync(ProductRawMateriallist);
+
+                    rawMaterialsList = await addAcutalRawMaterial(periodId,factoryId);
                     
 
                 }
