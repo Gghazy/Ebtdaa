@@ -8,10 +8,10 @@ namespace Ebtdaa.WebApi.Controllers
     public class SsoController : Controller
     {
         [HttpPost]
-        public async Task<IActionResult> getNationalID()
+        public async Task<IActionResult> getNationalID([FromBody] ssoData data)
         {
 
-            return Ok("nafath callback Result");
+            return Ok("nafath callback Result nationalID=" + data.NationalID + "    Name="+data.Name);
         }
 
     }
