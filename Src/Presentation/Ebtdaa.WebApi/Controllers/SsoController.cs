@@ -1,9 +1,11 @@
 ﻿using Ebtdaa.Application.ActualRawMaterials.Dtos;
 using Ebtdaa.Application.Common.Dtos;
+using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.Periods.Dtos;
 using Ebtdaa.Application.Sso.Dtos;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using System.Text;
@@ -15,8 +17,11 @@ namespace Ebtdaa.WebApi.Controllers
     public class SsoController : Controller
     {
         private readonly IConfiguration configuration;
-        public SsoController(IConfiguration configurations)
+        private readonly IEbtdaaDbContext _dbContext;
+
+        public SsoController(IConfiguration configurations, IEbtdaaDbContext dbContext)
         {
+            _dbContext = dbContext;
             configuration = configurations;
 
         }
@@ -24,8 +29,21 @@ namespace Ebtdaa.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> getNationalID([FromBody] ssoData data)
         {
-            //return Redirect("http://localhost:4200/#/pages/factories-list");
-            return Ok("nafath callback Result nationalID=" + data.NationalID + "    Name=" + data.Name);
+            string? NationalID = data.NationalID;
+            var Name = data.Name;
+            var result=
+                await _dbContext.Factories
+               .Include(x => x.FactoryLocations)
+               .ThenInclude(x => x.City)
+               .Where(r=>r.OwnerIdentity==NationalID)
+               .FirstOrDefaultAsync();
+            if(result==null)
+                return Redirect("https://preprod.partners.mim.gov.sa/#/Login");
+            else
+                return Redirect("https://preprod.partners.mim.gov.sa");
+
+
+            //return Ok("nafath callback Result nationalID=" + data.NationalID + "    Name=" + data.Name);
         }
         [HttpGet]
         public async Task<IActionResult> loginbynafath()
@@ -48,8 +66,8 @@ namespace Ebtdaa.WebApi.Controllers
           
            
            //  var timestamp = DateTime.Now.ToString("yyyyMMddHHmmssffff");
-           // var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+           // string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             string serviceToken = GenerateRandomString(16) + timestamp;
 ; 
             string serviceSignature = GenerateHmacSha256(serviceToken, privateKey);
