@@ -15,10 +15,5 @@ namespace Ebtdaa.Application.ActualRawMaterials.Dtos
         public string Name { get; set; }
 
     }
-    public class ssoData
-    {
-        public string NationalID { get; set; }
-        public string Name { get; set; }
-
-    }
+  
 }
