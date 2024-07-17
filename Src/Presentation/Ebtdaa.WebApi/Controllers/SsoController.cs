@@ -40,7 +40,7 @@ namespace Ebtdaa.WebApi.Controllers
             if(result==null)
                 return Redirect("https://preprod.partners.mim.gov.sa/#/Login");
             else
-                return Redirect("https://preprod.partners.mim.gov.sa");
+                return Redirect("https://preprod.partners.mim.gov.sa/#/pages/factories-list");
 
 
             //return Ok("nafath callback Result nationalID=" + data.NationalID + "    Name=" + data.Name);
