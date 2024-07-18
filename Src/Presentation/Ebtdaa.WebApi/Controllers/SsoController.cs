@@ -7,6 +7,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
+using System.Net.Http;
+using System.Runtime.InteropServices;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -18,33 +23,83 @@ namespace Ebtdaa.WebApi.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IEbtdaaDbContext _dbContext;
-
-        public SsoController(IConfiguration configurations, IEbtdaaDbContext dbContext)
+        private readonly IHttpClientFactory _httpClientFactory ;
+        public SsoController(IConfiguration configurations, 
+            IEbtdaaDbContext dbContext
+            ,
+             IHttpClientFactory  httpClientFactory)
         {
             _dbContext = dbContext;
             configuration = configurations;
+            _httpClientFactory = httpClientFactory;
+
 
         }
 
         [HttpPost]
-        public async Task<IActionResult> getNationalID([FromBody] ssoData data)
+        public async Task getNationalID()
         {
-            string? NationalID = data.NationalID;
-            var Name = data.Name;
-            var result=
+            var r =  User.Claims.ToList();
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            string nationalId = User.FindFirst("nationalId")?.Value;
+            string arabicName = User.FindFirst("arabicName")?.Value;
+            string englishName = User.FindFirst("englishName")?.Value;
+
+            
+            var result =
                 await _dbContext.Factories
                .Include(x => x.FactoryLocations)
                .ThenInclude(x => x.City)
-               .Where(r=>r.OwnerIdentity==NationalID)
+               .Where(r=>r.OwnerIdentity== nationalId)
                .FirstOrDefaultAsync();
-            if(result==null)
-                return Redirect("https://preprod.partners.mim.gov.sa/#/Login");
-            else
-                return Redirect("https://preprod.partners.mim.gov.sa");
+            var tokenResult = "";
+            if (nationalId != null)
+            {
+                var authClaims = new List<Claim>
+            {
+
+                  new Claim(ClaimTypes.NameIdentifier,userId),
+                  new Claim("nationalId",nationalId),
+                  new Claim("arabicName",arabicName),
+                  new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                };
+
+                var token = GetToken(authClaims);
+                 tokenResult = new JwtSecurityTokenHandler().WriteToken(token);
+
+            }
+            var url = "https://preprod.partners.mim.gov.sa/#/pages/factories-list"; //
+            string urlWithToken = $"{url}?token={tokenResult}";
+
+            var Loginurl = "https://preprod.partners.mim.gov.sa/#/Login"; //
+            //string urlWithToken = $"{url}?token={tokenResult}";
+
+            if (result==null)
+                 Process.Start(new ProcessStartInfo(Loginurl) { UseShellExecute = true });
+               else
+                 Process.Start(new ProcessStartInfo(urlWithToken) { 
+                     UseShellExecute = true }
+                 );
 
 
-            //return Ok("nafath callback Result nationalID=" + data.NationalID + "    Name=" + data.Name);
         }
+   
+        protected JwtSecurityToken GetToken(List<Claim> authClaims)
+        {
+            var date = TimeSpan.FromTicks(DateTime.Now.Ticks);
+
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("37gUgAhoXS+nliiQv2D5kMbEXSUD7ePgr4NfNYP3f50="));
+            var token = new JwtSecurityToken(
+                issuer: "Issuer",
+                audience: "Audience",
+                expires: DateTime.Now.AddHours(10),
+                claims: authClaims,
+                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
+            return token;
+
+        }
+
         [HttpGet]
         public async Task<IActionResult> loginbynafath()
         {
