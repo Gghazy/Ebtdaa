@@ -76,7 +76,7 @@ namespace Ebtdaa.WebApi.Controllers
             //string urlWithToken = $"{url}?token={tokenResult}";
 
             if (result==null)
-                 Process.Start(new ProcessStartInfo(urlWithToken) { UseShellExecute = true });
+                 Process.Start(new ProcessStartInfo(Loginurl) { UseShellExecute = true });
                else
                  Process.Start(new ProcessStartInfo(urlWithToken) { 
                      UseShellExecute = true }
