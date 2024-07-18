@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using System.Configuration;
 using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http;
@@ -58,9 +59,9 @@ namespace Ebtdaa.WebApi.Controllers
                 var authClaims = new List<Claim>
             {
 
-                  new Claim(ClaimTypes.NameIdentifier,userId),
-                  new Claim("nationalId",nationalId),
-                  new Claim("arabicName",arabicName),
+                  new Claim(ClaimTypes.NameIdentifier,userId!=null?userId:""),
+                  new Claim("nationalId",nationalId!=null?nationalId:""),
+                  new Claim("arabicName",arabicName!=null?arabicName:""),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
@@ -75,7 +76,7 @@ namespace Ebtdaa.WebApi.Controllers
             //string urlWithToken = $"{url}?token={tokenResult}";
 
             if (result==null)
-                 Process.Start(new ProcessStartInfo(Loginurl) { UseShellExecute = true });
+                 Process.Start(new ProcessStartInfo(urlWithToken) { UseShellExecute = true });
                else
                  Process.Start(new ProcessStartInfo(urlWithToken) { 
                      UseShellExecute = true }
@@ -88,7 +89,7 @@ namespace Ebtdaa.WebApi.Controllers
         {
             var date = TimeSpan.FromTicks(DateTime.Now.Ticks);
 
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("37gUgAhoXS+nliiQv2D5kMbEXSUD7ePgr4NfNYP3f50="));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("SecretKey")));
             var token = new JwtSecurityToken(
                 issuer: "Issuer",
                 audience: "Audience",

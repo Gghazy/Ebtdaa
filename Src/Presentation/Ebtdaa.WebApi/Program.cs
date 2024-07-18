@@ -56,7 +56,7 @@ builder.Services.AddAuthentication("Bearer")
             ValidIssuer = "Issuer",
             ValidAudience = "Audience",
             IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.ASCII.GetBytes("37gUgAhoXS+nliiQv2D5kMbEXSUD7ePgr4NfNYP3f50="))
+                Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("SecretKey")))
         };
     }
     );
