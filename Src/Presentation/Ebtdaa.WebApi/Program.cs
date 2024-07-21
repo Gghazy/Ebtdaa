@@ -97,8 +97,6 @@ app.Services.CreateScope().ServiceProvider.GetRequiredService<EbtdaaDbContext>()
 
 SeedData(app);
 
-
-app.MapControllers();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();

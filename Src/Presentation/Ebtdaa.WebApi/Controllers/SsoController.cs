@@ -3,6 +3,7 @@ using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.Periods.Dtos;
 using Ebtdaa.Application.Sso.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -38,21 +39,59 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task getNationalID()
+        public async Task<IActionResult> getNationalID()
         {
+
+            string urlRedirect = configuration.GetValue<string>("AppUrl");
+
+            string urlError = "/errorPage";
+
+            Boolean isAuthorizeUser = false;
+
             var r =  User.Claims.ToList();
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             string nationalId = User.FindFirst("nationalId")?.Value;
             string arabicName = User.FindFirst("arabicName")?.Value;
             string englishName = User.FindFirst("englishName")?.Value;
+         
+            if (nationalId == null)
+                return Redirect(urlRedirect + urlError+ "?errorM=1");
 
-            
+
             var result =
                 await _dbContext.Factories
                .Include(x => x.FactoryLocations)
                .ThenInclude(x => x.City)
                .Where(r=>r.OwnerIdentity== nationalId)
                .FirstOrDefaultAsync();
+
+            if(result!=null)
+            {
+                urlRedirect = urlRedirect + "/pages/factories-list";
+                isAuthorizeUser = true;
+            }
+            else
+            {
+               var  result2 =
+                await _dbContext.Inspectors
+               .Where(r => r.OwnerIdentity == nationalId)
+               .FirstOrDefaultAsync();
+                if (result2 != null)
+                {
+                    urlRedirect = urlRedirect + "/Inspector/factories-list";
+                    isAuthorizeUser = true;
+                }
+                else
+                {
+                    //Admin Area
+
+                }
+            }
+
+            if(isAuthorizeUser==false)
+                return Redirect(urlRedirect+ urlError + "?errorM=2");
+          
+            //create Token
             var tokenResult = "";
             if (nationalId != null)
             {
@@ -69,19 +108,9 @@ namespace Ebtdaa.WebApi.Controllers
                  tokenResult = new JwtSecurityTokenHandler().WriteToken(token);
 
             }
-            var url = "https://preprod.partners.mim.gov.sa/#/pages/factories-list"; //
-            string urlWithToken = $"{url}?token={tokenResult}";
+            string urlWithToken = $"{urlRedirect}?token={tokenResult}";
 
-            var Loginurl = "https://preprod.partners.mim.gov.sa/#/Login"; //
-            //string urlWithToken = $"{url}?token={tokenResult}";
-
-            if (result==null)
-                 Process.Start(new ProcessStartInfo(Loginurl) { UseShellExecute = true });
-               else
-                 Process.Start(new ProcessStartInfo(urlWithToken) { 
-                     UseShellExecute = true }
-                 );
-
+            return Redirect(urlWithToken);
 
         }
    
@@ -101,7 +130,7 @@ namespace Ebtdaa.WebApi.Controllers
 
         }
 
-        [HttpGet]
+        [HttpGet("loginbynafathData")]
         public async Task<IActionResult> loginbynafath()
         {
             LoginDataRequest result=new LoginDataRequest();
@@ -114,18 +143,10 @@ namespace Ebtdaa.WebApi.Controllers
             byte[] iv = Convert.FromBase64String(ServiceIV);
             byte[] SigningKeybyte = Convert.FromBase64String(SigningKey);
 
-
             string privateKey = DecryptStringFromBytes_Aes(SigningKeybyte, key, iv);
 
-
-           // string base64String = Convert.ToBase64String(key);
-          
-           
-           //  var timestamp = DateTime.Now.ToString("yyyyMMddHHmmssffff");
             var timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-           // string timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
             string serviceToken = GenerateRandomString(16) + timestamp;
-; 
             string serviceSignature = GenerateHmacSha256(serviceToken, privateKey);
            
             result.token = serviceToken;
@@ -135,7 +156,9 @@ namespace Ebtdaa.WebApi.Controllers
             {
                 Data = result,
             });
-            
+
+
+
         }
         private string GenerateRandomString(int length)
         {
