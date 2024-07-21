@@ -51,8 +51,8 @@ namespace Ebtdaa.WebApi.Controllers
             var r =  User.Claims.ToList();
             string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             string nationalId = User.FindFirst("national_id")?.Value;
-            string arabicName = User.FindFirst("full_name_ar")?.Value;
-            string englishName = User.FindFirst("full_name_en")?.Value;
+            string arabicName = User.FindFirst("first_name_ar")?.Value;
+            string englishName = User.FindFirst("first_name_en")?.Value;
          
             if (nationalId == null)
                 return Redirect(urlRedirect + urlError+ "?errorM=1");
@@ -99,8 +99,8 @@ namespace Ebtdaa.WebApi.Controllers
             {
 
                   new Claim(ClaimTypes.NameIdentifier,userId!=null?userId:""),
-                  new Claim("national_id",nationalId!=null?nationalId:""),
-                  new Claim("full_name_ar",arabicName!=null?arabicName:""),
+                  new Claim("nationalId",nationalId!=null?nationalId:""),
+                  new Claim("arabicName",arabicName!=null?arabicName:""),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
