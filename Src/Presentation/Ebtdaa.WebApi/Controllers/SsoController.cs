@@ -6,6 +6,7 @@ using Ebtdaa.Application.Sso.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Configuration;
@@ -40,7 +41,7 @@ namespace Ebtdaa.WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> redirectoUrl(string url)
         {
-            return Redirect(url);
+            return Redirect(url); 
 
         }
 
@@ -50,67 +51,67 @@ namespace Ebtdaa.WebApi.Controllers
         {
 
             string urlRedirect = configuration.GetValue<string>("AppUrl");
-
             string urlError = "/errorPage";
-
-            Boolean isAuthorizeUser = false;
-
-            var r =  User.Claims.ToList();
-            string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            string nationalId = User.FindFirst("national_id")?.Value;
-            string arabicName = User.FindFirst("first_name_ar")?.Value;
-            string englishName = User.FindFirst("first_name_en")?.Value;
-            //nationalId= "1012955132";
-            if (nationalId == null)
+            try
             {
-               // return Redirect(urlRedirect + urlError + "?errorM=1");
-                return RedirectToAction("redirectoUrl", new { url = urlRedirect + urlError + "?errorM=1" });
+                Boolean isAuthorizeUser = false;
 
-
-            }
-
-
-            var result =
-                await _dbContext.Factories
-               .Include(x => x.FactoryLocations)
-               .ThenInclude(x => x.City)
-               .Where(r=>r.OwnerIdentity== nationalId)
-               .FirstOrDefaultAsync();
-
-            if(result!=null)
-            {
-                urlRedirect = urlRedirect + "/pages/factories-list";
-                isAuthorizeUser = true;
-            }
-            else
-            {
-               var  result2 =
-                await _dbContext.Inspectors
-               .Where(r => r.OwnerIdentity == nationalId)
-               .FirstOrDefaultAsync();
-                if (result2 != null)
+                var r = User.Claims.ToList();
+                string userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                string nationalId = User.FindFirst("national_id")?.Value;
+                string arabicName = User.FindFirst("first_name_ar")?.Value;
+                string englishName = User.FindFirst("first_name_en")?.Value;
+                //nationalId= "1012955132";
+                if (nationalId == null)
                 {
-                    urlRedirect = urlRedirect + "/Inspector/factories-list";
+                    // return Redirect(urlRedirect + urlError + "?errorM=1");
+                    return RedirectToAction("redirectoUrl", new { url = urlRedirect + urlError + "?errorM=1" });
+
+
+                }
+
+
+                var result =
+                    await _dbContext.Factories
+                   .Include(x => x.FactoryLocations)
+                   .ThenInclude(x => x.City)
+                   .Where(r => r.OwnerIdentity == nationalId)
+                   .FirstOrDefaultAsync();
+
+                if (result != null)
+                {
+                    urlRedirect = urlRedirect + "/pages/factories-list";
                     isAuthorizeUser = true;
                 }
                 else
                 {
-                    //Admin Area
+                    var result2 =
+                     await _dbContext.Inspectors
+                    .Where(r => r.OwnerIdentity == nationalId)
+                    .FirstOrDefaultAsync();
+                    if (result2 != null)
+                    {
+                        urlRedirect = urlRedirect + "/Inspector/factories-list";
+                        isAuthorizeUser = true;
+                    }
+                    else
+                    {
+                        //Admin Area
 
+                    }
                 }
-            }
 
-            if (isAuthorizeUser == false)
-            {
-                return RedirectToAction("redirectoUrl", new { url = urlRedirect + urlError + "?errorM=2" });
-                //return Redirect(urlRedirect + urlError + "?errorM=2");
-            }
-          
-            //create Token
-            var tokenResult = "";
-            if (nationalId != null)
-            {
-                var authClaims = new List<Claim>
+                if (isAuthorizeUser == false)
+                {
+                    return RedirectToAction("redirectoUrl", new { url = urlRedirect + urlError + "?errorM=2" });
+                    //return Redirect(urlRedirect + urlError + "?errorM=2");
+                }
+
+                //create Token
+                var tokenResult = "";
+                if (nationalId != null)
+                {
+                    var authClaims = new List<Claim>
             {
 
                   new Claim(ClaimTypes.NameIdentifier,userId!=null?userId:""),
@@ -119,15 +120,20 @@ namespace Ebtdaa.WebApi.Controllers
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
-                var token = GetToken(authClaims);
-                 tokenResult = new JwtSecurityTokenHandler().WriteToken(token);
+                    var token = GetToken(authClaims);
+                    tokenResult = new JwtSecurityTokenHandler().WriteToken(token);
+
+                }
+                string urlWithToken = $"{urlRedirect}?token={tokenResult}";
+
+                return RedirectToAction("redirectoUrl", new { url = urlWithToken });
+
+                //return Redirect(urlWithToken);
+            }catch(Exception e)
+            {
+                return RedirectToAction("redirectoUrl", new { url = urlRedirect + urlError + "?errorM=1" });
 
             }
-            string urlWithToken = $"{urlRedirect}?token={tokenResult}";
-
-            return RedirectToAction("redirectoUrl", new { url = urlWithToken });
-
-            //return Redirect(urlWithToken);
 
         }
 
