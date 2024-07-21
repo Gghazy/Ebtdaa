@@ -37,7 +37,14 @@ namespace Ebtdaa.WebApi.Controllers
 
 
         }
+        [HttpGet]
+        public async Task<IActionResult> redirectoUrl(string url)
+        {
+            return Redirect(url);
 
+        }
+
+       
         [HttpPost]
         public async Task<IActionResult> getNationalID()
         {
@@ -53,9 +60,14 @@ namespace Ebtdaa.WebApi.Controllers
             string nationalId = User.FindFirst("national_id")?.Value;
             string arabicName = User.FindFirst("first_name_ar")?.Value;
             string englishName = User.FindFirst("first_name_en")?.Value;
-         
+            //nationalId= "1012955132";
             if (nationalId == null)
-                return Redirect(urlRedirect + urlError+ "?errorM=1");
+            {
+               // return Redirect(urlRedirect + urlError + "?errorM=1");
+                return RedirectToAction("redirectoUrl", new { url = urlRedirect + urlError + "?errorM=1" });
+
+
+            }
 
 
             var result =
@@ -88,8 +100,11 @@ namespace Ebtdaa.WebApi.Controllers
                 }
             }
 
-            if(isAuthorizeUser==false)
-                return Redirect(urlRedirect+ urlError + "?errorM=2");
+            if (isAuthorizeUser == false)
+            {
+                return RedirectToAction("redirectoUrl", new { url = urlRedirect + urlError + "?errorM=2" });
+                //return Redirect(urlRedirect + urlError + "?errorM=2");
+            }
           
             //create Token
             var tokenResult = "";
@@ -110,10 +125,12 @@ namespace Ebtdaa.WebApi.Controllers
             }
             string urlWithToken = $"{urlRedirect}?token={tokenResult}";
 
-            return Redirect(urlWithToken);
+            return RedirectToAction("redirectoUrl", new { url = urlWithToken });
+
+            //return Redirect(urlWithToken);
 
         }
-   
+
         protected JwtSecurityToken GetToken(List<Claim> authClaims)
         {
             var date = TimeSpan.FromTicks(DateTime.Now.Ticks);
