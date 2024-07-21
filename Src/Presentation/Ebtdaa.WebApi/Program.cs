@@ -28,7 +28,7 @@ builder.Services.AddCors(options =>
 // Add services to the container.
 builder.Services.AddHttpClient("MyClient", client =>
 {
-    client.BaseAddress = new Uri("http://localhost:4200/#/pages/factories-list");
+    client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("AppUrl"));
 });
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -97,10 +97,8 @@ app.Services.CreateScope().ServiceProvider.GetRequiredService<EbtdaaDbContext>()
 
 SeedData(app);
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+app.MapControllers();
+app.MapFallbackToFile("index.html");
 
 app.Run();
 
