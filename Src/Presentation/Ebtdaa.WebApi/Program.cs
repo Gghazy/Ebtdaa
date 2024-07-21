@@ -97,8 +97,11 @@ app.Services.CreateScope().ServiceProvider.GetRequiredService<EbtdaaDbContext>()
 
 SeedData(app);
 
-app.MapControllers();
-app.MapFallbackToFile("index.html");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+//app.MapFallbackToFile("index.html");
 
 app.Run();
 
