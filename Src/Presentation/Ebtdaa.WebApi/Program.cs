@@ -12,10 +12,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using System.Security.Claims;
 using System.Text;
+using System.Net;
+using System.Net.Http.Headers;
 
 var builder = WebApplication.CreateBuilder(args);
-
-
 
 builder.Services.AddCors(options =>
 {
@@ -25,12 +25,32 @@ builder.Services.AddCors(options =>
             .AllowAnyHeader()
              );
 });
+builder.Services.AddHttpClient<MyHttpClient>(client =>
+{
+    // Configure your HttpClient settings here
+    client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("AppUrl"));
+    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+});
 // Add services to the container.
-builder.Services.AddHttpClient("MyClient", client =>
+/*builder.Services.AddHttpClient("MyClient", client =>
 {
     client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("AppUrl"));
-});
+});*/
+
 builder.Services.AddControllers();
+
+// Register HttpClient with custom handler
+builder.Services.AddSingleton(new HttpClient(new HttpClientHandler
+{
+    ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true
+}));
+
+
+
+
+// Register HttpClient
+//builder.Services.AddHttpClient();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -75,6 +95,7 @@ builder.Services.AddMvc().AddFluentValidation(fv =>
 builder.Services.AddEndpointsApiExplorer();
 
 var app = builder.Build();
+ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -82,6 +103,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
+}    
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
@@ -97,11 +124,20 @@ app.Services.CreateScope().ServiceProvider.GetRequiredService<EbtdaaDbContext>()
 
 SeedData(app);
 
-app.UseEndpoints(endpoints =>
+/*app.UseEndpoints(endpoints =>
 {
+    endpoints.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
     endpoints.MapControllers();
-});
-//app.MapFallbackToFile("index.html");
+});*/
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapControllers();
+
+app.MapFallbackToFile("index.html");
 
 app.Run();
 
