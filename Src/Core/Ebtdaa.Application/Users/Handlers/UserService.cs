@@ -3,6 +3,7 @@ using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.Users.Dtos;
 using Ebtdaa.Application.Users.Interfaces;
+using Ebtdaa.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -30,6 +31,20 @@ namespace Ebtdaa.Application.Users.Handlers
             return new BaseResponse<UserResultDto>
             {
                 Data = result != null ? _mapper.Map<UserResultDto>(result) : new UserResultDto()
+            };
+        }
+
+        public async Task<BaseResponse<UserResultDto>> AddAsync(UserRequestDto req)
+        {
+            var user = _mapper.Map<User>(req);
+
+            await _dbContext.Users.AddAsync(user);
+
+            await _dbContext.SaveChangesAsync();
+
+            return new BaseResponse<UserResultDto>
+            {
+                Data = _mapper.Map<UserResultDto>(user)
             };
         }
     }

@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Ebtdaa.Application.Users.Dtos;
+using Ebtdaa.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +13,8 @@ namespace Ebtdaa.Application.Users.Mapper
     {
         public UserMapper() 
         {
-
+            CreateMap<User, UserResultDto>();
+            CreateMap<UserRequestDto, User>();
         }
     }
 }
