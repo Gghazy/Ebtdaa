@@ -50,7 +50,7 @@ namespace Ebtdaa.WebApi.Controllers
                 string nationalId = User.FindFirst("national_id")?.Value;
                 string arabicName = User.FindFirst("first_name_ar")?.Value;
                 string englishName = User.FindFirst("first_name_en")?.Value;
-                nationalId= "1012955132";
+               // nationalId= "1012955132";
                 if (nationalId == null)
                 {
                     // return Redirect(urlRedirect + urlError + "?errorM=1");
