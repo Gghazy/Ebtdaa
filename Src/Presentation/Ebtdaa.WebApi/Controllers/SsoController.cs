@@ -1,19 +1,10 @@
-﻿using Ebtdaa.Application.ActualRawMaterials.Dtos;
-using Ebtdaa.Application.Common.Dtos;
+﻿using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.Periods.Dtos;
 using Ebtdaa.Application.Sso.Dtos;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Configuration;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
-using System.Net.Http;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
@@ -26,7 +17,6 @@ namespace Ebtdaa.WebApi.Controllers
     {
         private readonly IConfiguration configuration;
         private readonly IEbtdaaDbContext _dbContext;
-        private readonly IHttpClientFactory _httpClientFactory ;
         public SsoController(IConfiguration configurations, 
             IEbtdaaDbContext dbContext
             ,
@@ -34,18 +24,17 @@ namespace Ebtdaa.WebApi.Controllers
         {
             _dbContext = dbContext;
             configuration = configurations;
-            _httpClientFactory = httpClientFactory;
+            
 
 
         }
-        [HttpGet]
+        [HttpGet("redirectoUrl")]
         public async Task<IActionResult> redirectoUrl(string url)
         {
             return Redirect(url); 
 
         }
 
-       
         [HttpPost]
         public async Task<IActionResult> getNationalID()
         {
@@ -61,7 +50,7 @@ namespace Ebtdaa.WebApi.Controllers
                 string nationalId = User.FindFirst("national_id")?.Value;
                 string arabicName = User.FindFirst("first_name_ar")?.Value;
                 string englishName = User.FindFirst("first_name_en")?.Value;
-                //nationalId= "1012955132";
+                nationalId= "1012955132";
                 if (nationalId == null)
                 {
                     // return Redirect(urlRedirect + urlError + "?errorM=1");
@@ -111,12 +100,14 @@ namespace Ebtdaa.WebApi.Controllers
                 var tokenResult = "";
                 if (nationalId != null)
                 {
+
+
                     var authClaims = new List<Claim>
             {
 
                   new Claim(ClaimTypes.NameIdentifier,userId!=null?userId:""),
-                  new Claim("nationalId",nationalId!=null?nationalId:""),
-                  new Claim("arabicName",arabicName!=null?arabicName:""),
+                  new Claim("national_id",nationalId!=null?nationalId:""),
+                  new Claim("arabic_name",arabicName!=null?arabicName:""),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 };
 
