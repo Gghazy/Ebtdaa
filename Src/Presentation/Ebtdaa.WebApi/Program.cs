@@ -19,12 +19,12 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(builder =>
-        builder.AllowAnyOrigin()
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-             );
+    options.AddPolicy("AllowAll",
+        builder => builder.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
 });
+
 builder.Services.AddHttpClient<MyHttpClient>(client =>
 {
     // Configure your HttpClient settings here
@@ -108,12 +108,13 @@ else
     app.UseSwagger();
     app.UseSwaggerUI();
 
-}    
-app.UseHttpsRedirection();
+}
+app.UseRouting();
+//app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-app.UseRouting();
-app.UseCors();
+
+app.UseCors("AllowAll");
 app.UseAuthentication();
 app.UseAuthorization();
 
