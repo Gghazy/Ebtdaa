@@ -19,33 +19,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder.AllowAnyOrigin()
-                          .AllowAnyMethod()
-                          .AllowAnyHeader());
-});
-
-builder.Services.AddHttpClient<MyHttpClient>(client =>
-{
-    // Configure your HttpClient settings here
-    client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("AppUrl"));
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+    options.AddDefaultPolicy(builder =>
+        builder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+             );
 });
 // Add services to the container.
-/*builder.Services.AddHttpClient("MyClient", client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration.GetValue<string>("AppUrl"));
-});*/
 
 builder.Services.AddControllers();
-
-// Register HttpClient with custom handler
-builder.Services.AddSingleton(new HttpClient(new HttpClientHandler
-{
-    ServerCertificateCustomValidationCallback = (message, cert, chain, sslPolicyErrors) => true
-}));
-
-
 
 
 // Register HttpClient
@@ -65,21 +47,7 @@ builder.Services.AddJobsConfiguration();
 builder.Services.AddScoped<ExcelDataSeeder>();
 
 
-builder.Services.AddAuthentication("Bearer")
-    .AddJwtBearer(options =>
-    {
-        options.TokenValidationParameters = new()
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = "Issuer",
-            ValidAudience = "Audience",
-            IssuerSigningKey = new SymmetricSecurityKey(
-                Encoding.ASCII.GetBytes(builder.Configuration.GetValue<string>("SecretKey")))
-        };
-    }
-    );
+
 
 
 
@@ -103,21 +71,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-else
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
 
-}
-app.UseRouting();
+
 app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
-app.UseCors("AllowAll");
-app.UseAuthentication();
+app.UseRouting();
+app.UseCors();
 app.UseAuthorization();
-
 // Globale Exeption
 app.UseMiddleware<GlobalExceptionHandler>();
 app.Services.CreateScope().ServiceProvider.GetRequiredService<EbtdaaDbContext>().Database.Migrate();
@@ -125,20 +86,11 @@ app.Services.CreateScope().ServiceProvider.GetRequiredService<EbtdaaDbContext>()
 
 SeedData(app);
 
-/*app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-    endpoints.MapControllers();
-});*/
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.MapControllers();
-
-app.MapFallbackToFile("index.html");
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();
 
