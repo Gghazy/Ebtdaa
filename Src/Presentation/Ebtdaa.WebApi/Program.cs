@@ -110,7 +110,7 @@ else
 
 }
 app.UseRouting();
-//app.UseHttpsRedirection();
+app.UseHttpsRedirection();
 app.UseDefaultFiles();
 app.UseStaticFiles();
 
