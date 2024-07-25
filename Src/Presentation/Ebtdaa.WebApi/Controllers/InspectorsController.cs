@@ -1,6 +1,8 @@
 ﻿using Ebtdaa.Application.ActualRawMaterials.Dtos;
 using Ebtdaa.Application.Inspectors.Dtos;
 using Ebtdaa.Application.Inspectors.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 
@@ -8,6 +10,8 @@ namespace Ebtdaa.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes =
+    JwtBearerDefaults.AuthenticationScheme)]
     public class InspectorsController : ControllerBase
     {
         private readonly IInspectorService _inspectorService;

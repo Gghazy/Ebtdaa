@@ -35,7 +35,7 @@ namespace Ebtdaa.WebApi.Controllers
 
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> getNationalID()
         {
 
@@ -115,7 +115,7 @@ namespace Ebtdaa.WebApi.Controllers
                     tokenResult = new JwtSecurityTokenHandler().WriteToken(token);
 
                 }
-                string urlWithToken = $"{urlRedirect}?token={tokenResult}";
+                string urlWithToken = $"{urlRedirect}?token={tokenResult}&userName=arabicName";
 
                 return RedirectToAction("redirectoUrl", new { url = urlWithToken });
 
@@ -132,10 +132,10 @@ namespace Ebtdaa.WebApi.Controllers
         {
             var date = TimeSpan.FromTicks(DateTime.Now.Ticks);
 
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("SecretKey")));
+            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetValue<string>("Authentication:SecretForKey")));
             var token = new JwtSecurityToken(
-                issuer: "Issuer",
-                audience: "Audience",
+                issuer: configuration.GetValue<string>("Authentication:Issuer"),
+                audience:configuration.GetValue<string>("Authentication:Audience"),
                 expires: DateTime.Now.AddHours(10),
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)

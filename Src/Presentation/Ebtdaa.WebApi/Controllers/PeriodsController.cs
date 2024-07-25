@@ -1,6 +1,8 @@
 ﻿using Ebtdaa.Application.Cities.Interfaces;
 using Ebtdaa.Application.Periods.Dtos;
 using Ebtdaa.Application.Periods.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +10,8 @@ namespace Ebtdaa.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes =
+    JwtBearerDefaults.AuthenticationScheme)]
     public class PeriodsController : ControllerBase
     {
         private readonly IPeriodService _periodService;
