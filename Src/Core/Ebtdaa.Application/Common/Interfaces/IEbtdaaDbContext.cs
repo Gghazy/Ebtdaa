@@ -16,6 +16,7 @@ using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
 using Ebtdaa.Domain.InspectorProductData.Entity;
 using Ebtdaa.Domain.InspectorActualProduction.Entity;
 using Ebtdaa.Domain.InspectorUpdateStatus.Entity;
+using Ebtdaa.Domain.Users;
 
 namespace Ebtdaa.Application.Common.Interfaces
 {
@@ -71,7 +72,7 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<InspectorRawMaterialFile> InspectorRawMaterialFiles { get; set; }
         public DbSet<InspectProductDataAttachment> InspectProductDataAttachments { get; set; }
         public DbSet<InspectorUpdateStatuses> InspectorUpdateStatuses { get; set; }
-
+        public DbSet<User> Users {  get; set; }
 
     }
 }
