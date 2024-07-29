@@ -310,6 +310,8 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                     PeriodId = r.PeriodId,
                     FactoryId = r.FactoryId,
                     UnitId = r.UnitId,
+                    PaperId=r.PaperId,
+                    PhotoId=r.PhotoId,
 
 
                 })
@@ -382,6 +384,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                            FactoryId = factoryId,
                            UnitId = a.UnitId != null ? (int)a.UnitId : 0,
                            AverageWeightKG =0,
+
 
 
                        })
