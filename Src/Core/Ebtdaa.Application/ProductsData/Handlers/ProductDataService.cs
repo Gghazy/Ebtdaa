@@ -389,14 +389,18 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         public async Task<BaseResponse<List<ProductResultDto>>> AllProductsList(ProductSearch search)
         {
 
+            var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
+
+
             var ExsitsProduct = await _dbContext.FactoryProducts
                 .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
                 .Select(x => x.ProductId).ToListAsync();
 
+            
           var resualt =
                 await _dbContext.Products
                 .Include(x => x.Unit)
-                .Where(x=> !ExsitsProduct.Contains(x.Id))
+                .Where(x => !(x.CR == getCR.CommercialRegister) && !(ExsitsProduct.Contains(x.Id)))
                 .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                 new ProductResultDto
                 {
@@ -414,7 +418,9 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     UnitName = a.Unit.Name,
                 })
                 .ToListAsync();
+
            
+
 
             return new BaseResponse<List<ProductResultDto>>
             {
