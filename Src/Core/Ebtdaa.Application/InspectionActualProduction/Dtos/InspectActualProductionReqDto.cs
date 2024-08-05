@@ -8,17 +8,18 @@ namespace Ebtdaa.Application.InspectionActualProduction.Dtos
 {
     public class InspectActualProductionReqDto
     {
+
         public int Id { get; set; }
         public int FactoryProductId { get; set; }
-        public int DesignedCapacity { get; set; }
-        public int ActualProduction { get; set; }
+        public decimal? DesignedCapacity { get; set; }
+        public double? ActualProduction { get; set; }
         public int DesignedCapacityUnitId { get; set; }
         public int ActualProductionUintId { get; set; }
-        public int ActualProductionWeight { get; set; }
+        public double? ActualProductionWeight { get; set; }
         public bool IsDesignedCapacityCorrect { get; set; }
         public bool IsActualProductionCorrect { get; set; }
-        public int? CorrectDesignedCapacity { get; set; }
-        public int? CorrectActualProduction { get; set; }
+        public decimal? CorrectDesignedCapacity { get; set; }
+        public double? CorrectActualProduction { get; set; }
         public int IncreaseReasonId { get; set; }
         public int? IncreaseReasonCorrect { get; set; }
         public bool IsIncreaseReasonCorrect { get; set; }

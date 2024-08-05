@@ -74,14 +74,14 @@ namespace Ebtdaa.Application.InspectorRawMaterials.Handlers
             if (respose.Count == 0)
             {
                 var result = await _dbContext.RawMaterials
-                    .Where(x => x.FactoryId == factoryId)
+                    .Where(x => x.FactoryId == factoryId && x.PeriodId==periodId)
                     .Select(x => new InspectorRawMaterialResultDto()
                     {
                         FactoryId = factoryId,
                         PeriodId = periodId,
                         RawMaterialId = x.Id,
-                        //PhotoId = x.PhotoId?null ,
-                        //PaperId = x.PaperId,
+                        PhotoId = x.PhotoId ?? 0,
+                        PaperId = x.PaperId ?? 0,
                         RawMaterialName = x.Name,
                         IsImageClear = true,
                         IsPaperClear = true,

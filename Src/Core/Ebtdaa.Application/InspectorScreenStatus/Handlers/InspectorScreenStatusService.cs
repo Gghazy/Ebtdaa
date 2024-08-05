@@ -43,12 +43,12 @@ namespace Ebtdaa.Application.InspectorScreenStatus.Handlers
         private async Task<bool> CheckBasicInfoScreenStatus(int periodId, int factoryId)
         {
             var result = await _dbContext.InspectBasicFactoryInfos.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
-            var attachment = await _dbContext.InspectFactoryFiles.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+           // var attachment = await _dbContext.InspectFactoryFiles.AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
 
 
             bool screenStatus = false;
 
-            screenStatus = result && attachment ? true : false;
+            screenStatus = result  ? true : false;
 
             return screenStatus;
         }
@@ -57,13 +57,17 @@ namespace Ebtdaa.Application.InspectorScreenStatus.Handlers
         {
             var result = await _dbContext.InspectFactoryLocations
                 .AnyAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+            //attachment Not require
+            /*  var attachment = await _dbContext.InspectFactoryLocationAttachments
+                  .AnyAsync(x => x.FactoryId == factoryId && x.PeriodId== periodId);
 
-            var attachment = await _dbContext.InspectFactoryLocationAttachments
-                .AnyAsync(x => x.FactoryId == factoryId && x.PeriodId== periodId);
+              bool screenStatus = false;
+
+              screenStatus = result && attachment ? true : false;*/
 
             bool screenStatus = false;
 
-            screenStatus = result && attachment ? true : false;
+            screenStatus = result  ? true : false;
 
             return screenStatus;
         }

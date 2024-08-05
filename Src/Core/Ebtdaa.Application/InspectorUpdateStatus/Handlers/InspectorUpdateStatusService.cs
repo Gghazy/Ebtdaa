@@ -28,9 +28,24 @@ namespace Ebtdaa.Application.InspectorUpdateStatus.Handlers
             await _dbContext.InspectorUpdateStatuses.AddAsync(UpdateStatus);
 
             await _dbContext.SaveChangesAsync();
+            InspectorUpdateStatusResultDto re= new InspectorUpdateStatusResultDto() ;
+            if(UpdateStatus!=null)
+            {
+                re = new InspectorUpdateStatusResultDto
+                {
+                    FactoryId = UpdateStatus.FactoryId,
+                    PeriodId = UpdateStatus.PeriodId,
+                    UpdateStatus = UpdateStatus.UpdateStatus,
+                    DataStatus = UpdateStatus.DataStatus,
+                    EnteredAt = UpdateStatus.EnteredAt,
+                    ApprovedAt = UpdateStatus.ApprovedAt,
+                    ReviewedAt = UpdateStatus.ReviewedAt,
+
+                };
+            }
             return new BaseResponse<InspectorUpdateStatusResultDto>
             {
-                Data = _mapper.Map<InspectorUpdateStatusResultDto>(UpdateStatus)
+                Data = re
             };
         }
 

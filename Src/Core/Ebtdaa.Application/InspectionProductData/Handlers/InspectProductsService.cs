@@ -32,11 +32,11 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             if (getInspectData.Count == 0)
             {
                 var result = await _dbContext.FactoryProducts
-                    .Include(x => x.Product).Where(x => x.FactoryId == factoryId )
+                    .Include(x => x.Product).Where(x => x.FactoryId == factoryId && x.PeriodId==periodId)
                     .Select(x=> new InspectProductsResultDto()
                     {
-                        FactoryId = factoryId,
-                        PeriodId=periodId,
+                        FactoryId = x.FactoryId,
+                        PeriodId=x.PeriodId,
                         ProductId = x.ProductId,
                         PhotoId = x.PhototId ?? 0,
                         PaperId = x.PeperId ?? 0,
@@ -73,7 +73,10 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
 
         public async Task<BaseResponse<bool>> AddAsync(InspectProductsRequestDto request)
         {
-            
+            if (request.NewProductPhotoId <= 0)
+                request.NewProductPhotoId = null;
+            if (request.NewProductPaperId <= 0)
+                request.NewProductPaperId = null;
             var factoryProduct = new InspectProductPhoto();
             factoryProduct.ProductId = request.ProductId;
             factoryProduct.PhotoId = request.PhotoId;
@@ -98,7 +101,10 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
 
         public async Task<BaseResponse<bool>> UpdateAsync(InspectProductsRequestDto req)
         {
-
+            if (req.NewProductPhotoId <= 0)
+                req.NewProductPhotoId = null;
+            if (req.NewProductPaperId <= 0)
+                req.NewProductPaperId = null;
             var factoryProduct = await _dbContext.InspectProductPhotos.FirstAsync(x => x.Id == req.Id);
             factoryProduct.ProductId = req.ProductId;
             factoryProduct.PhotoId = req.PhotoId;

@@ -23,6 +23,14 @@ namespace Ebtdaa.WebApi.Controllers
 
         }
 
+        [HttpPost("removeReason")]
+        public async Task<IActionResult> removeReason([FromBody] ReasonModelDto req)
+        {
+
+            return Ok(await _increaseActualProductionService.delete(req));
+
+        }
+
         [HttpPost]
         public async Task<IActionResult> CreateAsync([FromBody] IncreaseActualProductionRequestDto req)
         {

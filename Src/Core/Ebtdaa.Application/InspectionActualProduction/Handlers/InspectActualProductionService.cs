@@ -4,6 +4,7 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.InspectionActualProduction.Dtos;
 using Ebtdaa.Application.InspectionActualProduction.Interfaces;
 using Ebtdaa.Application.InspectionProductData.Dtos;
+using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.InspectorActualProduction.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -32,6 +33,8 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
                           .ThenInclude(x=>x.Product)
                           .Where(i => i.FactoryId == factoryId
                                           && i.PeriodId == periodId && i.CreatedBy==OwnerIdentity).ToListAsync();
+          
+        
 
             if (getInspectData.Count == 0)
             {
@@ -98,6 +101,7 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
 
         public async Task<BaseResponse<InspectActualProductionResultDto>> UpdateAsync(InspectActualProductionReqDto request)
         {
+
             var getActualproduction = await _dbContext.InspectActualProductions.FirstOrDefaultAsync(a => a.Id == request.Id);
             var actualproductionUpdated = _mapper.Map(request, getActualproduction);
 

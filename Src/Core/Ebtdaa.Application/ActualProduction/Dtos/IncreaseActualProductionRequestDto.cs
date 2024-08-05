@@ -15,4 +15,9 @@ namespace Ebtdaa.Application.ActualProduction.Dtos
 
         public int ReasonId { get; set; }
     }
+    public class ReasonModelDto
+    {
+        public int PeriodId { get; set; }
+        public int FactoryId { get; set; }
+    }
 }

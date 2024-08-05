@@ -24,11 +24,13 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         {
             var result = await _dbContext.IncreaseActualProductions
                                          .FirstOrDefaultAsync(x => x.PeriodId == periodId && x.FactoryId==factoryId);
-            var response = _mapper.Map<IncreaseActualProductionResultDto>(result);
+            IncreaseActualProductionResultDto response = new IncreaseActualProductionResultDto();
+            if (result != null)
+             response = _mapper.Map<IncreaseActualProductionResultDto>(result);
 
             return new BaseResponse<IncreaseActualProductionResultDto>
             {
-                Data = result != null ? response : new IncreaseActualProductionResultDto()
+                Data = response 
             };
         }
         public async Task<BaseResponse<IncreaseActualProductionResultDto>> AddAsync(IncreaseActualProductionRequestDto request)
@@ -59,7 +61,18 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                 Data = _mapper.Map<IncreaseActualProductionResultDto>(increaseActualProductionUpdated)
             };
         }
+        public async Task<BaseResponse<bool>> delete(ReasonModelDto actualProduct)
+        {
+            var result = await _dbContext.IncreaseActualProductions.Where(x => x.FactoryId == actualProduct.FactoryId && x.PeriodId == actualProduct.PeriodId).ToListAsync();
 
+            _dbContext.IncreaseActualProductions.RemoveRange(result);
+            await _dbContext.SaveChangesAsync();
+
+            return new BaseResponse<bool>
+            {
+                Data = true
+            };
+        }
         public async Task<BaseResponse<bool>> delete(int factoryId, int periodId)
         {
             var result = await _dbContext.IncreaseActualProductions.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();

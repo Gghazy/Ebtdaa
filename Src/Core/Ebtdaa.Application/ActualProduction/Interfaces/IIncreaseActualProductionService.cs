@@ -10,6 +10,7 @@ namespace Ebtdaa.Application.ActualProduction.Interfaces
         Task<BaseResponse<IncreaseActualProductionResultDto>> AddAsync(IncreaseActualProductionRequestDto result);
         Task<BaseResponse<IncreaseActualProductionResultDto>> UpdateAsync(IncreaseActualProductionRequestDto result);
         Task<BaseResponse<bool>> delete(int factoryId, int periodId);
+        Task<BaseResponse<bool>> delete(ReasonModelDto reason);
 
 
     }
