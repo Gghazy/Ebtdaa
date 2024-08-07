@@ -100,6 +100,7 @@ namespace Ebtdaa.Application.Factories.Handlers
             var factoryFile = await _dbContext.FactoryFiles.FindAsync(id);
 
              _dbContext.FactoryFiles.Remove(factoryFile);
+            _dbContext.Attachments.Remove(attachfile);
 
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<FactoryFileResultDto>
