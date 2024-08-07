@@ -26,6 +26,7 @@ namespace Ebtdaa.Application.Periods.Handlers
             var resualt = 
                 await _dbContext.Periods
                 .Include(x=>x.FactoryUpdateStatuses)
+                .Include(x=>x.InspectorUpdateStatuses)
                 .OrderByDescending(x=>x.PeriodStartDate.Year)
                 .ThenByDescending(x=>x.PeriodStartDate.Month)
                 .ToQueryResult(search.PageNumber, search.PageSize);
@@ -39,7 +40,11 @@ namespace Ebtdaa.Application.Periods.Handlers
                    response.Items.FirstOrDefault(x => x.Id == item.Id).Status =
                    item.FactoryUpdateStatuses.FirstOrDefault(x=>x.FactoryId== search.FactoryId) !=null?
                    item.FactoryUpdateStatuses.FirstOrDefault(x => x.FactoryId == search.FactoryId).DataStatus:DataStatus.New;
-            
+
+                response.Items.FirstOrDefault(x => x.Id == item.Id).InspectorStatus =
+                   item.InspectorUpdateStatuses.FirstOrDefault(x => x.FactoryId == search.FactoryId) != null ?
+                   item.InspectorUpdateStatuses.FirstOrDefault(x => x.FactoryId == search.FactoryId).DataStatus== DataStatus.Added : false;
+
             }
 
             return new BaseResponse<QueryResult<PeriodResultDto>>

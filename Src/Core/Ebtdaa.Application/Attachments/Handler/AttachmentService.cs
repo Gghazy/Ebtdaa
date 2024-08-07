@@ -92,7 +92,9 @@ namespace Ebtdaa.Application.Attachments.Handler
         }
         public async Task<ImageResultDto> DownloadImageBas64(int id)
         {
-            ImageResultDto result = new ImageResultDto();
+            try
+            {
+                ImageResultDto result = new ImageResultDto();
             var attachment =await _dbContext.Attachments.FindAsync(id);
             var filepath = Path.Combine(Directory.GetCurrentDirectory(), attachment.Path);
 
@@ -101,15 +103,21 @@ namespace Ebtdaa.Application.Attachments.Handler
             {
                 contenttype = "application/octet-stream";
             }
-
-            var bytes = await System.IO.File.ReadAllBytesAsync(filepath);
-            result.Image= Convert.ToBase64String(bytes);
+            
+                var bytes = await System.IO.File.ReadAllBytesAsync(filepath);
+                result.Image = Convert.ToBase64String(bytes);
+            
 
             result.Name = attachment.Name;
             result.Extention = contenttype;
 
 
             return result;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
 
         }

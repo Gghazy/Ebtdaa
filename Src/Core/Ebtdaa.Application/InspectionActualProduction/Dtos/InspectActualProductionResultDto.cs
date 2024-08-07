@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Ebtdaa.Application.InspectionActualProduction.Dtos
 {
     public class InspectActualProductionResultDto
-    {
+    { 
         public int Id { get; set; }
         public int FactoryProductId { get; set; }
         public string ProductName { get; set; }
@@ -17,13 +17,13 @@ namespace Ebtdaa.Application.InspectionActualProduction.Dtos
         public int ActualProductionUintId { get; set; }
         public bool IsDesignedCapacityCorrect { get; set; }
         public bool IsActualProductionCorrect { get; set; }
-        public int? CorrectDesignedCapacity { get; set; }
-        public int? CorrectActualProduction { get; set; }
+        public decimal? CorrectDesignedCapacity { get; set; }
+        public double? CorrectActualProduction { get; set; }
         public int IncreaseReasonId { get; set; }
         public string IncreaseReason { get; set; }
         public int? IncreaseReasonCorrect { get; set; }
         public bool IsIncreaseReasonCorrect { get; set; }
-        public double ActualProductionWeight { get; set; }
+        public double? ActualProductionWeight { get; set; }
         public string Comments { get; set; }
         public int PeriodId { get; set; }
         public int FactoryId { get; set; }

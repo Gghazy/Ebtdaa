@@ -4,6 +4,7 @@ using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Dtos;
 using Ebtdaa.Application.InspectionFactoryLocation.Dtos;
 using Ebtdaa.Application.InspectionFactoryLocation.Interfaces;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -57,8 +58,11 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Handlers
         public async Task<BaseResponse<InspectFactoryLocationAttachResDto>> DeleteAsync(int id)
         {
             var file = await _dbContext.InspectFactoryLocationAttachments.FirstOrDefaultAsync(x => x.Id == id);
+            var attachfile = await _dbContext.Attachments.FindAsync(file.AttachmentId);
 
             _dbContext.InspectFactoryLocationAttachments.Remove(file);
+            _dbContext.Attachments.Remove(attachfile);
+
 
             await _dbContext.SaveChangesAsync();
 
