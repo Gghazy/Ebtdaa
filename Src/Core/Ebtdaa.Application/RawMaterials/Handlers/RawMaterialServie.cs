@@ -68,7 +68,8 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                     ProductRawMateriallist.Add(
                          new ProductRawMaterial
                          {
-                             ProductId = item,
+                             ProductId = item.ProductId,
+                             ProductNameInRaw=item.ProductNameInRaw,
                              rawMaterialId = rawMaterial.Id
                          }
                         ); ;
@@ -134,12 +135,16 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 if (result.ProductRawMaterials != null && result.ProductRawMaterials.Any())
                 {
                     x.FactoryProductId = result.ProductRawMaterials
-                         .Select(prm => prm.ProductId)
+                         .Select(prm =>new FactoryProductInRaw
+                         {
+                            ProductId= prm.ProductId,
+                            ProductNameInRaw= prm.ProductNameInRaw,
+                         })
                          .ToList();
                 }
                 else
                 {
-                    x.FactoryProductId = new List<int>();
+                    x.FactoryProductId = new List<FactoryProductInRaw>();
                 }
                 x.PhotoName = resultPhoto;
                 x.PaperName = resultfile;
@@ -178,8 +183,10 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
                     var productRawMateriall = new ProductRawMaterial
                     {
-                        ProductId = item,
-                        rawMaterialId = rawMaterialUpdated.Id
+                        ProductId = item.ProductId,
+                        rawMaterialId = rawMaterialUpdated.Id,
+                        ProductNameInRaw = item.ProductNameInRaw,
+                        
                     };
 
                     await _dbContext.ProductRawMaterials.AddAsync(productRawMateriall);
@@ -410,7 +417,9 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                     List<RawMaterial> r = new List<RawMaterial>();
                     foreach (var item in rawMaterialsList)
                     {
-                        var itemPast = lastrawM.Where(t => t.CustomItemName == item.CustomItemName).FirstOrDefault();
+                        
+                        var itemPast = lastrawM != null? lastrawM.Where(t => t.CustomItemName == item.CustomItemName).FirstOrDefault():null;
+                        
                         if(itemPast!=null)
                         {
                             r.Add(new RawMaterial
@@ -450,7 +459,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                     List<ProductRawMaterial> ProductRawMateriallist = new List<ProductRawMaterial>();
                     foreach (var item in r)
                     {
-                        var itemPast = lastrawM.Where(t => t.CustomItemName == item.CustomItemName).FirstOrDefault();
+                        var itemPast = lastrawM!=null? lastrawM.Where(t => t.CustomItemName == item.CustomItemName).FirstOrDefault():null;
                         if (itemPast != null)
                         {
                             foreach (var itemProductRawMaterial in itemPast.ProductRawMaterials)
@@ -459,6 +468,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                              new ProductRawMaterial
                              {
                                  ProductId = itemProductRawMaterial.ProductId,
+                                 ProductNameInRaw=itemProductRawMaterial.ProductNameInRaw,
                                  rawMaterialId = item.Id,
                              }
                             );
@@ -512,7 +522,12 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                               Name = rawMaterial.Name,
                               FactoryProductId = _dbContext.ProductRawMaterials
                 .Where(prm => prm.rawMaterialId == rawMaterial.Id)
-                .Select(prm => prm.ProductId)
+                .Select(prm =>new FactoryProductInRaw
+                {
+                    ProductId = prm.ProductId,
+                    ProductNameInRaw= prm.ProductNameInRaw
+                }
+               )
                 .ToList(),
                               MaximumMonthlyConsumption = rawMaterial.MaximumMonthlyConsumption,
                               AverageWeightKG = rawMaterial.AverageWeightKG,

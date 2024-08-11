@@ -3,14 +3,14 @@
 namespace Ebtdaa.Application.RawMaterials.Dtos
 {
     public class RawMaterialRequestDto
-    {
+    { 
         public string RawMaterialName { get; set; }
         public int Id { get; set; }
         public string CustomItemName { get; set; }
         public string Name { get; set; }
         public decimal MaximumMonthlyConsumption { get; set; }
         public decimal AverageWeightKG { get; set; }
-        public List<int> FactoryProductId { get; set; }
+        public List<FactoryProductInRaw> FactoryProductId { get; set; }
         // public int ProductId { get; set; }
         public int UnitId { get; set; }
         public int PeriodId { get; set; }

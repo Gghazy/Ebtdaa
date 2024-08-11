@@ -13,6 +13,15 @@ namespace Ebtdaa.Application.ProductsData.Dtos
         public int PeriodId { get; set; }
         public bool IsActive { get; set; }
     }
+    public class ProductPaging
+    {
+        public int FactoryId { get; set; }
+        public int PeriodId { get; set; }
+        public int PageSize { get; set; }
+        public int CurrentPage { get; set; }
+        public string? SearchText { get; set; }
+
+    }
     public class ProductSearchNew : SearchCriteria
     {
         public int FactoryId { get; set; }

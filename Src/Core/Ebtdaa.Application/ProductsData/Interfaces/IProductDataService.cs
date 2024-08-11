@@ -14,6 +14,10 @@ namespace Ebtdaa.Application.ProductsData.Interfaces
         Task<BaseResponse<List<ProductResultDto>>> GetAllProducts();
         Task<BaseResponse<List<ProductResultDto>>> AllProductsList(ProductSearch search);
         Task<BaseResponse<List<ProductResultDto>>> AllProductsListToRaw(ProductSearch search);
+        Task<BaseResponse<List<ProductResultDto>>> GetProductsList(ProductPaging search);
+        Task<BaseResponse<List<ProductResultDto>>> GetAllProductsList(ProductPaging search);
+        Task<BaseResponse<List<ProductResultDto>>> AllProductsLists(ProductPaging search);
+
 
 
         Task<BaseResponse<ProductResultDto>> GetOne(int Id);

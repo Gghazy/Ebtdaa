@@ -18,6 +18,8 @@ using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Domain.Periods;
 using System.Collections.Generic;
 using Ebtdaa.Domain.ActualProduction.Entity;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -350,8 +352,134 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = resualt
             };
         }
+        /*public async Task<BaseResponse<List<ProductResultDto>>> GetProductsList(ProductPaging search)
+        {
+
+
+            var ExsitsProductInRaw = await _dbContext.RawMaterials
+                .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                .Select(x => Int64.Parse(x.CustomItemName)).ToListAsync();
+
+            var res =
+                   _dbContext.Products
+                  .Include(x => x.Unit)
+                  .Where(x => !ExsitsProductInRaw.Contains(x.Id))
+                  .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                  new ProductResultDto
+                  {
+                      Hs12NameEn = b.Hs12NameEn,
+                      Hs12NameAr = b.Hs12NameAr,
+                      Hs12Code = b.Hs12Code,
+                      Id = a.Id,
+                      ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                      ItemNumber = a.ItemNumber,
+                      ProductId = a.Id,
+                      UnitId = a.UnitId,
+                      CR = a.CR,
+                      Status = a.Status,
+                      Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                      UnitName = a.Unit.Name,
+                  }).AsQueryable();
+          
+             var  result = res.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = result
+            };
+        }*/
+
+
+        public async Task<BaseResponse<List<ProductResultDto>>> GetProductsList(ProductPaging search)
+        {
+
+
+            var ExsitsProductInRaw = await _dbContext.RawMaterials
+                .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                .Select(x => Int64.Parse(x.CustomItemName)).ToListAsync();
+
+            var res =
+                   _dbContext.Products
+                  .Include(x => x.Unit)
+                  .Where(x => !ExsitsProductInRaw.Contains(x.Id))
+                  .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                  new ProductResultDto
+                  {
+                      Hs12NameEn = b.Hs12NameEn,
+                      Hs12NameAr = b.Hs12NameAr,
+                      Hs12Code = b.Hs12Code,
+                      Id = a.Id,
+                      ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                      ItemNumber = a.ItemNumber,
+                      ProductId = a.Id,
+                      UnitId = a.UnitId,
+                      CR = a.CR,
+                      Status = a.Status,
+                      Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                      UnitName = a.Unit.Name,
+                  }).AsQueryable();
+            List<ProductResultDto> result = new List<ProductResultDto>();
+            if (!string.IsNullOrEmpty(search.SearchText))
+            {
+                var query = await res.ToListAsync();
+                query = query.Where(p => p.ProductName.Contains(search.SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+                result =query.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
+            }
+            else
+           result = await res.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToListAsync();
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = result
+            };
+        }
+
+        public async Task<BaseResponse<List<ProductResultDto>>> GetAllProductsList(ProductPaging search)
+        {
+
+
+           
+            var res =  _dbContext.Products
+                .Include(x => x.Unit)
+                .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                new ProductResultDto
+                {
+                    Hs12NameEn = b.Hs12NameEn,
+                    Hs12NameAr = b.Hs12NameAr,
+                    Hs12Code = b.Hs12Code,
+                    Id = a.Id,
+                    ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                    ItemNumber = a.ItemNumber,
+                    ProductId = a.Id,
+                    UnitId = a.UnitId,
+                    CR = a.CR,
+                    Status = a.Status,
+                    Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                    UnitName = a.Unit.Name,
+                })
+            .AsQueryable();
+            List<ProductResultDto> result = new List<ProductResultDto>();
+            if (!string.IsNullOrEmpty(search.SearchText))
+            {
+                var query = await res.ToListAsync();
+                query = query.Where(p => p.ProductName.Contains(search.SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+                result = query.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
+            }
+            else
+                result =await res.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToListAsync();
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = result
+            };
+        }
+
         public async Task<BaseResponse<List<ProductResultDto>>> AllProductsListToRaw(ProductSearch search)
         {
+
 
             var ExsitsProductInRaw = await _dbContext.RawMaterials
                 .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
@@ -383,6 +511,58 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             return new BaseResponse<List<ProductResultDto>>
             {
                 Data = resualt
+            };
+        }
+        public async Task<BaseResponse<List<ProductResultDto>>> AllProductsLists(ProductPaging search)
+        {
+
+            var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
+
+
+            var ExsitsProduct = await _dbContext.FactoryProducts
+                .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                .Select(x => x.ProductId).ToListAsync();
+
+
+            var res =
+                   _dbContext.Products
+                  .Include(x => x.Unit)
+                  .Where(x => !(x.CR == getCR.CommercialRegister) && !(ExsitsProduct.Contains(x.Id)))
+                  .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                  new ProductResultDto
+                  {
+                      Hs12NameEn = b.Hs12NameEn,
+                      Hs12NameAr = b.Hs12NameAr,
+                      Hs12Code = b.Hs12Code,
+                      Id = a.Id,
+                      ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                      ItemNumber = a.ItemNumber,
+                      ProductId = a.Id,
+                      UnitId = a.UnitId,
+                      CR = a.CR,
+                      Status = a.Status,
+                      Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                      UnitName = a.Unit.Name,
+                  })
+               .AsQueryable();
+           
+            List<ProductResultDto> result = new List<ProductResultDto>();
+            if (!string.IsNullOrEmpty(search.SearchText))
+            {
+                var query = await res.ToListAsync();
+                query = query.Where(p => p.ProductName.Contains(search.SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+                result = query.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
+            }
+            else
+                result =await res.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToListAsync();
+
+
+
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = result
             };
         }
 
