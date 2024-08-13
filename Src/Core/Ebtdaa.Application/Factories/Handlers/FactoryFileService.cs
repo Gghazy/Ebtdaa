@@ -53,12 +53,15 @@ namespace Ebtdaa.Application.Factories.Handlers
 
             //
 
+            /*  var allPeriods = await _dbContext.Periods
+                 .Include(x => x.FactoryUpdateStatuses)
+                 .Where(r => r.FactoryUpdateStatuses.
+                 All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
+                 .ToListAsync();*/
             var allPeriods = await _dbContext.Periods
-               .Include(x => x.FactoryUpdateStatuses)
-               .Where(r => r.FactoryUpdateStatuses.
-               All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
-               .ToListAsync();
-
+                   .Where(x => x.PeriodStartDate.Year == DateTime.Now.Year)
+                   .Select(i => i.Id)
+                   .ToListAsync();
 
             var AllPeriodsHasData = await _dbContext.FactoryFiles
                             .Where(x => x.FactoryId == req.FactoryId &&
