@@ -64,9 +64,9 @@ namespace Ebtdaa.WebApi.Controllers
 
         }
         [HttpGet("GetInspectorFactories")]
-        public async Task<IActionResult> GetInspectorFactories(string InspectorId)
+        public async Task<IActionResult> GetInspectorFactories(string inspectorId)
         {
-            return Ok(await _inspectorService.GetInspectorFactories(InspectorId));
+            return Ok(await _inspectorService.GetInspectorFactories(inspectorId));
 
         }
     }

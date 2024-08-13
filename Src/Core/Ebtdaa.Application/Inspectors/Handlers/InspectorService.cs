@@ -46,10 +46,10 @@ namespace Ebtdaa.Application.Inspectors.Handlers
                 .Include(x=> x.InspectorFactories)
                 .ThenInclude(x=>x.Factories)
                 .FirstOrDefaultAsync(x => x.Id == id);
-
+            var res = _mapper.Map<InspectorResultDto>(result);
             return new BaseResponse<InspectorResultDto>
             {
-                Data = _mapper.Map<InspectorResultDto>(result)
+                Data = res
             };
         }
 

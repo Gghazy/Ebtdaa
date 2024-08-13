@@ -169,15 +169,17 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                             SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", false);
                         }
                         else
-                      if (resultStatus.DataStatus == DataStatus.Added)
+                        if (resultStatus.DataStatus == DataStatus.Added)
                         {
                             SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Added, "مراجعة", false);
                         }
+                        else
                         if (resultStatus.DataStatus == DataStatus.New)
                         {
                             SetStatus(statusResult, DataStatus.New, DataStatus.New, "لم يتم الإدخال", true);
                         }
-                        else if (resultStatus.DataStatus == DataStatus.Reviwed)
+                        else 
+                        if (resultStatus.DataStatus == DataStatus.Reviwed)
                         {
 
                             SetStatus(statusResult, DataStatus.Reviwed, DataStatus.Reviwed, "تمت المراجعة", true);

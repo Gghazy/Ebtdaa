@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using Ebtdaa.Domain.ActualProduction.Entity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Ebtdaa.Application.RawMaterials.Dtos;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -47,15 +48,17 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
                     .Select(x => x.ProductId).ToListAsync();
             //}
-         
-                var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
+            var productInfactory = await _dbContext.ProductPeriodActives
+                      .Where(x => x.FactoryId == search.FactoryId && x.PeriodId != search.PeriodId)
+                      .Select(x => x.ProductId).ToListAsync();
+            var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
 
             var resualt =
                     await _dbContext.Products
                     .Include(x => x.Unit)
                     .Include(x=>x.ProductPeriodActives)
                     //.Include(x=>x.FactoryProducts)
-                   .Where(r => r.CR == getCR.CommercialRegister || productActive.Contains(r.Id))
+                   .Where(r => r.CR == getCR.CommercialRegister || productActive.Contains(r.Id) || productInfactory.Contains(r.Id))
                     //.Where(x=>x.ProductPeriodActives.Any(r=>r.FactoryId==search.FactoryId&&r.PeriodId==r.PeriodId))
                     .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                     new ProductResultDto
@@ -476,7 +479,25 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = result
             };
         }
+        public async Task<BaseResponse<ProductResultDto>> DeleteAsync(int id)
+        {
+            var factoryPrduct = await _dbContext.FactoryProducts.FirstOrDefaultAsync(x => x.Id == id);
+            var actualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == id);
+            var  ProductPeriodActive = await _dbContext.ProductPeriodActives.FirstOrDefaultAsync(x => x.PeriodId == factoryPrduct.PeriodId && x.FactoryId == factoryPrduct.FactoryId && x.ProductId==factoryPrduct.ProductId);
 
+             _dbContext.ActualProductionAndCapacities.Remove(actualProduct);
+             _dbContext.FactoryProducts.Remove(factoryPrduct);
+             _dbContext.ProductPeriodActives.Remove(ProductPeriodActive);
+
+
+            //  _dbContext.RawMaterials.State = EntityState.Deleted;
+            await _dbContext.SaveChangesAsync();
+
+            return new BaseResponse<ProductResultDto>
+            {
+                Data = _mapper.Map<ProductResultDto>(factoryPrduct)
+            };
+        }
         public async Task<BaseResponse<List<ProductResultDto>>> AllProductsListToRaw(ProductSearch search)
         {
 
@@ -520,7 +541,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
 
             var ExsitsProduct = await _dbContext.FactoryProducts
-                .Where(x => x.FactoryId == search.FactoryId && x.PeriodId == search.PeriodId)
+                .Where(x => x.FactoryId == search.FactoryId)//&& x.PeriodId == search.PeriodId
                 .Select(x => x.ProductId).ToListAsync();
 
 
