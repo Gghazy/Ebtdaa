@@ -55,60 +55,82 @@ namespace Ebtdaa.Application.Inspectors.Handlers
 
         public async Task<BaseResponse<InspectorResultDto>> AddAsync(InspectorRequestDto req)
         {
-            var inspector = _mapper.Map<Inspector>(req);
-            var result = await _inspectorValidator.ValidateAsync(inspector);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
+           var isFound= await _dbContext.Inspectors.FirstOrDefaultAsync(x=>x.OwnerIdentity== req.OwnerIdentity);
+            if (isFound == null)
+            {
+                var inspector = _mapper.Map<Inspector>(req);
+                var result = await _inspectorValidator.ValidateAsync(inspector);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
 
-            await _dbContext.Inspectors.AddAsync(inspector);
+                await _dbContext.Inspectors.AddAsync(inspector);
                 await _dbContext.SaveChangesAsync();
                 foreach (var item in req.FactoryIds)
-            {
-                InspectorFactory inspectorFactory = new InspectorFactory();
-                inspectorFactory.FactoryId = item;
-                inspectorFactory.InspectorId = inspector.Id;
+                {
+                    InspectorFactory inspectorFactory = new InspectorFactory();
+                    inspectorFactory.FactoryId = item;
+                    inspectorFactory.InspectorId = inspector.Id;
 
-                await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
+                    await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
 
+                }
+
+
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<InspectorResultDto>
+                {
+                    Data = _mapper.Map<InspectorResultDto>(inspector)
+                };
             }
+            else
+                return new BaseResponse<InspectorResultDto>
+                {
+                    Data = null
+                };
 
 
-            await _dbContext.SaveChangesAsync();
-                
-            return new BaseResponse<InspectorResultDto>
-            {
-                Data = _mapper.Map<InspectorResultDto>(inspector)
-            };
-            
         }
 
         public async Task<BaseResponse<InspectorResultDto>> UpdateAsync(InspectorRequestDto req)
         {
-            var getInspector = await _dbContext.Inspectors
-                                    .Include(x=>x.InspectorFactories)           
-                                    .FirstOrDefaultAsync(x => x.Id == req.Id);
-            var inspectorUpdated = _mapper.Map(req, getInspector);
-
-            // Validation
-            var result = await _inspectorValidator.ValidateAsync(inspectorUpdated);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-            await _dbContext.SaveChangesAsync();
-
-            _dbContext.InspectorFactories.RemoveRange(getInspector.InspectorFactories);
-            foreach (var item in req.FactoryIds)
+            var isFound = await _dbContext.Inspectors.FirstOrDefaultAsync(x => x.OwnerIdentity == req.OwnerIdentity &&  x.Id != req.Id);
+            if (isFound == null)
             {
-                InspectorFactory inspectorFactory = new InspectorFactory();
-                inspectorFactory.FactoryId = item;
-                inspectorFactory.InspectorId = req.Id;
+                var getInspector = await _dbContext.Inspectors
+                                    .Include(x => x.InspectorFactories)
+                                    .FirstOrDefaultAsync(x => x.Id == req.Id);
+                var inspectorUpdated = _mapper.Map(req, getInspector);
 
-                await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
+                // Validation
+                var result = await _inspectorValidator.ValidateAsync(inspectorUpdated);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+                await _dbContext.SaveChangesAsync();
+
+                _dbContext.InspectorFactories.RemoveRange(getInspector.InspectorFactories);
+                foreach (var item in req.FactoryIds)
+                {
+                    InspectorFactory inspectorFactory = new InspectorFactory();
+                    inspectorFactory.FactoryId = item;
+                    inspectorFactory.InspectorId = req.Id;
+
+                    await _dbContext.InspectorFactories.AddAsync(inspectorFactory);
+
+                }
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<InspectorResultDto>
+                {
+                    Data = _mapper.Map<InspectorResultDto>(inspectorUpdated)
+                };
+            }
+            else
+            {
+                return new BaseResponse<InspectorResultDto>
+                {
+                    Data = null
+                };
 
             }
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<InspectorResultDto>
-            {
-                Data = _mapper.Map<InspectorResultDto>(inspectorUpdated)
-            };
         }
 
         public async Task<BaseResponse<InspectorResultDto>> DeleteAsync(int id)
