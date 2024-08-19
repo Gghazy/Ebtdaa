@@ -17,6 +17,7 @@ using Ebtdaa.Domain.InspectorProductData.Entity;
 using Ebtdaa.Domain.InspectorActualProduction.Entity;
 using Ebtdaa.Domain.InspectorUpdateStatus.Entity;
 using Ebtdaa.Domain.Users;
+using Ebtdaa.Domain.SMSs;
 
 namespace Ebtdaa.Application.Common.Interfaces
 {
@@ -73,6 +74,8 @@ namespace Ebtdaa.Application.Common.Interfaces
         public DbSet<InspectProductDataAttachment> InspectProductDataAttachments { get; set; }
         public DbSet<InspectorUpdateStatuses> InspectorUpdateStatuses { get; set; }
         public DbSet<User> Users {  get; set; }
+        public DbSet<SMSGetWay> SMSGetWays {  get; set; }
+
 
     }
 }

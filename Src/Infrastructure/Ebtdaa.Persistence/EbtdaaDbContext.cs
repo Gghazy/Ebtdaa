@@ -23,6 +23,7 @@ using Ebtdaa.Domain.InspectorProductData.Entity;
 using Ebtdaa.Domain.InspectorActualProduction.Entity;
 using Ebtdaa.Domain.InspectorUpdateStatus.Entity;
 using Ebtdaa.Domain.Users;
+using Ebtdaa.Domain.SMSs;
 
 namespace Ebtdaa.Persistence
 {
@@ -101,6 +102,7 @@ namespace Ebtdaa.Persistence
         public DbSet<InspectorUpdateStatuses> InspectorUpdateStatuses { get; set; }
         public DbSet<InspectProductDataAttachment> InspectProductDataAttachments { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<SMSGetWay> SMSGetWays { get; set; }
 
 
         public Task<int> SaveChangesAsync()

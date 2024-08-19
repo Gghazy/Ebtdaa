@@ -33,5 +33,14 @@ namespace Ebtdaa.Common.Consts
         public const string Enviroment = "Enviroment";
 
         #endregion
+
+        #region SMS/Email Status
+        public const string Sent = "تم الإرسال";
+        public const string Cancled = "ملغية";
+        public const string Scheduled = "مجدولة";
+        public const string AllFactories = "جميع المصانع";
+        public const string FactoriesNotUpdated = "المصانع التي لم تستكمل التحديث فقط";
+
+        #endregion
     }
 }
