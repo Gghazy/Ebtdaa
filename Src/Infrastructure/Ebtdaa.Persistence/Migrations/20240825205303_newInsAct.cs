@@ -4,23 +4,22 @@
 
 namespace Ebtdaa.Persistence.Migrations
 {
-    public partial class newIn : Migration
+    public partial class newInsAct : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
+            migrationBuilder.RenameColumn(
                 name: "InspectAcuProductName",
                 table: "InspectActualProductions",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                newName: "InspectAcutProdName");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "InspectAcuProductName",
-                table: "InspectActualProductions");
+            migrationBuilder.RenameColumn(
+                name: "InspectAcutProdName",
+                table: "InspectActualProductions",
+                newName: "InspectAcuProductName");
         }
     }
 }

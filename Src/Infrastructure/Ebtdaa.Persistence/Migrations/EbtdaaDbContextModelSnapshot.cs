@@ -1214,7 +1214,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("IncreaseReasonId")
                         .HasColumnType("int");
 
-                    b.Property<string>("InspectAcuProductName")
+                    b.Property<string>("InspectAcutProdName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

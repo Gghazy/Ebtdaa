@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Persistence.Migrations
 {
     [DbContext(typeof(EbtdaaDbContext))]
-    [Migration("20240825172342_newIn")]
-    partial class newIn
+    [Migration("20240825205303_newInsAct")]
+    partial class newInsAct
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -1216,7 +1216,7 @@ namespace Ebtdaa.Persistence.Migrations
                     b.Property<int>("IncreaseReasonId")
                         .HasColumnType("int");
 
-                    b.Property<string>("InspectAcuProductName")
+                    b.Property<string>("InspectAcutProdName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -2222,6 +2222,60 @@ namespace Ebtdaa.Persistence.Migrations
                     b.HasIndex("PeriodId");
 
                     b.ToTable("ScreenStatuses");
+                });
+
+            modelBuilder.Entity("Ebtdaa.Domain.SMSs.SMSGetWay", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"), 1L, 1);
+
+                    b.Property<bool>("AllFactories")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Attachment")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Content")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("SendDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SendStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SendTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("smalldatetime");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("SMSGetWays");
                 });
 
             modelBuilder.Entity("Ebtdaa.Domain.Users.User", b =>

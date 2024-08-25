@@ -19,7 +19,7 @@ namespace Ebtdaa.Application.InspectionActualProduction.Mapper
            
             CreateMap<InspectActualProductionReqDto, InspectActualProduction>();
             CreateMap<InspectActualProduction, InspectActualProductionResultDto>()
-                                                 .ForMember(d => d.InspectAcuProductName, opt => opt.MapFrom(src => src.InspectAcuProductName));
+                                                 .ForMember(d => d.InspectAcuProductName, opt => opt.MapFrom(src => src.InspectAcutProdName));
                          
             CreateMap<FactoryProduct, InspectActualProductionResultDto>();
                                

@@ -45,7 +45,7 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
                               FactoryId = x.FactoryId,
                               PeriodId = x.PeriodId,
                               FactoryProductId = x.FactoryProductId,
-                              InspectAcuProductName = x.InspectAcuProductName,
+                              InspectAcuProductName = x.InspectAcutProdName,
                               IsActualProductionCorrect = x.IsActualProductionCorrect,
                               IsDesignedCapacityCorrect = x.IsDesignedCapacityCorrect,
                               CorrectActualProduction = x.CorrectActualProduction??0,
