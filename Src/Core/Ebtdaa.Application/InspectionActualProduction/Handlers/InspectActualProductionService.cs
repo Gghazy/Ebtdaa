@@ -32,7 +32,33 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
                           .Include(x => x.FactoryProduct)
                           .ThenInclude(x=>x.Product)
                           .Where(i => i.FactoryId == factoryId
-                                          && i.PeriodId == periodId && i.CreatedBy==OwnerIdentity).ToListAsync();
+                                          && i.PeriodId == periodId && i.CreatedBy==OwnerIdentity)
+                          .Select(x => new InspectActualProductionResultDto()
+                          {
+                              Id=x.Id,
+                              ActualProductionUintId = x.ActualProductionUintId ,
+                              ActualProduction = x.ActualProduction ?? 0,
+                              DesignedCapacity = x.DesignedCapacity ?? 0,
+                              DesignedCapacityUnitId = x.DesignedCapacityUnitId ,
+                              ActualProductionUintName = x.ActualProductionUint.Name,
+                              DesignedCapacityUnitName = x.DesignedCapacityUnit.Name,
+                              FactoryId = x.FactoryId,
+                              PeriodId = x.PeriodId,
+                              FactoryProductId = x.FactoryProductId,
+                              InspectAcuProductName = x.InspectAcuProductName,
+                              IsActualProductionCorrect = x.IsActualProductionCorrect,
+                              IsDesignedCapacityCorrect = x.IsDesignedCapacityCorrect,
+                              CorrectActualProduction = x.CorrectActualProduction??0,
+                              CorrectDesignedCapacity = x.CorrectDesignedCapacity??0,
+                              IsIncreaseReasonCorrect = x.IsIncreaseReasonCorrect,
+                              IncreaseReasonCorrect = x.IncreaseReasonCorrect ?? 0,
+                              IncreaseReasonId =x.IncreaseReasonId,
+                              ActualProductionWeight = x.ActualProductionWeight ?? 0,
+                              IncreaseReason = "",
+                              Comments = x.Comments,
+                          })
+                    
+                          .ToListAsync();
           
         
 
@@ -47,10 +73,12 @@ namespace Ebtdaa.Application.InspectionActualProduction.Handlers
                         ActualProduction = x.ActualProduction ?? 0,
                         DesignedCapacity = x.DesignedCapacity ?? 0,
                         DesignedCapacityUnitId = x.DesignedCapacityUnitId ?? 0,
+                        ActualProductionUintName = x.ActualProductionUint.Name,
+                        DesignedCapacityUnitName = x.DesignedCapacityUnit.Name,
                         FactoryId = factoryId,
                         PeriodId = periodId,
                         FactoryProductId = x.FactoryProductId,
-                        ProductName = x.FactoryProduct.Product.ProductName,
+                        InspectAcuProductName = x.AcuProductName,
                         IsActualProductionCorrect=true,
                         IsDesignedCapacityCorrect=true,
                         CorrectActualProduction=0,

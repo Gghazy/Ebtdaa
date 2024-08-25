@@ -27,20 +27,42 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
         public async  Task<BaseResponse<List<InspectProductsResultDto>>> GetProducts(int factoryId, int periodId , string ownerIdentity)
         {
             var getInspectData = await _dbContext.InspectProductPhotos
-                .Include(x => x.Product).Where(i => i.FactoryId == factoryId 
-                                && i.PeriodId == periodId && i.CreatedBy == ownerIdentity).ToListAsync();
+                .Include(x => x.Product)
+                .ThenInclude(x => x.Unit)
+                .Where(i => i.FactoryId == factoryId 
+                                && i.PeriodId == periodId && i.CreatedBy == ownerIdentity)
+                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code,
+                   (a, b) => new InspectProductsResultDto()
+                   {
+                       Id= a.Id,
+                       FactoryId = a.FactoryId,
+                       PeriodId = a.PeriodId,
+                       ProductId = a.ProductId,
+                       PhotoId = a.PhotoId ,
+                       PaperId = a.PaperId,
+                       ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                       IsProductPhotoCorrect = a.IsProductPhotoCorrect,
+                       Comments = a.Comments,
+                       NewProductPhotoId = a.NewProductPhotoId,
+                       NewProductPaperId = a.NewProductPaperId,
+                   })
+                   .ToListAsync();
             if (getInspectData.Count == 0)
             {
                 var result = await _dbContext.FactoryProducts
-                    .Include(x => x.Product).Where(x => x.FactoryId == factoryId && x.PeriodId==periodId)
-                    .Select(x=> new InspectProductsResultDto()
+                    .Include(x => x.Product)
+                     .ThenInclude(x => x.Unit)
+                     .Where(x => x.FactoryId == factoryId && x.PeriodId==periodId)
+                   .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code,
+                   (a, b) =>new InspectProductsResultDto()
                     {
-                        FactoryId = x.FactoryId,
-                        PeriodId=x.PeriodId,
-                        ProductId = x.ProductId,
-                        PhotoId = x.PhototId ?? 0,
-                        PaperId = x.PeperId ?? 0,
-                        ProductName = x.Product.ProductName+ x.Product.Level12Number,
+                        
+                        FactoryId = a.FactoryId,
+                        PeriodId=a.PeriodId,
+                        ProductId = a.ProductId,
+                        PhotoId = a.PhototId ?? 0,
+                        PaperId = a.PeperId ?? 0,
+                        ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
                         IsProductPhotoCorrect = true,
                         Comments = "",
                         NewProductPhotoId = 0,
@@ -73,6 +95,7 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
 
         public async Task<BaseResponse<bool>> AddAsync(InspectProductsRequestDto request)
         {
+            var IfFound = await _dbContext.InspectProductPhotos.FirstOrDefaultAsync(x => x.Id == request.Id);
             if (request.NewProductPhotoId <= 0)
                 request.NewProductPhotoId = null;
             if (request.NewProductPaperId <= 0)
@@ -88,9 +111,12 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             factoryProduct.NewProductPhotoId = request.NewProductPhotoId;
             factoryProduct.NewProductPaperId = request.NewProductPaperId;
             factoryProduct.PeriodId = request.PeriodId;
+            if (IfFound == null) {
+                await _dbContext.InspectProductPhotos.AddAsync(factoryProduct);
 
-            
-            await _dbContext.InspectProductPhotos.AddAsync(factoryProduct);
+            }
+          
+
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<bool>
             {
