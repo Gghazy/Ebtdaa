@@ -13,7 +13,7 @@ namespace Ebtdaa.Application.InspectionActualProduction.Dtos
         public string DesignedCapacityUnitName { get; set; }
         public string ActualProductionUintName { get; set; }
         
-        public string InspectAcuProductName { get; set; }
+        public string InspectAcutProdName { get; set; }
         public decimal DesignedCapacity { get; set; }
         public double ActualProduction { get; set; }
         public int DesignedCapacityUnitId { get; set; }
