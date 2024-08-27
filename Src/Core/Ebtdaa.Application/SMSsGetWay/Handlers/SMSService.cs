@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
-using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Application.SMSsGetWay.Dtos;
 using Ebtdaa.Application.SMSsGetWay.Interfaces;
 using Ebtdaa.Common.Consts;
