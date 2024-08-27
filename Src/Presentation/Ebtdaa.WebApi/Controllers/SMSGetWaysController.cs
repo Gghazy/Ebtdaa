@@ -31,7 +31,7 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(_SmsService.CancelSendSMS(Id));  
         }
-        [HttpGet]
+        [HttpGet("CreateSMS")]
         public IActionResult CreateSMS(SMSGetWayRequestDto req) 
         {
             req.SendTime = "10:00 AM";

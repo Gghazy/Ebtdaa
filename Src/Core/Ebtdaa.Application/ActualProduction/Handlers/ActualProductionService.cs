@@ -60,7 +60,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                         .ThenInclude(x => x.ActualProductionUint)
                         .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code, (a, b) => 
                         new ProductCapacityResultDto
-                        {
+                        { 
                             Level12ItemName= b.Hs12NameAr,
                             Level12Number = b.Hs12Code,
                             Kilograms_Per_Unit = a.Product.Kilograms_Per_Unit,

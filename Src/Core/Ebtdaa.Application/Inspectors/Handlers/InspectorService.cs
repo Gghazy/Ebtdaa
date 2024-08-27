@@ -173,6 +173,8 @@ namespace Ebtdaa.Application.Inspectors.Handlers
 
             var result = await _dbContext.InspectorFactories
                  .Include(x => x.Factories)
+                 .ThenInclude(x => x.FactoryLocations)
+                 .ThenInclude(x => x.City)
                  .Where(x => x.Inspector.OwnerIdentity == InspectorId)
                  .Select(x => new InspectorFactoriesResultDto
                  {
@@ -180,7 +182,7 @@ namespace Ebtdaa.Application.Inspectors.Handlers
                      FactoryId = x.FactoryId,
                      FactoryName = x.Factories.NameAr,
                      CommerialNumber = x.Factories.CommercialRegister,
-                     CityName = x.Factories.City,
+                     CityName = x.Factories.FactoryLocations.Any() ? x.Factories.FactoryLocations.FirstOrDefault().City.NameAr : "",
                      Email = x.Factories.Email,
                      Address= x.Factories.Address,
                      MobileNumber=x.Factories.MobileNumber,

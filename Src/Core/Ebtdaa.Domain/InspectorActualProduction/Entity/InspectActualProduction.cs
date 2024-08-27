@@ -32,7 +32,10 @@ namespace Ebtdaa.Domain.InspectorActualProduction.Entity
         public string Comments { get; set; }
         public int PeriodId { get; set; }
         public int FactoryId {  get; set; }
+        public string InspectAcutProdName { get; set; }
+         
 
+        
         //public virtual Factory Factory {  get; set; }
         public virtual Unit DesignedCapacityUnit { get; set; }
         public virtual Unit ActualProductionUint { get; set; }

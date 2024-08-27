@@ -77,6 +77,7 @@ namespace Ebtdaa.Application.InspectorRawMaterials.Handlers
                     .Where(x => x.FactoryId == factoryId && x.PeriodId==periodId)
                     .Select(x => new InspectorRawMaterialResultDto()
                     {
+                       
                         FactoryId = factoryId,
                         PeriodId = periodId,
                         RawMaterialId = x.Id,
