@@ -178,6 +178,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 if (result.IsValid == false) throw new ValidationException(result.Errors);
 
                 await _dbContext.SaveChangesAsync();
+                if(rawMaterial!=null)
                 _dbContext.ProductRawMaterials.RemoveRange(rawMaterial.ProductRawMaterials);
                 foreach (var item in req.FactoryProductId)
                 {
@@ -195,13 +196,15 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
                 var actualRawMaterial = await _dbContext.ActualRawMaterials
                                             .FirstOrDefaultAsync(x => x.RawMaterialId== req.Id);
-                actualRawMaterial.CurrentStockQuantity_KG =
-                   (actualRawMaterial.CurrentStockQuantity *(double) req.AverageWeightKG);
+                if (actualRawMaterial != null)
+                {
+                    actualRawMaterial.CurrentStockQuantity_KG =
+                       (actualRawMaterial.CurrentStockQuantity * (double)req.AverageWeightKG);
 
-                actualRawMaterial.UsedQuantity_KG =
-                   (actualRawMaterial.UsedQuantity * (double)req.AverageWeightKG);
+                    actualRawMaterial.UsedQuantity_KG =
+                       (actualRawMaterial.UsedQuantity * (double)req.AverageWeightKG);
 
-
+                }
                 await _dbContext.SaveChangesAsync();
 
                 return new BaseResponse<RawMaterialResultDto>
@@ -237,10 +240,12 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         public async Task<BaseResponse<RawMaterialResultDto>> DeleteAsync(int id)
         {
             var material = await _dbContext.RawMaterials.FirstOrDefaultAsync(x => x.Id == id);
-            var actualRawmaterial = await _dbContext.ActualRawMaterials.FirstOrDefaultAsync(x => x.RawMaterialId == id);
+          
+                var actualRawmaterial = await _dbContext.ActualRawMaterials.FirstOrDefaultAsync(x => x.RawMaterialId == id);
+            if (actualRawmaterial!=null)
+                 _dbContext.ActualRawMaterials.Remove(actualRawmaterial);
 
-            var ar = _dbContext.ActualRawMaterials.Remove(actualRawmaterial);
-            var r = _dbContext.RawMaterials.Remove(material);
+            _dbContext.RawMaterials.Remove(material);
 
 
             //  _dbContext.RawMaterials.State = EntityState.Deleted;

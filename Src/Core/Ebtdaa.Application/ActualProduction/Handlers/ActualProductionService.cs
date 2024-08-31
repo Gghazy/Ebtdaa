@@ -182,6 +182,8 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                                        .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
                                        .Where(x => factoryProducts.Contains(x.ProductId))
                                        .ToListAsync();
+            if(resultFP!=null)
+                _dbContext.FactoryProducts.RemoveRange(resultFP);
 
 
 
@@ -190,9 +192,8 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
                                       .Where(x => factoryProducts.Contains(x.FactoryProductId))
                                       .ToListAsync();
 
-
-            _dbContext.FactoryProducts.RemoveRange(resultFP);
-            _dbContext.ActualProductionAndCapacities.RemoveRange(result);
+            if(result!=null)
+                _dbContext.ActualProductionAndCapacities.RemoveRange(result);
 
 
 
