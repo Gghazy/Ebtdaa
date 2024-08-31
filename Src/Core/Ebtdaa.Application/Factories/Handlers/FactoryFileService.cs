@@ -101,10 +101,10 @@ namespace Ebtdaa.Application.Factories.Handlers
         public async Task<BaseResponse<FactoryFileResultDto>> DeleteAsync(int id)
         {
             var factoryFile = await _dbContext.FactoryFiles.FindAsync(id);
-            var attachfile = await _dbContext.Attachments.FindAsync(factoryFile.AttachmentId);
+          //  var attachfile = await _dbContext.Attachments.FindAsync(factoryFile.AttachmentId);
           
             _dbContext.FactoryFiles.Remove(factoryFile);
-            _dbContext.Attachments.Remove(attachfile);
+          //  _dbContext.Attachments.Remove(attachfile);
 
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<FactoryFileResultDto>

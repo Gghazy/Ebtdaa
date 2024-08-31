@@ -73,15 +73,17 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
         public async Task<BaseResponse<InspectFactoryFlieResultDto>> DeleteAsync(int id)
         {
             var factoryFile = await _dbContext.InspectFactoryFiles.FindAsync(id);
-           
-            var attachfile = await _dbContext.Attachments.FindAsync(factoryFile.AttachmentId);
+
+            if (factoryFile != null)
+            {
+              //  var attachfile = await _dbContext.Attachments.FindAsync(factoryFile.AttachmentId);
 
 
 
 
-            _dbContext.InspectFactoryFiles.Remove(factoryFile);
-            _dbContext.Attachments.Remove(attachfile);
-
+                _dbContext.InspectFactoryFiles.Remove(factoryFile);
+               // _dbContext.Attachments.Remove(attachfile);
+            }
 
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<InspectFactoryFlieResultDto>
