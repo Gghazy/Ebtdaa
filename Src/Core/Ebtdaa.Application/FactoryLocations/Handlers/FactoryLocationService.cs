@@ -100,29 +100,49 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
 
                 return new BaseResponse<FactoryLocationResultDto>
                 {
-                    Data = _mapper.Map<FactoryLocationResultDto>(factoryLocation)
+                    Data = _mapper.Map<FactoryLocationResultDto>(factoryLocation),
+                    IsSuccess = true,
                 };
             }
-            catch(Exception ex) 
+            catch (Exception ex)
             {
-                throw;
+                return new BaseResponse<FactoryLocationResultDto>
+                {
+                    Data = new FactoryLocationResultDto(),
+                    IsSuccess = false
+                };
+
             }
+        
         }
         public async Task<BaseResponse<FactoryLocationResultDto>> UpdateAsync(FactoryLocationRequestDto req)
         {
-            var factoryLocation = await _dbContext.FactoryLocations.FirstOrDefaultAsync(x => x.Id == req.Id);
-            var factoryLocationUpdated = _mapper.Map(req, factoryLocation);
-
-            // Validation
-            var result = await _validator.ValidateAsync(factoryLocationUpdated);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<FactoryLocationResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryLocationResultDto>(factoryLocationUpdated)
-            };
+                var factoryLocation = await _dbContext.FactoryLocations.FirstOrDefaultAsync(x => x.Id == req.Id);
+                var factoryLocationUpdated = _mapper.Map(req, factoryLocation);
+
+                // Validation
+                var result = await _validator.ValidateAsync(factoryLocationUpdated);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<FactoryLocationResultDto>
+                {
+                    Data = _mapper.Map<FactoryLocationResultDto>(factoryLocationUpdated),
+                    IsSuccess = true
+                };
+            }
+            catch(Exception ex)
+            {
+                return new BaseResponse<FactoryLocationResultDto>
+                {
+                    Data = new FactoryLocationResultDto(),
+                    IsSuccess = false
+                };
+
+            }
         }
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {

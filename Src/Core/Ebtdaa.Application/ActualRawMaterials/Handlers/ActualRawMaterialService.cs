@@ -4,9 +4,13 @@ using Ebtdaa.Application.ActualRawMaterials.Interfaces;
 using Ebtdaa.Application.ActualRawMaterials.Validation;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Common.Dtos;
 using Ebtdaa.Common.Extentions;
 using Ebtdaa.Domain.ActualRawMaterials.Entity;
+using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.Periods;
+using Ebtdaa.Domain.RawMaterials.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 
@@ -27,18 +31,21 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             _actualRawFileService = actualRawFileService;
         }
 
-        public async Task<BaseResponse<QueryResult<ActualRawMaterialResultDto>>> GetAll(ActualRawMaterialSearch search)
+        public async Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetAll(ActualRawMaterialSearch search)
         {
-            var respose = _mapper.Map<QueryResult<ActualRawMaterialResultDto>>(
-                           await _dbContext.ActualRawMaterials
-                           .Where(x=>x.RawMaterial.FactoryId== search.FactoryId &&
+            var respose = await _dbContext.ActualRawMaterials
+                           .Include(x => x.RawMaterial)
+                           .Where(x => x.RawMaterial.FactoryId == search.FactoryId &&
                            x.PeriodId == search.PeriodId)
-                             .Include(x => x.RawMaterial)
-                          .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true));
-               
-            return new BaseResponse<QueryResult<ActualRawMaterialResultDto>>
+            .ToListAsync();
+
+
+           var  AcurawMaterialsList = _mapper.Map<List<ActualRawMaterialResultDto>>(respose);
+
+
+            return new BaseResponse<List<ActualRawMaterialResultDto>>
             {
-                Data = respose
+                Data = AcurawMaterialsList
             };
            
         }
@@ -57,11 +64,12 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
 
         public async Task<BaseResponse<ActualRawMaterialResultDto>> AddAsync(ActualRawMaterialRequestDto req)
         {
+
             try
             {
 
-          
-            ActualRawMaterial actualRawMaterial = _mapper.Map<ActualRawMaterial>(req);
+
+                ActualRawMaterial actualRawMaterial = _mapper.Map<ActualRawMaterial>(req);
             var result = await _actualRawMaterialValidator.ValidateAsync(actualRawMaterial);
             if (result.IsValid == false) throw new ValidationException(result.Errors);
 
@@ -70,22 +78,28 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<ActualRawMaterialResultDto>
             {
-                Data = _mapper.Map<ActualRawMaterialResultDto>(actualRawMaterial)
+                Data = _mapper.Map<ActualRawMaterialResultDto>(actualRawMaterial),
+                IsSuccess= true
             };
             }
             catch (Exception)
             {
 
-                throw;
+                return new BaseResponse<ActualRawMaterialResultDto>
+                {
+                    Data = new ActualRawMaterialResultDto(),
+                    IsSuccess = false
+                };
             }
         }
         public async Task<BaseResponse<ActualRawMaterialResultDto>> UpdateAsync(ActualRawMaterialRequestDto req)
         {
+
             try
             {
 
-            
-            var actualRawMaterial = await _dbContext.ActualRawMaterials.FirstOrDefaultAsync(x => x.Id == req.Id);
+
+                var actualRawMaterial = await _dbContext.ActualRawMaterials.FirstOrDefaultAsync(x => x.Id == req.Id);
             var actualRawMaterialUpdated = _mapper.Map(req, actualRawMaterial);
 
             // Validation
@@ -96,13 +110,19 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
 
             return new BaseResponse<ActualRawMaterialResultDto>
             {
-                Data = _mapper.Map<ActualRawMaterialResultDto>(actualRawMaterialUpdated)
+                Data = _mapper.Map<ActualRawMaterialResultDto>(actualRawMaterialUpdated),
+                IsSuccess=true
+                
             };
             }
             catch (Exception)
             {
 
-                throw;
+                return new BaseResponse<ActualRawMaterialResultDto>
+                {
+                    Data = new ActualRawMaterialResultDto(),
+                    IsSuccess = false
+                };
             }
         }
 

@@ -14,6 +14,7 @@ using Ebtdaa.Domain.ActualProduction.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Ebtdaa.Application.ActualProduction.Handlers
 {
@@ -25,9 +26,8 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
         private readonly IActualProductionAttachService _actualProductionAttachService;
         private readonly IIncreaseActualProductionService _increaseActualProductionService;
         private readonly IScreenStatusService _screenStatusService;
-
-
-        public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper, ActualProductionValidator actualProductionValidator, IActualProductionAttachService actualProductionAttachService, IIncreaseActualProductionService increaseActualProductionService, IScreenStatusService screenStatusService)
+      //  private readonly ILogger<ActualProductionService> _logger;
+        public ActualProductionService(IEbtdaaDbContext dbContext, IMapper mapper, ILogger<ActualProductionService> logger, ActualProductionValidator actualProductionValidator, IActualProductionAttachService actualProductionAttachService, IIncreaseActualProductionService increaseActualProductionService, IScreenStatusService screenStatusService)
         {
             _dbContext = dbContext;
             _mapper = mapper;
@@ -35,6 +35,7 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
             _actualProductionAttachService = actualProductionAttachService;
             _increaseActualProductionService = increaseActualProductionService;
             _screenStatusService = screenStatusService;
+          //  _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
         public async Task<BaseResponse<QueryResult<ProductCapacityResultDto>>>  GetAll(ActualProductionSearch search)
@@ -140,40 +141,73 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
 
         public async Task<BaseResponse<ActualProductionResultDto>> AddAsync(ActualProductionRequestDto request)
         {
-            var actualProduction = _mapper.Map<ActualProductionAndCapacity>(request);
 
-            var result = await _actualProductionValidator.ValidateAsync(actualProduction);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-
-            await _dbContext.ActualProductionAndCapacities.AddAsync(actualProduction);
-            await _dbContext.SaveChangesAsync();
-            
-            return new BaseResponse<ActualProductionResultDto>
+            try
             {
-                Data = _mapper.Map<ActualProductionResultDto>(actualProduction)
-            };
+                var actualProduction = _mapper.Map<ActualProductionAndCapacity>(request);
+                var result = await _actualProductionValidator.ValidateAsync(actualProduction);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+
+                await _dbContext.ActualProductionAndCapacities.AddAsync(actualProduction);
+                await _dbContext.SaveChangesAsync();
+                return new BaseResponse<ActualProductionResultDto>
+                {
+                    Data = _mapper.Map<ActualProductionResultDto>(actualProduction),
+                    IsSuccess = true,
+
+
+                };
+            }
+            catch (Exception ex)
+            {
+               
+                return new BaseResponse<ActualProductionResultDto>
+                {
+                    Data =new ActualProductionResultDto(),
+                    IsSuccess = false,
+
+
+                };
+
+            }
+           
         }
 
         public async Task<BaseResponse<ActualProductionResultDto>> UpdateAsync (ActualProductionRequestDto request)
         {
-            var getActualproduction = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(a => a.Id == request.Id);
-
-            var actualproductionUpdated = _mapper.Map(request , getActualproduction);
-
-             actualproductionUpdated.ActualProductionWeight=
-            (int?)(request.ActualProduction * (getActualproduction.AcuKilograms_Per_Unit != null? getActualproduction.AcuKilograms_Per_Unit : 0));
-
-             var result = await _actualProductionValidator.ValidateAsync(actualproductionUpdated);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.SaveChangesAsync();
-           
-
-            return new BaseResponse<ActualProductionResultDto>
+            try
             {
-                Data = _mapper.Map<ActualProductionResultDto>(actualproductionUpdated)
-            };
+                var getActualproduction = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(a => a.Id == request.Id);
+                var actualproductionUpdated = _mapper.Map(request, getActualproduction);
+
+
+                actualproductionUpdated.ActualProductionWeight =
+               (int?)(request.ActualProduction * (getActualproduction.AcuKilograms_Per_Unit != null ? getActualproduction.AcuKilograms_Per_Unit : 0));
+
+                var result = await _actualProductionValidator.ValidateAsync(actualproductionUpdated);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.SaveChangesAsync();
+              //  _logger.LogInformation( "Acutal Production Data Updated");
+
+                return new BaseResponse<ActualProductionResultDto>
+                {
+                    Data = _mapper.Map<ActualProductionResultDto>(actualproductionUpdated),
+                    IsSuccess = true,
+                };
+
+            }
+            catch (Exception ex)
+            {
+             //   _logger.LogError(ex, "An error occured during update Acutal Production Data");
+                return new BaseResponse<ActualProductionResultDto>
+                {
+                    Data = new ActualProductionResultDto(),
+                    IsSuccess = false,
+                };
+            }
+           
         }
         public async Task<BaseResponse<bool>> Delete(int factoryId, int periodId,List<int> factoryProducts)
         {

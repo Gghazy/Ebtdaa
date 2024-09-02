@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
+using Ebtdaa.Application.FactoryFinancials.Dtos;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Dtos;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Interfaces;
 using Ebtdaa.Application.FactoryMonthlyFinancials.Validation;
@@ -39,6 +40,7 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Handlers
         }
         public async Task<BaseResponse<FactoryMonthlyFinancialResultDto>> AddAsync(FactoryMonthlyFinancialRequestDto req)
         {
+            try { 
             var factoryFinancial = _mapper.Map<FactoryMonthlyFinancial>(req);
 
             // Validation
@@ -52,28 +54,54 @@ namespace Ebtdaa.Application.FactoryMonthlyFinancials.Handlers
 
             return new BaseResponse<FactoryMonthlyFinancialResultDto>
             {
-                Data = _mapper.Map<FactoryMonthlyFinancialResultDto>(factoryFinancial)
+                Data = _mapper.Map<FactoryMonthlyFinancialResultDto>(factoryFinancial),
+                IsSuccess=true
             };
+            }
+            catch (Exception ex)
+            {
+
+                return new BaseResponse<FactoryMonthlyFinancialResultDto>
+                {
+                    Data = new FactoryMonthlyFinancialResultDto(),
+                    IsSuccess = false
+                };
+            }
         }
 
 
 
         public async Task<BaseResponse<FactoryMonthlyFinancialResultDto>> UpdateAsync(FactoryMonthlyFinancialRequestDto req)
         {
-            var factoryFinancial = await _dbContext.FactoryMonthlyFinancials.FirstOrDefaultAsync(x => x.Id == req.Id);
-            var factoryFinancialUpdated = _mapper.Map(req, factoryFinancial);
-
-            // Validation
-            var result = await _validator.ValidateAsync(factoryFinancialUpdated);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.SaveChangesAsync();
-
-
-            return new BaseResponse<FactoryMonthlyFinancialResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryMonthlyFinancialResultDto>(factoryFinancialUpdated)
-            };
+                var factoryFinancial = await _dbContext.FactoryMonthlyFinancials.FirstOrDefaultAsync(x => x.Id == req.Id);
+                var factoryFinancialUpdated = _mapper.Map(req, factoryFinancial);
+
+                // Validation
+                var result = await _validator.ValidateAsync(factoryFinancialUpdated);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.SaveChangesAsync();
+
+
+                return new BaseResponse<FactoryMonthlyFinancialResultDto>
+                {
+                    Data = _mapper.Map<FactoryMonthlyFinancialResultDto>(factoryFinancialUpdated),
+                    IsSuccess = true
+
+                };
+            }
+            catch (Exception ex)
+            {
+                
+                return new BaseResponse<FactoryMonthlyFinancialResultDto>
+                {
+                    Data = new FactoryMonthlyFinancialResultDto(),
+                    IsSuccess = false
+                };
+            }
+        
         }
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {

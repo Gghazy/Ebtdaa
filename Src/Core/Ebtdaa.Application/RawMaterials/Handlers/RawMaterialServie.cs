@@ -40,6 +40,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
         }
         public async Task<BaseResponse<RawMaterialResultDto>> AddAsync(RawMaterialRequestDto req)
         {
+
             try
             {
 
@@ -99,13 +100,19 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
                 return new BaseResponse<RawMaterialResultDto>
                 {
-                    Data = _mapper.Map<RawMaterialResultDto>(rawMaterial)
+                    Data = _mapper.Map<RawMaterialResultDto>(rawMaterial),
+                    IsSuccess = true
+
                 };
             }
             catch (Exception ex)
             {
-
-                throw;
+               
+                return new BaseResponse<RawMaterialResultDto>
+                {
+                    Data = new RawMaterialResultDto(),
+                    IsSuccess = false
+                };
             }
         }
 
@@ -164,6 +171,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
         public async Task<BaseResponse<RawMaterialResultDto>> UpdateAsync(RawMaterialRequestDto req)
         {
+            
 
             try
             {
@@ -209,13 +217,18 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
                 return new BaseResponse<RawMaterialResultDto>
                 {
-                    Data = _mapper.Map<RawMaterialResultDto>(rawMaterialUpdated)
+                    Data = _mapper.Map<RawMaterialResultDto>(rawMaterialUpdated),
+                    IsSuccess = true
                 };
             }
             catch (Exception)
             {
-
-                throw;
+                
+                return new BaseResponse<RawMaterialResultDto>
+                {
+                    Data = new RawMaterialResultDto(),
+                    IsSuccess = false
+                };
             }
 
         }
@@ -239,22 +252,35 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
         public async Task<BaseResponse<RawMaterialResultDto>> DeleteAsync(int id)
         {
-            var material = await _dbContext.RawMaterials.FirstOrDefaultAsync(x => x.Id == id);
-          
-                var actualRawmaterial = await _dbContext.ActualRawMaterials.FirstOrDefaultAsync(x => x.RawMaterialId == id);
-            if (actualRawmaterial!=null)
-                 _dbContext.ActualRawMaterials.Remove(actualRawmaterial);
-
-            _dbContext.RawMaterials.Remove(material);
-
-
-            //  _dbContext.RawMaterials.State = EntityState.Deleted;
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<RawMaterialResultDto>
+            try
             {
-                Data = _mapper.Map<RawMaterialResultDto>(material)
-            };
+                var material = await _dbContext.RawMaterials.FirstOrDefaultAsync(x => x.Id == id);
+
+                var actualRawmaterial = await _dbContext.ActualRawMaterials.FirstOrDefaultAsync(x => x.RawMaterialId == id);
+                if (actualRawmaterial != null)
+                    _dbContext.ActualRawMaterials.Remove(actualRawmaterial);
+
+                _dbContext.RawMaterials.Remove(material);
+
+
+                //  _dbContext.RawMaterials.State = EntityState.Deleted;
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<RawMaterialResultDto>
+                {
+                    Data = _mapper.Map<RawMaterialResultDto>(material),
+                    IsSuccess = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<RawMaterialResultDto>
+                {
+                    Data = new RawMaterialResultDto(),
+                    IsSuccess = false
+                };
+
+            }
         }
         public async Task<List<RawMaterialResultDto>> addAcutalRawMaterial(int periodId, int factoryId)
         {

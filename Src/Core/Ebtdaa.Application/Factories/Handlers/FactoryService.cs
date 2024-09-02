@@ -148,6 +148,7 @@ namespace Ebtdaa.Application.Factories.Handlers
 
         public async Task<BaseResponse<bool>> UpdateAsync(FactoryRequestDto req)
         {
+
             try
             {
                 var isCheckExist = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == req.FactoryId);
@@ -251,14 +252,19 @@ namespace Ebtdaa.Application.Factories.Handlers
            
             return new BaseResponse<bool>
             {
-                Data =true
+                Data =true,
+                IsSuccess = true
             };
 
             }
             catch (Exception ex)
             {
 
-                throw ex;
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false
+                };
             }
         }
 

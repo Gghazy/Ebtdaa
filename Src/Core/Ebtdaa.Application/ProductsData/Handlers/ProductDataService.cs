@@ -481,22 +481,34 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         }
         public async Task<BaseResponse<ProductResultDto>> DeleteAsync(int id)
         {
-            var factoryPrduct = await _dbContext.FactoryProducts.FirstOrDefaultAsync(x => x.Id == id);
-            var actualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == id);
-            var  ProductPeriodActive = await _dbContext.ProductPeriodActives.FirstOrDefaultAsync(x => x.PeriodId == factoryPrduct.PeriodId && x.FactoryId == factoryPrduct.FactoryId && x.ProductId==factoryPrduct.ProductId);
-
-             _dbContext.ActualProductionAndCapacities.Remove(actualProduct);
-             _dbContext.FactoryProducts.Remove(factoryPrduct);
-             _dbContext.ProductPeriodActives.Remove(ProductPeriodActive);
-
-
-            //  _dbContext.RawMaterials.State = EntityState.Deleted;
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<ProductResultDto>
+            try
             {
-                Data = _mapper.Map<ProductResultDto>(factoryPrduct)
-            };
+                var factoryPrduct = await _dbContext.FactoryProducts.FirstOrDefaultAsync(x => x.Id == id);
+                var actualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == id);
+                var ProductPeriodActive = await _dbContext.ProductPeriodActives.FirstOrDefaultAsync(x => x.PeriodId == factoryPrduct.PeriodId && x.FactoryId == factoryPrduct.FactoryId && x.ProductId == factoryPrduct.ProductId);
+
+                _dbContext.ActualProductionAndCapacities.Remove(actualProduct);
+                _dbContext.FactoryProducts.Remove(factoryPrduct);
+                _dbContext.ProductPeriodActives.Remove(ProductPeriodActive);
+
+
+                //  _dbContext.RawMaterials.State = EntityState.Deleted;
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<ProductResultDto>
+                {
+                    Data = _mapper.Map<ProductResultDto>(factoryPrduct),
+                    IsSuccess = true
+                };
+            }
+            catch   (Exception ex)
+            {
+                return new BaseResponse<ProductResultDto>
+                {
+                    Data = new ProductResultDto(),
+                    IsSuccess = false
+                };
+            }
         }
         public async Task<BaseResponse<List<ProductResultDto>>> AllProductsListToRaw(ProductSearch search)
         {
@@ -774,12 +786,17 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
                 return new BaseResponse<bool>
                 {
-                    Data = true
+                    Data = true,
+                    IsSuccess=  true,
                 };
             }
             catch (Exception ex) 
             {
-                throw ex;
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false,
+                };
             }
            
          
@@ -812,26 +829,26 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             await _dbContext.SaveChangesAsync();
         }
         public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
-{
-    try
-    {
-        var factoryProduct = await _dbContext.FactoryProducts.Include("Product").FirstOrDefaultAsync(x => x.Id == req.Id);
-
-        if (factoryProduct != null)
         {
-            factoryProduct.CommericalName = req.CommericalName;
-            if (req.PhototId != null)
+            try
             {
-                if (req.PhototId > 0)
-                    factoryProduct.PhototId = req.PhototId;
-            }
-            if (req.PeperId != null)
-            {
-                if (req.PeperId > 0)
-                    factoryProduct.PeperId = req.PeperId;
-            }
-           var ActualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == req.Id);
-           ActualProduct.AcuKilograms_Per_Unit = (double) req.Kilograms_Per_Unit;
+                var factoryProduct = await _dbContext.FactoryProducts.Include("Product").FirstOrDefaultAsync(x => x.Id == req.Id);
+
+                if (factoryProduct != null)
+                {
+                    factoryProduct.CommericalName = req.CommericalName;
+                    if (req.PhototId != null)
+                    {
+                        if (req.PhototId > 0)
+                            factoryProduct.PhototId = req.PhototId;
+                    }
+                    if (req.PeperId != null)
+                    {
+                        if (req.PeperId > 0)
+                            factoryProduct.PeperId = req.PeperId;
+                    }
+                    var ActualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == req.Id);
+                    ActualProduct.AcuKilograms_Per_Unit = (double)req.Kilograms_Per_Unit;
                     factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
 
                     ActualProduct.ActualProductionWeight =
@@ -840,20 +857,26 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
                     await _dbContext.SaveChangesAsync();
 
+                }
+                //await _dbContext.FactoryProducts.AddRangeAsync(factoryProduct);
+                return new BaseResponse<bool>
+                {
+                    Data = true,
+                    IsSuccess = true,
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false,
+                };
+            }
+
+
+
         }
-        //await _dbContext.FactoryProducts.AddRangeAsync(factoryProduct);
-    }
-    catch (Exception ex)
-    {
-        throw;
-    }
-
-
-    return new BaseResponse<bool>
-    {
-        Data = true
-    };
-}
 
 /*
         public async Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto req)
