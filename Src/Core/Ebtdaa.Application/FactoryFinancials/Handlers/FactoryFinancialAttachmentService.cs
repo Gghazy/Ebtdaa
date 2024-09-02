@@ -64,47 +64,75 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
 
             return new BaseResponse<FactoryFinancialAttachmentResultDto>
             {
-                Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file)
+                Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file),
+                IsSuccess = true
             };
 
             }
-            catch (Exception)
+            catch
             {
-
-                throw;
+                return new BaseResponse<FactoryFinancialAttachmentResultDto>
+                {
+                    Data = new FactoryFinancialAttachmentResultDto(),
+                    IsSuccess = false
+                };
             }
         }
 
         public async Task<BaseResponse<FactoryFinancialAttachmentResultDto>> DeleteAsync(int id)
         {
-            var file = await _dbContext.FactoryFinancialAttachments
-                .Include(x=>x.FactoryFinancial)
-                .FirstOrDefaultAsync(x=>x.Id==id);
-
-            _dbContext.FactoryFinancialAttachments.Remove(file);
-
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<FactoryFinancialAttachmentResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file)
-            };
+                var file = await _dbContext.FactoryFinancialAttachments
+                    .Include(x => x.FactoryFinancial)
+                    .FirstOrDefaultAsync(x => x.Id == id);
+
+                _dbContext.FactoryFinancialAttachments.Remove(file);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<FactoryFinancialAttachmentResultDto>
+                {
+                    Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file),
+                    IsSuccess = true
+                };
+            }
+            catch
+            {
+                return new BaseResponse<FactoryFinancialAttachmentResultDto>
+                {
+                    Data = new FactoryFinancialAttachmentResultDto(),
+                    IsSuccess = false
+                };
+            }
         }
 
         public async Task<BaseResponse<FactoryFinancialAttachmentResultDto>> UpdateAsync(FactoryFinancialAttachmentRequestDto req)
         {
-            var file = await _dbContext.FactoryFinancialAttachments
-               .Include(x => x.FactoryFinancial)
-               .FirstOrDefaultAsync(x => x.Id == req.Id);
-
-            file.FactoryFinancialId =req.FactoryFinancialId??0 ;
-
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<FactoryFinancialAttachmentResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file)
-            };
+                var file = await _dbContext.FactoryFinancialAttachments
+                   .Include(x => x.FactoryFinancial)
+                   .FirstOrDefaultAsync(x => x.Id == req.Id);
+
+                file.FactoryFinancialId = req.FactoryFinancialId ?? 0;
+
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<FactoryFinancialAttachmentResultDto>
+                {
+                    Data = _mapper.Map<FactoryFinancialAttachmentResultDto>(file),
+                    IsSuccess=true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<FactoryFinancialAttachmentResultDto>
+                {
+                    Data = new FactoryFinancialAttachmentResultDto(),
+                    IsSuccess = false
+                };
+            }
         }
     }
 }

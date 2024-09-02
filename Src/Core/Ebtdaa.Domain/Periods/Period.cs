@@ -1,5 +1,8 @@
 ﻿using Ebtdaa.Common.Enums;
+using Ebtdaa.Domain.ActualRawMaterials.Entity;
 using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
+using Ebtdaa.Domain.InspectorRawMaterials.Entity;
 using Ebtdaa.Domain.InspectorUpdateStatus.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using System;
@@ -22,6 +25,10 @@ namespace Ebtdaa.Domain.Periods
         public virtual ICollection<ProductPeriodActive> ProductPeriodActives { get; set; }
         public virtual ICollection<FactoryUpdateStatus> FactoryUpdateStatuses { get; set; }
         public virtual ICollection<InspectorUpdateStatuses> InspectorUpdateStatuses { get; set; }
+        public virtual ICollection<ActualRawMaterial> ActualRawMaterials { get; set; }
+        public virtual ICollection<InspectorRawMaterial> InspectorRawMaterials { get; set; }
+        public virtual ICollection<InspectFactoryLocation> InspectorFactoryLocations { get; set; }
+
 
     }
 }

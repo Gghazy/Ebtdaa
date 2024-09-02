@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,5 +14,7 @@ namespace Ebtdaa.Domain.Factories.Entity
         public string NameEn { get; set; }
 
         public virtual ICollection<FactoryLocation> FactoryLocations { get; set; }
+        public virtual ICollection<InspectFactoryLocation> InspectorFactoryLocations { get; set; }
+
     }
 }

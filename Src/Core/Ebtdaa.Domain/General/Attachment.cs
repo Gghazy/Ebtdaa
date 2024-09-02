@@ -1,5 +1,6 @@
 ﻿using Ebtdaa.Domain.ActualRawMaterials.Entity;
 using Ebtdaa.Domain.Factories.Entity;
+using Ebtdaa.Domain.InspectorRawMaterials.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using System;
 using System.Collections.Generic;
@@ -22,6 +23,7 @@ namespace Ebtdaa.Domain.General
         public virtual ICollection<ActualRawMaterialFile> ActualRawMaterialFiles { get; set; }
         public virtual ICollection<FactoryProduct> Perpers { get; set; }
         public virtual ICollection<FactoryProduct> Photos { get; set; }
+        public virtual ICollection<InspectorRawMaterialFile> InspectorRawMaterialFiles { get; set; }
 
     }
 }

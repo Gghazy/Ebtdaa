@@ -92,30 +92,71 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
                 await _dbContext.SaveChangesAsync();
                 return new BaseResponse<FactoryLocationAttachmentResultDto>
                 {
-                    Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
+                    Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file),
+                    IsSuccess = true
                 };
             }
             catch(Exception ex)
             {
-                throw;
+                return new BaseResponse<FactoryLocationAttachmentResultDto>
+                {
+                    Data = new FactoryLocationAttachmentResultDto(),
+                    IsSuccess = false,
+                };
             }
            
         }
-
-        public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int factoryId , int periodId)
+        public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int id)
         {
-            var file = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x=>x.FactoryId== factoryId && x.PeriodId == periodId);
-            if(file != null)
+            try
             {
-                _dbContext.FactoryLocationAttachments.Remove(file);
+                var file = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x => x.Id == id);
+                if (file != null)
+                {
+                    _dbContext.FactoryLocationAttachments.Remove(file);
+
+
+                    await _dbContext.SaveChangesAsync();
+                    return new BaseResponse<FactoryLocationAttachmentResultDto>
+                    {
+                        Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file),
+                        IsSuccess = true
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<FactoryLocationAttachmentResultDto>
+                    {
+                        Data = new FactoryLocationAttachmentResultDto(),
+                        IsSuccess = false
+                    };
+                }
+            }
+            catch(Exception ex)
+            {
+                return new BaseResponse<FactoryLocationAttachmentResultDto>
+                {
+                    Data = new FactoryLocationAttachmentResultDto(),
+                    IsSuccess = false
+                };
 
             }
-            await _dbContext.SaveChangesAsync();
-            return new BaseResponse<FactoryLocationAttachmentResultDto>
-            {
-                Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
-            };
         }
+
+         public async Task<BaseResponse<FactoryLocationAttachmentResultDto>> DeleteAsync(int factoryId , int periodId)
+         {
+             var file = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x=>x.FactoryId== factoryId && x.PeriodId == periodId);
+             if(file != null)
+             {
+                 _dbContext.FactoryLocationAttachments.Remove(file);
+
+             }
+             await _dbContext.SaveChangesAsync();
+             return new BaseResponse<FactoryLocationAttachmentResultDto>
+             {
+                 Data = _mapper.Map<FactoryLocationAttachmentResultDto>(file)
+             };
+         }
 
     }
 }

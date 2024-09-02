@@ -12,11 +12,13 @@ namespace Ebtdaa.Persistence.Configuration.ProductRawMaterials
 
             builder.HasOne(prm => prm.Product)
                 .WithMany(p => p.ProductRawMaterials)
-                .HasForeignKey(prm => prm.ProductId);
+                .HasForeignKey(prm => prm.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(prm => prm.RawMaterial)
                 .WithMany(r => r.ProductRawMaterials)
-                .HasForeignKey(prm => prm.rawMaterialId);
+                .HasForeignKey(prm => prm.rawMaterialId)
+                .OnDelete(DeleteBehavior.Restrict);
 
 
         }

@@ -1,4 +1,5 @@
 ﻿using Ebtdaa.Domain.General;
+using Ebtdaa.Domain.InspectorFactoryLocation.Entity;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -17,5 +18,7 @@ namespace Ebtdaa.Domain.Factories.Entity
         public virtual City City { get; set; }
 
         public virtual ICollection<FactoryLocation> FactoryLocations { get; set; }
+        public virtual ICollection<InspectFactoryLocation> InspectorFactoryLocations { get; set; }
+
     }
 }

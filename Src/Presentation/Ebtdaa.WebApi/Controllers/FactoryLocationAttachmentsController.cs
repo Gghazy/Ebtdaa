@@ -31,9 +31,9 @@ namespace Ebtdaa.WebApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(int factoryId , int periodId)
+        public async Task<IActionResult> DeleteAsync(int id)
         {
-            return Ok(await _service.DeleteAsync(factoryId,periodId));
+            return Ok(await _service.DeleteAsync(id));
 
         }
     }

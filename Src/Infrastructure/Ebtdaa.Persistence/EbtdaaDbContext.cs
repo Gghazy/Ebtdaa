@@ -24,6 +24,11 @@ using Ebtdaa.Domain.InspectorActualProduction.Entity;
 using Ebtdaa.Domain.InspectorUpdateStatus.Entity;
 using Ebtdaa.Domain.Users;
 using Ebtdaa.Domain.SMSs;
+using Ebtdaa.Persistence.Configuration.ActualRawMaterials;
+using Ebtdaa.Persistence.Configuration.InspectorRawMaterialFIle;
+using Ebtdaa.Persistence.Configuration.InspectorRawMaterials;
+using Ebtdaa.Persistence.Configuration.InspectorFactoryLocations;
+using Ebtdaa.Persistence.Configuration.InspectorActualProduction;
 
 namespace Ebtdaa.Persistence
 {
@@ -47,6 +52,11 @@ namespace Ebtdaa.Persistence
             builder.ApplyConfiguration(new ActualProductionAndCapacityConfiguration());
             builder.ApplyConfiguration(new ProductRawMaterialConfiguration());
             builder.ApplyConfiguration(new FactoryLocationConfigration());
+            builder.ApplyConfiguration(new ActualRawMaterialConfugration());
+            builder.ApplyConfiguration(new InspectorRawMaterialFileConfiguration());
+            builder.ApplyConfiguration(new InspectorRawMaterialConfugration());
+            builder.ApplyConfiguration(new InspectorFactoryLocationConfugration());
+            builder.ApplyConfiguration(new InspectorActualProductionConfiguration());
 
 
            

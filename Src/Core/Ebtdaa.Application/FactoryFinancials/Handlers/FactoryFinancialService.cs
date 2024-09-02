@@ -45,38 +45,62 @@ namespace Ebtdaa.Application.FactoryFinancials.Handlers
         }
         public async Task<BaseResponse<FactoryFinancialResultDto>> AddAsync(FactoryFinancialRequestDto req)
         {
-            var factoryFinancial = _mapper.Map<FactoryFinancial>(req);
-
-            // Validation
-            var result = await _validator.ValidateAsync(factoryFinancial);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.FactoryFinancials.AddAsync(factoryFinancial);
-
-            await _dbContext.SaveChangesAsync();
-
-
-            return new BaseResponse<FactoryFinancialResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryFinancialResultDto>(factoryFinancial)
-            };
+                var factoryFinancial = _mapper.Map<FactoryFinancial>(req);
+
+                // Validation
+                var result = await _validator.ValidateAsync(factoryFinancial);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.FactoryFinancials.AddAsync(factoryFinancial);
+
+                await _dbContext.SaveChangesAsync();
+
+
+                return new BaseResponse<FactoryFinancialResultDto>
+                {
+                    Data = _mapper.Map<FactoryFinancialResultDto>(factoryFinancial),
+                    IsSuccess = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<FactoryFinancialResultDto>
+                {
+                    Data = new FactoryFinancialResultDto(),
+                    IsSuccess = false
+                };
+            }
         }
         public async Task<BaseResponse<FactoryFinancialResultDto>> UpdateAsync(FactoryFinancialRequestDto req)
         {
-            var factoryFinancial = await _dbContext.FactoryFinancials.FirstOrDefaultAsync(x => x.Id == req.Id);
-            var factoryFinancialUpdated = _mapper.Map(req, factoryFinancial);
-
-            // Validation
-            var result = await _validator.ValidateAsync(factoryFinancialUpdated);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.SaveChangesAsync();
-
-
-            return new BaseResponse<FactoryFinancialResultDto>
+            try
             {
-                Data = _mapper.Map<FactoryFinancialResultDto>(factoryFinancialUpdated)
-            };
+                var factoryFinancial = await _dbContext.FactoryFinancials.FirstOrDefaultAsync(x => x.Id == req.Id);
+                var factoryFinancialUpdated = _mapper.Map(req, factoryFinancial);
+
+                // Validation
+                var result = await _validator.ValidateAsync(factoryFinancialUpdated);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.SaveChangesAsync();
+
+
+                return new BaseResponse<FactoryFinancialResultDto>
+                {
+                    Data = _mapper.Map<FactoryFinancialResultDto>(factoryFinancialUpdated),
+                    IsSuccess = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<FactoryFinancialResultDto>
+                {
+                    Data = new FactoryFinancialResultDto(),
+                    IsSuccess = false,
+                };
+            }
         }
     }
 }

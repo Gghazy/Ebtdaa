@@ -1,5 +1,7 @@
-﻿using Ebtdaa.Domain.Factories.Entity;
+﻿using Ebtdaa.Domain.ActualRawMaterials.Entity;
+using Ebtdaa.Domain.Factories.Entity;
 using Ebtdaa.Domain.General;
+using Ebtdaa.Domain.InspectorRawMaterials.Entity;
 using Ebtdaa.Domain.Periods;
 using Ebtdaa.Domain.ProductData.Entity;
 
@@ -23,6 +25,9 @@ namespace Ebtdaa.Domain.RawMaterials.Entity
         public int? PhotoId { get; set; }
         public int? PaperId { get; set; }
         public virtual ICollection<ProductRawMaterial> ProductRawMaterials { get; set; }
+        public virtual ICollection<ActualRawMaterial> ActualRawMaterials { get; set; }
+        public virtual ICollection<InspectorRawMaterialFile> InspectorRawMaterialFiles { get; set; }
+        public virtual ICollection<InspectorRawMaterial> InspectorRawMaterials { get; set; }
   }
    
     }

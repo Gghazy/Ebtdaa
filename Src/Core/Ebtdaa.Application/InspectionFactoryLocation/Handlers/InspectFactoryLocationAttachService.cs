@@ -58,10 +58,10 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Handlers
         public async Task<BaseResponse<InspectFactoryLocationAttachResDto>> DeleteAsync(int id)
         {
             var file = await _dbContext.InspectFactoryLocationAttachments.FirstOrDefaultAsync(x => x.Id == id);
-            var attachfile = await _dbContext.Attachments.FindAsync(file.AttachmentId);
+          //  var attachfile = await _dbContext.Attachments.FindAsync(file.AttachmentId);
 
             _dbContext.InspectFactoryLocationAttachments.Remove(file);
-            _dbContext.Attachments.Remove(attachfile);
+          //  _dbContext.Attachments.Remove(attachfile);
 
 
             await _dbContext.SaveChangesAsync();

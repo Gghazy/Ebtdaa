@@ -6,7 +6,7 @@ namespace Ebtdaa.Application.ActualRawMaterials.Interfaces
 {
     public interface IActualRawMaterialService
     {
-        Task<BaseResponse<QueryResult<ActualRawMaterialResultDto>>> GetAll(ActualRawMaterialSearch search);
+        Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetAll(ActualRawMaterialSearch search);
         Task<BaseResponse<List<ActualRawMaterialResultDto>>> GetByPeriod(int factoryid,int period);
         Task<BaseResponse<ActualRawMaterialResultDto>> GetOne(int id);
         Task<BaseResponse<ActualRawMaterialResultDto>> AddAsync(ActualRawMaterialRequestDto req);
