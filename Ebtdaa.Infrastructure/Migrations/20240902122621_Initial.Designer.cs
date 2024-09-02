@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Ebtdaa.Infrastructure.Migrations
 {
     [DbContext(typeof(IntgrationDbContext))]
-    [Migration("20240309124118_intial")]
-    partial class intial
+    [Migration("20240902122621_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

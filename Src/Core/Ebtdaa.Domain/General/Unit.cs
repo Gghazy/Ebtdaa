@@ -1,4 +1,5 @@
 ﻿using Ebtdaa.Domain.ActualProduction.Entity;
+using Ebtdaa.Domain.InspectorActualProduction.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using System;
 using System.Collections.Generic;
@@ -16,5 +17,7 @@ namespace Ebtdaa.Domain.General
         public ICollection<Product> Products { get; set; }
         public ICollection<ActualProductionAndCapacity> ActualProductionUints { get; set; }
         public ICollection<ActualProductionAndCapacity> DesignedCapacityUnits { get; set; }
+        public ICollection<InspectActualProduction> InspectorActualProductionUnits { get; set; }
+        public ICollection<InspectActualProduction> InspectorDesignedCapacityUnits { get; set; }
     }
 }
