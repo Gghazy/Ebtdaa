@@ -1,4 +1,5 @@
-﻿using Ebtdaa.Application.Factories.Dtos;
+﻿using Ebtdaa.Application.Common.Dtos;
+using Ebtdaa.Application.Factories.Dtos;
 using Ebtdaa.Application.Factories.Interfaces;
 using Ebtdaa.Domain.Factories.Entity;
 using Microsoft.AspNetCore.Http;
@@ -39,8 +40,19 @@ namespace Ebtdaa.WebApi.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateAsync([FromBody] FactoryRequestDto req)
         {
+            try
+            {
+                 return Ok(await _factoryService.UpdateAsync(req));
 
-            return Ok(await _factoryService.UpdateAsync(req));
+            }catch (Exception ex)
+            {
+                var re= new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false
+                };
+                return Ok(re);
+            }
 
         }
        

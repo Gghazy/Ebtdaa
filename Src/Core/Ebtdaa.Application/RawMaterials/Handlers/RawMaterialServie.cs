@@ -260,6 +260,10 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 if (actualRawmaterial != null)
                     _dbContext.ActualRawMaterials.Remove(actualRawmaterial);
 
+                var productRawMaterial = await _dbContext.ProductRawMaterials.Where(x => x.rawMaterialId == id).ToListAsync();
+                if (productRawMaterial.Count != 0)
+                    _dbContext.ProductRawMaterials.RemoveRange(productRawMaterial);
+
                 _dbContext.RawMaterials.Remove(material);
 
 
