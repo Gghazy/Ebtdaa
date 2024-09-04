@@ -11,8 +11,8 @@ namespace Ebtdaa.Application.InspectionProductData.Dtos
         public int Id { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
-        public int PhotoId { get; set; }
-        public int PaperId { get; set; }
+        public int? PhotoId { get; set; }
+        public int? PaperId { get; set; }
         public int ProductId { get; set; }
         public bool IsProductPhotoCorrect { get; set; }
         public int? NewProductPhotoId { get; set; }

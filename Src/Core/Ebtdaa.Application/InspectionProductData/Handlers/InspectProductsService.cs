@@ -38,8 +38,8 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
                        FactoryId = a.FactoryId,
                        PeriodId = a.PeriodId,
                        ProductId = a.ProductId,
-                       PhotoId = a.PhotoId ,
-                       PaperId = a.PaperId,
+                       PhotoId = a.PhotoId==null?0:(int) a.PhotoId,
+                       PaperId = a.PaperId == null ? 0 : (int)a.PaperId,
                        ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
                        IsProductPhotoCorrect = a.IsProductPhotoCorrect,
                        Comments = a.Comments,
@@ -95,45 +95,60 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
 
         public async Task<BaseResponse<bool>> AddAsync(InspectProductsRequestDto request)
         {
-            var IfFound = await _dbContext.InspectProductPhotos.FirstOrDefaultAsync(x => x.Id == request.Id);
-            if (request.NewProductPhotoId <= 0)
-                request.NewProductPhotoId = null;
-            if (request.NewProductPaperId <= 0)
-                request.NewProductPaperId = null;
-            var factoryProduct = new InspectProductPhoto();
-            factoryProduct.ProductId = request.ProductId;
-            factoryProduct.PhotoId = request.PhotoId;
-            factoryProduct.FactoryId = request.FactoryId;
-            factoryProduct.ProductId = request.ProductId;
-            factoryProduct.PaperId = request.PaperId;
-            factoryProduct.IsProductPhotoCorrect = request.IsProductPhotoCorrect;
-            factoryProduct.Comments = request.Comments;
-            factoryProduct.NewProductPhotoId = request.NewProductPhotoId;
-            factoryProduct.NewProductPaperId = request.NewProductPaperId;
-            factoryProduct.PeriodId = request.PeriodId;
-            if (IfFound == null) {
-                await _dbContext.InspectProductPhotos.AddAsync(factoryProduct);
-
-            }
-          
-
-            await _dbContext.SaveChangesAsync();
-            return new BaseResponse<bool>
+            try
             {
-                Data = true
-            };
+                var IfFound = await _dbContext.InspectProductPhotos.FirstOrDefaultAsync(x => x.Id == request.Id);
+                if (request.NewProductPhotoId <= 0)
+                    request.NewProductPhotoId = null;
+                if (request.NewProductPaperId <= 0)
+                    request.NewProductPaperId = null;
+               
+                var factoryProduct = new InspectProductPhoto();
+                factoryProduct.ProductId = request.ProductId;
+                factoryProduct.PhotoId = request.PhotoId<=0?null: request.PhotoId;
+                factoryProduct.FactoryId = request.FactoryId;
+                factoryProduct.ProductId = request.ProductId;
+                factoryProduct.PaperId = request.PaperId <= 0 ? null : request.PaperId;
+                factoryProduct.IsProductPhotoCorrect = request.IsProductPhotoCorrect;
+                factoryProduct.Comments = request.Comments;
+                factoryProduct.NewProductPhotoId = request.NewProductPhotoId;
+                factoryProduct.NewProductPaperId = request.NewProductPaperId;
+                factoryProduct.PeriodId = request.PeriodId;
+                if (IfFound == null)
+                {
+                    await _dbContext.InspectProductPhotos.AddAsync(factoryProduct);
+
+                }
+
+
+                await _dbContext.SaveChangesAsync();
+                return new BaseResponse<bool>
+                {
+                    Data = true,
+                    IsSuccess = true,
+                };
+            }
+            catch (Exception ex) {
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess= false
+                };
+            }
            
         }
 
         public async Task<BaseResponse<bool>> UpdateAsync(InspectProductsRequestDto req)
         {
+            try { 
             if (req.NewProductPhotoId <= 0)
                 req.NewProductPhotoId = null;
             if (req.NewProductPaperId <= 0)
                 req.NewProductPaperId = null;
             var factoryProduct = await _dbContext.InspectProductPhotos.FirstAsync(x => x.Id == req.Id);
             factoryProduct.ProductId = req.ProductId;
-            factoryProduct.PhotoId = req.PhotoId;
+            factoryProduct.PaperId = req.PaperId <= 0 ? null : req.PaperId;
+            factoryProduct.PhotoId = req.PhotoId <= 0 ? null : req.PhotoId;
             factoryProduct.IsProductPhotoCorrect = req.IsProductPhotoCorrect;
             factoryProduct.Comments = req.Comments;
             factoryProduct.NewProductPhotoId= req.NewProductPhotoId;
@@ -145,6 +160,15 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             {
                 Data = true
             };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false
+                };
+            }
         }
     }
 }
