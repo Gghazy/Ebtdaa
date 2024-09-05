@@ -50,12 +50,19 @@ namespace Ebtdaa.WebApi.Controllers
             return Ok(await _RawMaterialService.UpdateAsync(req));
 
         }
-
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpPut("deleteList")]
+        public async Task<IActionResult> deleteList([FromBody] RawMaterialIdsList idList)
         {
 
-            return Ok(await _RawMaterialService.DeleteAsync(id));
+            return Ok(await _RawMaterialService.DeleteAsync(idList));
+
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync([FromBody] RawMaterialIdsList idList)
+        {
+
+            return Ok(await _RawMaterialService.DeleteAsync(idList));
 
         }
     }

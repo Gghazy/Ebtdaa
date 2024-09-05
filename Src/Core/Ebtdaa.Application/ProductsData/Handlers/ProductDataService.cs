@@ -21,6 +21,7 @@ using Ebtdaa.Domain.ActualProduction.Entity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Ebtdaa.Application.RawMaterials.Dtos;
+using System.Collections;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -479,33 +480,68 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                 Data = result
             };
         }
-        public async Task<BaseResponse<ProductResultDto>> DeleteAsync(int id)
+        public async Task<BaseResponse<bool>> DeleteAsync(ProductIdsList idsList)
         {
             try
             {
-                var factoryPrduct = await _dbContext.FactoryProducts.FirstOrDefaultAsync(x => x.Id == id);
-                var actualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == id);
-                var ProductPeriodActive = await _dbContext.ProductPeriodActives.FirstOrDefaultAsync(x => x.PeriodId == factoryPrduct.PeriodId && x.FactoryId == factoryPrduct.FactoryId && x.ProductId == factoryPrduct.ProductId);
+                var ids = idsList.ids;
+                var FactoryProductsItems = await _dbContext.FactoryProducts.Include("Product").Where(i => ids.Contains(i.Id)).ToListAsync();
 
-                _dbContext.ActualProductionAndCapacities.Remove(actualProduct);
-                _dbContext.FactoryProducts.Remove(factoryPrduct);
-                _dbContext.ProductPeriodActives.Remove(ProductPeriodActive);
+                if (FactoryProductsItems == null || !FactoryProductsItems.Any())
+                {
+                    //
+                }
 
+                _dbContext.FactoryProducts.RemoveRange(FactoryProductsItems);
 
+                var factoryids = FactoryProductsItems.Select(r=>r.ProductId).ToList();
+                var ActualProductionAndCapacitiesItems = await _dbContext.ActualProductionAndCapacities.Where(i => ids.Contains(i.FactoryProductId)).ToListAsync();
+
+                if (ActualProductionAndCapacitiesItems == null || !ActualProductionAndCapacitiesItems.Any())
+                {
+                    //
+                }
+
+                _dbContext.ActualProductionAndCapacities.RemoveRange(ActualProductionAndCapacitiesItems);
+
+                var ProductPeriodActivesItems = await _dbContext.ProductPeriodActives
+                    .Where(x =>x.PeriodId == FactoryProductsItems.FirstOrDefault().PeriodId
+                    && x.FactoryId == FactoryProductsItems.FirstOrDefault().FactoryId 
+                    && factoryids.Contains(x.ProductId) ).ToListAsync();
+
+                if (ProductPeriodActivesItems == null || !ProductPeriodActivesItems.Any())
+                {
+                    //
+                }
+
+                _dbContext.ProductPeriodActives.RemoveRange(ProductPeriodActivesItems);
+                /*
+                foreach (var id in ids)
+                {
+                    var factoryPrduct = await _dbContext.FactoryProducts.FirstOrDefaultAsync(x => x.Id == id);
+                    var actualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == id);
+                    var ProductPeriodActive = await _dbContext.ProductPeriodActives.FirstOrDefaultAsync
+                        (x => x.PeriodId == factoryPrduct.PeriodId && x.FactoryId == factoryPrduct.FactoryId && x.ProductId == factoryPrduct.ProductId);
+
+                    _dbContext.ActualProductionAndCapacities.Remove(actualProduct);
+                    _dbContext.FactoryProducts.Remove(factoryPrduct);
+                    _dbContext.ProductPeriodActives.Remove(ProductPeriodActive);
+                }
+                */
                 //  _dbContext.RawMaterials.State = EntityState.Deleted;
                 await _dbContext.SaveChangesAsync();
 
-                return new BaseResponse<ProductResultDto>
+                return new BaseResponse<bool>
                 {
-                    Data = _mapper.Map<ProductResultDto>(factoryPrduct),
+                    Data = true,
                     IsSuccess = true
                 };
             }
             catch   (Exception ex)
             {
-                return new BaseResponse<ProductResultDto>
+                return new BaseResponse<bool>
                 {
-                    Data = new ProductResultDto(),
+                    Data = false,
                     IsSuccess = false
                 };
             }

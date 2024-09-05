@@ -42,12 +42,14 @@ namespace Ebtdaa.Application.Attachments.Handler
 
         public async Task<BaseResponse<Attachment>> AddAsync(IFormFile file)
         {
-            var path = await UploadFile(file);
+            var uniqueFileName = DateTime.Now.ToString("yyyyMMddHHmmssfff") + file.FileName;
+            var path = await UploadFile(file, uniqueFileName);
             var allowedExtensions = new[] { ".pdf", ".jpg", ".jpeg", ".png" };
+            var randomNumber =new Random();
             Attachment attachment = new Attachment 
             {
-                Name = file.FileName,
-                Path = path + "/" + file.FileName,
+                Name = uniqueFileName,
+                Path = path + "/" + uniqueFileName,
                 Extension= GetFileExtension(file)
 
             };
@@ -123,7 +125,7 @@ namespace Ebtdaa.Application.Attachments.Handler
         }
 
 
-        public async Task<string> UploadFile(IFormFile file)
+        public async Task<string> UploadFile(IFormFile file,string fileName)
         {
             string path = "";
             if (file.Length > 0)
@@ -133,7 +135,7 @@ namespace Ebtdaa.Application.Attachments.Handler
                 {
                     Directory.CreateDirectory(path);
                 }
-                using (var fileStream = new FileStream(Path.Combine(path, file.FileName), FileMode.Create))
+                using (var fileStream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
                 {
                     await file.CopyToAsync(fileStream);
                 }

@@ -26,7 +26,8 @@ namespace Ebtdaa.Application.ProductsData.Interfaces
         Task<BaseResponse<ProductResultDto>> GetOneNewProduct(NewProductRequest Id);
         Task<BaseResponse<bool>> AddAsync(ProductRequestDto request);
         Task<BaseResponse<bool>> UpdateAsync(ProductRequestDto request);
-        Task<BaseResponse<ProductResultDto>> DeleteAsync(int id);
+        //Task<BaseResponse<ProductResultDto>> DeleteAsync(int id);
+        Task<BaseResponse<bool>> DeleteAsync(ProductIdsList id);
 
         Task<BaseResponse<QueryResult<UnitResultDto>>> GetUnit(UnitSearch search);
         Task<BaseResponse<QueryResult<ProductResultDto>>> GetFactoryProduct(ProductSearch search);

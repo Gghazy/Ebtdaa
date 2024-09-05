@@ -14,6 +14,7 @@ using Ebtdaa.Domain.ProductData.Entity;
 using Ebtdaa.Domain.RawMaterials.Entity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.WebSockets;
@@ -159,16 +160,81 @@ namespace Ebtdaa.Application.ProductsData.Handlers
         }
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
-            var result = await _dbContext.ProductPeriodActives
-                                     .Include(x => x.Product)
-                                     .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
-                                     .ToListAsync();
-            _dbContext.ProductPeriodActives.RemoveRange(result);
-
-            return new BaseResponse<bool>
+            try
             {
-                Data = true
-            };
+                var FactoryProductsItems = await _dbContext.FactoryProducts.Include("Product").
+                    Where(i => i.FactoryId==factoryId&&i.PeriodId==periodId).ToListAsync();
+
+                if (FactoryProductsItems == null || !FactoryProductsItems.Any())
+                {
+                    //
+                }
+
+                _dbContext.FactoryProducts.RemoveRange(FactoryProductsItems);
+
+                var factoryids = FactoryProductsItems.Select(r => r.Id).ToList();
+                var factoryProductids = FactoryProductsItems.Select(r => r.ProductId).ToList();
+
+                var ActualProductionAndCapacitiesItems = await _dbContext.ActualProductionAndCapacities.Where(i => factoryids.Contains(i.FactoryProductId)).ToListAsync();
+
+                if (ActualProductionAndCapacitiesItems == null || !ActualProductionAndCapacitiesItems.Any())
+                {
+                    //
+                }
+
+                _dbContext.ActualProductionAndCapacities.RemoveRange(ActualProductionAndCapacitiesItems);
+
+                var ProductPeriodActivesItems = await _dbContext.ProductPeriodActives
+                    .Where(x => x.PeriodId == periodId
+                    && x.FactoryId == factoryId
+                    && factoryProductids.Contains(x.ProductId)).ToListAsync();
+
+                if (ProductPeriodActivesItems == null || !ProductPeriodActivesItems.Any())
+                {
+                    //
+                }
+
+                _dbContext.ProductPeriodActives.RemoveRange(ProductPeriodActivesItems);
+                /*
+                foreach (var id in ids)
+                {
+                    var factoryPrduct = await _dbContext.FactoryProducts.FirstOrDefaultAsync(x => x.Id == id);
+                    var actualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == id);
+                    var ProductPeriodActive = await _dbContext.ProductPeriodActives.FirstOrDefaultAsync
+                        (x => x.PeriodId == factoryPrduct.PeriodId && x.FactoryId == factoryPrduct.FactoryId && x.ProductId == factoryPrduct.ProductId);
+
+                    _dbContext.ActualProductionAndCapacities.Remove(actualProduct);
+                    _dbContext.FactoryProducts.Remove(factoryPrduct);
+                    _dbContext.ProductPeriodActives.Remove(ProductPeriodActive);
+                }
+                */
+                //  _dbContext.RawMaterials.State = EntityState.Deleted;
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<bool>
+                {
+                    Data = true,
+                    IsSuccess = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false
+                };
+            }
+            /* var result = await _dbContext.ProductPeriodActives
+                                      .Include(x => x.Product)
+                                      .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                                      .ToListAsync();
+             _dbContext.ProductPeriodActives.RemoveRange(result);
+
+             return new BaseResponse<bool>
+             {
+                 Data = true
+             };*/
         }
     }
 }

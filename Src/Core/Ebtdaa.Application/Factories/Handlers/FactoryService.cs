@@ -228,22 +228,25 @@ namespace Ebtdaa.Application.Factories.Handlers
 
                 if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
                 {
-                  await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                  await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                //  await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                 // await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
                   await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
                   await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId , req.PeriodId);
                 }
                 if (factory.FactoryStatusId == FactoryStatusEnum.Under_Production)
                 {
-                        await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                        await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                      //  await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                      //  await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
                     }
                 if(factory.FactoryStatusId == FactoryStatusEnum.Canceled)
                 {
-                    await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                    await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    //await _actualProductionService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    //await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    // await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                    //await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
                     await _productPeriodService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
                     await _rawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+
                     //await _factoryMonthlyFinancial.DeleteByFactoryIdAndPeriodId(req.FactoryId , req.PeriodId);
                     await _factoryLocation.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
                     await _factoryContactService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);

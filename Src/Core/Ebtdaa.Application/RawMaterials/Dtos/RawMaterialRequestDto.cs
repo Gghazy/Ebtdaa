@@ -19,4 +19,9 @@ namespace Ebtdaa.Application.RawMaterials.Dtos
         public int? PhotoId { get; set; }
         public int? PaperId { get; set; }
     }
+    public class RawMaterialIdsList
+    {
+        public List<int> ids { get; set; }
+
+    }
 }

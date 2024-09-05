@@ -1,6 +1,7 @@
 ﻿using Ebtdaa.Application.ActualProduction.Dtos;
 using Ebtdaa.Application.ProductsData.Dtos;
 using Ebtdaa.Application.ProductsData.Interfaces;
+using Ebtdaa.Application.RawMaterials.Dtos;
 using Ebtdaa.Common.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -103,11 +104,18 @@ namespace Ebtdaa.WebApi.Controllers
         {
             return Ok(await _productDataService.UpdateAsync(req));
         }
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAsync(int id)
+        [HttpPut("deleteProductList")]
+        public async Task<IActionResult> deleteProductList([FromBody] ProductIdsList idList)
         {
 
-            return Ok(await _productDataService.DeleteAsync(id));
+            return Ok(await _productDataService.DeleteAsync(idList));
+
+        }
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAsync([FromBody] ProductIdsList idList)
+        {
+
+            return Ok(await _productDataService.DeleteAsync(idList));
 
         }
     }

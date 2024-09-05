@@ -33,4 +33,9 @@ namespace Ebtdaa.Application.ProductsData.Dtos
 
 
     }
+    public class ProductIdsList
+    {
+        public List<int> ids { get; set; }
+
+    }
 }
