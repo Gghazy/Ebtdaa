@@ -18,6 +18,8 @@ namespace Ebtdaa.Application.RawMaterials.Interfaces
         Task<BaseResponse<RawMaterialResultDto>> UpdateAsync(RawMaterialRequestDto req);
         Task<BaseResponse<bool>> DeleteAsync(RawMaterialIdsList id);
         Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId);
+        Task<BaseResponse<bool>> createActualRawMaterials(int factoryId, int periodId);
+
 
     }
 }

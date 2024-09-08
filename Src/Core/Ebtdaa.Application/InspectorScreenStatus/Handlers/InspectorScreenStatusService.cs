@@ -23,7 +23,11 @@ namespace Ebtdaa.Application.InspectorScreenStatus.Handlers
         {
            
             var result = new InspectorScreenStatusResultDto();
-
+            var factorystatus = await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId && x.CreatedDate.Year == DateTime.Now.Year);
+            if(factorystatus != null)
+            {
+                result.factorystatus=factorystatus.FactoryStatusId;
+            }
             result.InspectorBasicFactoryInfo = await CheckBasicInfoScreenStatus(periodId, factoryId);
             result.InspectorFactoryLocation = await CheckFactoryLocationScreenStatus(factoryId, periodId);
             result.InspectorFactoryContact = await CheckFactoryContactScreenStatus(factoryId, periodId);

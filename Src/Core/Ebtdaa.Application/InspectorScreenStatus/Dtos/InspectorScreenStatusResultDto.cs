@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ebtdaa.Common.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,5 +16,6 @@ namespace Ebtdaa.Application.InspectorScreenStatus.Dtos
         public bool? InspectorProductData { get; set; }
         public bool? InspectorActualProduction { get; set; }
         public bool? InspectorRawMaterial { get; set; }
+        public FactoryStatusEnum factorystatus { get; set; }
     }
 }

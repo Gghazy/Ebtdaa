@@ -23,39 +23,64 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
         }
         public async Task<BaseResponse<ActualRawFileResultDto>> AddAsync(ActualRawFileRequestDto req)
         {
-            ActualRawMaterialFile file = _mapper.Map<ActualRawMaterialFile>(req);
-            file.Name = file.FactoryId
-                           + DateTime.Today.Date.ToShortDateString().Replace("/", "")
-                           + file.AttachmentId;
-
-            var result = await _actualMaterialFileValidator.ValidateAsync(file);
-            if (result.IsValid == false) throw new ValidationException(result.Errors);
-
-            await _dbContext.ActualRawMaterialFiles.AddAsync(file);
-
-            await _dbContext.SaveChangesAsync();
-            return new BaseResponse<ActualRawFileResultDto>
+            try
             {
-                Data = _mapper.Map<ActualRawFileResultDto>(file)
-            };
+                ActualRawMaterialFile file = _mapper.Map<ActualRawMaterialFile>(req);
+                file.Name = file.FactoryId
+                               + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                               + file.AttachmentId;
+
+                var result = await _actualMaterialFileValidator.ValidateAsync(file);
+                if (result.IsValid == false) throw new ValidationException(result.Errors);
+
+                await _dbContext.ActualRawMaterialFiles.AddAsync(file);
+
+                await _dbContext.SaveChangesAsync();
+                return new BaseResponse<ActualRawFileResultDto>
+                {
+                    Data = _mapper.Map<ActualRawFileResultDto>(file),
+                    IsSuccess= true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<ActualRawFileResultDto>
+                {
+                    Data = new ActualRawFileResultDto(),
+                    IsSuccess = false
+                };
+            }
         }
 
         public async Task<BaseResponse<ActualRawFileResultDto>> DeleteAsync(int id)
         {
-            var file = await _dbContext.ActualRawMaterialFiles.FindAsync(id);
-
-            _dbContext.ActualRawMaterialFiles.Remove(file);
-
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<ActualRawFileResultDto>
+            try
             {
-                Data = _mapper.Map<ActualRawFileResultDto>(file)
-            };
+                var file = await _dbContext.ActualRawMaterialFiles.FindAsync(id);
+
+                _dbContext.ActualRawMaterialFiles.Remove(file);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<ActualRawFileResultDto>
+                {
+                    Data = _mapper.Map<ActualRawFileResultDto>(file),
+                    IsSuccess = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<ActualRawFileResultDto>
+                {
+                    Data =new ActualRawFileResultDto(),
+                    IsSuccess = false
+                };
+            }
         }
 
         public async Task<BaseResponse<List<ActualRawFileResultDto>>> GetByFactory(int factoryId, int periodId)
         {
+            try { 
             var respose = _mapper.Map<List<ActualRawFileResultDto>>(
                 await _dbContext.ActualRawMaterialFiles
                 .Where(x=>x.FactoryId ==factoryId&&x.PeriodId==periodId)
@@ -63,20 +88,43 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
 
             return new BaseResponse<List<ActualRawFileResultDto>>
             {
-                Data = respose
+                Data = respose,
+                IsSuccess = true
             };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<List<ActualRawFileResultDto>>
+                {
+                    Data = new List<ActualRawFileResultDto>(),
+                    IsSuccess = false
+                };
+            }
         }
 
         public async Task<BaseResponse<bool>> delete(int factoryId, int periodId)
         {
-            var result = await _dbContext.ActualRawMaterialFiles.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
-
-            _dbContext.ActualRawMaterialFiles.RemoveRange(result);
-
-            return new BaseResponse<bool>
+            try
             {
-                Data = true
-            };
+                var result = await _dbContext.ActualRawMaterialFiles.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+
+                _dbContext.ActualRawMaterialFiles.RemoveRange(result);
+
+                return new BaseResponse<bool>
+                {
+                    Data = true,
+                    IsSuccess = false
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false
+                };
+            }
+
         }
     }
 }

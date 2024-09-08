@@ -3,6 +3,7 @@ using Ebtdaa.Application.Common.Dtos;
 using Ebtdaa.Application.Common.Interfaces;
 using Ebtdaa.Application.InspectionProductData.Dtos;
 using Ebtdaa.Application.InspectionProductData.Interfaces;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.InspectorProductData.Entity;
 using Ebtdaa.Domain.ProductData.Entity;
 using Microsoft.EntityFrameworkCore;
@@ -26,69 +27,89 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
         }
         public async  Task<BaseResponse<List<InspectProductsResultDto>>> GetProducts(int factoryId, int periodId , string ownerIdentity)
         {
-            var getInspectData = await _dbContext.InspectProductPhotos
-                .Include(x => x.Product)
-                .ThenInclude(x => x.Unit)
-                .Where(i => i.FactoryId == factoryId 
-                                && i.PeriodId == periodId && i.CreatedBy == ownerIdentity)
-                .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code,
-                   (a, b) => new InspectProductsResultDto()
-                   {
-                       Id= a.Id,
-                       FactoryId = a.FactoryId,
-                       PeriodId = a.PeriodId,
-                       ProductId = a.ProductId,
-                       PhotoId = a.PhotoId==null?0:(int) a.PhotoId,
-                       PaperId = a.PaperId == null ? 0 : (int)a.PaperId,
-                       ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
-                       IsProductPhotoCorrect = a.IsProductPhotoCorrect,
-                       Comments = a.Comments,
-                       NewProductPhotoId = a.NewProductPhotoId,
-                       NewProductPaperId = a.NewProductPaperId,
-                   })
-                   .ToListAsync();
-            if (getInspectData.Count == 0)
-            {
-                var result = await _dbContext.FactoryProducts
-                    .Include(x => x.Product)
-                     .ThenInclude(x => x.Unit)
-                     .Where(x => x.FactoryId == factoryId && x.PeriodId==periodId)
-                   .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code,
-                   (a, b) =>new InspectProductsResultDto()
-                    {
-                        
-                        FactoryId = a.FactoryId,
-                        PeriodId=a.PeriodId,
-                        ProductId = a.ProductId,
-                        PhotoId = a.PhototId ?? 0,
-                        PaperId = a.PeperId ?? 0,
-                        ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
-                        IsProductPhotoCorrect = true,
-                        Comments = "",
-                        NewProductPhotoId = 0,
-                        NewProductPaperId = 0,
 
-                    }  )
-                    .ToListAsync();
-                var response = _mapper.Map< List< InspectProductsResultDto>>(result);
+            var basicinfo = await _dbContext.BasicFactoryInfos.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId
+            && x.CreatedDate.Year == DateTime.Now.Year);
+
+            if (basicinfo.FactoryStatusId == FactoryStatusEnum.Under_Construction || basicinfo.FactoryStatusId == FactoryStatusEnum.Canceled)
+            {
+                var getInspect = await _dbContext.InspectProductPhotos
+            .Where(i => i.FactoryId == factoryId
+              && i.PeriodId == periodId && i.CreatedBy == ownerIdentity).ToListAsync();
+                var response = _mapper.Map<List<InspectProductsResultDto>>(getInspect);
 
                 return new BaseResponse<List<InspectProductsResultDto>>
                 {
                     Data = response
                 };
+
             }
             else
             {
-                var Inspectresponse = _mapper.Map<List<InspectProductsResultDto>>(getInspectData);
+                var getInspectData = await _dbContext.InspectProductPhotos
+                    .Include(x => x.Product)
+                    .ThenInclude(x => x.Unit)
+                    .Where(i => i.FactoryId == factoryId
+                      && i.PeriodId == periodId && i.CreatedBy == ownerIdentity)
+                    .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code,
+                       (a, b) => new InspectProductsResultDto()
+                       {
+                           Id = a.Id,
+                           FactoryId = a.FactoryId,
+                           PeriodId = a.PeriodId,
+                           ProductId = (int)a.ProductId,
+                           PhotoId = a.PhotoId == null ? 0 : (int)a.PhotoId,
+                           PaperId = a.PaperId == null ? 0 : (int)a.PaperId,
+                           ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                           IsProductPhotoCorrect = a.IsProductPhotoCorrect,
+                           Comments = a.Comments,
+                           NewProductPhotoId = a.NewProductPhotoId,
+                           NewProductPaperId = a.NewProductPaperId,
+                       })
+                       .ToListAsync();
 
-
-
-                return new BaseResponse<List<InspectProductsResultDto>>
+                if (getInspectData.Count == 0)
                 {
-                    Data = Inspectresponse
-                };
-            }
+                    var result = await _dbContext.FactoryProducts
+                        .Include(x => x.Product)
+                         .ThenInclude(x => x.Unit)
+                         .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId)
+                       .Join(_dbContext.MappingProducts, a => a.Product.ItemNumber, b => b.Hs10Code,
+                       (a, b) => new InspectProductsResultDto()
+                       {
 
+                           FactoryId = a.FactoryId,
+                           PeriodId = a.PeriodId,
+                           ProductId = a.ProductId,
+                           PhotoId = a.PhototId ?? 0,
+                           PaperId = a.PeperId ?? 0,
+                           ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                           IsProductPhotoCorrect = true,
+                           Comments = "",
+                           NewProductPhotoId = 0,
+                           NewProductPaperId = 0,
+
+                       })
+                        .ToListAsync();
+                    var response = _mapper.Map<List<InspectProductsResultDto>>(result);
+
+                    return new BaseResponse<List<InspectProductsResultDto>>
+                    {
+                        Data = response
+                    };
+                }
+                else
+                {
+                    var Inspectresponse = _mapper.Map<List<InspectProductsResultDto>>(getInspectData);
+
+
+
+                    return new BaseResponse<List<InspectProductsResultDto>>
+                    {
+                        Data = Inspectresponse
+                    };
+                }
+            }
 
               
         }
@@ -98,6 +119,7 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
             try
             {
                 var IfFound = await _dbContext.InspectProductPhotos.FirstOrDefaultAsync(x => x.Id == request.Id);
+              
                 if (request.NewProductPhotoId <= 0)
                     request.NewProductPhotoId = null;
                 if (request.NewProductPaperId <= 0)
@@ -107,10 +129,10 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
                 factoryProduct.ProductId = request.ProductId;
                 factoryProduct.PhotoId = request.PhotoId<=0?null: request.PhotoId;
                 factoryProduct.FactoryId = request.FactoryId;
-                factoryProduct.ProductId = request.ProductId;
+                factoryProduct.ProductId = request.ProductId <= 0 ? null : request.ProductId;
                 factoryProduct.PaperId = request.PaperId <= 0 ? null : request.PaperId;
                 factoryProduct.IsProductPhotoCorrect = request.IsProductPhotoCorrect;
-                factoryProduct.Comments = request.Comments;
+                factoryProduct.Comments = request.Comments==null?" ": request.Comments;
                 factoryProduct.NewProductPhotoId = request.NewProductPhotoId;
                 factoryProduct.NewProductPaperId = request.NewProductPaperId;
                 factoryProduct.PeriodId = request.PeriodId;
@@ -145,12 +167,12 @@ namespace Ebtdaa.Application.InspectionProductData.Handlers
                 req.NewProductPhotoId = null;
             if (req.NewProductPaperId <= 0)
                 req.NewProductPaperId = null;
-            var factoryProduct = await _dbContext.InspectProductPhotos.FirstAsync(x => x.Id == req.Id);
-            factoryProduct.ProductId = req.ProductId;
-            factoryProduct.PaperId = req.PaperId <= 0 ? null : req.PaperId;
+            var factoryProduct = await _dbContext.InspectProductPhotos.FirstOrDefaultAsync(x => x.Id == req.Id);
+            factoryProduct.ProductId = req.ProductId <= 0 ? null : req.ProductId;
+                factoryProduct.PaperId = req.PaperId <= 0 ? null : req.PaperId;
             factoryProduct.PhotoId = req.PhotoId <= 0 ? null : req.PhotoId;
             factoryProduct.IsProductPhotoCorrect = req.IsProductPhotoCorrect;
-            factoryProduct.Comments = req.Comments;
+            factoryProduct.Comments = req.Comments==null?"": req.Comments;
             factoryProduct.NewProductPhotoId= req.NewProductPhotoId;
             factoryProduct.NewProductPaperId= req.NewProductPaperId;
 

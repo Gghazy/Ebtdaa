@@ -28,35 +28,52 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
         }
         public async Task<BaseResponse<List<InspectFactoryFlieResultDto>>> GetAll(int factoryId, int periodId)
         {
-        
-            var inspectorRespose = _mapper.Map<List<InspectFactoryFlieResultDto>>(
-                await _dbContext.InspectFactoryFiles.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).Include(x => x.Attachment).ToListAsync()
-
-                );
-            if(inspectorRespose == null)
+            try
             {
-                var respose = _mapper.Map<List<InspectFactoryFlieResultDto>>(
-                await _dbContext.FactoryFiles.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).Include(x => x.Attachment).ToListAsync()
+                var inspectorRespose = _mapper.Map<List<InspectFactoryFlieResultDto>>(
+                    await _dbContext.InspectFactoryFiles.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId&&x.CreatedDate.Year == DateTime.Now.Year).Include(x => x.Attachment).ToListAsync()
 
-                );
+                    );
+                if (inspectorRespose == null)
+                {
+                    var respose = _mapper.Map<List<InspectFactoryFlieResultDto>>(
+                    await _dbContext.FactoryFiles.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).Include(x => x.Attachment).ToListAsync()
 
+                    );
+
+                    return new BaseResponse<List<InspectFactoryFlieResultDto>>
+                    {
+                        Data = respose ,
+                        IsSuccess = true
+                    };
+                }
+                else
+                {
+                    return new BaseResponse<List<InspectFactoryFlieResultDto>>
+                    {
+                        Data = inspectorRespose,
+                        IsSuccess   = true
+                    };
+                }
+            }
+            catch (Exception ex)
+            {
                 return new BaseResponse<List<InspectFactoryFlieResultDto>>
                 {
-                    Data = respose
+                    Data = new List<InspectFactoryFlieResultDto>(),
+                    IsSuccess = false
+
                 };
+
             }
-            else
-            {
-                return new BaseResponse<List<InspectFactoryFlieResultDto>>
-                {
-                    Data = inspectorRespose
-                };
-            }
-            
+
+
         }
         public async Task<BaseResponse<InspectFactoryFlieResultDto>> AddAsync(InspectFactoryFlieRequestDto req)
         {
-            InspectFactoryFile factoryFile = _mapper.Map<InspectFactoryFile>(req);
+            try
+            {
+                InspectFactoryFile factoryFile = _mapper.Map<InspectFactoryFile>(req);
             factoryFile.Name = factoryFile.FactoryId
                            + DateTime.Today.Date.ToShortDateString().Replace("/", "")
                            + factoryFile.AttachmentId;
@@ -65,31 +82,57 @@ namespace Ebtdaa.Application.InspectionBasicFactInfos.Handlers
             await _dbContext.SaveChangesAsync();
             return new BaseResponse<InspectFactoryFlieResultDto>
             {
-                Data = _mapper.Map<InspectFactoryFlieResultDto>(factoryFile)
+                Data = _mapper.Map<InspectFactoryFlieResultDto>(factoryFile),
+                IsSuccess = true
+
             };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<InspectFactoryFlieResultDto>
+                {
+                    Data = new InspectFactoryFlieResultDto(),
+                    IsSuccess = false
+
+                };
+
+            }
         }
 
 
         public async Task<BaseResponse<InspectFactoryFlieResultDto>> DeleteAsync(int id)
         {
-            var factoryFile = await _dbContext.InspectFactoryFiles.FindAsync(id);
-
-            if (factoryFile != null)
+            try
             {
-              //  var attachfile = await _dbContext.Attachments.FindAsync(factoryFile.AttachmentId);
+                var factoryFile = await _dbContext.InspectFactoryFiles.FindAsync(id);
+
+                if (factoryFile != null)
+                {
+                    //  var attachfile = await _dbContext.Attachments.FindAsync(factoryFile.AttachmentId);
 
 
 
 
-                _dbContext.InspectFactoryFiles.Remove(factoryFile);
-               // _dbContext.Attachments.Remove(attachfile);
+                    _dbContext.InspectFactoryFiles.Remove(factoryFile);
+                    // _dbContext.Attachments.Remove(attachfile);
+                }
+
+                await _dbContext.SaveChangesAsync();
+                return new BaseResponse<InspectFactoryFlieResultDto>
+                {
+                    Data = _mapper.Map<InspectFactoryFlieResultDto>(factoryFile),
+                    IsSuccess  = true
+                };
+            }catch (Exception ex)
+            {
+                return new BaseResponse<InspectFactoryFlieResultDto>
+                {
+                    Data = new InspectFactoryFlieResultDto(),
+                    IsSuccess = false
+
+                };
+
             }
-
-            await _dbContext.SaveChangesAsync();
-            return new BaseResponse<InspectFactoryFlieResultDto>
-            {
-                Data = _mapper.Map<InspectFactoryFlieResultDto>(factoryFile)
-            };
         }
     }
 }

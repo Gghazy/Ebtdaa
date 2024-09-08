@@ -16,11 +16,11 @@ namespace Ebtdaa.Domain.InspectorActualProduction.Entity
 
 
         public int Id {  get; set; }
-        public int FactoryProductId { get; set; }
+        public int? FactoryProductId { get; set; }
         public decimal? DesignedCapacity { get; set; }
         public double? ActualProduction { get; set; }
-        public int DesignedCapacityUnitId { get; set; }
-        public int ActualProductionUintId { get; set; }
+        public int? DesignedCapacityUnitId { get; set; }
+        public int? ActualProductionUintId { get; set; }
         public bool IsDesignedCapacityCorrect { get; set; }
         public bool IsActualProductionCorrect { get; set; }
         public decimal? CorrectDesignedCapacity { get; set; }
@@ -37,8 +37,8 @@ namespace Ebtdaa.Domain.InspectorActualProduction.Entity
 
         
         //public virtual Factory Factory {  get; set; }
-        public virtual Unit DesignedCapacityUnit { get; set; }
-        public virtual Unit ActualProductionUint { get; set; }
-        public virtual FactoryProduct FactoryProduct { get; set; }
+        public virtual Unit? DesignedCapacityUnit { get; set; }
+        public virtual Unit? ActualProductionUint { get; set; }
+        public virtual FactoryProduct? FactoryProduct { get; set; }
     }
 }

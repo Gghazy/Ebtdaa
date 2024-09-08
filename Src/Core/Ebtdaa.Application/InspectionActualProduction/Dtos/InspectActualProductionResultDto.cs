@@ -9,15 +9,15 @@ namespace Ebtdaa.Application.InspectionActualProduction.Dtos
     public class InspectActualProductionResultDto
     { 
         public int Id { get; set; }
-        public int FactoryProductId { get; set; }
+        public int? FactoryProductId { get; set; }
         public string DesignedCapacityUnitName { get; set; }
         public string ActualProductionUintName { get; set; }
         
         public string InspectAcutProdName { get; set; }
         public decimal DesignedCapacity { get; set; }
         public double ActualProduction { get; set; }
-        public int DesignedCapacityUnitId { get; set; }
-        public int ActualProductionUintId { get; set; }
+        public int? DesignedCapacityUnitId { get; set; }
+        public int? ActualProductionUintId { get; set; }
         public bool IsDesignedCapacityCorrect { get; set; }
         public bool IsActualProductionCorrect { get; set; }
         public decimal? CorrectDesignedCapacity { get; set; }

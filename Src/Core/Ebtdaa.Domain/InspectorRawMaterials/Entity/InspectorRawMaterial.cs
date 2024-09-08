@@ -10,8 +10,8 @@ namespace Ebtdaa.Domain.InspectorRawMaterials.Entity
         public int Id { get; set; }
         public int FactoryId { get; set; }
         public int PeriodId { get; set; }
-        public int RawMaterialId { get; set; }
-        public virtual RawMaterial RawMaterial { get; set; }
+        public int? RawMaterialId { get; set; }
+        public virtual RawMaterial? RawMaterial { get; set; }
         public bool IsImageClear { get; set; }
         public bool IsPaperClear { get; set; }
         public string Comment { get; set; }

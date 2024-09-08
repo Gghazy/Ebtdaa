@@ -28,50 +28,95 @@ namespace Ebtdaa.Application.InspectionFactoryLocation.Handlers
 
         public async Task<BaseResponse<List<InspectFactoryLocationAttachResDto>>> GetAll(int FactoryId, int periodId)
         {
-            var response = _mapper.Map<List<InspectFactoryLocationAttachResDto>>(
-                await _dbContext.InspectFactoryLocationAttachments
-                .Where(x=>x.FactoryId == FactoryId   && x.PeriodId== periodId)
-                .Include(x => x.Attachment).ToListAsync());
-
-            return new BaseResponse<List<InspectFactoryLocationAttachResDto>>
+            try
             {
-                Data = response
-            };
+                var response = _mapper.Map<List<InspectFactoryLocationAttachResDto>>(
+                    await _dbContext.InspectFactoryLocationAttachments
+                    .Where(x => x.FactoryId == FactoryId && x.PeriodId == periodId)
+                    .Include(x => x.Attachment).ToListAsync());
+
+                return new BaseResponse<List<InspectFactoryLocationAttachResDto>>
+                {
+                    Data = response,
+                    IsSuccess = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<List<InspectFactoryLocationAttachResDto>>
+                {
+                    Data = new List<InspectFactoryLocationAttachResDto>(),
+                    IsSuccess = false
+
+                };
+
+
+            }
         }
 
         public async Task<BaseResponse<InspectFactoryLocationAttachResDto>> AddAsync(InspectFactoryLocationAttachReqDto req)
         {
-            var file = _mapper.Map<InspectFactoryLocationAttachment>(req);
-            file.Name = file.FactoryId
-                + DateTime.Today.Date.ToShortDateString().Replace("/", "")
-                + file.AttachmentId;
-            await _dbContext.InspectFactoryLocationAttachments.AddAsync(file);
-
-            await _dbContext.SaveChangesAsync();
-
-            return new BaseResponse<InspectFactoryLocationAttachResDto>
+            try
             {
-                Data = _mapper.Map<InspectFactoryLocationAttachResDto>(file)
-            };
+                var file = _mapper.Map<InspectFactoryLocationAttachment>(req);
+                file.Name = file.FactoryId
+                    + DateTime.Today.Date.ToShortDateString().Replace("/", "")
+                    + file.AttachmentId;
+                await _dbContext.InspectFactoryLocationAttachments.AddAsync(file);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<InspectFactoryLocationAttachResDto>
+                {
+                    Data = _mapper.Map<InspectFactoryLocationAttachResDto>(file),
+                    IsSuccess = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<InspectFactoryLocationAttachResDto>
+                {
+                    Data = new InspectFactoryLocationAttachResDto(),
+                    IsSuccess = false
+
+                };
+
+
+            }
         }
 
         public async Task<BaseResponse<InspectFactoryLocationAttachResDto>> DeleteAsync(int id)
         {
-            var file = await _dbContext.InspectFactoryLocationAttachments.FirstOrDefaultAsync(x => x.Id == id);
-          //  var attachfile = await _dbContext.Attachments.FindAsync(file.AttachmentId);
-
-            _dbContext.InspectFactoryLocationAttachments.Remove(file);
-          //  _dbContext.Attachments.Remove(attachfile);
-
-
-            await _dbContext.SaveChangesAsync();
-
-
-
-            return new BaseResponse<InspectFactoryLocationAttachResDto>
+            try
             {
-                Data = _mapper.Map<InspectFactoryLocationAttachResDto>(file)
-            };
+                var file = await _dbContext.InspectFactoryLocationAttachments.FirstOrDefaultAsync(x => x.Id == id);
+                //  var attachfile = await _dbContext.Attachments.FindAsync(file.AttachmentId);
+
+                _dbContext.InspectFactoryLocationAttachments.Remove(file);
+                //  _dbContext.Attachments.Remove(attachfile);
+
+
+                await _dbContext.SaveChangesAsync();
+
+
+
+                return new BaseResponse<InspectFactoryLocationAttachResDto>
+                {
+                    Data = _mapper.Map<InspectFactoryLocationAttachResDto>(file),
+                    IsSuccess = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<InspectFactoryLocationAttachResDto>
+                {
+                    Data = new InspectFactoryLocationAttachResDto(),
+                    IsSuccess = false
+
+                };
+
+
+            }
         }
     }
 }

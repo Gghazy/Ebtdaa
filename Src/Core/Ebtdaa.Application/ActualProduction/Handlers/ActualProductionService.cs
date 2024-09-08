@@ -260,20 +260,25 @@ namespace Ebtdaa.Application.ActualProduction.Handlers
 
         public async Task<BaseResponse<bool>> UpdateByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
+
             var result = await _dbContext.ActualProductionAndCapacities
                                       .Where(x => x.PeriodId == periodId && x.FactoryProduct.FactoryId == factoryId).ToListAsync();
 
 
-            await _actualProductionAttachService.delete(factoryId, periodId);
-            await _increaseActualProductionService.delete(factoryId, periodId);
+         //   await _actualProductionAttachService.delete(factoryId, periodId);
+         //   await _increaseActualProductionService.delete(factoryId, periodId);
 
             foreach (var item in result)
             {
-                item.ActualProduction = null;
-                item.ActualProductionUintId = null;
-                item.ActualProductionWeight = null;
+                item.ActualProduction = 0;
+               // item.ActualProductionUintId = 0;
+                item.ActualProductionWeight = 0;
             }
+            var increaseActualProductions = await _dbContext.IncreaseActualProductions.Where(x => x.FactoryId == factoryId && x.PeriodId == periodId).ToListAsync();
+            if(increaseActualProductions.Count>0)
+            _dbContext.IncreaseActualProductions.RemoveRange(increaseActualProductions);
 
+            await _dbContext.SaveChangesAsync();
 
             return new BaseResponse<bool>
             {

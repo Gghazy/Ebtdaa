@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Dtos;
+using Ebtdaa.Common.Enums;
 
 namespace Ebtdaa.Application.FactoryContacts.Handlers
 {
@@ -64,8 +65,14 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
                           .Where(r => r.FactoryUpdateStatuses.
                           All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
                           .ToListAsync();*/
+
+                var allBasicFactory = await _dbContext.BasicFactoryInfos
+                      .Where(x => x.FactoryId==req.FactoryId &&x.FactoryStatusId!=FactoryStatusEnum.Canceled)
+                      .Select(i => i.PeriodId)
+                      .ToListAsync();
+
                 var allPeriods = await _dbContext.Periods
-                       .Where(x => x.PeriodStartDate.Year == DateTime.Now.Year)
+                       .Where(x => x.PeriodStartDate.Year == DateTime.Now.Year && allBasicFactory.Contains(x.Id))
                        .Select(i => i.Id)
                        .ToListAsync();
 
@@ -150,15 +157,30 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
 
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
-            var result = await _dbContext.FactoryContacts
-                                     .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
-                                     .ToListAsync();
-            _dbContext.FactoryContacts.RemoveRange(result);
-
-            return new BaseResponse<bool>
+            try
             {
-                Data = true
-            };
+                var result = await _dbContext.FactoryContacts
+                                         .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                                         .ToListAsync();
+                if(result.Count>0)
+                _dbContext.FactoryContacts.RemoveRange(result);
+
+                await _dbContext.SaveChangesAsync();
+
+                return new BaseResponse<bool>
+                {
+                    Data = true,
+                    IsSuccess=true
+                };
+            }
+            catch(Exception ex)
+            {
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false
+                };
+            }
         }
     }
 }

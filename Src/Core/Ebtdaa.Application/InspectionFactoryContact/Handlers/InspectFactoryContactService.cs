@@ -31,6 +31,10 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Handlers
 
         public async Task<BaseResponse<InspectFactContactResultDto>> GetOne(int factoryId , int periodId,string ownerIdentity)
         {
+            var notExist = new InspectFactContactResultDto();
+            notExist.IsOfficerMailCorrect = true;
+            notExist.IsOfficerPhoneCorrect=true;
+            
             var checkIsExist = await _dbContext.InspectFactoryContacts
                 .Include(x=>x.Factory.FactoryContacts)
                 .ThenInclude(x=>x.OfficerPhone)
@@ -40,6 +44,7 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Handlers
             {
                 var resualt = await _dbContext.FactoryContacts
                 .Include(x => x.OfficerPhone)
+                .Where(x => x.FactoryId == factoryId && x.PeriodId == periodId && x.CreatedDate.Year== DateTime.Now.Year)
                 .Select(x => new InspectFactContactResultDto()
                  {
                      FactoryId = factoryId,
@@ -53,11 +58,12 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Handlers
                     Comments = "",
 
                  })
-                .FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+                .FirstOrDefaultAsync();
 
                 return new BaseResponse<InspectFactContactResultDto>
                 {
-                    Data = resualt != null ? _mapper.Map<InspectFactContactResultDto>(resualt) : new InspectFactContactResultDto()
+                    Data = resualt != null ? _mapper.Map<InspectFactContactResultDto>(resualt) : notExist,
+                    IsSuccess = true
                 };
             }
             else
@@ -65,7 +71,8 @@ namespace Ebtdaa.Application.InspectionFactoryContact.Handlers
                
                 return new BaseResponse<InspectFactContactResultDto>
                 {
-                    Data = checkIsExist != null ? _mapper.Map<InspectFactContactResultDto>(checkIsExist) : new InspectFactContactResultDto()
+                    Data = checkIsExist != null ? _mapper.Map<InspectFactContactResultDto>(checkIsExist) : notExist,
+                    IsSuccess=true
                 };
             }
            

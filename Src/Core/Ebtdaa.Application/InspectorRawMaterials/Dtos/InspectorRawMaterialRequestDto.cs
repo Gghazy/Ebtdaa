@@ -3,10 +3,10 @@
     public class InspectorRawMaterialRequestDto
     {
         public int Id { get; set; }
-        public int RawMaterialId { get; set; }
+        public int? RawMaterialId { get; set; }
         public bool IsImageClear { get; set; }
         public bool IsPaperClear { get; set; }
-        public string Comment { get; set; }
+        public string? Comment { get; set; }
         public int PhotoId { get; set; }
         public int PaperId { get; set; }
         public int? CorrectPhotoId { get; set; }

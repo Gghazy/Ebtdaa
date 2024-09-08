@@ -18,9 +18,9 @@ namespace Ebtdaa.Domain.InpectorFactoryContact.Entity
         public string OldOfficerEmail { get; set; }
         public bool IsOfficerPhoneCorrect { get; set; }
         public bool IsOfficerMailCorrect { get; set; }
-        public string NewOfficerPhoneId { get; set; }
-        public string NewOfficerEmail { get; set; }
-        public string Comments { get; set; }
+        public string? NewOfficerPhoneId { get; set; }
+        public string? NewOfficerEmail { get; set; }
+        public string? Comments { get; set; }
 
         public virtual Factory Factory { get; set; }
         public virtual Period Period { get; set; }

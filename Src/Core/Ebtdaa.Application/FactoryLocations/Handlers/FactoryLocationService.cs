@@ -5,6 +5,7 @@ using Ebtdaa.Application.FactoryLocations.Dtos;
 using Ebtdaa.Application.FactoryLocations.Interfaces;
 using Ebtdaa.Application.FactoryLocations.Validation;
 using Ebtdaa.Application.ScreenUpdateStatus.Interfaces;
+using Ebtdaa.Common.Enums;
 using Ebtdaa.Domain.Factories.Entity;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
@@ -57,13 +58,18 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
 
 
                 ///
-               /* var allPeriods = await _dbContext.Periods
-                      .Include(x => x.FactoryUpdateStatuses)
-                      .Where(r => r.FactoryUpdateStatuses.
-                      All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
-                      .ToListAsync();*/
+                /* var allPeriods = await _dbContext.Periods
+                       .Include(x => x.FactoryUpdateStatuses)
+                       .Where(r => r.FactoryUpdateStatuses.
+                       All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
+                       .ToListAsync();*/
+                var allBasicFactory = await _dbContext.BasicFactoryInfos
+                     .Where(x => x.FactoryId == req.FactoryId && x.FactoryStatusId != FactoryStatusEnum.Canceled)
+                     .Select(i => i.PeriodId)
+                     .ToListAsync(); 
+
                 var allPeriods = await _dbContext.Periods
-                    .Where(x=>x.PeriodStartDate.Year == DateTime.Now.Year)
+                    .Where(x=>x.PeriodStartDate.Year == DateTime.Now.Year && allBasicFactory.Contains(x.Id))
                     .Select(i => i.Id)
                     .ToListAsync();
 
@@ -146,16 +152,32 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
         }
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
-            var result = await _dbContext.FactoryLocations
-                                     .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
-                                     .ToListAsync();
-            await _factoryLocationAttachmentService.DeleteAsync(periodId, factoryId);
-            _dbContext.FactoryLocations.RemoveRange(result);
-
-            return new BaseResponse<bool>
+            try
             {
-                Data = true
-            };
+                var result = await _dbContext.FactoryLocations
+                                         .Where(x => x.PeriodId == periodId && x.FactoryId == factoryId)
+                                         .ToListAsync();
+                if(result.Count>0)
+                    _dbContext.FactoryLocations.RemoveRange(result);
+
+                var file = await _dbContext.FactoryLocationAttachments.FirstOrDefaultAsync(x => x.FactoryId == factoryId && x.PeriodId == periodId);
+                if (file != null)
+                    _dbContext.FactoryLocationAttachments.Remove(file);
+
+                await _dbContext.SaveChangesAsync();
+                return new BaseResponse<bool>
+                {
+                    Data = true,
+                    IsSuccess=true
+                };
+            }
+            catch   (Exception ex) {
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false
+                };
+            }
         }
     }
 }

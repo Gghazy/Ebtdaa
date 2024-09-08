@@ -144,20 +144,49 @@ namespace Ebtdaa.Application.ActualRawMaterials.Handlers
 
         public async Task<BaseResponse<bool>> DeleteByFactoryIdAndPeriodId(int factoryId, int periodId)
         {
-            var result = await _dbContext.ActualRawMaterials
-                                     .Include(x=>x.RawMaterial) 
-                                     .Where(x => x.PeriodId == periodId )
-                                     //.Select(x=>x.RawMaterial.ProductRawMaterials
-                                     .Where(x=>x.RawMaterial.FactoryId == factoryId)
-                                     .ToListAsync();
-
-            await _actualRawFileService.delete(factoryId, periodId);
-            _dbContext.ActualRawMaterials.RemoveRange(result);
-
-            return new BaseResponse<bool>
+            try
             {
-                Data = true
-            };
+                /*   var result = await _dbContext.ActualRawMaterials
+                                            .Include(x => x.RawMaterial)
+                                            .Where(x => x.PeriodId == periodId)
+                                            //.Select(x=>x.RawMaterial.ProductRawMaterials
+                                            .Where(x => x.RawMaterial.FactoryId == factoryId && x.PeriodId==periodId)
+                                            .ToListAsync();*/
+                var result = await _dbContext.ActualRawMaterials
+                                      .Include(x => x.RawMaterial)
+                                      .Where(x => x.RawMaterial.FactoryId == factoryId && x.PeriodId == periodId)
+                                      .ToListAsync();
+
+                // await _actualRawFileService.delete(factoryId, periodId);
+             
+                if (result.Count > 0)
+                {
+                    _dbContext.ActualRawMaterials.RemoveRange(result);
+                }
+
+               var  actualRawMaterialFile = await _dbContext.ActualRawMaterialFiles
+                    .Where(x=>x.FactoryId==factoryId&&periodId==periodId).ToListAsync();
+                if (actualRawMaterialFile.Count > 0)
+                {
+                    _dbContext.ActualRawMaterialFiles.RemoveRange(actualRawMaterialFile);
+                }
+                await _dbContext.SaveChangesAsync();
+
+
+                return new BaseResponse<bool>
+                {
+                    Data = true,
+                    IsSuccess= true,
+                };
+            }catch (Exception ex) {
+
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false,
+                };
+            }
+
         }
     }
 }

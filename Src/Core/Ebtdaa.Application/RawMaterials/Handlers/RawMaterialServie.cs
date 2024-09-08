@@ -368,7 +368,38 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
 
             return rawMaterialsList;
         }
-     
+        public async Task<BaseResponse<bool>> createActualRawMaterials(int factoryId, int periodId)
+        {
+            try
+            {
+
+                var result = await _dbContext.ActualRawMaterials
+                                    .Include(x => x.RawMaterial)
+                                    .Where(x => x.RawMaterial.FactoryId == factoryId && x.PeriodId == periodId)
+                                    .ToListAsync();
+                if (result.Count == 0)
+                {
+                    await addAcutalRawMaterial(periodId, factoryId);
+                    await _dbContext.SaveChangesAsync();
+                }
+
+                return new BaseResponse<bool>
+                {
+                    Data = true,
+                    IsSuccess = true,
+                };
+            }
+            catch (Exception ex)
+            {
+                return new BaseResponse<bool>
+                {
+                    Data = false,
+                    IsSuccess = false,
+                };
+            }
+
+
+        }
     //
     public async Task<BaseResponse<List<RawMaterialResultDto>>> getAllRawMaterial(RawMaterialSearch search, int id)
         {
@@ -658,30 +689,48 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                 {
                     //
                 }
-
-                _dbContext.RawMaterials.RemoveRange(RawMaterialsItems);
-                var ids = RawMaterialsItems.Select(x => x.Id).ToList();
-
-                var ProductRawMaterialsItems = await _dbContext.ProductRawMaterials.Where(i => ids.Contains(i.rawMaterialId)).ToListAsync();
-
-                if (ProductRawMaterialsItems == null || !ProductRawMaterialsItems.Any())
+                if(RawMaterialsItems.Count>0)
                 {
+                    _dbContext.RawMaterials.RemoveRange(RawMaterialsItems);
+
+                    var ids = RawMaterialsItems.Select(x => x.Id).ToList();
+                   // var idsPaperId = RawMaterialsItems.Select(x => x.PaperId).ToList();
+                    //var idsPhotoId = RawMaterialsItems.Select(x => x.PhotoId).ToList();
+
+
+                    var ProductRawMaterialsItems = await _dbContext.ProductRawMaterials.Where(i => ids.Contains(i.rawMaterialId)).ToListAsync();
+
+
+                    if (ProductRawMaterialsItems.Count > 0)
+                        _dbContext.ProductRawMaterials.RemoveRange(ProductRawMaterialsItems);
+
                     //
+                    var rawMaterialAttachments = await _dbContext.RawMaterialAttachments.Where(i => ids.Contains(i.RawMaterialId)).ToListAsync();
+
+
+                    if (rawMaterialAttachments.Count > 0)
+                        _dbContext.RawMaterialAttachments.RemoveRange(rawMaterialAttachments);
+
+                    var ActualRawMaterialsItems = await _dbContext.ActualRawMaterials.Where(i => ids.Contains(i.RawMaterialId)).ToListAsync();
+
+
+                    if (ActualRawMaterialsItems.Count > 0)
+                    {
+                        _dbContext.ActualRawMaterials.RemoveRange(ActualRawMaterialsItems);
+                    }
+
+                    var actualRawMaterialFile = await _dbContext.ActualRawMaterialFiles
+                         .Where(x => x.FactoryId == factoryId && periodId == periodId).ToListAsync();
+                    if (actualRawMaterialFile.Count > 0)
+                    {
+                        _dbContext.ActualRawMaterialFiles.RemoveRange(actualRawMaterialFile);
+                    }
+
+
+                    await _dbContext.SaveChangesAsync();
+
+
                 }
-
-                _dbContext.ProductRawMaterials.RemoveRange(ProductRawMaterialsItems);
-
-                var ActualRawMaterialsItems = await _dbContext.ActualRawMaterials.Where(i => ids.Contains(i.RawMaterialId)).ToListAsync();
-
-                if (ActualRawMaterialsItems == null || !ActualRawMaterialsItems.Any())
-                {
-                    //
-                }
-
-                _dbContext.ActualRawMaterials.RemoveRange(ActualRawMaterialsItems);
-
-
-                await _dbContext.SaveChangesAsync();
 
                 return new BaseResponse<bool>
                 {

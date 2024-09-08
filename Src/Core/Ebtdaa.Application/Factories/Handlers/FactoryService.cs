@@ -224,7 +224,11 @@ namespace Ebtdaa.Application.Factories.Handlers
                 
                     //  await _dbContext.SaveChangesAsync();
                 }
-                
+                if ((factory.FactoryStatusId == FactoryStatusEnum.Productive) ||(factory.FactoryStatusId == FactoryStatusEnum.Stop))
+                {
+                    await _rawMaterialService.createActualRawMaterials(req.FactoryId, req.PeriodId);
+
+                }
 
                 if (factory.FactoryStatusId==FactoryStatusEnum.Under_Construction)
                 {
@@ -235,8 +239,8 @@ namespace Ebtdaa.Application.Factories.Handlers
                 }
                 if (factory.FactoryStatusId == FactoryStatusEnum.Under_Production)
                 {
-                      //  await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
-                      //  await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                        await _actualProductionService.UpdateByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
+                        await _actualRawMaterialService.DeleteByFactoryIdAndPeriodId(req.FactoryId, req.PeriodId);
                     }
                 if(factory.FactoryStatusId == FactoryStatusEnum.Canceled)
                 {
