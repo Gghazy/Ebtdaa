@@ -59,6 +59,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     .Include(x=>x.ProductPeriodActives)
                     //.Include(x=>x.FactoryProducts)
                    .Where(r => r.CR == getCR.CommercialRegister || productActive.Contains(r.Id) || productInfactory.Contains(r.Id))
+                   .Distinct()
                     //.Where(x=>x.ProductPeriodActives.Any(r=>r.FactoryId==search.FactoryId&&r.PeriodId==r.PeriodId))
                     .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                     new ProductResultDto
