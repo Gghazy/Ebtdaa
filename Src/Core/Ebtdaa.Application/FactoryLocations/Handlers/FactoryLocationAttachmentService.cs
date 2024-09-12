@@ -58,7 +58,7 @@ namespace Ebtdaa.Application.FactoryLocations.Handlers
                       All(x => x.FactoryId == req.FactoryId)).Select(i => i.Id)
                       .ToListAsync();*/
                 var allPeriods = await _dbContext.Periods
-                   .Where(x => x.PeriodStartDate.Year == DateTime.Now.Year)
+                  // .Where(x => x.PeriodStartDate.Year == DateTime.Now.Year)
                    .Select(i => i.Id)
                    .ToListAsync();
 

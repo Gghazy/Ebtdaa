@@ -72,7 +72,9 @@ namespace Ebtdaa.Application.FactoryContacts.Handlers
                       .ToListAsync();
 
                 var allPeriods = await _dbContext.Periods
-                       .Where(x => x.PeriodStartDate.Year == DateTime.Now.Year && allBasicFactory.Contains(x.Id))
+                      // .Where(x => x.PeriodStartDate.Year == DateTime.Now.Year && allBasicFactory.Contains(x.Id))
+                       .Where(x => allBasicFactory.Contains(x.Id))
+
                        .Select(i => i.Id)
                        .ToListAsync();
 

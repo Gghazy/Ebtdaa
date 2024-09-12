@@ -169,7 +169,7 @@ namespace Ebtdaa.Application.Factories.Handlers
                 else
                 {
                     var allPeriods = await _dbContext.Periods
-                   .Where(x => x.PeriodStartDate.Year == DateTime.Now.Year)
+                   //.Where(x => x.PeriodStartDate.Year == DateTime.Now.Year)
                    .Select(i => i.Id)
                    .ToListAsync();
 

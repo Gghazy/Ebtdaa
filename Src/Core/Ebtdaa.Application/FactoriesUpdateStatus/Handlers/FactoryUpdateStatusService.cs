@@ -238,7 +238,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
         {
             var status = false;
             var result = new List< FactUpdateStatusResultDto>();
-            var getPeriods =  _dbContext.Periods.ToList();
+            /*var getPeriods =  _dbContext.Periods.ToList();
             getPeriods.ForEach(p =>
             {
                 var isUpdatedData = _dbContext.FactoryUpdateStatuses.Where(f =>  f.PeriodId == p.Id).ToList();
@@ -257,21 +257,24 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                         status = false;
                     }
                 }
-            });
+            });*/
+            var periodsLength = await _dbContext.Periods.ToListAsync();
+
            var factoryData = _dbContext.Factories
                     .Include(x => x.FactoryLocations)
                     .ThenInclude(x => x.City)
                     .ToList();
             foreach (var item in factoryData)
             {
-                var getApproverDate = _dbContext.FactoryUpdateStatuses
-                    .OrderByDescending(d => d.Id).FirstOrDefault(d => d.FactoryId == item.Id);
-
+                var getApproverDateAll = await _dbContext.FactoryUpdateStatuses.Where(d => d.FactoryId == item.Id).ToListAsync();
+                var getApproverDate = getApproverDateAll.FirstOrDefault();
+                var allapprove = getApproverDateAll.All(x => x.DataStatus == DataStatus.Approved);
+                allapprove = getApproverDateAll.Count == periodsLength.Count && allapprove;
                 if (getApproverDate != null)
                 {
                     var FactUpdateData = new FactUpdateStatusResultDto {
                         UpdatedDate = getApproverDate.CreatedDate,
-                        FactoryUpdateStatus = status,
+                        FactoryUpdateStatus = allapprove,
                         FactoryId = item.Id,
                         CityNameAr = item.FactoryLocations.Any() ? item.FactoryLocations.FirstOrDefault().City.NameAr : "",
                         NameAr = item.NameAr,
@@ -284,9 +287,8 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 {
                     var FactUpdateData = new FactUpdateStatusResultDto
                     {
-                     FactoryUpdateStatus = status,
+                     FactoryUpdateStatus = false,
                     FactoryId = item.Id,
-
                     CityNameAr = item.FactoryLocations.Any() ? item.FactoryLocations.FirstOrDefault().City.NameAr : "",
                     NameAr = item.NameAr,
                     CommercialRegister = item.CommercialRegister,
@@ -295,7 +297,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
                 }
 
             }
-            result.OrderByDescending(d => d.FactoryId)
+            result.OrderByDescending(d => d.NameAr)
                     .ToList();
             return new BaseResponse<List<FactUpdateStatusResultDto>>
             { 
