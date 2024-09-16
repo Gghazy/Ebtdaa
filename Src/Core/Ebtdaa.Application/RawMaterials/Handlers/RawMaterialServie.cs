@@ -484,7 +484,7 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                        await _dbContext.Products
                        .Include(x => x.Unit)
                        .Include(x => x.ProductPeriodActives)
-                      .Where(r => r.CR == getCR.CommercialRegister || productActiveId.Contains(r.Id))
+                       .Where(r => r.CR == getCR.CommercialRegister || productActiveId.Contains(r.Id))
                        .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                        new RawMaterialResultDto
                        {
@@ -495,10 +495,14 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                            FactoryId = factoryId,
                            UnitId = a.UnitId != null ? (int)a.UnitId : 0,
                            AverageWeightKG =0,
+                           Hs12Code= b.Hs12Code
 
 
 
                        })
+                     //  .OrderBy(x => x.CustomItemName)//added for dublicate in cR
+                       .GroupBy(x => x.Hs12Code)//added for dublicate in cR
+                       .Select(x=>x.First())//added for dublicate in cR
                        .ToListAsync();
                
 

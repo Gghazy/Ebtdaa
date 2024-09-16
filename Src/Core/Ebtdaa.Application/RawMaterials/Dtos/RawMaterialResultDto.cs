@@ -4,11 +4,14 @@
     {
         public int Id { get; set; }
 
+        public string Hs12Code { get; set; }
+
         public string CustomItemName { get; set; }
         public string RawMaterialName { get; set; }
         public string Name { get; set; }
         public decimal MaximumMonthlyConsumption { get; set; }
         public decimal AverageWeightKG { get; set; }
+      
         public List<FactoryProductInRaw> FactoryProductId { get; set; }
         //  public List<RawMaterialProductDto> RawMaterialProducts { get; set; }
         public int UnitId { get; set; }

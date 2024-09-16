@@ -22,6 +22,8 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Ebtdaa.Application.RawMaterials.Dtos;
 using System.Collections;
+using System.Linq;
+using System.Diagnostics.Metrics;
 
 namespace Ebtdaa.Application.ProductsData.Handlers
 {
@@ -56,7 +58,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
             var resualt =
                     await _dbContext.Products
-                    .Distinct()
                     .Include(x => x.Unit)
                     .Include(x=>x.ProductPeriodActives)
                     //.Include(x=>x.FactoryProducts)
@@ -395,8 +396,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             };
         }*/
 
-
-        public async Task<BaseResponse<List<ProductResultDto>>> GetProductsList(ProductPaging search)
+    public async Task<BaseResponse<List<ProductResultDto>>> GetProductsList(ProductPaging search)
         {
 
 
@@ -407,7 +407,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             var res =
                    _dbContext.Products
                   .Include(x => x.Unit)
-                  .Where(x => !ExsitsProductInRaw.Contains(x.Id))
                   .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                   new ProductResultDto
                   {
@@ -423,7 +422,79 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                       Status = a.Status,
                       Kilograms_Per_Unit = a.Kilograms_Per_Unit,
                       UnitName = a.Unit.Name,
-                  }).AsQueryable();
+                  })
+                  .GroupBy(x => x.Hs12Code)//new for dublicate
+                  .Where(x => !x.Any(r => ExsitsProductInRaw.Contains(r.Id)))//new for dublicate
+                  .Select(r => r.First())
+                  .AsQueryable();
+            List<ProductResultDto> result = new List<ProductResultDto>();
+            var query = await res.ToListAsync();
+
+            query = query.Where(x => !ExsitsProductInRaw.Contains(x.Id))
+                        .GroupBy(x => x.ItemNumber)//new for dublicate
+                  .Select(x => x.First()).ToList();//new for dublicate
+
+            if (!string.IsNullOrEmpty(search.SearchText))
+            {
+             //   var query = await res.ToListAsync();
+                query = query.Where(p => p.ProductName.Contains(search.SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
+                result =query.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
+            }
+            else
+           result =  query.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
+
+
+            return new BaseResponse<List<ProductResultDto>>
+            {
+                Data = result
+            };
+        }
+
+        public async Task<BaseResponse<List<ProductResultDto>>> GetAllProductsCurrent(ProductPaging search)
+        {
+
+
+
+            var productInfactory = new List<int>();
+            // if (search.IsActive)
+            //{
+            productInfactory = await _dbContext.ProductPeriodActives
+               .Where(x => x.FactoryId == search.FactoryId)
+               .Select(x => x.ProductId).ToListAsync();
+            //}
+            
+            var getCR = await _dbContext.Factories.FirstOrDefaultAsync(f => f.Id == search.FactoryId);
+
+            var res =
+                     _dbContext.Products
+                    .Distinct()
+                    .Include(x => x.Unit)
+                    .Include(x => x.ProductPeriodActives)
+                   //.Include(x=>x.FactoryProducts)
+                   .Where(r => r.CR == getCR.CommercialRegister  || productInfactory.Contains(r.Id))
+                    //.Where(x=>x.ProductPeriodActives.Any(r=>r.FactoryId==search.FactoryId&&r.PeriodId==r.PeriodId))
+                    .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
+                    new ProductResultDto
+                    {
+                        Hs12NameEn = b.Hs12NameEn,
+                        Hs12NameAr = b.Hs12NameAr,
+                        Hs12Code = b.Hs12Code,
+                        Id = a.Id,
+                        ProductName = $"{b.Hs12NameAr} ({b.Hs12Code})",
+                        ProductName10 = $"{a.ProductName} ({a.ItemNumber})",
+                        ProductId = a.Id,
+                        UnitId = a.UnitId,
+                        ItemNumber = a.ItemNumber,
+                        CR = a.CR,
+                        Status = a.Status,
+                        FactoryId = search.FactoryId,
+                        Kilograms_Per_Unit = a.Kilograms_Per_Unit,
+                        UnitName = a.Unit.Name,
+                    })
+                      // .OrderBy(x => x.Id)//added for dublicate in cR
+                       .GroupBy(x => x.Hs12Code)//added for dublicate in cR
+                       .Select(x => x.First())//added for dublicate in cR
+                    .AsQueryable();
             List<ProductResultDto> result = new List<ProductResultDto>();
             if (!string.IsNullOrEmpty(search.SearchText))
             {
@@ -597,7 +668,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
             var res =
                    _dbContext.Products
                   .Include(x => x.Unit)
-                  .Where(x => !(x.CR == getCR.CommercialRegister) && !(ExsitsProduct.Contains(x.Id)))
                   .Join(_dbContext.MappingProducts, a => a.ItemNumber, b => b.Hs10Code, (a, b) =>
                   new ProductResultDto
                   {
@@ -613,18 +683,27 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                       Status = a.Status,
                       Kilograms_Per_Unit = a.Kilograms_Per_Unit,
                       UnitName = a.Unit.Name,
-                  })
-               .AsQueryable();
+                  }) 
+                  .GroupBy(x => x.Hs12Code)//new for dublicate
+                  .Where(x => !x.Any(r=>ExsitsProduct.Contains(r.Id)|| r.CR == getCR.CommercialRegister))//new for dublicate
+                  .Select(r=>r.First())
+                  .AsQueryable();
            
             List<ProductResultDto> result = new List<ProductResultDto>();
+            var query = await res
+                .ToListAsync();
+
+            query = query.Where(x => !(x.CR == getCR.CommercialRegister)).GroupBy(x => x.ItemNumber)//new for dublicate
+                  .Select(x => x.First()).ToList();//new for dublicate
+
             if (!string.IsNullOrEmpty(search.SearchText))
             {
-                var query = await res.ToListAsync();
+               // var query = await res.ToListAsync();
                 query = query.Where(p => p.ProductName.Contains(search.SearchText, StringComparison.OrdinalIgnoreCase)).ToList();
-                result = query.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
+               result = query.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
             }
             else
-                result =await res.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToListAsync();
+                result = query.Skip(search.CurrentPage * search.PageSize).Take(search.PageSize).ToList();
 
 
 
