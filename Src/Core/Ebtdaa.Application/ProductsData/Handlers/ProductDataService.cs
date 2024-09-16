@@ -56,7 +56,6 @@ namespace Ebtdaa.Application.ProductsData.Handlers
 
             var resualt =
                     await _dbContext.Products
-                    .Distinct()
                     .Include(x => x.Unit)
                     .Include(x=>x.ProductPeriodActives)
                     //.Include(x=>x.FactoryProducts)
@@ -81,6 +80,7 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                         UnitName = a.Unit.Name, 
                         IsActive = productActive.Contains(a.Id),
                     })
+                    .Distinct()
                     .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
 
 
