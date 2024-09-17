@@ -518,17 +518,19 @@ namespace Ebtdaa.Application.RawMaterials.Handlers
                     DateTime tt = DateTime.Now;
 
                     var lastrawM = productActive
-                       .Where(t => t.PeriodId < periodId)
-                       .GroupBy(r => r.PeriodId)
-                       .FirstOrDefault();
+                       // .Where(t => t.PeriodId < periodId)
+                       .GroupBy(r => r.CustomItemName)
+                       .Select(r => r.Any(t=>t.Name!="") ? r.OrderByDescending(t => t.PeriodId).First(t => t.Name != ""): r.OrderByDescending(t => t.PeriodId).First())
+                       .ToList();
+                       //.FirstOrDefault();
 
                     List<RawMaterial> r = new List<RawMaterial>();
                     foreach (var item in rawMaterialsList)
                     {
-                        
-                        var itemPast = lastrawM != null? lastrawM.Where(t => t.CustomItemName == item.CustomItemName).FirstOrDefault():null;
-                        
-                        if(itemPast!=null)
+
+                        //var itemPast = lastrawM != null? lastrawM.Where(t => t.CustomItemName == item.CustomItemName).FirstOrDefault():null;
+                        var itemPast = lastrawM.FirstOrDefault(r => r.CustomItemName == item.CustomItemName);
+                        if (itemPast!=null)
                         {
                             r.Add(new RawMaterial
                             {

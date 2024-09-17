@@ -991,13 +991,26 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                         if (req.PeperId > 0)
                             factoryProduct.PeperId = req.PeperId;
                     }
-                    var ActualProduct = await _dbContext.ActualProductionAndCapacities.FirstOrDefaultAsync(x => x.FactoryProductId == req.Id);
-                    ActualProduct.AcuKilograms_Per_Unit = (double)req.Kilograms_Per_Unit;
+
+                    var allfac  =await _dbContext.FactoryProducts.Include("Product").Where(x=>x.FactoryId== factoryProduct.FactoryId&&x.ProductId== factoryProduct.ProductId).Select(r=>r.Id).ToListAsync();
+
+                    var ActualProductList = await _dbContext.ActualProductionAndCapacities.Where(x =>allfac.Contains(x.FactoryProductId)).ToListAsync();
+                    foreach (var ActualProduct in ActualProductList)
+                    {
+                        ActualProduct.AcuKilograms_Per_Unit = (double)req.Kilograms_Per_Unit;
+                        factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
+
+                        ActualProduct.ActualProductionWeight =
+                         (int?)(ActualProduct.ActualProduction * ActualProduct.AcuKilograms_Per_Unit);
+
+                    }
+                  
+                    /*ActualProduct.AcuKilograms_Per_Unit = (double)req.Kilograms_Per_Unit;
                     factoryProduct.Product.Kilograms_Per_Unit = req.Kilograms_Per_Unit;
 
                     ActualProduct.ActualProductionWeight =
                      (int?)(ActualProduct.ActualProduction * ActualProduct.AcuKilograms_Per_Unit);
-
+                    */
 
                     await _dbContext.SaveChangesAsync();
 
