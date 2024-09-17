@@ -122,13 +122,15 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                     _dbContext.ActualProductionAndCapacities.RemoveRange(result);
 
                 }
+                var pids = products.Select(r => r.ProductId).ToList();
+                var ifproductFound = await _dbContext.FactoryProducts.Where(x =>x.FactoryId==factoryId && pids.Contains(x.ProductId)).GroupBy(x => x.ProductId).Select(r => r.OrderByDescending(t => t.PeriodId).First()).ToListAsync();
 
                 List<FactoryProduct> factoryProducts = products.Select(x =>
                 new FactoryProduct
                 {
-                    CommericalName = "",
-                    PhototId = null,
-                    PeperId = null,
+                    CommericalName = ifproductFound.FirstOrDefault(r=>r.ProductId==x.ProductId)==null? "" : ifproductFound.FirstOrDefault(r => r.ProductId == x.ProductId).CommericalName,
+                    PhototId = ifproductFound.FirstOrDefault(r => r.ProductId == x.ProductId) == null ? null: ifproductFound.FirstOrDefault(r => r.ProductId == x.ProductId).PhototId,
+                    PeperId = ifproductFound.FirstOrDefault(r => r.ProductId == x.ProductId) == null ? null : ifproductFound.FirstOrDefault(r => r.ProductId == x.ProductId).PeperId,
                     FactoryId = factoryId,
                     ProductId = x.ProductId,
                     PeriodId = periodId,
