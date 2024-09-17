@@ -82,12 +82,40 @@ namespace Ebtdaa.Application.ProductsData.Handlers
                         UnitName = a.Unit.Name, 
                         IsActive = productActive.Contains(a.Id),
                     })
-                    .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
+                       .GroupBy(x => x.Hs12Code)//new for dublicate
+                        .Select(g => new
+                        {
+                            Key = g.Key,
+                            Items = g.Any(i => i.IsActive) ? g.First(i => i.IsActive) : g.Any(r => r.CR == getCR.CommercialRegister) ? g.First(r => r.CR == getCR.CommercialRegister):g.First()
+                        })
+                        .ToListAsync();
+
+            var pagedItems = resualt
+            .Select(g => g.Items)
+            .OrderByDescending(x => x.Id)
+            .Skip((search.PageNumber - 1) * search.PageSize)
+            .Take(search.PageSize)
+            .ToList();
+
+            var totalItems = resualt.Select(g => g.Items).Count();
+            search.PageNumber = (int)Math.Ceiling((decimal)totalItems / (decimal)search.PageSize);
+            var res = new QueryResult<ProductResultDto>(pagedItems, totalItems, search.PageNumber, search.PageSize);
 
 
+            // .ToQueryResult(search.PageNumber, search.PageSize, sort: "Id", descending: true);
+
+
+
+            /*var Items = resualt.Items
+               .GroupBy(x => x.Hs12Code)//new for dublicate
+               .Select(x => x.First());//new for dublicate
+
+
+            resualt.AddItems(Items);
+            resualt.SetPageSize(Items.Count);*/
             return new BaseResponse<QueryResult<ProductResultDto>>
             {
-                Data = resualt
+                Data = res
             };
 
         }
