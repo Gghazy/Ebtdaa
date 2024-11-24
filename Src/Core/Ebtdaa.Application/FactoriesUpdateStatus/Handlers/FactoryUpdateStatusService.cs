@@ -263,6 +263,7 @@ namespace Ebtdaa.Application.FactoriesUpdateStatus.Handlers
            var factoryData = _dbContext.Factories
                     .Include(x => x.FactoryLocations)
                     .ThenInclude(x => x.City)
+                    .Where(e=>e.OwnerIdentity=="1012955132")
                     .ToList();
             foreach (var item in factoryData)
             {

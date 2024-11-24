@@ -27,8 +27,8 @@ namespace Ebtdaa.Application.Periods.Handlers
                 await _dbContext.Periods
                 .Include(x=>x.FactoryUpdateStatuses)
                 .Include(x=>x.InspectorUpdateStatuses)
-                .OrderByDescending(x=>x.PeriodStartDate.Year)
-                .ThenByDescending(x=>x.PeriodStartDate.Month)
+                .OrderBy(x=>x.PeriodStartDate.Year)
+                .ThenBy(x=>x.PeriodStartDate.Month)
                 .ToQueryResult(search.PageNumber, search.PageSize);
 
          
